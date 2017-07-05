@@ -77,6 +77,25 @@ body {
     font-size: 12px;
 }
 
+#Content label {
+    margin: 0;
+    color: #a4aab3;
+    font-size: 12px;
+}
+
+.flex-container{
+    display: -webkit-flex;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.flex-item{
+    margin: 0;
+    color: #a4aab3;
+    font-size: 12px;
+}
+
 #Footer {
     height: 40px;
     background: #FAFAFA;
