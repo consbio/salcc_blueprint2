@@ -1,8 +1,10 @@
-import React, {Component} from 'react';
-// import './components/Geonames.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import Geonames from './components/Geonames';
+import HelloChart from './HelloChart';
 
-class App extends Component {
+class App extends React.Component {
+
     toptabs = [
         '',
         '',
@@ -35,7 +37,10 @@ class App extends Component {
         this.setState({showTabs: !this.state.showTabs});
     }
 
+
+
     render() {
+        const { chartData, chartOptions } = this.state;
         return (
             <div id="Container">
                 <div id="TopBar">
@@ -118,9 +123,14 @@ class App extends Component {
                         </div>
                     </div>
                     <h4>Basemap Credit</h4>
-                    <p><img src={'/images/basemap.png'} height={40}/> Image of toggle button and then text attribution
-                        <br/><br/>
-                    </p>
+                    <div className="flex-container">
+                        <div className="flex-item"> <img src={'/images/basemap.png'} height={40}/></div>
+                        <div className="flex-item"> toggle button and then text attribution</div>
+                    </div>
+                    <div className="flex-container">
+                        <div className="flex-item"> <img src={'/images/basemap.png'} height={40}/></div>
+                        <div className="flex-item"> toggle button and then text attribution</div>
+                    </div>
                     <h4>Developed By</h4>
                     <p>Conservation Biology Institute</p>
                 </div>
@@ -168,9 +178,14 @@ class App extends Component {
                     <h2>Watershed name</h2>
                     <br/>
                     <h4>Urbanization</h4>
-                    <p>
-                        First graph
-                    </p>
+
+                     <div>
+                         bleh
+
+                         { this.state.selected === 2 && <HelloChart/>
+                         }
+
+                     </div>
                      <br/><br/>
                      <h4>Sea Level Rise</h4>
                     <p>
@@ -232,6 +247,7 @@ class App extends Component {
         );
     }
 }
+
 
 
 export default App;

@@ -1,0 +1,44 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.flex-container{
+    display: -webkit-flex;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.flex-item{
+    margin: 0;
+    color: #a4aab3;
+    font-size: 12px;
+}
+
+/*#Footer.active {*/
+    /*display: block;*/
+/*}*/
+
+.button {
+    color:#AAA;
+    font-size: 10px;
+    flex-grow: 1;
+    padding-top: 5px;
+    cursor: pointer;
+}
+
+.button.active {
+    color: #0892D0;
+    background: #DDD;
+}
+.button img{
+    flex-grow: 0;
+}
+.imgwrap{
+    test-align: center;
+}
+.button + .button {
+
+}
