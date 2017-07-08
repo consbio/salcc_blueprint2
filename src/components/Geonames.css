@@ -1,9 +1,6 @@
-.geonames__container {
-    flex-grow: 4; /* TODO: figure out right value */
-}
+
 
 .geonames__input-wrapper {
-    border-left: 1px solid #AAA;
     padding: 0 4px 0 6px;
     display: flex;
     align-content: stretch;
@@ -25,12 +22,12 @@
 
 
 .geonames__input-wrapper input {
-    margin-top: 12px;
+    margin-top: 6px;
     border: none;
-    padding: 4px 4px 4px 2px;
+    padding: 4px 24px 4px 2px;
     width: 100%;
     outline: none;
-    font-size: 14px;
+    font-size: 16px;
     color: #a4aab3;
     background: none;
 }
@@ -38,9 +35,29 @@
     background: #FFF;
 }
 
+.geonames__input {
+    display: flex;
+    position: relative;
+    width: 100%;
+}
+
+.geonames__input_placeholder {
+    position: absolute;
+    top: 12px;
+    left: 4px;
+    font-size: small;
+}
+
+.geonames__input_clear {
+    position: absolute;
+    right: 2px;
+    top: 10px;
+    cursor: pointer;
+    fill: darkred;
+}
 
 .geonames__results {
-    margin: 2px 0 0 0;
+    margin: 9px 0 0 0;
     padding: 0;
     list-style: none;
     position: absolute;

@@ -4,19 +4,20 @@ import React from 'react';
 
 
 // TODO: make sure props are immutable
-export default class SuggestList extends React.PureComponent {
+export default class ResultsList extends React.PureComponent {
     isHidden() {
         // console.log('results', this.props.results)
         return this.props.isHidden || this.props.results.length === 0;
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.results !== this.props.results) {
-            if (nextProps.results.length === 0) {
-                this.props.onSuggestNoResults();
-            }
-        }
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     console.log('will receive new props')
+    //     if (nextProps.results !== this.props.results) {
+    //         if (nextProps.results.length === 0) {
+    //             this.props.onSuggestNoResults();
+    //         }
+    //     }
+    // }
 
     render() {
         // const classes = classnames(
@@ -32,7 +33,7 @@ export default class SuggestList extends React.PureComponent {
 
         // TODO: set key properly
         // className={classes} style={this.props.style}
-        return <ul className="geonames__results">
+        return <ul className={this.props.className}>
 
             {this.props.results.map((result, i) => {
                 // const isActive = this.props.activeSuggest &&
@@ -58,7 +59,8 @@ export default class SuggestList extends React.PureComponent {
     }
 }
 
-SuggestList.defaultProps = {
+ResultsList.defaultProps = {
+    className: '',
     isHidden: true,
     results: []
 };

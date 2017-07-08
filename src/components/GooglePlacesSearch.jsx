@@ -1,75 +1,112 @@
 import React from 'react';
-import './Geonames.css';
+import './GooglePlacesSearch.css';
 // import classnames from 'classnames';
-// import debounce from 'lodash.debounce';
+import debounce from 'lodash.debounce';
 
 import Input from './Input';
 import ResultsList from './ResultsList';
 
 
-// Escapes special characters in user input for regex
-// function escapeRegExp(str) {
-//   return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-// }
-
-
-class Geonames extends React.Component {
+class GooglePlacesSearch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isResultsHidden: true,
-            isLoading: false,
-            userInput: props.initialValue,
-            activeSuggest: null,
-            results: [],
-            focused: false,
+            isPending: false,
+            value: '', // input value
+            selected: null, // selected result
+            results: []
         };
 
-        this.onInputChange = this.onInputChange.bind(this);
-        this.onAfterInputChange = this.onAfterInputChange.bind(this);
-
-        // if (props.queryDelay) {
-        //   this.onAfterInputChange =
-        //     debounce(this.onAfterInputChange, props.queryDelay);
-        // }
+        this.getAutocomplete = debounce(this.getAutocomplete, 500);
     }
 
-    /**
-     * Change inputValue if prop changes
-     * @param {Object} props The new props
-     */
-    componentWillReceiveProps(props) {
-        if (this.props.initialValue !== props.initialValue) {
-            this.setState({userInput: props.initialValue});
+    onInputChange = value => {
+        this.setState(
+            {value, isResultsHidden: !!!value, isPending: !!value},
+            this.getAutocomplete
+        );
+    }
+
+
+    getAutocomplete = () => {
+        console.log('get autocomplete');
+
+        if (!!!this.state.value) {
+            console.log('empty string')
+            this.setState({results: [], isPending: false});
+            return;
         }
+
+        // this.setState({
+        //     results: [
+        //         {label: this.state.value + 'more substring', offset: 0, length: this.state.value.length, lat: 0, long: 0},
+        //         {label: 'not ' + this.state.value + ' foo', offset: 4, length: this.state.value.length, lat: 0, long: 0},
+        //     ],
+        //     isPending: false
+        // });
+
+
+        const options = {
+            input: this.state.value
+        };
+
+        ['location', 'radius', 'bounds', 'types'].forEach(option => {
+          if (this.props[option]) {
+            options[option] = this.props[option];
+          }
+        });
+
+        if (this.props.country) {
+          options.componentRestrictions = {
+            country: this.props.country
+          };
+        }
+
+        this.setState({isPending: true}, () => {
+          this.autocompleteService.getPlacePredictions(
+            options,
+            googleResults => {
+              googleResults = googleResults || [];
+              console.log(googleResults)
+
+                let results = googleResults.map(r => {
+                    return {
+                        id: r.id,
+                        label: r.description,
+                        length: r.matched_substrings[0].length,
+                        offset: r.matched_substrings[0].offset
+                    };
+                });
+              this.setState({isPending: false, results: results});
+            }
+          );
+        });
     }
 
-    // /**
-    //  * Called on the client side after component is mounted.
-    //  */
-    // componentWillMount() {
-    //   if (typeof window === 'undefined') {
-    //     return;
-    //   }
-    //
-    //   var googleMaps = this.props.googleMaps ||
-    //     (window.google && // eslint-disable-line no-extra-parens
-    //       window.google.maps) ||
-    //     this.googleMaps;
-    //
-    //   /* istanbul ignore next */
-    //   if (!googleMaps) {
-    //     if (console) {
-    //       console.error(// eslint-disable-line no-console
-    //         'Google map api was not found in the page.');
-    //     }
-    //     return;
-    //   }
-    //   this.googleMaps = googleMaps;
-    //
-    //   this.autocompleteService = new googleMaps.places.AutocompleteService();
-    //   this.geocoder = new googleMaps.Geocoder();
-    // }
+    componentWillMount() {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        var googleMaps = this.props.googleMaps ||
+            (window.google && // eslint-disable-line no-extra-parens
+            window.google.maps) ||
+            this.googleMaps;
+
+        /* istanbul ignore next */
+        if (!googleMaps) {
+            if (console) {
+                console.error(// eslint-disable-line no-console
+                    'Google map api was not found in the page.');
+            }
+            return;
+        }
+        this.googleMaps = googleMaps;
+
+        this.autocompleteService = new googleMaps.places.AutocompleteService();
+        this.geocoder = new googleMaps.Geocoder();
+    }
 
     /**
      * When the component will unmount
@@ -78,41 +115,28 @@ class Geonames extends React.Component {
         clearTimeout(this.timer);
     }
 
-    /**
-     * When the input changed
-     * @param {String} userInput The input value of the user
-     */
-    onInputChange = userInput => {
-        this.setState({userInput}, this.onAfterInputChange);
-    };
 
-    /**
-     * On After the input got changed
-     */
-    onAfterInputChange = () => {
-        if (!this.state.isResultsHidden) {
-            this.showSuggests();
-        }
-        this.props.onChange(this.state.userInput);
-    };
+    // onInputChange = userInput => {
+    //     this.setState({userInput}, this.onAfterInputChange);
+    // };
 
-    /**
-     * When the input gets focused
-     */
+    // onAfterInputChange = () => {
+    //     if (!this.state.isResultsHidden) {
+    //         this.showSuggests();
+    //     }
+    //     this.props.onChange(this.state.userInput);
+    // };
+
     onInputFocus = () => {
         this.props.onFocus();
         this.showSuggests();
         this.setState({focused: true});
     };
 
-    /**
-     * When the input gets blurred
-     */
     onInputBlur = () => {
-        if (!this.state.ignoreBlur) {
-            this.hideSuggests();
-        }
-        this.setState({focused: false})
+        console.log('input blur')
+        this.hideSuggests();
+        // this.setState({isResultsHidden: true, focused: false});
     };
 
     onNext = () => this.activateSuggest('next');
@@ -130,39 +154,26 @@ class Geonames extends React.Component {
         // this.props.onSuggestNoResults(this.state.userInput);
     };
 
-    /**
-     * Focus the input
-     */
+
+    // Public methods
     focus() {
         this.input.focus();
     }
 
-    /**
-     * Blur the input
-     */
     blur() {
         this.input.blur();
     }
 
-    /**
-     * Update the value of the user input
-     * @param {String} userInput the new value of the user input
-     */
     update(userInput) {
         this.setState({userInput});
         this.props.onChange(userInput);
     }
 
-    /*
-     * Clear the input and close the suggestion pane
-     */
     clear() {
         this.setState({userInput: ''}, this.hideSuggests);
     }
 
-    /**
-     * Search for new suggests
-     */
+
     searchSuggests() {
         console.log(this.state.userInput)
 
@@ -177,7 +188,7 @@ class Geonames extends React.Component {
 
         // TODO: this is a faked out function to generate results
         var results = []
-        for (let i=0; i<this.state.userInput.length; i++){
+        for (let i = 0; i < this.state.userInput.length; i++) {
             let char = this.state.userInput[i];
             if (char.trim()) results.push(char);
         }
@@ -218,14 +229,9 @@ class Geonames extends React.Component {
         // });
     }
 
-    /**
-     * Update the suggests
-     * @param {Array} suggestsGoogle The new google suggests
-     * @param {Function} callback Called once the state has been updated
-     */
+
     updateSuggests(suggestsGoogle = [], callback) {
         console.log('update suggests', suggestsGoogle, callback)
-
 
 
         // var suggests = [],
@@ -270,11 +276,7 @@ class Geonames extends React.Component {
         // this.setState({suggests, activeSuggest}, callback);
     }
 
-    /**
-     * Return the new activeSuggest object after suggests have been updated
-     * @param {Array} suggests The new list of suggests
-     * @return {Object} The new activeSuggest
-     **/
+
     updateActiveSuggest(suggests = []) {
         // console.log('update active suggests')
         let activeSuggest = this.state.activeSuggest;
@@ -291,9 +293,7 @@ class Geonames extends React.Component {
         return activeSuggest;
     }
 
-    /**
-     * Show the suggestions
-     */
+
     showSuggests() {
         // console.log('show suggests')
         this.searchSuggests();
@@ -305,12 +305,13 @@ class Geonames extends React.Component {
      * Hide the suggestions
      */
     hideSuggests = () => {
-        // console.log('hide suggests')
-        this.props.onBlur(this.state.userInput);
+        console.log('hide suggests')
+        // this.props.onBlur(this.state.userInput);
         this.timer = setTimeout(() => {
+            console.log('after timeout, hidding')
             this.setState({
                 isResultsHidden: true,
-                activeSuggest: null
+                // activeSuggest: null
             });
         }, 100);
     };
@@ -402,55 +403,65 @@ class Geonames extends React.Component {
         // );
     }
 
+
+    handleResultClick(result)  {
+        console.log('handleResultClick', result);
+        this.setState({value: result.label, isResultsHidden: true, selected: result});
+        this.props.onSelect(result);// TODO: as a callback above?
+    }
+
+
+    getResultsDisplay = () => {
+        if (this.state.isResultsHidden || this.state.isPending || !this.state.focused || !!!this.state.value) {
+            return null;
+        } else
+            if (this.state.results.length === 0) {
+            return <div className='gplaces-search-noresults'>No results found...</div>
+        }
+
+        return <ul className='gplaces-search-results'>
+
+            {this.state.results.map((result, i) => {
+                let head = result.label.slice(0, result.offset);
+                let highlight = result.label.slice(result.offset, result.offset + result.length);
+                let tail = result.label.slice(result.offset + result.length);
+                return <li
+                    key={i}
+                    onClick={(e) => this.handleResultClick(result)}>
+                    {head}<b>{highlight}</b>{tail}
+                </li>
+            })}
+        </ul>;
+    }
+
+
     render() {
-        const input = <Input className={this.props.inputClassName}
-                             ref={(i) => {this.input = i}}
-                             value={this.state.userInput}
-                             ignoreEnter={!this.state.isResultsHidden}
-                             ignoreTab={this.props.ignoreTab}
+        console.log('render gplaces')
+        const input = <Input ref={(i) => {
+                this.input = i
+            }}
+                             value={this.state.value}
+                             className='gplaces-search-input-container'
+                             isPending={this.state.isPending}
                              onChange={this.onInputChange}
                              onFocus={this.onInputFocus}
-                             onBlur={this.onInputBlur}
-                             onKeyDown={this.props.onKeyDown}
-                             onKeyPress={this.props.onKeyPress}
-                             onNext={this.onNext}
-                             onPrev={this.onPrev}
-                             onSelect={this.onSelect}
-                             onEscape={this.hideSuggests}/>,
-            resultsList = <ResultsList isHidden={this.state.isResultsHidden}
-                                       userInput={this.state.userInput}
-                                       results={this.state.results}
-                                       onSuggestNoResults={this.onSuggestNoResults}
-                                       onSuggestMouseDown={this.onSuggestMouseDown}
-                                       onSuggestMouseOut={this.onSuggestMouseOut}
-                                       onSuggestSelect={this.selectSuggest}/>;
+                             onBlur={this.onInputBlur} />,
 
-        return <div className="geonames__container">
-            <div className="geonames__input-wrapper">
-                {/*<div className="search-icon"></div>*/}
+            resultsList = this.getResultsDisplay();
 
-                <svg fill={(this.state.focused)? '#0892D0': '#AAA'} height="30" viewBox="2 -2 22 24" width="30" xmlns="http://www.w3.org/2000/svg"  onClick={this.focus.bind(this)}>
-                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                    <path d="M0 0h24v24H0z" fill="none"/>
-                </svg>
-                {input}
-            </div>
-
-            <div className="geonames__results-wrapper">
-                {resultsList}
-            </div>
+        return <div className='gplaces-search'>
+            {input}
+            {resultsList}
         </div>;
     }
 }
 
-Geonames.defaultProps = {
-    onFocus: () => {
-    },
-    onBlur: () => {
-    },
-    onChange: () => {
-    },
+GooglePlacesSearch.defaultProps = {
+    onFocus: () => {},
+    onBlur: () => {},
+    onSelect: () => {},
+    country: 'us'
 }
 
 
-export default Geonames;
+export default GooglePlacesSearch;

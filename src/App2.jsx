@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 // import './components/Geonames.css';
-import Geonames from './components/Geonames';
+import GooglePlacesSearch from './components/GooglePlacesSearch';
+
+
 
 class App extends Component {
     toptabs = [
@@ -30,11 +32,6 @@ class App extends Component {
         this.setState({selected: (this.state.selected === id)? null: id});
     }
 
-    onContainerClick = (event) => {
-        console.log('on contentClick')
-        this.setState({showTabs: !this.state.showTabs});
-    }
-
     render() {
         return (
             <div id="Container">
@@ -58,7 +55,7 @@ class App extends Component {
                     }
                     {/*<div className="button" onClick={this.onClick}><img src ={'./images/Home.png'} height={20}/><div className="imgwrap">Home</div></div>
                     <div className="button" onClick={this.onClick}><img src ={'./images/Contact.png'} height={20}/><div className="imgwrap">Contact</div></div>*/}
-                    <Geonames />
+                    <GooglePlacesSearch />
                 </div>
 
 
