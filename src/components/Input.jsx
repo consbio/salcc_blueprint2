@@ -1,22 +1,8 @@
-// derived from react-geosuggest
-
 import React from 'react';
 
+
+// The value of this input is entirely managed via props (meaning it is managed from the outside)
 class Input extends React.PureComponent {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         value: this.props.value
-    //     };
-    // }
-
-
-    handleChange = (event) => {
-        const value = event.target.value;
-        // this.setState({value: value});
-        this.props.onChange(value);
-    };
-
 
     onFocus = () => {
         this.props.onFocus();
@@ -36,7 +22,6 @@ class Input extends React.PureComponent {
 
     reset = (event) => {
         event.preventDefault();
-        // this.setState({value: ''});
         this.props.onChange('');
         this.focus();
     }
@@ -89,7 +74,6 @@ class Input extends React.PureComponent {
 
 
     render() {
-        console.log('input render called')
 
         const icon = <svg fill='#888'
                           height='30' width='30' viewBox='2 -2 22 24'
@@ -106,7 +90,7 @@ class Input extends React.PureComponent {
                 autoComplete='false'
                 placeholder={this.props.placeholder}
                 value={this.props.value}
-                onChange={this.handleChange}
+                onChange={this.props.onChange}
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}/>,
 
@@ -129,8 +113,10 @@ Input.defaultProps = {
     className: '',
     value: '',
     placeholder: 'Enter a location name',
-    ignoreTab: false,
-    isPending: false
+    isPending: false,
+    onChange: () => {},
+    onFocus: () => {},
+    onBlur: () => {},
 };
 
 export default Input;

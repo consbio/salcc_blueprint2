@@ -5,25 +5,20 @@
     align-items: center;
 }
 
-
-
 .gplaces-search input {
     margin-top: 6px;
     border: none;
     padding: 4px 22px 4px 4px;
-    /*width: 100%;*/
     outline: none;
     font-size: 16px;
     color: #a4aab3;
     background: #EEE;
-    /*margin-right: 28px;*/
     border-radius: 6px;
     border: 1px solid transparent;
     line-height: 1;
-
 }
 
-/*Only targeting chrome and safari */
+/* Only targeting chrome and safari, so this is intentionally not provided for others */
 .gplaces-search input::-webkit-input-placeholder {
     font-size: small;
     line-height: 1.5;
@@ -50,7 +45,7 @@
     padding: 0;
     list-style: none;
     position: absolute;
-    z-index: 2000; /* fixme */
+    z-index: 10000;
     top: 40px;
     left: 0;
     right: 0;
@@ -73,7 +68,7 @@
     padding: 20px;
     text-align: center;
     position: absolute;
-    z-index: 2000; /* fixme */
+    z-index: 10000;
     top: 40px;
     left: 0;
     right: 0;
