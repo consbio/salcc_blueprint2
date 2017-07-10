@@ -27,8 +27,7 @@ class App extends Component {
     changeTab(tab) {
         this.setState({
             ...this.state,
-            activeTab: tab,
-            images: tab+'active'
+            activeTab: tab
         });
     }
 
@@ -67,6 +66,7 @@ class App extends Component {
                 </div>
                 <div id ="Footer" className="tabs">
                     {this.state.tabs.map((tabName) => (
+
                         <div
                             className={this.state.activeTab === tabName ? 'tab active' : 'tab'}
                             onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ tabName +'.png'} height={20}/><div className="imgwrap">{tabName}</div></div>

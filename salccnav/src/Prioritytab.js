@@ -1,46 +1,18 @@
 import React from 'react';
 import './App.css';
-import {AreaChart} from 'react-easy-chart';
 
 function TabOne() {
     return (
         <div id = "Content">
         <h2>Watershed Name</h2>
-        <AreaChart
-          margin={{top: 30, right: 0, bottom: 30, left: 0}}
-          width={550}
-          height={450}
-          areaColors={['black','black','purple','red','hotpink','pink']}
-          data={[
-            [
-              { x: 1, y: 0 },
-              { x: 2, y: 0 },
-              { x: 3, y: 0 }
-            ],
-            [
-              { x: 1, y: 1 },
-              { x: 2, y: 1 },
-              { x: 3, y: 1 }
-            ],
-            [
-              { x: 1, y: 4 },
-              { x: 2, y: 4 },
-              { x: 3, y: 4 }
-            ], [
-              { x: 1, y: 6 },
-              { x: 2, y: 6 },
-              { x: 3, y: 6 }
-            ], [
-              { x: 1, y: 10 },
-              { x: 2, y: 10 },
-              { x: 3, y: 10 }
-            ], [
-              { x: 1, y: 12 },
-              { x: 2, y: 12 },
-              { x: 3, y: 12 }
-            ]
-          ]}
-          />
+
+            <svg width="520" height="220">
+                <rect x="0" y="0" width="520" height="10" fill = "#4A0068"/>
+                <rect x="0" y="10" width="520" height="50" fill = "#C40988"/>
+                <rect x="0" y="60" width="520" height="50" fill = "#FAB3BA"/>
+                <rect x="0" y="110" width="520" height="10" fill = "#D3D3D3"/>
+                <rect x="0" y="120" width="520" height="50" fill = "gray"/>
+            </svg>
         </div>
     );
 }
