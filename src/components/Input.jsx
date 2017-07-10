@@ -14,20 +14,26 @@ class Input extends React.PureComponent {
 
     focus() {
         this.input.focus();
-    }
+    };
 
     blur() {
         this.input.blur();
-    }
+    };
 
     reset = (event) => {
         event.preventDefault();
         this.props.onChange('');
         this.focus();
-    }
+    };
 
 
-    getSpinner = () => {
+    handleChange = (event) => {
+        const value = event.target.value;
+        this.props.onChange(value);
+    };
+
+
+    renderSpinner = () => {
         if (this.props.isPending) {
             return <div className='gplaces-search-spinner'>
                 <svg
@@ -59,7 +65,7 @@ class Input extends React.PureComponent {
         return null;
     }
 
-    getReset = () => {
+    renderReset = () => {
         if (this.props.value) {
             return <svg onClick={this.reset} className='gplaces-search-reset' height='18' viewBox='0 0 24 24' width='18'
                         xmlns='http://www.w3.org/2000/svg'>
@@ -90,13 +96,13 @@ class Input extends React.PureComponent {
                 autoComplete='false'
                 placeholder={this.props.placeholder}
                 value={this.props.value}
-                onChange={this.props.onChange}
+                onChange={this.handleChange}
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}/>,
 
-            spinner = this.getSpinner(),
+            spinner = this.renderSpinner(),
 
-            reset = this.getReset();
+            reset = this.renderReset();
 
 
         return <div className={this.props.className}>
