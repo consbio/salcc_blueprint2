@@ -38,6 +38,8 @@ class BarChart extends Component {
       .selectAll('rect')
       .data(this.props.data)
       .style('fill', 'url(#dots-6)')
+       .style('stroke', 'black')
+       .style('stroke-width', '2px')
       .attr('x', (d,i) => i * 25)
       .attr('y', d => this.props.size[1] -yScale(d))
       .attr('height', d => yScale(d))

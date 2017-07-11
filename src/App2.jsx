@@ -180,7 +180,6 @@ class App extends React.Component {
                     <h4>Urbanization</h4>
 
                      <div>
-                         bleh
 
                          { this.state.selected === 2 && <HelloChart/>
                          }
