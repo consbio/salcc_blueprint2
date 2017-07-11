@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import './index.css';
 import BarChart from './components/Charts/BarChart'
-import Geonames from './components/Geonames/Geonames';
+import Geonames from './components/Geonames/GooglePlacesSearch';
 
 import TabOne from './components/Prioritytab.js'
 import TabTwo from './components/IndicatorsTab.js'
