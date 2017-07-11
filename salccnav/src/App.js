@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import './index.css';
-import BarChart from './BarChart'
-import Geonames from './components/Geonames';
+import BarChart from './components/Charts/BarChart'
+import Geonames from './components/Geonames/Geonames';
 
-import TabOne from './Prioritytab.js'
-import TabTwo from './IndicatorsTab.js'
-import TabThree from './ThreatsTab.js'
-import TabFour from './PartnersTab.js'
-import TabFive from './HomeTab.js'
-import TabSix from './ContactTab.js'
+import TabOne from './components/Prioritytab.js'
+import TabTwo from './components/IndicatorsTab.js'
+import TabThree from './components/ThreatsTab.js'
+import TabFour from './components/PartnersTab.js'
+import TabFive from './components/HomeTab.js'
+import TabSix from './components/ContactTab.js'
 
 class App extends Component {
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {AreaChart} from 'react-easy-chart';
-import Whisker from './WhiskerPlot.js';
+import Whisker from './Charts/WhiskerPlot.js';
 
 function TabTwo() {
     return (

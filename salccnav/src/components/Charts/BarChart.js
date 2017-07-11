@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import './App.css'
 import { max } from 'd3-array'
 import { select } from 'd3-selection'
 let s = require('d3-scale');
