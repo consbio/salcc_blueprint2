@@ -23,6 +23,19 @@ body {
     font-size: 12px;
 }
 
+.flex-item2{
+    margin: 2px;
+    color: #a4aab3;
+    font-size: 12px;
+}
+
+.flex-item2.active {
+    margin: 2px;
+    color: #0892D0;
+    background: #DDD;
+}
+
+
 /*#Footer.active {*/
     /*display: block;*/
 /*}*/

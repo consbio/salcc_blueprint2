@@ -55,7 +55,7 @@ class App extends Component {
                     <div id="TopBar" className="toptabs">
                     {this.state.toptabs.map((tabName) => (
                         <div
-                            className={this.state.activeTab === tabName ? 'tab active' : 'tab'}
+                            className={this.state.activeTab === tabName ?'tab active' : 'tab'}
                             onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ tabName +'.png'} height={20}/><div className="imgwrap">{tabName}</div></div>
                     ))}
                       <Geonames />
