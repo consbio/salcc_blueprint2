@@ -1,10 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Geonames from './components/Geonames';
+import React, {Component} from 'react';
+import GooglePlacesSearch from './components/GooglePlacesSearch';
 import HelloChart from './HelloChart';
 
-class App extends React.Component {
-
+class App extends Component {
     toptabs = [
         '',
         '',
@@ -63,7 +61,7 @@ class App extends React.Component {
                     }
                     {/*<div className="button" onClick={this.onClick}><img src ={'./images/Home.png'} height={20}/><div className="imgwrap">Home</div></div>
                     <div className="button" onClick={this.onClick}><img src ={'./images/Contact.png'} height={20}/><div className="imgwrap">Contact</div></div>*/}
-                    <Geonames />
+                    <GooglePlacesSearch />
                 </div>
 
 
