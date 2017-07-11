@@ -91,6 +91,7 @@ class DemoTabs extends Component {
   };
 
   handleChangeIndex = (index) => {
+      console.log(index)
     this.setState({
       index,
     });
@@ -133,9 +134,9 @@ class DemoTabs extends Component {
           </SwipeableViews>
                   <div id ="Footer">
             <div className="flex-container">
-              <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
-              <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
-              <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+              <div className="flex-item" onClick={()=>this.handleChangeIndex(0)}> <img src={'/images/basemap.png'} height={30}/></div>
+              <div className="flex-item" onClick={()=>this.handleChangeIndex(1)}> <img src={'/images/basemap.png'} height={30}/></div>
+              <div className="flex-item" onClick={()=>this.handleChangeIndex(2)}> <img src={'/images/basemap.png'} height={30}/></div>
             </div>
           </div>
               </div>
