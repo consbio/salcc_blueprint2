@@ -102,7 +102,7 @@ class DemoTabs extends Component {
     } = this.state;
 
     return (
-          
+
               <div id = "Content">
                   <h2>Watershed name</h2>
           <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex}>
