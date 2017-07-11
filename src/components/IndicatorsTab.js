@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
+import Tabs, { Tab } from 'material-ui/Tabs';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { LabelCheckbox } from 'material-ui/Checkbox';
 import Whisker from './Charts/WhiskerPlot.js';
 import SwipeableViews from 'react-swipeable-views';
 
@@ -66,54 +69,80 @@ const styles = {
     color: '#fff',
   },
   slide1: {
-    background: '#FFFFFF',
+    backgroundColor: '#Ffffff',
   },
   slide2: {
-    background: '#c9e2ea',
+    backgroundColor: '#c9e2ea',
   },
   slide3: {
-    background: '#FFFFFF',
+    backgroundColor: '#ffffFF',
   },
 };
 
-const MyComponent = () => (
-    <div id="Content">
-      <h2>Watershed name</h2>
-      <SwipeableViews>
-        <div style={Object.assign({}, styles.slide, styles.slide1)}>
-          <div className="flex-container2">
-            <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
-            <div className="flex-item"> <h4>Ecosystem1</h4></div>
-          </div>
-          <Whisker/>
-          <Whisker/>
-        </div>
-        <div style={Object.assign({}, styles.slide, styles.slide2)}>
-          <div className="flex-container2">
-            <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
-            <div className="flex-item"> <h4>Ecosystem2</h4></div>
-          </div>
-          <Whisker/>
-          <Whisker/>
-          <Whisker/>
-        </div>
-        <div style={Object.assign({}, styles.slide, styles.slide3)}>
-           <div className="flex-container2">
-            <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
-            <div className="flex-item"> <h4>Ecosystem3</h4></div>
-          </div>
-          <Whisker/>
-          <Whisker/>
-        </div>
-      </SwipeableViews>
-      <div id ="Footer">
-        <div className="flex-container">
-          <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
-          <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
-          <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
-        </div>
-      </div>
-    </div>
-);
+class DemoTabs extends Component {
+  state = {
+    index: 0,
+  };
 
-export default MyComponent;
+  handleChange = (event, value) => {
+    this.setState({
+      index: value,
+    });
+  };
+
+  handleChangeIndex = (index) => {
+    this.setState({
+      index,
+    });
+  };
+
+  render() {
+    const {
+      index,
+    } = this.state;
+
+    return (
+      <MuiThemeProvider>
+        <div>
+          <Tabs index={index} fullWidth onChange={this.handleChange}>
+            <Tab label="tab n°1" />
+            <Tab label="tab n°2" />
+            <Tab label="tab n°3" />
+          </Tabs>
+          <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex}>
+            <div style={Object.assign({}, styles.slide, styles.slide1)}>
+               <div className="flex-container2">
+                  <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+                  <div className="flex-item"> <h4>Ecosystem1</h4></div>
+               </div>
+               <Whisker/>
+               <Whisker/>
+            </div>
+            <div style={Object.assign({}, styles.slide, styles.slide2)}>
+              slide n°2
+              <div className="flex-container2">
+                  <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+                  <div className="flex-item"> <h4>Ecosystem2</h4></div>
+               </div>
+               <Whisker/>
+               <Whisker/>
+              <br />
+              <br />
+            </div>
+            <div style={Object.assign({}, styles.slide, styles.slide3)}>
+              slide n°3
+              <div className="flex-container2">
+                  <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+                  <div className="flex-item"> <h4>Ecosystem3</h4></div>
+               </div>
+               <Whisker/>
+               <Whisker/>
+            </div>
+          </SwipeableViews>
+        </div>
+      </MuiThemeProvider>
+    );
+  }
+}
+
+export default DemoTabs;
