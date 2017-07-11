@@ -1,6 +1,7 @@
 import React from 'react';
 import {AreaChart} from 'react-easy-chart';
 import Whisker from './Charts/WhiskerPlot.js';
+import SwipeableViews from 'react-swipeable-views';
 
 function TabTwo() {
     return (
@@ -59,4 +60,64 @@ function TabTwo() {
     );
 }
 
-export default TabTwo;
+const styles = {
+  slide: {
+    padding: 0,
+    minHeight: 425,
+    color: '#fff',
+  },
+  slide1: {
+    background: '#FEA900',
+  },
+  slide2: {
+    background: '#B3DC4A',
+  },
+  slide3: {
+    background: '#6AC0FF',
+  },
+};
+
+const MyComponent = () => (
+    <div id="Content">
+      <h2>Watershed name</h2>
+      <SwipeableViews>
+        <div style={Object.assign({}, styles.slide, styles.slide1)}>
+          <div className="flex-container2">
+            <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+            <div className="flex-item"> <h4>Ecosystem1</h4></div>
+          </div>
+          slide n°1
+          <Whisker/>
+          <Whisker/>
+        </div>
+        <div style={Object.assign({}, styles.slide, styles.slide2)}>
+          <div className="flex-container2">
+            <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+            <div className="flex-item"> <h4>Ecosystem2</h4></div>
+          </div>
+          slide n°2
+          <Whisker/>
+          <Whisker/>
+          <Whisker/>
+        </div>
+        <div style={Object.assign({}, styles.slide, styles.slide3)}>
+           <div className="flex-container2">
+            <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+            <div className="flex-item"> <h4>Ecosystem3</h4></div>
+          </div>
+          slide n°3
+          <Whisker/>
+          <Whisker/>
+        </div>
+      </SwipeableViews>
+      <div id ="Footer">
+        <div className="flex-container">
+          <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+          <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+          <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+        </div>
+      </div>
+    </div>
+);
+
+export default MyComponent;
