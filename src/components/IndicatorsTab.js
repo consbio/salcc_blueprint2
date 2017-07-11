@@ -84,7 +84,7 @@ class DemoTabs extends Component {
     index: 0,
   };
 
-  handleChange = (event, value) => {
+  handleChangeTabs = (event, value) => {
     this.setState({
       index: value,
     });
@@ -102,13 +102,9 @@ class DemoTabs extends Component {
     } = this.state;
 
     return (
-      <MuiThemeProvider>
-        <div>
-          <Tabs index={index} fullWidth onChange={this.handleChange}>
-            <Tab label="tab n°1" />
-            <Tab label="tab n°2" />
-            <Tab label="tab n°3" />
-          </Tabs>
+          
+              <div id = "Content">
+                  <h2>Watershed name</h2>
           <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex}>
             <div style={Object.assign({}, styles.slide, styles.slide1)}>
                <div className="flex-container2">
@@ -119,18 +115,14 @@ class DemoTabs extends Component {
                <Whisker/>
             </div>
             <div style={Object.assign({}, styles.slide, styles.slide2)}>
-              slide n°2
               <div className="flex-container2">
                   <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
                   <div className="flex-item"> <h4>Ecosystem2</h4></div>
                </div>
                <Whisker/>
                <Whisker/>
-              <br />
-              <br />
             </div>
             <div style={Object.assign({}, styles.slide, styles.slide3)}>
-              slide n°3
               <div className="flex-container2">
                   <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
                   <div className="flex-item"> <h4>Ecosystem3</h4></div>
@@ -139,8 +131,15 @@ class DemoTabs extends Component {
                <Whisker/>
             </div>
           </SwipeableViews>
-        </div>
-      </MuiThemeProvider>
+                  <div id ="Footer">
+            <div className="flex-container">
+              <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+              <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+              <div className="flex-item"> <img src={'/images/basemap.png'} height={30}/></div>
+            </div>
+          </div>
+              </div>
+
     );
   }
 }
