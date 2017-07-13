@@ -57,6 +57,7 @@ function TabFive() {
                         covers 50%.</div>
                     </div>
                 </div>
+                <h4>Next Steps</h4>
                 <h4>Basemap Credit</h4>
                 <div className="flex-container">
                     <div className="flex-item"> <img src={'/images/basemap.png'} height={40}/></div>

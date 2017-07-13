@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import './index.css';
+import Map from './components/leaflet/Map';
 import BarChart from './components/Charts/BarChart'
 import Geonames from './components/GooglePlacesSearch/GooglePlacesSearch';
 
@@ -19,7 +20,7 @@ class App extends Component {
         this.state = {
             activeTab: null,
             tabs: ['Priority', 'Indicators', 'Threats', 'Partners'],
-            images: ['Priority', 'Indicators', 'Threats', 'Partners'],
+            images: null,
             toptabs: ['Home','Contact']
         };
     }
@@ -45,6 +46,8 @@ class App extends Component {
                 return <TabFive />
             case 'Contact':
                 return <TabSix />
+            case null:
+                return <Map/>
         }
     }
 
@@ -55,22 +58,25 @@ class App extends Component {
                     <div id="TopBar" className="toptabs">
                     {this.state.toptabs.map((tabName) => (
                         <div
-                            className={this.state.activeTab === tabName ?'tab active' : 'tab'}
+                            className={(this.state.activeTab !== null && this.state.activeTab === tabName) ?'tab active' : 'tab'}
                             onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ tabName +'.png'} height={20}/><div className="imgwrap">{tabName}</div></div>
                     ))}
                       <Geonames />
                     </div>
-                    <div className="tabContent">
-                        {this.renderActiveTab()}
+                    <div className="tabContent">{
+                                this.renderActiveTab()
+                        }
                     </div>
                 </div>
                 <div id ="Footer" className="tabs">
                     {this.state.tabs.map((tabName) => (
-
                         <div
                             className={this.state.activeTab === tabName ? 'tab active' : 'tab'}
-                            onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ tabName +'.png'} height={20}/><div className="imgwrap">{tabName}</div></div>
-                    ))}
+                            onClick={() => this.changeTab(tabName)}>
+                            < img src={'/images/' + tabName + '.png'} height={20}/>
+                            <div className="imgwrap">{tabName}</div>
+                        </div>
+                        ))}
                 </div>
             </div>
 
