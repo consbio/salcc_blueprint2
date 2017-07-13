@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import L from 'leaflet';
 //import '../node_modules/leaflet-modal';
-//import '../node_modules/leaflet.locatecontrol';
+import '../../../node_modules/leaflet.locatecontrol';
 // postCSS import of Leaflet's CSS
 import 'leaflet/dist/leaflet.css';
 
@@ -123,7 +123,7 @@ export default class Map extends React.Component {
     //L.control.zoom({ position: "topright"}).addTo(map);
     //L.control.scale({ position: "bottomleft"}).addTo(map);
     //L.control.layers( baseMaps, overlayMaps, {position: "bottomleft"}).addTo(map);
-    //L.control.locate({position: "bottomright"}).addTo(map);
+    L.control.locate({position: "bottomright"}).addTo(map);
 
     // a TileLayer is used as the "basemap"
     const tileLayer = L.tileLayer(config.tileLayer.uri, config.tileLayer.params).addTo(map);

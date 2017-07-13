@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import './index.css';
 import Map from './components/leaflet/Map';
-import BarChart from './components/Charts/BarChart'
 import Geonames from './components/GooglePlacesSearch/GooglePlacesSearch';
 
 import TabOne from './components/Prioritytab.js'
@@ -30,6 +28,13 @@ class App extends Component {
             ...this.state,
             activeTab: tab
         });
+    }
+    //trying to reuse this code in changeTab function
+    onClick = (event) => {
+        let id = parseInt(event.currentTarget.dataset.id, 10);
+        console.log('setstate', id)
+        // if this matches previous tab, deselect it
+        this.setState({activeTab: (this.state.activeTab === id)? null: id});
     }
 
     renderActiveTab() {
