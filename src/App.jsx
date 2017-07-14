@@ -25,10 +25,10 @@ class App extends Component {
 
     changeTab(tab) {
         if(tab === this.state.activeTab){
-                    this.setState({
-            ...this.state,
-            activeTab: null
-        });
+            this.setState({
+                ...this.state,
+                activeTab: null
+            });
         }
         else {
             this.setState({
@@ -72,7 +72,7 @@ class App extends Component {
                     {this.state.toptabs.map((tabName) => (
                         <div
                             className={(this.state.activeTab !== null && this.state.activeTab === tabName) ?'tab active' : 'tab'}
-                            onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ tabName +'.png'} height={20}/><div className="imgwrap">{tabName}</div></div>
+                            onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ ((this.state.activeTab !== null && this.state.activeTab === tabName) ? tabName+'active' : tabName) +'.png'} height={20}/><div className="imgwrap">{tabName}</div></div>
                     ))}
                       <Geonames />
                     </div>
@@ -86,7 +86,7 @@ class App extends Component {
                         <div
                             className={this.state.activeTab === tabName ? 'tab active' : 'tab'}
                             onClick={() => this.changeTab(tabName)}>
-                            < img src={'/images/' + tabName + '.png'} height={20}/>
+                            < img src={'/images/' + ((this.state.activeTab !== null && this.state.activeTab === tabName) ? tabName+'active' : tabName) + '.png'} height={20}/>
                             <div className="imgwrap">{tabName}</div>
                         </div>
                         ))}
