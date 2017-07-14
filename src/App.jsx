@@ -24,10 +24,18 @@ class App extends Component {
     }
 
     changeTab(tab) {
-        this.setState({
+        if(tab === this.state.activeTab){
+                    this.setState({
             ...this.state,
-            activeTab: tab
+            activeTab: null
         });
+        }
+        else {
+            this.setState({
+                ...this.state,
+                activeTab: tab
+            });
+        }
     }
     //trying to reuse this code in changeTab function
     onClick = (event) => {
@@ -38,7 +46,7 @@ class App extends Component {
     }
 
     renderActiveTab() {
-        switch (this.state.activeTab) {
+        switch (this.state.activeTab) {//if the previous state is the same tab, then close the tab
             case 'Priority':
                 return <TabOne />
             case 'Indicators':
