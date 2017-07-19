@@ -1,8 +1,9 @@
 import React from 'react';
+import WhiskerDes from './WhiskerDescription';
 
 function Whisker() {
     return (
-      <div id = "Content">
+      <div id = "Content" onClick={()=><WhiskerDes/>}>
       <svg width="270" height="100">
         <text x="10.8" y="20" textAnchor="begin" fill='#a4aab3' fontSize={14}>Amphibians</text>
         <line x1="126.8" x2="126.8" y1="18" y2="70" fill='#a4aab3'></line>

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
-import './index.css';
-import Map from './components/leaflet/Map';
-import Geonames from './components/GooglePlacesSearch/GooglePlacesSearch';
+import '../index.css';
+import Map from './leaflet/Map';
+import Geonames from './GooglePlacesSearch/GooglePlacesSearch';
 
-import TabOne from './components/Prioritytab.js'
-import TabTwo from './components/IndicatorsTab.js'
-import TabThree from './components/ThreatsTab.js'
-import TabFour from './components/PartnersTab.js'
-import TabFive from './components/HomeTab.js'
-import TabSix from './components/ContactTab.js'
+import TabOne from './Prioritytab.js'
+import TabTwo from './IndicatorsTab.js'
+import TabThree from './ThreatsTab.js'
+import TabFour from './PartnersTab.js'
+import TabFive from './HomeTab.js'
+import TabSix from './ContactTab.js'
 
 class App extends Component {
 

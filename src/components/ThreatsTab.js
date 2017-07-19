@@ -1,6 +1,6 @@
 import React from 'react';
 import BarChart from './Charts/BarChart';
-import '../App.css';
+import './App.css';
 import {AreaChart} from 'react-easy-chart';
 
 function TabThree() {

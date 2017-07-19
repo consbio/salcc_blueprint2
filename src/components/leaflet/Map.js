@@ -138,8 +138,6 @@ export default class Map extends React.Component {
     return (
       <div id="mapUI">
         {
-          //<Map/>
-            //Currently the navigation is always showing but a show and hide function exists
         }
         <div ref={(node) => this._mapNode = node} id="map" />
       </div>
