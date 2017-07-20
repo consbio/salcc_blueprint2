@@ -60,14 +60,17 @@ class App extends Component {
             case 'Contact':
                 return <TabSix />
             case null:
-                return <Map/>
+                return null;
+                // return <Map/>
         }
     }
 
     render() {
         return (
             <div className="App">
-                <div id="Container" className="tabContentHolder">
+                <Map />
+
+                {/*<div id="Container" className="tabContentHolder">*/}
                     <div id="TopBar" className="toptabs">
                     {this.state.toptabs.map((tabName) => (
                         <div
@@ -76,11 +79,13 @@ class App extends Component {
                     ))}
                       <Geonames />
                     </div>
-                    <div className="tabContent">{
+
+                {/*</div>*/}
+                {/*<div className="tabContent">*/}
+                    {
                                 this.renderActiveTab()
                         }
-                    </div>
-                </div>
+                    {/*</div>*/}
                 <div id ="Footer" className="tabs">
                     {this.state.tabs.map((tabName) => (
                         <div

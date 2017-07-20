@@ -1,4 +1,9 @@
 .App {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .App-logo {
@@ -16,25 +21,35 @@
 .App-intro {
   font-size: large;
 }
-.tabContent {
-  position: absolute;
-    height: 485px;
-    width: 100%;
-  top: 40px;
-    bottom: 40px;
-    right: 0px;
-    left: 0px;
-    background: #FFF;
-    padding: 0px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    display:block;
-}
-#Container {
-    background: #FFF;
+/*.tabContent {*/
+  /*position: absolute;*/
+    /*!*height: 485px;*!*/
+    /*!*width: 100%;*!*/
+  /*top: 40px;*/
+    /*bottom: 48px;*/
+    /*right: 0px;*/
+    /*left: 0px;*/
+    /*background: #FFF;*/
+    /*padding: 0px;*/
+    /*overflow-y: auto;*/
+    /*overflow-x: hidden;*/
+    /*display:block;*/
+    /*z-index: 10000;*/
+/*}*/
+
+#TopBar, #Footer, #Content{
+    z-index: 10000;
 }
 
+/*#Container {*/
+    /*background: #FFF;*/
+/*}*/
+
 #TopBar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
     display: flex;
     flex-direction: row;
     align-content: stretch;
@@ -49,12 +64,15 @@
 
 #Content {
   background: #FFF;
+    display: flex;
     position: absolute;
     right: 0px;
     left: 0px;
+    bottom: 48px;
+    top: 40px;
     background: #FFF;
     padding: 10px;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     display: block;
 }
@@ -146,6 +164,21 @@
 /*#Footer.active {*/
     /*display: block;*/
 /*}*/
+
+
+#MapContainer {
+    position: absolute;
+    top:40px;
+    bottom:48px;
+    left: 0;
+    right:0;
+    z-index: 1;
+}
+#Map {
+    height: 100%;
+    width: 100%;
+}
+
 
 .tab {
     color:#AAA;

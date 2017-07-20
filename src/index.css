@@ -6,11 +6,13 @@ html, body {
   font-family: sans-serif;
 }
 
-#root, #map, #mapUI{
-  width: inherit;
-  height: inherit;
-  background-color: #000;
-}
+/*#root{*/
+  /*width: inherit;*/
+  /*height: inherit;*/
+  /*background-color: #000;*/
+/*}*/
+
+
 
 .flex-container{
     display: -webkit-flex;

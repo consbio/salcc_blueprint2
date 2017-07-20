@@ -16,6 +16,7 @@
     "es6-promise": "^4.1.1",
     "isomorphic-fetch": "^2.2.1",
     "leaflet": "^1.1.0",
+    "leaflet-basemaps": "^0.2.2",
     "leaflet.locatecontrol": "^0.62.0",
     "leaflet.vectorgrid": "^1.2.0",
     "lodash.debounce": "^4.0.8",
