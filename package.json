@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "babel-polyfill": "^6.23.0",
     "chart.js": "^1.1.1",
     "d3-array": "1.2.0",
     "d3-axis": "1.0.8",
@@ -14,6 +15,10 @@
     "d3-transition": "1.1.0",
     "es6-promise": "^4.1.1",
     "isomorphic-fetch": "^2.2.1",
+    "leaflet": "^1.1.0",
+    "leaflet-basemaps": "^0.2.2",
+    "leaflet.locatecontrol": "^0.62.0",
+    "leaflet.vectorgrid": "^1.2.0",
     "lodash.debounce": "^4.0.8",
     "material-ui": "^0.18.6",
     "react": "^15.6.1",
