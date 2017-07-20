@@ -6,6 +6,7 @@ import 'leaflet-basemaps';
 // postCSS import of Leaflet's CSS
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-basemaps/L.Control.Basemaps.css';
+import './Map.css';
 // require('leaflet-basemaps')
 
 

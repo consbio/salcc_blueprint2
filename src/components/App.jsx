@@ -61,7 +61,6 @@ class App extends Component {
                 return <TabSix />
             case null:
                 return null;
-                // return <Map/>
         }
     }
 
@@ -70,22 +69,17 @@ class App extends Component {
             <div className="App">
                 <Map />
 
-                {/*<div id="Container" className="tabContentHolder">*/}
-                    <div id="TopBar" className="toptabs">
+                <div id="TopBar" className="toptabs">
                     {this.state.toptabs.map((tabName) => (
                         <div
                             className={(this.state.activeTab !== null && this.state.activeTab === tabName) ?'tab active' : 'tab'}
                             onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ ((this.state.activeTab !== null && this.state.activeTab === tabName) ? tabName+'active' : tabName) +'.png'} height={20}/><div className="imgwrap">{tabName}</div></div>
                     ))}
                       <Geonames />
-                    </div>
+                </div>
 
-                {/*</div>*/}
-                {/*<div className="tabContent">*/}
-                    {
-                                this.renderActiveTab()
-                        }
-                    {/*</div>*/}
+                { this.renderActiveTab() }
+
                 <div id ="Footer" className="tabs">
                     {this.state.tabs.map((tabName) => (
                         <div
