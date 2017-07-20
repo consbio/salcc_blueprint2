@@ -112,8 +112,8 @@ class App extends Component {
                 <Map />
 
                 <div id="TopBar" className="toptabs">
-                    {this.state.toptabs.map((tabName) => (
-                        <div
+                    {this.state.toptabs.map((tabName, index) => (
+                        <div key={index}
                             className={(this.state.activeTab !== null && this.state.activeTab === tabName) ?'tab active' : 'tab'}
                             onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ ((this.state.activeTab !== null && this.state.activeTab === tabName) ? tabName+'active' : tabName) +'.png'} height={20} alt=""/><div className="imgwrap">{tabName}</div></div>
                     ))}
