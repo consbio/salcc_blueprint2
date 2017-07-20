@@ -102,27 +102,26 @@ class App extends Component {
             case 'Contact':
                 return <TabSix />
             case null:
-                return <Map />
+                return null;
         }
     }
 
     render() {
         return (
             <div className="App">
-                <div id="Container" className="tabContentHolder">
-                    <div id="TopBar" className="toptabs">
+                <Map />
+
+                <div id="TopBar" className="toptabs">
                     {this.state.toptabs.map((tabName, index) => (
                         <div key={index}
                             className={(this.state.activeTab !== null && this.state.activeTab === tabName) ?'tab active' : 'tab'}
                             onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ ((this.state.activeTab !== null && this.state.activeTab === tabName) ? tabName+'active' : tabName) +'.png'} height={20} alt=""/><div className="imgwrap">{tabName}</div></div>
                     ))}
                       <Geonames />
-                    </div>
-                    <div className="tabContent">{
-                                this.renderActiveTab()
-                        }
-                    </div>
                 </div>
+
+                { this.renderActiveTab() }
+
                 <div id ="Footer" className="tabs">
                     {this.state.tabs.map((tabName, index) => (
                         <div key={index}
