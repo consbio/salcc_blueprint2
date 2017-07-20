@@ -1,5 +1,6 @@
 import React from 'react';
 import WhiskerDes from './WhiskerDescription';
+//import PropTypes from 'prop-types';
 
 function Whisker() {
     return (

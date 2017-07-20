@@ -43,7 +43,7 @@ import fetch from 'isomorphic-fetch';
  export function fetchData( unit ) {
      return function (dispatch) {
          dispatch(requestData(unit));
-         return fetch('../data/${unit}.json')
+         return fetch(process.env.PUBLIC_URL + '/data/' + unit + '.json')
              .then(
                  response => response.json(),
                  error => console.log('Error occured.', error)
