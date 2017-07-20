@@ -3,28 +3,61 @@ import './App.css';
 import PropTypes from 'prop-types';
 
 function TabOne({data}) {
+    const colors = [
+        "#D3D3D3",
+        "gray",
+        "#FAB3BA",
+        "#C40988",
+        "#4A0068"
+    ];
+    let sum=0;
+    const posi = [
+        0,
+        data[0]*2,
+        data[0]*2+data[1]*2,
+        data[0]*2+data[1]*2+data[2]*2,
+        data[0]*2+data[1]*2+data[2]*2+data[3]*2,
+        data[0]*2+data[1]*2+data[2]*2+data[3]*2+data[4]*2
+    ];
     return (
         <div id = "Content">
         <h2>Watershed Name</h2>
-
-            <svg width="520" height="220">
-                <rect x="0" y="0" width="520" height="10" fill = "#4A0068"/>
-                <rect x="0" y="10" width="520" height="50" fill = "#C40988"/>
-                <rect x="0" y="60" width="520" height="50" fill = "#FAB3BA"/>
-                <rect x="0" y="110" width="520" height="10" fill = "#D3D3D3"/>
-                <rect x="0" y="120" width="520" height="50" fill = "gray"/>
-            </svg>
-            <ul>
-                {data.map((num,i) =>
-                    <li key={i}>{num}</li>
+            <svg width="100%" height="220">
+                {
+                    data.map((num, i)=>
+                    <rect x="0" y={posi[i]} width="520" height={num*2} fill = {colors[i]}>
+                    </rect>
                 )}
-            </ul>
+            </svg>
+            <div>
+                    <div className="flex-container2">
+                        <div className="flex-item2"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAGxJREFUOI3t1KEOgDAMBNATSyqXGRz8BB9IP3RiCjmCPIeiYbabIjvVVLycuoDBCe8hItoDkVQDRURX7kdEcmEnCqpkkFRrGJGwYHM3rMiwhiMzwQlO8GfgieJGblwtSFKrZJsgT5qB/T568wAWSyFwDyoiLwAAAABJRU5ErkJggg==" alt=""></img></div>
+                        <div className="flex-item2"> <b>  Highest priority {data[4]} %</b></div>
+                    </div>
+                    <div className="flex-container2">
+                        <div className="flex-item2"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAHJJREFUOI1jYaAyYIEx2NnZGygx6OfPnw1wA9nZ2RuyGNzq5bnFyDLs7Ne7DKvYjzP8/PmzAe5CeW4xBlN2NbJduOrrcQa4C6kJRg0cNXDUwGFm4Nmvd8k25OHXV6gG/vz5s2EV+3F4EUQOQClgkQUoBQBcnCRdcyUxFQAAAABJRU5ErkJggg==" alt=""></img></div>
+                        <div className="flex-item2"><b>  High priority {data[3]} %</b></div>
+                    </div>
+                    <div className="flex-container2">
+                        <div className="flex-item2"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAHJJREFUOI1jYaAyYIEx2NnZGygx6OfPnw1wA9nZ2Ru6E5Lr1WVlyTLs4MWLDL2b1jP8/PmzAe5CdVlZBmdDY7Jd2LtpPQPchdQEowaOGjhq4DAz8ODFi2QbcvPxY1QDf/782dC7aT28CCIHoBSwyAKUAgA94iTl61gEtQAAAABJRU5ErkJggg==" alt=""></img></div>
+                        <div className="flex-item2"><b>  Medium priority {data[2]} %</b></div>
+                    </div>
+                    <div className="flex-container2">
+                        <div className="flex-item2"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAGdJREFUOI3t1CEOwDAMA8CAScHh/UUfuDzUID8oNhtatNK0aKpRFHAy8iWbc72HqvoKRNITVFXvvd9mVsIiQgAISc+GZiattXJDAJINd+aABzzgz8CIKCNjjBkk6QBygiqZBvb7WM0DvcUmwcYVKdQAAAAASUVORK5CYII=" alt=""></img></div>
+                        <div className="flex-item2"><b>  Corridors {data[1]} %</b></div>
+                    </div>
+                </div>
+
         </div>
     );
 }
 
 TabOne.propTypes = {
     data: PropTypes.array
+    //data: PropTypes.shape({
+    //blueprint: PropTypes.array,
+    //name: PropTypes.string
+    //})
 }
 
 export default TabOne;

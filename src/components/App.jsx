@@ -87,20 +87,20 @@ class App extends Component {
     }
 
     renderActiveTab() {
-        const { selectedUnit, dataByUnit, isFetching } = this.props;
+        const { selectedUnit, dataByUnit} = this.props;
         switch (this.state.activeTab) {//if the previous state is the same tab, then close the tab
             case 'Priority':
-                return <TabOne data={dataByUnit[selectedUnit].items}/> //<TabOne data = {data}/>
+                return <TabOne data={dataByUnit[selectedUnit].items}/>
             case 'Indicators':
-                return <TabTwo /> //data = {data}
+                return <TabTwo data={dataByUnit[selectedUnit].items}/>
             case 'Threats':
-                return <TabThree /> //data = {data}
+                return <TabThree data={dataByUnit[selectedUnit].items}/>
             case 'Partners':
-                return <TabFour /> //data =
+                return <TabFour data={dataByUnit[selectedUnit].items}/>
             case 'Home':
-                return <TabFive />
+                return <TabFive data={dataByUnit[selectedUnit].items}/>
             case 'Contact':
-                return <TabSix />
+                return <TabSix data={dataByUnit[selectedUnit].items}/>
             case null:
                 return null;
         }
