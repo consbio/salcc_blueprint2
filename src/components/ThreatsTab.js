@@ -2,6 +2,7 @@ import React from 'react';
 import BarChart from './Charts/BarChart';
 import './App.css';
 import {AreaChart} from 'react-easy-chart';
+//import PropTypes from 'prop-types';
 
 function TabThree() {
     return (

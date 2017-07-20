@@ -6,7 +6,7 @@ import {
     RECIEVE_DATA
 } from '../Actions/actions';
 
-function selectedUnit (state = 'reactjs', action){
+function selectedUnit (state = '', action){
     switch (action.type){
         case SELECT_UNIT:
             return action.unit;
@@ -52,7 +52,7 @@ function dataByUnit (state = {}, action){
         case REQUEST_DATA:
             return Object.assign({}, state, {
                 [action.unit]: data(state[action.unit], action)
-            })
+            });
         default:
             return state
     }
@@ -61,6 +61,6 @@ function dataByUnit (state = {}, action){
 const rootReducer = combineReducers({
     dataByUnit,
     selectedUnit
-})
+});
 
 export default rootReducer;
