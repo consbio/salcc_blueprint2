@@ -35,7 +35,7 @@ import fetch from 'isomorphic-fetch';
      return {
          type: RECIEVE_DATA,
          unit,
-         data: (json.data)? json.data : [],
+         data: (json.data)? json.data : [], //was data
          recievedAt: Date.now()
      }
  }

@@ -64,7 +64,7 @@ function TabFive() {
                     <div className="flex-item"> toggle button and then text attribution</div>
                 </div>
                 <div className="flex-container">
-                    <div className="flex-item"> <img src={'/images/basemap.png'} height={40} alt=""/></div>
+                    <div className="flex-item"> <img src={'/images/basemap2.png'} height={40} alt=""/></div>
                     <div className="flex-item"> toggle button and then text attribution</div>
                 </div>
                 <h4>Developed By</h4>
