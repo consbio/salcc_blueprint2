@@ -87,7 +87,7 @@ class App extends Component {
     }
 
     renderActiveTab() {
-        const { selectedUnit, dataByUnit, isFetching } = this.props;
+        const { selectedUnit, dataByUnit} = this.props;
         switch (this.state.activeTab) {//if the previous state is the same tab, then close the tab
             case 'Priority':
                 return <TabOne data={dataByUnit[selectedUnit].items}/> //<TabOne data = {data}/>
