@@ -1,26 +1,33 @@
 {
-// Vertices of watershed boundary, used to create polygon layer in Leaflet
-  "properties": {
-    "blueprint": [  // rounded percent of watershed in each blueprint category (see: config::blueprintCategoriesArray):  Not priority, Corridors, Medium priority, High priority, Highest priority
+  "data":
+    [
       3,
       1,
       15,
       11,
       69
     ],
-    "justification": "Part of the Okefenokee/Osceola/Eglin AFB Complex and Big Bend coastline. This is a large landscape containing longleaf pine, large swamps, and rivers (Suwanee and St. Marys).  Also this area ties the Gulf and Atlantic coasts together. There is a group of stakeholders that have done conservation planning in the Okefenokee/Osceola area and they should be consulted regarding management actions. Important area for coastal to inland migration of communities and species. A key area for management and protection in response to sea level rise and an important area for economy for inshore/near-shore harvest (clams, scallops, oysters). A rich estuarine habitat with a dependency on freshwater flows and inputs. There is connectivity from coastal waters to inland freshwater and many threatened/endangered species. Concentration of working forests and fisheries.", // text description of watershed from Blueprint 1.0 workshops
-    "plans": [  // text listing of the plan keys associated with this project (see: config::plans for mapping of keys to longer descriptions)
+  "properties":{
+    "blueprint": [
+      3,
+      1,
+      15,
+      11,
+      69
+    ],
+    "justification": "Part of the OkefenokeeOsceolaEglin AFB Complex and Big Bend coastline. This is a large landscape containing longleaf pine, large swamps, and rivers (Suwanee and St. Marys).  Also this area ties the Gulf and Atlantic coasts together. There is a group of stakeholders that have done conservation planning in the OkefenokeeOsceola area and they should be consulted regarding management actions. Important area for coastal to inland migration of communities and species. A key area for management and protection in response to sea level rise and an important area for economy for inshorenear-shore harvest (clams, scallops, oysters). A rich estuarine habitat with a dependency on freshwater flows and inputs. There is connectivity from coastal waters to inland freshwater and many threatenedendangered species. Concentration of working forests and fisheries.",
+    "plans": [
       "PARCA",
       "TNC",
       "ACJV",
       "NBCI",
       "Florida"
     ],
-    "indicator_stats": {  // these are the min, mean, and max values for each indicator present in this watershed.  Used for the interior whiskers in the indicator whisker plot
+    "indicator_stats": {
       "PineAndPrairie_Birds": [
-        0, // min
-        0.821, // mean
-        2.0 // max
+        0,
+        0.821,
+        2.0
       ],
       "Estuarine_CoastalCondition": [
         2.6667,
@@ -103,32 +110,32 @@
         0
       ]
     },
-    "gap": {  // land protection status, joins to config::gapLabels / gapColors
+    "gap": {
       "2": 39.3,
       "3": 0.2,
       "39": 2.5
-    }, //Assuming that threats would go in here somewhere
-    "owner": { // breakdown of percent of watershed in each ownership, these join to config::ownershipLabels / ownershipColors
+    },
+    "owner": {
       "PLO": 2.5,
       "FED": 39.3,
       "STP": 0.2
     },
-    "ecosystems": { // this is the breakdown of percent of watershed in each ecosystem
+    "ecosystems": {
       "estuaries": 16.6,
       "pine_and_prairie": 37.1,
       "freshwater_marsh": 2.6,
       "forested_wetland": 43.6
     },
-    "counties": { // countyID: county name; these list the counties present and are used to generate links for the land trusts
+    "counties": {
       "1275": "Levy County, Florida",
       "1229": "Dixie County, Florida"
     },
-    "name": "Suwannee River (Suwannee Basin)",  // name of watershed
-    "SRCID": "031102050805", // Watershed ID, only present for watersheds, not marine blocks.
-    "acres": 43901,  // size of watershed in acres
-    "indicators": {// this entity maps to config::indicators[indicatorKey],  values here match up with valueLabels in that object (and occasionally also join with other things like categories)
+    "name": "Suwannee River (Suwannee Basin)",
+    "SRCID": "031102050805",
+    "acres": 43901,
+    "indicators": {
       "PineAndPrairie_Birds": [
-        27.6, // this maps to indicators['PineAndPrairieBirds'].valueLabels[0], which is 'Poor'     (note: not all start at 0, but we handle that by joining through categoricalValues array)
+        27.6,
         62.7,
         9.7,
         0

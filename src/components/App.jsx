@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-//import { bindActionCreators } from 'redux';
+import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import './App.css';
 import '../index.css';
@@ -15,9 +16,42 @@ import TabFive from './HomeTab.js'
 import TabSix from './ContactTab.js'
 
 //import actions
+//import {selectUnit, fetchData, deselectUnit} from '../Actions/actions';
 import * as UnitActions from '../Actions/actions';
 
 class App extends Component {
+    ///////////////////////////////////////
+    static propTypes = {
+        selectedUnit: PropTypes.string.isRequired,
+        items: PropTypes.array.isRequired,
+        isFetching: PropTypes.bool.isRequired,
+        dispatch: PropTypes.func.isRequired
+    }
+
+    componentDidMount(){
+        const { fetchData, selectedUnit} = this.props
+        fetchData(selectedUnit);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.selectedUnit !== this.props.selectedUnit){
+            const { fetchData, selectedUnit } = nextProps
+            fetchData(selectedUnit);
+        }
+    }
+
+    handleChange = nextUnit => {
+        this.props.selectUnit(nextUnit)
+    }
+
+    handleRefreshClick = e => {
+        e.preventDefault()
+
+        const { deselectUnit, fetchData, selectedUnit} = this.props
+        deselectUnit(selectedUnit);
+        fetchData(selectedUnit);
+    }
+////////////////////////////
 
     constructor(props) {
         super(props);
@@ -53,16 +87,16 @@ class App extends Component {
     }
 
     renderActiveTab() {
-        //const { unit, actions } = this.props;
+        const { selectedUnit, dataByUnit, isFetching } = this.props;
         switch (this.state.activeTab) {//if the previous state is the same tab, then close the tab
             case 'Priority':
-                return <TabOne />
+                return <TabOne data={dataByUnit[selectedUnit].items}/> //<TabOne data = {data}/>
             case 'Indicators':
-                return <TabTwo />
+                return <TabTwo /> //data = {data}
             case 'Threats':
-                return <TabThree />
+                return <TabThree /> //data = {data}
             case 'Partners':
-                return <TabFour />
+                return <TabFour /> //data =
             case 'Home':
                 return <TabFive />
             case 'Contact':
@@ -113,6 +147,10 @@ class App extends Component {
 function mapStateToProps(state) {
     return state;
 }
+
+//function mapDispatchToProps(dispatch) {
+//    return bindActionCreators({ selectedUnit: selectUnit}, dispatch);
+//}
 
 export default connect(
     mapStateToProps,

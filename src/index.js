@@ -31,9 +31,9 @@ const store = createStore(
     )
 )
 
-store.dispatch(selectUnit('reactjs'));
+store.dispatch(selectUnit('I4'));
 store
-    .dispatch(fetchData('reactjs'))
+    .dispatch(fetchData('I4'))
     .then(() => console.log(store.getState()));
 
 ReactDOM.render(
