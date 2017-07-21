@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function TabFour() {
+function TabFour({data}) {
     return (
       <div id = "Content">
-                    <h2>Watershed name</h2>
+                    <h2>{data.name}</h2>
                     <br/>
                     <h4>Conserved Lands Ownership</h4>
                     <p>
@@ -38,6 +38,13 @@ function TabFour() {
                 </div>
 
     );
+}
+
+TabFour.propTypes = {
+    //data: PropTypes.array
+    data: PropTypes.shape({
+        name: PropTypes.string
+    })
 }
 
 export default TabFour;
