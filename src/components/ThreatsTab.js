@@ -2,12 +2,12 @@ import React from 'react';
 import BarChart from './Charts/BarChart';
 import './App.css';
 import {AreaChart} from 'react-easy-chart';
-//import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
-function TabThree() {
+function TabThree({data}) {
     return (
       <div id = "Content">
-              <h2>Watershed name</h2>
+              <h2>{data.name}</h2>
               <h4>Urbanization</h4>
           <svg width="100" height="250">
                 <rect x="0" y="50" width="100%" height="50" fill = "#AC69B3"/>
@@ -63,6 +63,13 @@ function TabThree() {
             />
         </div>
     );
+}
+
+TabThree.propTypes = {
+    //data: PropTypes.array
+    data: PropTypes.shape({
+        name: PropTypes.string
+    })
 }
 
 export default TabThree;
