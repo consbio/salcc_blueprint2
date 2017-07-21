@@ -67,11 +67,7 @@ class IndicaTabs extends Component {
               <div className="flex-container2">
                   <div className="flex-item2"> <img src={'/SALCC_icons/Icon-Forestedwetland.svg'} height={30} alt=""/></div>
                   <div className="flex-item"> <h4>Forested Wetland</h4></div>
-                  /*<ul>{
-                      data.inidicator_stats.map((num, i)=>
-                          <li key = {i}>{num}</li>
-                      )}
-                  </ul>*/
+                 
                </div>
             </div>
           </SwipeableViews>
