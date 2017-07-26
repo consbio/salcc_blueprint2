@@ -16,104 +16,109 @@
       "Florida"
     ],
     "ecosystems": {
-      "estuaries": 16.6,
-      "pine_and_prairie": 37.1,
-      "freshwater_marsh": 2.6,
-      "forested_wetland": 43.6
+      "Estuaries": 16.6,
+      "Pineandprairie": 37.1,
+      "Freshwatermarsh": 2.6,
+      "Forestedwetland": 43.6
     },
     "counties": {
       "1275": "Levy County, Florida",
       "1229": "Dixie County, Florida"
     },
+    "gap": {
+      "2": 39.3,
+      "3": 0.2,
+      "39": 2.5
+    },
     "name": "Suwannee River (Suwannee Basin)",
     "SRCID": "031102050805",
     "acres": 43901,
-    "indicator_stats": [
-      {"PineAndPrairie_Birds": [
+    "indicator_stats": {
+      "PineAndPrairie_Birds": [
         0,
         0.821,
         2.0
-      ]},
-      {"Estuarine_CoastalCondition": [
+      ],
+      "Estuarine_CoastalCondition": [
         2.6667,
         2.6667,
         2.6667
-      ]},
-      {"EstuarineMarsh_WetlandPatchSize": [
+      ],
+      "EstuarineMarsh_WetlandPatchSize": [
         0,
         1.7153,
         3.0
-      ]},
-      {"FreshwaterMarsh_Birds": [
+      ],
+      "FreshwaterMarsh_Birds": [
         0,
         271.4918,
         4043.0
-      ]},
-      {"PineAndPrairie_Amphibians": [
+      ],
+      "PineAndPrairie_Amphibians": [
         0,
         0.3986,
         1.0
-      ]},
-      {"PineAndPrairie_RegularlyBurnedHabitat": [
+      ],
+      "PineAndPrairie_RegularlyBurnedHabitat": [
         0,
         0.5479,
         1.0
-      ]},
-      {"EstuarineMarsh_Water_VegetationEdge": [
+      ],
+      "EstuarineMarsh_Water_VegetationEdge": [
         0,
         3.0739,
         4.0
-      ]},
-      {"Landscapes_LowRoadDensityPatches": [
+      ],
+      "Landscapes_LowRoadDensityPatches": [
         0,
         0.4685,
         1.0
-      ]},
-      {"FreshwaterAquatic_PermeableSurface": [
+      ],
+      "FreshwaterAquatic_PermeableSurface": [
         77.0,
         99.5225,
         100.0
-      ]},
-      {"FreshwaterAquatic_ImperiledAquaticSpecies": [
+      ],
+      "FreshwaterAquatic_ImperiledAquaticSpecies": [
         0,
         0,
         0
-      ]},
-      {"Waterscapes_MigratoryFishConnectivity": [
+      ],
+      "Waterscapes_MigratoryFishConnectivity": [
         1.0,
         3.6343,
         4.0
-      ]},
-      {"Waterscapes_NetworkComplexity": [
+      ],
+      "Waterscapes_NetworkComplexity": [
         1.0,
         5.1582,
         6.0
-      ]},
-      {"ForestedWetland_Birds": [
+      ],
+      "ForestedWetland_Birds": [
         0,
         1.4467,
         2.0
-      ]},
-      {"ForestedWetland_Amphibians": [
+      ],
+      "ForestedWetland_Amphibians": [
         0,
         0.8332,
         1.0
-      ]},
-      {"Landscapes_ResilientBiodiversityHotspots": [
+      ],
+      "Landscapes_ResilientBiodiversityHotspots": [
         0,
         3.7038,
         6.0
-      ]},
-      {"FreshwaterAquatic_RiparianBuffers": [
+      ],
+      "FreshwaterAquatic_RiparianBuffers": [
         24.0,
         94.1022,
         100.0
-      ]},
-      {"Landscapes_LowUrbanHistoric": [
+      ],
+      "Landscapes_LowUrbanHistoric": [
         0,
         0,
         0
-      ]}
-    ]
+      ]
+    }
   }
 }

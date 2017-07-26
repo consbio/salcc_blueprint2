@@ -8,11 +8,11 @@ import Map from './leaflet/Map';
 import Geonames from './GooglePlacesSearch/GooglePlacesSearch';
 
 //import components as needed
-import TabOne from './Prioritytab.js'
-import TabTwo from './IndicatorsTab.js'
-import TabThree from './ThreatsTab.js'
-import TabFour from './PartnersTab.js'
-import TabFive from './HomeTab.js'
+import TabOne from './Prioritytab'
+import TabTwo from './IndicatorsTab'
+import TabThree from './ThreatsTab'
+import TabFour from './PartnersTab'
+import TabFive from './HomeTab'
 import TabSix from './ContactTab.js'
 
 //import actions

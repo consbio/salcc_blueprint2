@@ -1,15 +1,9 @@
 import React from 'react';
 import './App.css';
 import PropTypes from 'prop-types';
+import colors from '../config.js';
 
 function TabOne({data}) {
-    const colors = [
-        "#D3D3D3",
-        "gray",
-        "#FAB3BA",
-        "#C40988",
-        "#4A0068"
-    ];
     const position = [
         0,
         data.blueprint[0]*2,
@@ -20,17 +14,17 @@ function TabOne({data}) {
     ];
     return (
         <div id = "Content">
-        <h2>{data.name}</h2>
+            <h2>{data.name}</h2>
             <svg width="100%" height="220">
                 {
                     data.blueprint.map((num, i)=>
-                    <rect x="0" y={position[i]} width="520" height={num*2} fill = {colors[i]}/>
-                )}
+                        <rect x="0" y={position[i]} width="520" height={num*2} fill = {colors[i]}/>
+                    )}
             </svg>
             <div>
                 <div className="flex-container2">
-                        <div className="flex-item2"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAGxJREFUOI3t1KEOgDAMBNATSyqXGRz8BB9IP3RiCjmCPIeiYbabIjvVVLycuoDBCe8hItoDkVQDRURX7kdEcmEnCqpkkFRrGJGwYHM3rMiwhiMzwQlO8GfgieJGblwtSFKrZJsgT5qB/T568wAWSyFwDyoiLwAAAABJRU5ErkJggg==" alt=""></img></div>
-                        <div className="flex-item2"> <b>  Highest priority {data.blueprint[4]} %</b></div>
+                    <div className="flex-item2"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAGxJREFUOI3t1KEOgDAMBNATSyqXGRz8BB9IP3RiCjmCPIeiYbabIjvVVLycuoDBCe8hItoDkVQDRURX7kdEcmEnCqpkkFRrGJGwYHM3rMiwhiMzwQlO8GfgieJGblwtSFKrZJsgT5qB/T568wAWSyFwDyoiLwAAAABJRU5ErkJggg==" alt=""></img></div>
+                    <div className="flex-item2"> <b>  Highest priority {data.blueprint[4]} %</b></div>
                 </div>
                 <div className="flex-container2">
                     <div className="flex-item2"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAHJJREFUOI1jYaAyYIEx2NnZGygx6OfPnw1wA9nZ2RuyGNzq5bnFyDLs7Ne7DKvYjzP8/PmzAe5CeW4xBlN2NbJduOrrcQa4C6kJRg0cNXDUwGFm4Nmvd8k25OHXV6gG/vz5s2EV+3F4EUQOQClgkQUoBQBcnCRdcyUxFQAAAABJRU5ErkJggg==" alt=""></img></div>

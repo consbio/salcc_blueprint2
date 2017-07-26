@@ -1,15 +1,15 @@
 html, body {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
     height: 100%;
-  width: 100%;
-  font-family: sans-serif;
+    width: 100%;
+    font-family: sans-serif;
 }
 
 /*#root{*/
-  /*width: inherit;*/
-  /*height: inherit;*/
-  /*background-color: #000;*/
+/*width: inherit;*/
+/*height: inherit;*/
+/*background-color: #000;*/
 /*}*/
 
 
@@ -47,7 +47,7 @@ html, body {
 
 
 /*#Footer.active {*/
-    /*display: block;*/
+/*display: block;*/
 /*}*/
 
 .button {
