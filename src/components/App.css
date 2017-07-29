@@ -124,17 +124,16 @@
 }
 
 #Footer2 {
-    height: 32px;
+    height: 36px;
     background: #FAFAFA;
     text-align: center;
-    position: absolute;
-    bottom: 0px;
+    position: fixed;
+    bottom: 47px;
     left: 0px;
     right: 0px;
     display: flex;
     justify-content: center;
     align-content: stretch;
-    /*display: none;*/
 }
 /*#Footer.active {*/
     /*display: block;*/
@@ -183,4 +182,13 @@
 .crosshatch {
   background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><path fill='#fff' d='M0 0h8v8h-8z'/><path d='M0 0l8 8zm8 0l-8 8z' stroke-width='.5' stroke='#aaa'/></svg>");
   background-repeat: repeat;
+}
+
+.indicator-chart svg {
+    border: 1px solid red;
+}
+
+.indicator-chart .rangeLine {
+    stroke-width:3;
+    stroke: #a4aab3;
 }

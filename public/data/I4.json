@@ -30,41 +30,46 @@
       "3": 0.2,
       "39": 2.5
     },
+    "owner": {
+      "PLO": 2.5,
+      "FED": 39.3,
+      "STP": 0.2
+    },
     "name": "Suwannee River (Suwannee Basin)",
     "SRCID": "031102050805",
     "acres": 43901,
     "indicator_stats": {
-      "PineAndPrairie_Birds": [
+      "Pineandprairie_Birds": [
         0,
         0.821,
         2.0
       ],
-      "Estuarine_CoastalCondition": [
+      "Estuaries_CoastalCondition": [
         2.6667,
         2.6667,
         2.6667
       ],
-      "EstuarineMarsh_WetlandPatchSize": [
+      "EstuariesMarsh_WetlandPatchSize": [
         0,
         1.7153,
         3.0
       ],
-      "FreshwaterMarsh_Birds": [
+      "Freshwatermarsh_Birds": [
         0,
         271.4918,
         4043.0
       ],
-      "PineAndPrairie_Amphibians": [
+      "Pineandprairie_Amphibians": [
         0,
         0.3986,
         1.0
       ],
-      "PineAndPrairie_RegularlyBurnedHabitat": [
+      "Pineandprairie_RegularlyBurnedHabitat": [
         0,
         0.5479,
         1.0
       ],
-      "EstuarineMarsh_Water_VegetationEdge": [
+      "EstuariesMarsh_Water_VegetationEdge": [
         0,
         3.0739,
         4.0
@@ -74,12 +79,12 @@
         0.4685,
         1.0
       ],
-      "FreshwaterAquatic_PermeableSurface": [
+      "Freshwateraquatic_PermeableSurface": [
         77.0,
         99.5225,
         100.0
       ],
-      "FreshwaterAquatic_ImperiledAquaticSpecies": [
+      "Freshwateraquatic_ImperiledAquaticSpecies": [
         0,
         0,
         0
@@ -94,12 +99,12 @@
         5.1582,
         6.0
       ],
-      "ForestedWetland_Birds": [
+      "Forestedwetland_Birds": [
         0,
         1.4467,
         2.0
       ],
-      "ForestedWetland_Amphibians": [
+      "Forestedwetland_Amphibians": [
         0,
         0.8332,
         1.0
@@ -109,7 +114,7 @@
         3.7038,
         6.0
       ],
-      "FreshwaterAquatic_RiparianBuffers": [
+      "Freshwateraquatic_RiparianBuffers": [
         24.0,
         94.1022,
         100.0

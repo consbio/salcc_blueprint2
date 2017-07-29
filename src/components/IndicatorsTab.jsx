@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 //import { LabelCheckbox } from 'material-ui/Checkbox';
 import Whisker from './Charts/WhiskerPlot.js';
+import WhiskerDes from './Charts/WhiskerDescription';
 import SwipeableViews from 'react-swipeable-views';
 import PropTypes from 'prop-types';
 
@@ -10,7 +11,7 @@ import PropTypes from 'prop-types';
 const styles = {
     slide: {
         padding: 0,
-        minHeight: 425,
+        minHeight: 410,
         color: '#fff',
     },
     slide1: {
@@ -25,7 +26,6 @@ const styles = {
 };
 
 class IndicaTabs extends Component {
-//function IndicaTabs ({data}) {
 
     state = {
         index: 0,
@@ -54,22 +54,30 @@ class IndicaTabs extends Component {
         return Object.keys(this.props.data.ecosystems).map((thing, index)=>
         <div style={Object.assign({}, styles.slide, styles.slide2)}>
             <div className="flex-container2">
-                <div className="flex-item2"> <img src={'/SALCC_icons/Icon-'+ thing +'.svg'} height={30} alt=""/></div>
-                <div className="flex-item2"><h4>{thing +' '+ this.props.data.ecosystems[thing] + '%'}</h4></div>
+                <div className="flex-item2"> <img src={'/SALCC_icons/Icon-'+ thing +'.svg'} height={40} alt=""/></div>
+                <div className="flex-item2"><h4>{thing +' '}</h4></div>
+                <div className="flex-item2"> <p>{'('+ this.props.data.ecosystems[thing] + '% )'}</p></div>
             </div>
-            <Whisker key = {2}/>
-            <Whisker/>
+            <div>{this.renderWhiskers(thing)}</div>
         </div>);
+    }
+
+    renderIndicatorDescription(){
+        return <WhiskerDes indicatordes = {this.props.data}/>
+    }
+
+    renderWhiskers(thing){ //consider using filter first
+        return Object.keys(this.props.data.indicator_stats).map((name, index)=>
+                <div>{name.includes(thing) ? <Whisker indicatorname = {name} values =
+                    {this.props.data.indicator_stats} /> : '' }
+                </div>
+        )
     }
 
     render(){
         const {
             index,
         } = this.state;
-
-        for (var k of Object.keys(this.props.data.ecosystems)) {
-            console.log(k + this.props.data.ecosystems[k]);
-        }
 
         return (
             <div id ="Content">

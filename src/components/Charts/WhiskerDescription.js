@@ -1,8 +1,8 @@
 import React from 'react';
 
-function WhiskerDes() {
+function WhiskerDes({indicatordes}) {
     return (
-      <div id = "Content">
+      <div>
       lots of text here and a table below
 
 
