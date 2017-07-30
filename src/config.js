@@ -104,21 +104,6 @@ var plans = {
     }
 };
 
-var planURLs = {
-    'ACJV': 'http://acjv.org/planning/bird-conservation-regions/sambi/',
-    'EPA': 'http://www.epa.gov/region4/water/watersheds/priority.html',
-    'PARCA': 'http://www.separc.org/',
-    'NBCI': 'http://bringbackbobwhites.org/',
-    'TNC': 'http://www.landscope.org/focus/understand/tnc_portfolio/',
-    'Alabama': 'http://www.alh2o.org/shus/',
-    'Florida': 'http://www.fnai.org/clip.cfm',
-    'Georgia': 'http://www.georgiawildlife.com/node/1377',
-    'NorthCarolina': 'http://www.ncwildlife.org/Conserving/Programs/GreenGrowthToolbox.aspx',
-    'Virginia': 'http://www.dcr.virginia.gov/natural_heritage/vaconvisvnla.shtml',
-    'SnapperHAPC': 'http://safmc.net/  ',
-    'SAFMC_HAPC_wDeepwater_Coral': 'http://safmc.net/',
-    'RightWhale': 'http://www.nmfs.noaa.gov/pr/species/mammals/cetaceans/rightwhale_northatlantic.htm'
-};
 
 var ownershipLabels = {
     FED: 'Federal',
@@ -132,17 +117,6 @@ var ownershipLabels = {
     UNK: 'Ownership unknown'
 };
 
-var ownershipColors = {
-    FED: '#2ca02c',
-    STP: '#1f77b4',
-    LOC: '#aec7e8',
-    TNC: '#98df8a',
-    PNP: '#ad494a',
-    PFP: '#ff7f0e',
-    PLO: '#d62728',
-    TRB: '#9467bd',
-    UNK: '#c49c94'
-};
 
 var gapLabels = {
     1: 'Permanent protection for biodiversity|e.g., Nature reserves, research natural areas, wilderness areas, Forever Wild easements',
@@ -153,14 +127,7 @@ var gapLabels = {
     9: 'Unknown - protection status unknown|Protection status unknown'
 };
 
-var gapColors = {
-    1: '#637939',
-    2: '#b5cf6b',
-    3: '#98df8a',
-    39: '#e7cb94',
-    4: '#d62728',
-    9: '#9edae5'
-};
+
 
 var ecosystemIndicators = {
     'beach_and_dune': ['BeachAndDune_BeachBirds', 'BeachAndDune_UnalteredBeach'],

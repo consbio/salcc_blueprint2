@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import { LabelCheckbox } from 'material-ui/Checkbox';
 import Whisker from './Charts/WhiskerPlot.js';
 import WhiskerDes from './Charts/WhiskerDescription';
 import SwipeableViews from 'react-swipeable-views';
@@ -19,10 +18,7 @@ const styles = {
     },
     slide2: {
         backgroundColor: '#eff3f4',
-    },
-    slide3: {
-        backgroundColor: '#ffffFF',
-    },
+    }
 };
 
 class IndicaTabs extends Component {
@@ -53,7 +49,7 @@ class IndicaTabs extends Component {
     renderInsides(){
         return Object.keys(this.props.data.ecosystems).map((thing, index)=>
         <div style={Object.assign({}, styles.slide, styles.slide2)}>
-            <div className="flex-container2">
+            <div className="flex-container3">
                 <div className="flex-item2"> <img src={'/SALCC_icons/Icon-'+ thing +'.svg'} height={40} alt=""/></div>
                 <div className="flex-item2"><h4>{thing +' '}</h4></div>
                 <div className="flex-item2"> <p>{'('+ this.props.data.ecosystems[thing] + '% )'}</p></div>
@@ -96,36 +92,7 @@ class IndicaTabs extends Component {
 }
 
 IndicaTabs.propTypes = {
-    //data: PropTypes.array
     data: PropTypes.shape({
-        //indicator_stats: PropTypes.array, //({
-        //Each one is a whiskerplot
-        //List of all the different kinds of indicator_stats has to be here
-        /*PineAndPraire_Birds: PropTypes.array,
-         Estuarine_CoastalCondition: PropTypes.array,
-         EstuarineMarsh_WetlandPatchSize: PropTypes.array,
-         FreshwaterMarsh_Birds: PropTypes.array,
-         PineAndPrairie_Amphibians: PropTypes.array,
-         PineAndPrairie_RegularlyBurnedHabitat: PropTypes.array,
-         EstuarineMarsh_Water_VegetationEdge: PropTypes.array,
-         Landscapes_LowRoadDensityPatches: PropTypes.array,
-         FreshwaterAquatic_PermeableSurface: PropTypes.array,
-         FreshwaterAquatic_ImperiledAquaticSpecies: PropTypes.array,
-         Waterscapes_MigratoryFishConnectivity: PropTypes.array,
-         Waterscapes_NetworkComplexity: PropTypes.array,
-         ForestedWetland_Birds: PropTypes.array,
-         ForestedWetland_Amphibians: PropTypes.array,
-         Landscapes_ResilientBiodiversityHotspots: PropTypes.array,
-         FreshwaterAquatic_RiparianBuffers: PropTypes.array,
-         Landscapes_LowUrbanHistoric: PropTypes.array
-         }),*/
-        //ecosystems: PropTypes.array,/*.shape({
-
-        /* estuaries: PropTypes.number,
-         pine_and_prairie: PropTypes.number,
-         freshwater_marsh: PropTypes.number,
-         forested_wetland: PropTypes.number
-         }),*/
         name: PropTypes.string
     })
 };
