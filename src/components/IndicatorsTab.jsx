@@ -42,7 +42,8 @@ class IndicaTabs extends Component {
     renderFooter(){
         return Object.keys(this.props.data.ecosystems).map((thing, index)=>
             <div className={this.state.index === index ? 'flex-item2 active' : 'flex-item2'}
-                 onClick={() => this.handleChangeIndex(index)}><img src={'/SALCC_icons/Icon-' + thing + '.svg'}
+                 onClick={(e) => {e.stopPropagation();
+                 this.handleChangeIndex(index);}}><img src={'/SALCC_icons/Icon-' + thing + '.svg'}
                                                                     height={30} alt=""/></div>);
     }
 
@@ -58,13 +59,14 @@ class IndicaTabs extends Component {
         </div>);
     }
 
-    renderIndicatorDescription(){
-        return <WhiskerDes indicatordes = {this.props.data}/>
+    renderIndicatorDescription(indicatordes, name){
+        return <WhiskerDes indicatordes = {this.props.data} name = {name}/>
     }
 
     renderWhiskers(thing){ //consider using filter first
         return Object.keys(this.props.data.indicator_stats).map((name, index)=>
-                <div>{name.includes(thing) ? <Whisker indicatorname = {name} values =
+                <div onClick={(e) => {e.stopPropagation();
+                this.renderIndicatorDescription.bind(this.props.data ,name);}}>{name.includes(thing) ? <Whisker indicatorname = {name} values =
                     {this.props.data.indicator_stats} /> : '' }
                 </div>
         )

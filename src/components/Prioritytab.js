@@ -24,8 +24,8 @@ function TabOne({data}) {
             <div>
                 <div className="flex-container2">
                     <div className="flex-item2">
-                        <svg width ="15" height="15">
-                            <rect width = "100%" height= "100%" fill = "#D3D3D3" stroke="gray" strokeWidth="1"/>
+                        <svg width ="17" height="17">
+                            <rect width = "100%" height= "100%" fill = "#D3D3D3" stroke="gray" strokeWidth="2"/>
                         </svg>
                     </div>
                     <div className="flex-item2">Not a priority</div>

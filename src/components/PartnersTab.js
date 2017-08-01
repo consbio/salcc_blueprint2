@@ -147,10 +147,16 @@ function TabFour({data}) {
                 </div>
             )}
             <h4>Land Trusts</h4>
-            <ul>
-                {Object.keys(data.counties).map((num, i)=>
-                    <li key={i}>{num} {data.counties[num]}</li>)}
-            </ul>
+            {Object.keys(data.counties).map((num, i)=>
+                <div className="flex-container2">
+                    <div className="flex-item2">
+                        <svg width ="7" height="7">
+                            <rect width = "100%" height= "100%" fill = "#D3D3D3"/>
+                        </svg>
+                    </div>
+                    <div className="flex-item2"><a href = {"http://findalandtrust.org/counties/"+ num} target="_blank">{data.counties[num]}</a>
+                    </div>
+                </div>)}
 
         </div>
 

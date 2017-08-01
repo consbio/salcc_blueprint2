@@ -1,7 +1,7 @@
 import React from 'react';
 import indicators from '../../configindica';
 
-function WhiskerDes({indicatordes}) {
+function WhiskerDes({indicatordes, name}) {
     return (
         <div>
             lots of text here and a table below
