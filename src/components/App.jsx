@@ -11,7 +11,7 @@ import Geonames from './GooglePlacesSearch/GooglePlacesSearch';
 import TabOne from './Prioritytab'
 import TabTwo from './IndicatorsTab'
 import TabThree from './ThreatsTab'
-import TabFour from './PartnersTab'
+import PartnersTab from './PartnersTab'
 import TabFive from './HomeTab'
 import TabSix from './ContactTab.js'
 
@@ -56,24 +56,23 @@ class App extends Component {
     constructor(props) {
         super(props);
         console.log(props);
+
+        this.tabs = ['Priority', 'Indicators', 'Threats', 'Partners'];
+        this.toptabs = ['Home','Contact'];
+
         this.state = {
-            activeTab: null,
-            tabs: ['Priority', 'Indicators', 'Threats', 'Partners'],
-            images: null,
-            toptabs: ['Home','Contact']
+            activeTab: null
         };
     }
 
     changeTab(tab) {
         if(tab === this.state.activeTab){
             this.setState({
-                ...this.state,
                 activeTab: null
             });
         }
         else {
             this.setState({
-                ...this.state,
                 activeTab: tab
             });
         }
@@ -96,7 +95,7 @@ class App extends Component {
             case 'Threats':
                 return <TabThree data={dataByUnit[selectedUnit].items}/>
             case 'Partners':
-                return <TabFour data={dataByUnit[selectedUnit].items}/>
+                return <PartnersTab data={dataByUnit[selectedUnit].items}/>
             case 'Home':
                 return <TabFive data={dataByUnit[selectedUnit].items}/>
             case 'Contact':
@@ -112,7 +111,7 @@ class App extends Component {
                 <Map />
 
                 <div id="TopBar" className="toptabs">
-                    {this.state.toptabs.map((tabName, index) => (
+                    {this.toptabs.map((tabName, index) => (
                         <div key={index}
                             className={(this.state.activeTab !== null && this.state.activeTab === tabName) ?'tab active' : 'tab'}
                             onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ ((this.state.activeTab !== null && this.state.activeTab === tabName) ? tabName+'active' : tabName) +'.png'} height={20} alt=""/><div className="imgwrap">{tabName}</div></div>
@@ -123,7 +122,7 @@ class App extends Component {
                 { this.renderActiveTab() }
 
                 <div id ="Footer" className="tabs">
-                    {this.state.tabs.map((tabName, index) => (
+                    {this.tabs.map((tabName, index) => (
                         <div key={index}
                             className={this.state.activeTab === tabName ? 'tab active' : 'tab'}
                             onClick={() => this.changeTab(tabName)}>

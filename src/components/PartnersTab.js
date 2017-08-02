@@ -1,51 +1,144 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import planURLs from '../configplanURLs';
-import plans2 from '../configplans.js';
 
-let ownershipColors = {
-    FED: '#2ca02c',
-    STP: '#1f77b4',
-    LOC: '#aec7e8',
-    TNC: '#98df8a',
-    PNP: '#ad494a',
-    PFP: '#ff7f0e',
-    PLO: '#d62728',
-    TRB: '#9467bd',
-    UNK: '#c49c94'
+
+let gapConfig = {
+    1: {
+        color: '#637939',
+        label: 'Permanent protection for biodiversity|e.g., Nature reserves, research natural areas, wilderness areas, Forever Wild easements'
+    },
+    2: {
+        color: '#b5cf6b',
+        label: 'Permanent protection to maintain a primarily natural state|e.g., National Wildlife Refuges, many State Parks, high-use National Parks',
+    },
+    3: {
+        color: '#98df8a',
+        label: 'Permanently secured for multiple uses and in natural cover|e.g., State forests, lands protected from development by forest easements',
+    },
+    39: {
+        color: '#e7cb94',
+        label: 'Permanently secured and in agriculture or maintained grass cover|e.g., Agricultural easements',
+    },
+    4: {
+        color: '#d62728',
+        label: 'Unsecured (already developed temporary easements and/or municipal lands)|e.g., Private lands with no easements, city parks, undesignated state lands ',
+    },
+    9: {
+        color: '#9edae5',
+        label: 'Unknown - protection status unknown|Protection status unknown'
+    }
 };
 
-let gapColors = {
-    1: '#637939',
-    2: '#b5cf6b',
-    3: '#98df8a',
-    39: '#e7cb94',
-    4: '#d62728',
-    9: '#9edae5'
+
+let ownershipConfig = {
+    FED: {
+        color: '#2ca02c',
+        label: 'Federal'
+    },
+    STP: {
+        color: '#1f77b4',
+        label: 'State/province'
+    },
+    LOC: {
+        color: '#aec7e8',
+        label: 'Local'
+    },
+    TNC: {
+        color: '#98df8a',
+        label: 'The Nature Conservancy'
+    },
+    PNP: {
+        color: '#ad494a',
+        label: 'Private non-profit'
+    },
+    PFP: {
+        color: '#ff7f0e',
+        label: 'Private for-profit'
+    },
+    PLO: {
+        color: '#d62728',
+        label: 'Private land owner'
+    },
+    TRB: {
+        color: '#9467bd',
+        label: 'Tribal'
+    },
+    UNK: {
+        color: '#c49c94',
+        label: 'Ownership unknown'
+    }
 };
 
-var ownershipLabels = {
-    FED: 'Federal',
-    STP: 'State/province',
-    LOC: 'Local',
-    TNC: 'The Nature Conservancy',
-    PNP: 'Private non-profit',
-    PFP: 'Private for-profit',
-    PLO: 'Private land owner',
-    TRB: 'Tribal',
-    UNK: 'Ownership unknown'
+
+let plansConfig = {
+    'ACJV': {
+        label: 'ACJV migratory bird priority areas|Atlantic Coast Joint Venture (ACJV)/ South Atlantic Migratory Bird Initiative (SAMBI) Priority Areas',
+        url: 'http://acjv.org/planning/bird-conservation-regions/sambi/'
+    },
+    'EPA': {
+        label: 'EPA priority watersheds|Environmental Protection Agency (EPA) Region 4 Priority Watersheds (except Virginia)',
+        url: 'http://www.epa.gov/region4/water/watersheds/priority.html'
+    },
+    'PARCA': {
+        label: 'Amphibian and reptile conservation|Partners in Amphibian & Reptile Conservation (PARC) Priority Areas',
+        url: 'http://www.separc.org/'
+    },
+    'NBCI': {
+        label: 'Bobwhite conservation areas|National Bobwhite Conservation Initiative (NBCI) Plan',
+        url: 'http://bringbackbobwhites.org/'
+    },
+    'TNC': {
+        label: "TNC's conservation priorities|The Nature Conservancy's (TNC) Ecoregional Priorities for the Mid-Atlantic Coastal Plain, South Atlantic Coastal Plain, and Piedmont",
+        url: 'http://www.landscope.org/focus/understand/tnc_portfolio/'
+    },
+    'Alabama': {
+        label: 'AL Strategic Habitat Units|Alabama Strategic Habitat Units',
+        url: 'http://www.alh2o.org/shus/'
+    },
+    'Florida': {
+        label: 'FL Critical Lands & Waters|Florida Critical Lands and Waters (CLIP)',
+        url: 'http://www.fnai.org/clip.cfm'
+    },
+    'Georgia': {
+        label: 'GA Priority Waters|Georgia Priority Waters',
+        url: 'http://www.georgiawildlife.com/node/1377'
+    },
+    'NorthCarolina': {
+        label: 'NC Green Growth Toolbox|Integrated priorities from the NC Green Growth Toolbox',
+        url: 'http://www.ncwildlife.org/Conserving/Programs/GreenGrowthToolbox.aspx'
+    },
+    'Virginia': {
+        label: 'VA Natural Landscapes Assessment|Virginia Natural Landscapes Assessment',
+        url: 'http://www.dcr.virginia.gov/natural_heritage/vaconvisvnla.shtml'
+    },
+    'ImportantBirdAreas': {
+        label: 'Important Bird Areas|Important Bird Areas',
+        url: null
+    },
+    'NC_Capes': {
+        label: 'NC Seashore Viewsheds|5 mile buffer around NC Capes',
+        url: null
+    },
+    'RightWhale': {
+        label: 'Right Whale Habitat|Right Whale Critical Habitat',
+        url: 'http://www.nmfs.noaa.gov/pr/species/mammals/cetaceans/rightwhale_northatlantic.htm'
+    },
+    'SAFMC_HAPC_wDeepwater_Coral': {
+        label: 'Habitat areas of particular concern|All habitat areas of particular concern (HAPC) from the South Atlantic Fisheries Management Council',
+        url: 'http://safmc.net/'
+    },
+    'SnapperHAPC': {
+        label: 'Snapper habitat areas|Snapper habitat areas of particular concern (HAPC) from the South Atlantic Fisheries Management Council',
+        url: 'http://safmc.net/'
+    },
+    'ViewSheds': {
+        label: 'Viewsheds|Buffer around National Seashores',
+        url: null
+    }
 };
 
-var gapLabels = {
-    1: 'Permanent protection for biodiversity|e.g., Nature reserves, research natural areas, wilderness areas, Forever Wild easements',
-    2: 'Permanent protection to maintain a primarily natural state|e.g., National Wildlife Refuges, many State Parks, high-use National Parks',
-    3: 'Permanently secured for multiple uses and in natural cover|e.g., State forests, lands protected from development by forest easements',
-    39: 'Permanently secured and in agriculture or maintained grass cover|e.g., Agricultural easements',
-    4: 'Unsecured (already developed temporary easements and/or municipal lands)|e.g., Private lands with no easements, city parks, undesignated state lands ',
-    9: 'Unknown - protection status unknown|Protection status unknown'
-};
 
-function TabFour({data}) {
+function PartnersTab({data}) {
     let position = [
         0,
         0,
@@ -80,7 +173,7 @@ function TabFour({data}) {
                     <rect width= "520" height = "100%" fill = '#D3D3D3'/>
                     {
                         Object.keys(data.gap).map((num, i)=>
-                            <rect key={i} x="0" y={position[i]} width="520" height={data.gap[num]*2} fill = {gapColors[num]}/>
+                            <rect key={i} x="0" y={position[i]} width="520" height={data.gap[num]*2} fill = {gapConfig[num].color}/>
                         )}
                 </svg>
                 <br/>
@@ -88,10 +181,10 @@ function TabFour({data}) {
                     <div className="flex-container2">
                         <div className="flex-item2">
                             <svg width ="15" height="15">
-                                <rect key={i} width = "100%" height= "100%" fill = {gapColors[num]} stroke="gray" strokeWidth="1"/>
+                                <rect key={i} width = "100%" height= "100%" fill = {gapConfig[num].color} stroke="gray" strokeWidth="1"/>
                             </svg>
                         </div>
-                        <div className="flex-item2" >{gapLabels[num]+ ' (' + data.gap[num] + '%)'}</div>
+                        <div className="flex-item2" >{gapConfig[num].label+ ' (' + data.gap[num] + '%)'}</div>
                     </div>
                 )}
                 <div className="flex-container2">
@@ -110,19 +203,23 @@ function TabFour({data}) {
                     <rect width= "520" height = "100%" fill = '#D3D3D3'/>
                     {
                         Object.keys(data.owner).map((num, i)=>
-                            <rect key={i} x="0" y={positionowners[i]} width="520" height={data.owner[num]*2} fill = {ownershipColors[num]}/>
+                            <rect key={i} x="0" y={positionowners[i]} width="520" height={data.owner[num]*2} fill = {ownershipConfig[num].color}/>
                         )}
                 </svg>
                 <br/>
                 {Object.keys(data.owner).map((num, i)=>
-                    <div className="flex-container2">
-                        <div className="flex-item2">
-                            <svg width ="15" height="15">
-                                <rect key={i} width = "100%" height= "100%" fill = {ownershipColors[num]} stroke="gray" strokeWidth="1"/>
-                            </svg>
+                    {
+                        const {color, label} = ownershipConfig[num];
+
+                        return <div className="flex-container2">
+                            <div className="flex-item2">
+                                <svg width ="15" height="15">
+                                    <rect key={i} width = "100%" height= "100%" fill = {color} stroke="gray" strokeWidth="1"/>
+                                </svg>
+                            </div>
+                            <div className="flex-item2" >{label + ' (' + data.owner[num] + '%)'}</div>
                         </div>
-                        <div className="flex-item2" >{ownershipLabels[num] + ' (' + data.owner[num] + '%)'}</div>
-                    </div>
+                    }
                 )}
                 <div className="flex-container2">
                     <div className="flex-item2">
@@ -137,14 +234,20 @@ function TabFour({data}) {
 
             <h4>Conservation Plans</h4>
             {data.plans.map((num, i)=>
-                <div className="flex-container2">
-                    <div className="flex-item2">
-                        <svg width ="7" height="7">
-                            <rect width = "100%" height= "100%" fill = "#D3D3D3"/>
-                        </svg>
+                {
+                    let {label, url} = plansConfig[num];
+
+                    return <div className="flex-container2">
+                        <div className="flex-item2">
+                            <svg width ="7" height="7">
+                                <rect width = "100%" height= "100%" fill = "#D3D3D3"/>
+                            </svg>
+                        </div>
+                        <div className="flex-item2">
+                            {url ? <a href={url} target="_blank">{label}</a> : {label} }
+                        </div>
                     </div>
-                    <div className="flex-item2"><a href={planURLs[num]}>{plans2[num]}</a></div>
-                </div>
+                }
             )}
             <h4>Land Trusts</h4>
             {Object.keys(data.counties).map((num, i)=>
@@ -163,8 +266,7 @@ function TabFour({data}) {
     );
 }
 
-TabFour.propTypes = {
-    //data: PropTypes.array
+PartnersTab.propTypes = {
     data: PropTypes.shape({
         name: PropTypes.string,
         gap: PropTypes.shape({
@@ -175,4 +277,4 @@ TabFour.propTypes = {
     })
 };
 
-export default TabFour;
+export default PartnersTab;
