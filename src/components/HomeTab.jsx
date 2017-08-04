@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-function TabFive() {
+function HomeTab() {
     return (
     <div id = "Content">
     <h2>Welcome to the Blueprint 2.1 Simple Viewer for Mobile</h2>
@@ -74,4 +74,4 @@ function TabFive() {
     );
 }
 
-export default TabFive;
+export default HomeTab;

@@ -8,12 +8,12 @@ import Map from './leaflet/Map';
 import Geonames from './GooglePlacesSearch/GooglePlacesSearch';
 
 //import components as needed
-import TabOne from './Prioritytab'
-import TabTwo from './IndicatorsTab'
-import TabThree from './ThreatsTab'
+import PriorityTab from './Prioritytab'
+import IndicatorsTab from './IndicatorsTab'
+import ThreatsTab from './ThreatsTab'
 import TabFour from './PartnersTab'
-import TabFive from './HomeTab'
-import TabSix from './ContactTab.js'
+import HomeTab from './HomeTab'
+import ContactTab from './ContactTab'
 
 //import actions
 //import {selectUnit, fetchData, deselectUnit} from '../Actions/actions';
@@ -90,17 +90,17 @@ class App extends Component {
         const { selectedUnit, dataByUnit} = this.props;
         switch (this.state.activeTab) {//if the previous state is the same tab, then close the tab
             case 'Priority':
-                return <TabOne data={dataByUnit[selectedUnit].items}/>
+                return <PriorityTab data={dataByUnit[selectedUnit].items}/>
             case 'Indicators':
-                return <TabTwo data={dataByUnit[selectedUnit].items}/>
+                return <IndicatorsTab data={dataByUnit[selectedUnit].items}/>
             case 'Threats':
-                return <TabThree data={dataByUnit[selectedUnit].items}/>
+                return <ThreatsTab data={dataByUnit[selectedUnit].items}/>
             case 'Partners':
                 return <TabFour data={dataByUnit[selectedUnit].items}/>
             case 'Home':
-                return <TabFive data={dataByUnit[selectedUnit].items}/>
+                return <HomeTab data={dataByUnit[selectedUnit].items}/>
             case 'Contact':
-                return <TabSix data={dataByUnit[selectedUnit].items}/>
+                return <ContactTab data={dataByUnit[selectedUnit].items}/>
             case null:
                 return null;
         }

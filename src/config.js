@@ -29,14 +29,7 @@ const blueprintCategories = {
 };
 //const blueprintCategoriesArray = d3.values(blueprintCategories);
 
-const colors = [
-    '#D3D3D3',
-    '#686868',
-    '#fbb4b9',
-    '#c51b8a',
-    '#49006a'
-]
-export default colors;
+
 //var colorsArray = d3.values(colors);
 
 var ecosystemLabels = {

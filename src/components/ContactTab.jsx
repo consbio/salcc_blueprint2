@@ -1,8 +1,8 @@
 import React from 'react';
 
-function TabSix() {
+function ContactTab() {
     return (
-        <div id = "Content">
+        <div>
             <h2>Give Us Feedback!</h2>
 
             <p>
@@ -20,4 +20,4 @@ function TabSix() {
     );
 }
 
-export default TabSix;
+export default ContactTab;

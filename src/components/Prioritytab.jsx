@@ -1,9 +1,16 @@
 import React from 'react';
 import './App.css';
 import PropTypes from 'prop-types';
-import colors from '../config.js';
 
-function TabOne({data}) {
+const colors = [
+    '#D3D3D3',
+    '#686868',
+    '#fbb4b9',
+    '#c51b8a',
+    '#49006a'
+];
+
+function PriorityTab({data}) {
     const position = [
         0,
         data.blueprint[0]*2,
@@ -55,7 +62,7 @@ function TabOne({data}) {
     );
 }
 
-TabOne.propTypes = {
+PriorityTab.propTypes = {
     //data: PropTypes.array
     data: PropTypes.shape({
         blueprint: PropTypes.array,
@@ -64,4 +71,4 @@ TabOne.propTypes = {
     })
 }
 
-export default TabOne;
+export default PriorityTab;
