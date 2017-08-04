@@ -7,7 +7,7 @@ function ThreatsTab({data}) {
     return (
         <div id = "Content">
             <h2>{data.name}</h2>
-            <h4>Urbanization</h4>
+            <h4><br/>Urbanization</h4>
             <svg width="100%" height="220">
                 <rect x="0" y="0" width="100%" height="50" fill = "#AC69B3"/>
                 <rect x="0" y="50" width="100%" height="60" fill = "#AE76DE"/>
