@@ -8,12 +8,12 @@ import Map from './leaflet/Map';
 import Geonames from './GooglePlacesSearch/GooglePlacesSearch';
 
 //import components as needed
-import TabOne from './Prioritytab'
-import TabTwo from './IndicatorsTab'
-import TabThree from './ThreatsTab'
+import PriorityTab from './Prioritytab'
+import IndicatorsTab from './IndicatorsTab'
+import ThreatsTab from './ThreatsTab'
 import PartnersTab from './PartnersTab'
-import TabFive from './HomeTab'
-import TabSix from './ContactTab'
+import HomeTab from './HomeTab'
+import ContactTab from './ContactTab'
 
 //import actions
 //import {selectUnit, fetchData, deselectUnit} from '../Actions/actions';
@@ -97,9 +97,9 @@ class App extends Component {
             case 'Partners':
                 return <PartnersTab data={dataByUnit[selectedUnit].items}/>
             case 'Home':
-                return <HomeTab data={dataByUnit[selectedUnit].items}/>
+                return <HomeTab/>
             case 'Contact':
-                return <ContactTab data={dataByUnit[selectedUnit].items}/>
+                return <ContactTab/>
             case null:
                 return null;
         }
