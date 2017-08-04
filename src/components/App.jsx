@@ -116,7 +116,7 @@ class App extends Component {
                             className={(this.state.activeTab !== null && this.state.activeTab === tabName) ?'tab active' : 'tab'}
                             onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ ((this.state.activeTab !== null && this.state.activeTab === tabName) ? tabName+'active' : tabName) +'.png'} height={20} alt=""/><div className="imgwrap">{tabName}</div></div>
                     ))}
-                      <Geonames />
+                      <Geonames onFocus={()=>this.changeTab(null)}/>
                 </div>
 
                 { this.renderActiveTab() }
