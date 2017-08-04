@@ -8,12 +8,12 @@ import Map from './leaflet/Map';
 import Geonames from './GooglePlacesSearch/GooglePlacesSearch';
 
 //import components as needed
-import PriorityTab from './Prioritytab'
-import IndicatorsTab from './IndicatorsTab'
-import ThreatsTab from './ThreatsTab'
+import TabOne from './Prioritytab'
+import TabTwo from './IndicatorsTab'
+import TabThree from './ThreatsTab'
 import TabFour from './PartnersTab'
-import HomeTab from './HomeTab'
-import ContactTab from './ContactTab'
+import TabFive from './HomeTab'
+import TabSix from './ContactTab'
 
 //import actions
 //import {selectUnit, fetchData, deselectUnit} from '../Actions/actions';
