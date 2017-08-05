@@ -20,7 +20,6 @@ import ContactTab from './ContactTab'
 import * as UnitActions from '../Actions/actions';
 
 class App extends Component {
-    ///////////////////////////////////////
     static propTypes = {
         selectedUnit: PropTypes.string.isRequired,
         items: PropTypes.array.isRequired,
@@ -51,7 +50,6 @@ class App extends Component {
         deselectUnit(selectedUnit);
         fetchData(selectedUnit);
     }
-////////////////////////////
 
     constructor(props) {
         super(props);
@@ -137,11 +135,6 @@ class App extends Component {
         );
     }
 }
-
-//App.propTypes = {
-  //  item: PropTypes.array.isRequired,
-  //  isFetching: PropTypes.object.isRequired
-//};
 
 function mapStateToProps(state) {
     return state;

@@ -21,17 +21,40 @@ const styles = {
     }
 };
 
-class IndicaTabs extends Component {
+
+/* Notes on how this component should work:
+- props contain the ecosystems and indicators, their percents, and other dynamic data.
+
+- this component has all the global data for indicators and ecosystems, this.
+can be passed down to components using props
+
+- this component is responsible for fusing together dynamic data and global data
+for each indicator and ecosystem.
+
+- this view is composed of a swipeable container of ecosystems that are present
+
+- each ecosystem has one or more indicators
+
+- each indicator is clickable to show the description.  When the description
+is shown, the indicator takes over the full view underneath the ecosystem name
+(all other indicators are hidden).
+
+- tapping the indicator description reverts back to the regular view.
+
+ */
+
+
+class IndicatorsTab extends Component {
 
     state = {
         index: 0,
     };
 
-    handleChangeTabs = (event, value) => {
-        this.setState({
-            index: value,
-        });
-    };
+    // handleChangeTabs = (event, value) => {
+    //     this.setState({
+    //         index: value,
+    //     });
+    // };
 
     handleChangeIndex = (index) => {
         this.setState({
@@ -93,10 +116,10 @@ class IndicaTabs extends Component {
     }
 }
 
-IndicaTabs.propTypes = {
+IndicatorsTab.propTypes = {
     data: PropTypes.shape({
         name: PropTypes.string
     })
 };
 
-export default IndicaTabs;
+export default IndicatorsTab;
