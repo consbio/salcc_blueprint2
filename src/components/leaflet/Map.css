@@ -1,8 +1,31 @@
-
 /* Leaflet basemap overrides */
+.basemaps {
+    padding: 0;
+    margin-bottom: 20px !important;
+}
 
 .basemap img {
     width: 40px;
+    box-shadow: 1px 2px 4px #555;
     border: none;
-    border-radius: 6px;
+}
+
+
+/* Locate control */
+.leaflet-locate-control {
+    border: 1px solid #DDD !important;
+    box-shadow: 1px 2px 4px #555 !important;
+    border-radius: 40px !important;
+    background: #FFF;
+    margin-right: 14px !important;
+    margin-bottom: 24px !important;
+}
+
+.leaflet-locate-control a {
+    background: transparent no-repeat center center;
+    /*src: https://design.google.com/icons/#ic_my_location*/
+    background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMTIgOGMtMi4yMSAwLTQgMS43OS00IDRzMS43OSA0IDQgNCA0LTEuNzkgNC00LTEuNzktNC00LTR6bTguOTQgM2MtLjQ2LTQuMTctMy43Ny03LjQ4LTcuOTQtNy45NFYxaC0ydjIuMDZDNi44MyAzLjUyIDMuNTIgNi44MyAzLjA2IDExSDF2MmgyLjA2Yy40NiA0LjE3IDMuNzcgNy40OCA3Ljk0IDcuOTRWMjNoMnYtMi4wNmM0LjE3LS40NiA3LjQ4LTMuNzcgNy45NC03Ljk0SDIzdi0yaC0yLjA2ek0xMiAxOWMtMy44NyAwLTctMy4xMy03LTdzMy4xMy03IDctNyA3IDMuMTMgNyA3LTMuMTMgNy03IDd6Ii8+PC9zdmc+);
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 40px !important;
 }
