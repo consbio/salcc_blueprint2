@@ -61,7 +61,8 @@ class App extends Component {
         this.toptabs = ['Home','Contact'];
 
         this.state = {
-            activeTab: null
+            activeTab: null,
+            place: null
         };
     }
 
@@ -108,7 +109,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <Map />
+                <Map place={this.state.place}/>
 
                 <div id="TopBar" className="toptabs">
                     {this.toptabs.map((tabName, index) => (
@@ -116,7 +117,7 @@ class App extends Component {
                             className={(this.state.activeTab !== null && this.state.activeTab === tabName) ?'tab active' : 'tab'}
                             onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ ((this.state.activeTab !== null && this.state.activeTab === tabName) ? tabName+'active' : tabName) +'.png'} height={20} alt=""/><div className="imgwrap">{tabName}</div></div>
                     ))}
-                      <Geonames onFocus={()=>this.changeTab(null)}/>
+                      <Geonames onFocus={()=>this.changeTab(null)} onSelect={(place)=>this.setState({place: place})}/>
                 </div>
 
                 { this.renderActiveTab() }

@@ -83,7 +83,6 @@ let config = {
         fill: true,
         weight: 3
     }
-
 };
 
 class Map extends Component {
@@ -129,7 +128,7 @@ class Map extends Component {
         let locateControlClass = L.Control.extend({
             options: {
                 position: 'bottomright',
-                maxZoom: 15
+                maxZoom: 14
             },
 
             onLocationFound: (lat, lng) => {},
@@ -174,9 +173,10 @@ class Map extends Component {
         //     location: {lat: 44.1, lng: -123.2}
         // }
 
+        // for now, intentionally ignoring label
         if (place && place.location) {
-            this._addMarker(place.location.lat, place.location.lng, place.label);
-            this.map.setView([place.location.lat, place.location.lng], 15);
+            this._addMarker(place.location.lat, place.location.lng, null);
+            this.map.setView([place.location.lat, place.location.lng], 12);
         }
         else {
             this._removeMarker();
@@ -184,7 +184,6 @@ class Map extends Component {
     }
 
     _addMarker(lat, lng, label) {
-        console.log('add marker', lat, lng, label)
         this._removeMarker();
 
         this._marker = L.marker([lat, lng]).addTo(this.map);
