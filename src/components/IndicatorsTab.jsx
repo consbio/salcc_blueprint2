@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Whisker from './Charts/WhiskerPlot.js';
 import WhiskerDes from './Charts/WhiskerDescription';
+import Ecosystem from './Ecosystem';
 import SwipeableViews from 'react-swipeable-views';
 import PropTypes from 'prop-types';
 
@@ -30,6 +31,8 @@ can be passed down to components using props
 
 - this component is responsible for fusing together dynamic data and global data
 for each indicator and ecosystem.
+
+- this component is responsible for managing state of which
 
 - this view is composed of a swipeable container of ecosystems that are present
 
@@ -62,38 +65,30 @@ class IndicatorsTab extends Component {
         });
     };
 
-    renderFooter(){
-        return Object.keys(this.props.data.ecosystems).map((thing, index)=>
+    handleNavClick = (e, index) => {
+        console.log('Nav click')
+        console.log(e)
+        e.stopPropagation();
+        this.handleChangeIndex(index);
+    };
+
+
+    renderNav(){
+        return Object.keys(this.props.data.ecosystems).map((ecosystemID, index)=>
             <div className={this.state.index === index ? 'flex-item2 active' : 'flex-item2'}
-                 onClick={(e) => {e.stopPropagation();
-                 this.handleChangeIndex(index);}}><img src={'/SALCC_icons/Icon-' + thing + '.svg'}
-                                                                    height={30} alt=""/></div>);
-    }
-
-    renderInsides(){
-        return Object.keys(this.props.data.ecosystems).map((thing, index)=>
-        <div style={Object.assign({}, styles.slide, styles.slide2)}>
-            <div className="flex-container3">
-                <div className="flex-item2"> <img src={'/SALCC_icons/Icon-'+ thing +'.svg'} height={40} alt=""/></div>
-                <div className="flex-item2"><h4>{thing +' '}</h4></div>
-                <div className="flex-item2"> <p>{'('+ this.props.data.ecosystems[thing] + '% )'}</p></div>
+                 onClick={(e) => {this.handleNavClick(e, index)}}>
+                <img src={'/SALCC_icons/Icon-' + ecosystemID + '.svg'} height={30} alt=""/>
             </div>
-            <div>{this.renderWhiskers(thing)}</div>
-        </div>);
+        );
     }
 
-    renderIndicatorDescription(indicatordes, name){
-        return <WhiskerDes indicatordes = {this.props.data} name = {name}/>
+    renderEcosystems(){
+        console.log('IndicatorsTab props:', this.props)
+        return Object.keys(this.props.data.ecosystems).map((ecosystemID, index)=>
+            <Ecosystem id={ecosystemID} percent={this.props.data.ecosytems[ecosystemID]}/>
+        );
     }
 
-    renderWhiskers(thing){ //consider using filter first
-        return Object.keys(this.props.data.indicator_stats).map((name, index)=>
-                <div onClick={(e) => {e.stopPropagation();
-                this.renderIndicatorDescription.bind(this.props.data ,name);}}>{name.includes(thing) ? <Whisker indicatorname = {name} values =
-                    {this.props.data.indicator_stats} /> : '' }
-                </div>
-        )
-    }
 
     render(){
         const {
@@ -104,11 +99,11 @@ class IndicatorsTab extends Component {
             <div id ="Content">
                 <h2>{this.props.data.name}</h2>
                 <SwipeableViews index = {index} onChangeIndex={this.handleChangeIndex}>
-                   { this.renderInsides() }
+                   { this.renderEcosystems() }
                 </SwipeableViews>
-                <div id="Footer2">
+                <div id="EcosystemsNav">
                     <div className="flex-container">
-                        { this.renderFooter() }
+                        { this.renderNav() }
                     </div>
                 </div>
             </div>
