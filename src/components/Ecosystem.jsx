@@ -5,56 +5,74 @@ import WhiskerDes from './Charts/WhiskerDescription';
 
 // Ecosystem globals live here
 const ecosystemConfig = {
-    'beach_and_dune': {
+    'BeachAndDune': {
         label: 'Beach and dune',
         color: '#e7cb94'
     },
-    'estuaries': {
+    'Estuarine': {
         label: 'Estuarine',
         color: '#9edae5'
     },
-    'forested_wetland': {
+    'ForestedWetland': {
         label: 'Forested wetland',
         color: '#cedb9c'
     },
-    'freshwater_marsh': {
+    'FreshwaterMarsh': {
         label: 'Freshwater marsh',
         color: '#9c9ede'
     },
-    'maritime_forest': {
+    'MaritimeForest': {
         label: 'Maritime forest',
         color: '#8ca252'
     },
-    'pine_and_prairie': {
+    'PineAndPrairie': {
         label: 'Pine and prairie',
         color: '#bd9e39'
     },
-    'upland_hardwood': {
+    'UplandHardwood': {
         label: 'Upland hardwood',
         color: '#637939'
     },
-    'marine': {
+    'Marine': {
         label: 'Marine',
         color: '#1f77b4'
     },
 
     // universal(cross-system) ecosystems, these will not have a percent
-    'freshwater_aquatic': {
+    'FreshwaterAquatic': {
         label: 'Freshwater aquatic',
         color: '#1f77b4',
         isUniversal: true
     },
-    'landscapes': {
+    'Landscapes': {
         label: 'Landscapes',
         color: '#c7e9c0',
         isUniversal: true
     },
-    'waterscapes': {
+    'Waterscapes': {
         label: 'Waterscapes',
         color: 'c6dbef',
         isUniversal: true
     }
 };
+
+
+// not needed, just split on underscore in indicatorID
+// var ecosystemIndicators = {
+//     'BeachAndDune': ['BeachAndDune_BeachBirds', 'BeachAndDune_UnalteredBeach'],
+//     'Estuarine': ['Estuarine_CoastalCondition', 'Estuarine_Water_VegetationEdge', 'Estuarine_WetlandPatchSize'],
+//     'ForestedWetland': ['ForestedWetland_Amphibians', 'ForestedWetland_Birds'],
+//     'FreshwaterMarsh': ['FreshwaterMarsh_Birds'],
+//     'MaritimeForest': ['MaritimeForest_MaritimeForestExtent'],
+//     'PineAndPrairie': ['PineAndPrairie_Amphibians', 'PineAndPrairie_Birds', 'PineAndPrairie_RegularlyBurnedHabitat'],
+//     'UplandHardwood': ['UplandHardwoods_Birds', 'UplandHardwood_UrbanOpenSpace'],
+//     'Marine': ['Marine_Mammals', 'Marine_PotentialHardbottomCondition'],
+//     //These are landscape wide, only for inland
+//     'FreshwaterAquatic': ['FreshwaterAquatic_PermeableSurface', 'FreshwaterAquatic_RiparianBuffers', 'FreshwaterAquatic_ImperiledAquaticSpecies'],
+//     'Landscapes': ['Landscapes_LowRoadDensityPatches', 'Landscapes_LowUrbanHistoric', 'Landscapes_ResilientBiodiversityHotspots'],
+//     'Waterscapes': ['Waterscapes_MigratoryFishConnectivity', 'Waterscapes_NetworkComplexity']
+// };
+
 
 
 
@@ -66,7 +84,7 @@ class Ecosystem extends Component {
         return <WhiskerDes indicatordes = {this.props.data} name = {name}/>
     }
 
-    renderWhiskers(thing){ //consider using filter first
+    RenderIndicators(thing){ //consider using filter first
         return Object.keys(this.props.data.indicator_stats).map((name, index)=>
                 <div onClick={(e) => {e.stopPropagation();
                 this.renderIndicatorDescription.bind(this.props.data ,name);}}>{name.includes(thing) ? <Whisker indicatorname = {name} values =
@@ -88,11 +106,11 @@ class Ecosystem extends Component {
 
             <div>
                 <div className="flex-container3">
-                    <div className="flex-item2"> <img src={'/SALCC_icons/Icon-'+ ecosystemID +'.svg'} height={40} alt=""/></div>
+                    <div className="flex-item2"> <img src={'/icons/' + ecosystemID + '.svg'} height={40} alt=""/></div>
                     <div className="flex-item2"><h4>{label}</h4></div>
                     <div className="flex-item2"> <p>{' ('+ percent + '% )'}</p></div>
                 </div>
-                <div>{this.renderWhiskers(ecosystemID)}</div>
+                <div>{this.RenderIndicators(ecosystemID)}</div>
             </div>
         );
     }

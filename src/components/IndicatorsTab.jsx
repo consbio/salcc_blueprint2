@@ -77,7 +77,7 @@ class IndicatorsTab extends Component {
         return Object.keys(this.props.data.ecosystems).map((ecosystemID, index)=>
             <div className={this.state.index === index ? 'flex-item2 active' : 'flex-item2'}
                  onClick={(e) => {this.handleNavClick(e, index)}}>
-                <img src={'/SALCC_icons/Icon-' + ecosystemID + '.svg'} height={30} alt=""/>
+                <img src={'/icons/' + ecosystemID + '.svg'} height={30} alt=""/>
             </div>
         );
     }

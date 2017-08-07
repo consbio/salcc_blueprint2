@@ -20,40 +20,23 @@ import ContactTab from './ContactTab'
 import * as UnitActions from '../Actions/actions';
 
 class App extends Component {
-    static propTypes = {
-        selectedUnit: PropTypes.string.isRequired,
-        items: PropTypes.array.isRequired,
-        isFetching: PropTypes.bool.isRequired,
-        dispatch: PropTypes.func.isRequired
-    }
+    // static propTypes = {
+    //     selectedUnit: PropTypes.string.isRequired,
+    //     items: PropTypes.array.isRequired,
+    //     isFetching: PropTypes.bool.isRequired,
+    //     dispatch: PropTypes.func.isRequired
+    // }
 
-    componentDidMount(){
-        const { fetchData, selectedUnit} = this.props
-        fetchData(selectedUnit);
-    }
+    // componentDidMount(){
+    // }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.selectedUnit !== this.props.selectedUnit){
-            const { fetchData, selectedUnit } = nextProps
-            fetchData(selectedUnit);
-        }
-    }
-
-    handleChange = nextUnit => {
-        this.props.selectUnit(nextUnit)
-    }
-
-    handleRefreshClick = e => {
-        e.preventDefault()
-
-        const { deselectUnit, fetchData, selectedUnit} = this.props
-        deselectUnit(selectedUnit);
-        fetchData(selectedUnit);
+        console.log('Next Props: ', nextProps)
     }
 
     constructor(props) {
         super(props);
-        console.log(props);
+        console.log('App props (from redux store):', props);
 
         this.tabs = ['Priority', 'Indicators', 'Threats', 'Partners'];
         this.toptabs = ['Home','Contact'];
@@ -76,25 +59,29 @@ class App extends Component {
             });
         }
     }
-    //trying to reuse this code in changeTab function
-    onClick = (event) => {
-        let id = parseInt(event.currentTarget.dataset.id, 10);
-        console.log('setstate', id)
-        // if this matches previous tab, deselect it
-        this.setState({activeTab: (this.state.activeTab === id)? null: id});
+
+    handleUnitSelect = (id) => {
+        console.log('Select map unit: ', id);
+        this.props.selectUnit(id);
     }
 
+    handleUnitDeselect = () => {
+        console.log('Deselect map unit');
+        this.props.deselectUnit();
+    }
+
+
     renderActiveTab() {
-        const { selectedUnit, dataByUnit} = this.props;
+        const { selectedUnit, data} = this.props;
         switch (this.state.activeTab) {//if the previous state is the same tab, then close the tab
             case 'Priority':
-                return <PriorityTab data={dataByUnit[selectedUnit].items}/>
+                return <PriorityTab data={data}/>
             case 'Indicators':
-                return <IndicatorsTab data={dataByUnit[selectedUnit].items}/>
+                return <IndicatorsTab data={data}/>
             case 'Threats':
-                return <ThreatsTab data={dataByUnit[selectedUnit].items}/>
+                return <ThreatsTab data={data}/>
             case 'Partners':
-                return <PartnersTab data={dataByUnit[selectedUnit].items}/>
+                return <PartnersTab data={data}/>
             case 'Home':
                 return <HomeTab/>
             case 'Contact':
@@ -107,7 +94,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <Map place={this.state.place}/>
+                <Map place={this.state.place} selectUnit={this.handleUnitSelect} deselectUnit={this.handleUnitDeselect}/>
 
                 <div id="TopBar" className="toptabs">
                     {this.toptabs.map((tabName, index) => (
