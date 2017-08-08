@@ -78,7 +78,7 @@ class Ecosystem extends Component {
         return <WhiskerDes indicatordes = {this.props.data} name = {name}/>
     }
 
-    RenderIndicators(thing){ //consider using filter first
+    renderIndicators(thing){ //consider using filter first
         return Object.keys(this.props.data.indicator_stats).map((name, index)=>
                 <div onClick={(e) => {e.stopPropagation();
                 this.renderIndicatorDescription.bind(this.props.data ,name);}}>{name.includes(thing) ? <Whisker indicatorname = {name} values =
@@ -95,7 +95,6 @@ class Ecosystem extends Component {
 
         // TODO:
         // format percent
-//style={{minHeight: 410, padding: 0}}
         return (
             <div className="ecosystem">
                 <div className="flex-container3">
@@ -106,7 +105,7 @@ class Ecosystem extends Component {
                     <div className="flex-item2"><h4>{label}</h4></div>
                     <div className="flex-item2">{(percent) ? ' ('+ percent + '% )' : ''}</div>
                 </div>
-                {/*<div>{this.RenderIndicators(ecosystemID)}</div>*/}
+                {/*<div>{this.renderIndicators(ecosystemID)}</div>*/}
 
             </div>
         );
