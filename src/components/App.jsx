@@ -104,7 +104,9 @@ class App extends Component {
 
                 { this.renderActiveTab() }
 
-                <div id ="Footer" className="tabs">
+                <div id ="Footer">
+                    <div id="UnitName">{(this.props.data)? this.props.data.name: ''}</div>
+                    <div className="tabs">
                     {this.tabs.map((tabName, index) => (
                         <div key={index}
                             className={this.state.activeTab === tabName ? 'tab active' : 'tab'}
@@ -113,6 +115,7 @@ class App extends Component {
                             <div className="imgwrap">{tabName}</div>
                         </div>
                         ))}
+                    </div>
                 </div>
             </div>
 

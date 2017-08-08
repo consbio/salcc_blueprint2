@@ -40,16 +40,16 @@
 #Content {
   background: #FFF;
     display: flex;
+    flex-direction: column;
     position: absolute;
     right: 0px;
     left: 0px;
-    bottom: 48px;
+    bottom: 43px;
     top: 40px;
     background: #FFF;
     padding: 10px;
     overflow-y: auto;
     overflow-x: hidden;
-    display: block;
 }
 
 #Content.modal {
@@ -115,7 +115,7 @@
 }
 
 #Footer {
-    height: 47px;
+    /*height: 47px;*/
     background: #FAFAFA;
     text-align: center;
     position: absolute;
@@ -126,31 +126,35 @@
     display: flex;
     justify-content: center;
     align-content: stretch;
-    /*display: none;*/
+    flex-direction: column;
 }
 
 #EcosystemsNav {
-    height: 36px;
-    /*background: #FAFAFA;*/
-    text-align: center;
-    position: fixed;
-    bottom: 54px;
+    background: #FFF;
+    position: absolute;
+    bottom: 0px;
     left: 0px;
     right: 0px;
     justify-content: center;
+    padding: 4px 0 16px;
 }
 
 #EcosystemsNav img {
     cursor: pointer;
     padding: 0 4px;
     opacity: 0.4;
-    filter: grayscale(100%);
+    filter: grayscale(50%);
 }
 
 #EcosystemsNav img.active {
     opacity: 1;
     filter: grayscale(0);
 }
+
+.ecosystem {
+    min-height: 50vh;
+}
+
 
 #MapContainer {
     position: absolute;
@@ -174,6 +178,11 @@
     cursor: pointer;
     text-align: center;
     min-width: 50px;
+}
+
+#Footer .tabs {
+    display: flex;
+    flex-direction: row;
 }
 
 #Footer .tab {

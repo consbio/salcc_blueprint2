@@ -76,11 +76,6 @@ class IndicatorsTab extends Component {
         return `/icons/${ecosystem}.svg`;
     }
 
-    // <div key={ecosystem} className={this.state.index === index ? 'flex-item2 active' : 'flex-item2'}
-    //              onClick={(e) => {this.handleNavClick(e, index)}}>
-    //             <img src={this.getIcon(ecosystem)} height={30} alt=""/>
-    //         </div>
-
     renderNav(ecosystemIDs){
         return ecosystemIDs.map((ecosystem, index)=>
 
@@ -97,7 +92,7 @@ class IndicatorsTab extends Component {
         const {ecosystems} = this.props.data;
         console.log('Ecosystems:',ecosystems);
         return ecosystemIDs.map((ecosystem, index)=>
-            <Ecosystem key={ecosystem} ecosystem={ecosystem} icon={this.getIcon(ecosystem)} {...ecosystems[ecosystem]}/>
+            <Ecosystem key={ecosystem} index={index} ecosystem={ecosystem} icon={this.getIcon(ecosystem)} {...ecosystems[ecosystem]}/>
         );
     }
 
@@ -134,15 +129,13 @@ class IndicatorsTab extends Component {
             return 0;
         });
 
-
-
         const ecosystemIDs = ecosystems.map((e) => e[0]);
-        console.log('sorted ecosystems', ecosystems)
-        console.log('sortedIDs', ecosystemIDs);
+
+        // TODO: use flexbox or abs positioning for nav instead of fixed, it isn't working properly
 
         return (
             <div id ="Content">
-                <h2>{this.props.data.name}</h2>
+                {/*<h2>{this.props.data.name}</h2>*/}
                 <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex}>
                    { this.renderEcosystems(ecosystemIDs) }
                 </SwipeableViews>
@@ -155,9 +148,7 @@ class IndicatorsTab extends Component {
 }
 
 IndicatorsTab.propTypes = {
-    data: PropTypes.shape({
-        name: PropTypes.string
-    })
+    //TODO
 };
 
 export default IndicatorsTab;

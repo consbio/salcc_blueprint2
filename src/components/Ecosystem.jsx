@@ -3,6 +3,20 @@ import React, {Component} from 'react';
 import Whisker from './Charts/WhiskerPlot.js';
 import WhiskerDes from './Charts/WhiskerDescription';
 
+const styles = {
+    slide: {
+        padding: 0,
+        minHeight: 410,
+        color: '#fff',
+    },
+    slide1: {
+        backgroundColor: '#Ffffff',
+    },
+    slide2: {
+        backgroundColor: 'red',
+    }
+};
+
 // Ecosystem globals live here
 const ECOSYSTEMS = {
     'BeachAndDune': {
@@ -76,28 +90,24 @@ class Ecosystem extends Component {
     render() {
         console.log('Ecosystem props:', this.props)
 
-        //     <div style={Object.assign({}, styles.slide, styles.slide2)}>
-
-        // const {ecosystemID, percent} = this.props;
-        // // TODO: format percent
-        // const {label} = ecosystemConfig[ecosystemID];
         const {ecosystem, icon, percent, indicators} = this.props;
-        // const {percent, indicators} = data;
         const {label} = ECOSYSTEMS[ecosystem];
 
+        // TODO:
+        // format percent
+//style={{minHeight: 410, padding: 0}}
         return (
-
-            <div>
+            <div className="ecosystem">
                 <div className="flex-container3">
                     <div className="flex-item2">
                         <img src={icon} height={40} alt=""/>
                     </div>
 
                     <div className="flex-item2"><h4>{label}</h4></div>
-
                     <div className="flex-item2">{(percent) ? ' ('+ percent + '% )' : ''}</div>
                 </div>
                 {/*<div>{this.RenderIndicators(ecosystemID)}</div>*/}
+
             </div>
         );
     }
