@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import './App.css';
 import '../index.css';
@@ -15,8 +14,6 @@ import PartnersTab from './PartnersTab'
 import HomeTab from './HomeTab'
 import ContactTab from './ContactTab'
 
-//import actions
-//import {selectUnit, fetchData, deselectUnit} from '../Actions/actions';
 import * as UnitActions from '../Actions/actions';
 
 class App extends Component {
@@ -72,7 +69,7 @@ class App extends Component {
 
 
     renderActiveTab() {
-        const { selectedUnit, data} = this.props;
+        const {data} = this.props;
         switch (this.state.activeTab) {//if the previous state is the same tab, then close the tab
             case 'Priority':
                 return <PriorityTab data={data}/>
@@ -86,7 +83,7 @@ class App extends Component {
                 return <HomeTab/>
             case 'Contact':
                 return <ContactTab/>
-            case null:
+            default:
                 return null;
         }
     }
@@ -126,10 +123,6 @@ class App extends Component {
 function mapStateToProps(state) {
     return state;
 }
-
-//function mapDispatchToProps(dispatch) {
-//    return bindActionCreators({ selectedUnit: selectUnit}, dispatch);
-//}
 
 export default connect(
     mapStateToProps,

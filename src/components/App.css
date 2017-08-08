@@ -131,20 +131,26 @@
 
 #EcosystemsNav {
     height: 36px;
-    background: #FAFAFA;
+    /*background: #FAFAFA;*/
     text-align: center;
     position: fixed;
-    bottom: 47px;
+    bottom: 54px;
     left: 0px;
     right: 0px;
-    display: flex;
     justify-content: center;
-    align-content: stretch;
 }
-/*#Footer.active {*/
-    /*display: block;*/
-/*}*/
 
+#EcosystemsNav img {
+    cursor: pointer;
+    padding: 0 4px;
+    opacity: 0.4;
+    filter: grayscale(100%);
+}
+
+#EcosystemsNav img.active {
+    opacity: 1;
+    filter: grayscale(0);
+}
 
 #MapContainer {
     position: absolute;

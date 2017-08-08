@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import Whisker from './Charts/WhiskerPlot.js';
 import WhiskerDes from './Charts/WhiskerDescription';
 
 // Ecosystem globals live here
-const ecosystemConfig = {
+const ECOSYSTEMS = {
     'BeachAndDune': {
         label: 'Beach and dune',
         color: '#e7cb94'
@@ -56,26 +56,6 @@ const ecosystemConfig = {
     }
 };
 
-
-// not needed, just split on underscore in indicatorID
-// var ecosystemIndicators = {
-//     'BeachAndDune': ['BeachAndDune_BeachBirds', 'BeachAndDune_UnalteredBeach'],
-//     'Estuarine': ['Estuarine_CoastalCondition', 'Estuarine_Water_VegetationEdge', 'Estuarine_WetlandPatchSize'],
-//     'ForestedWetland': ['ForestedWetland_Amphibians', 'ForestedWetland_Birds'],
-//     'FreshwaterMarsh': ['FreshwaterMarsh_Birds'],
-//     'MaritimeForest': ['MaritimeForest_MaritimeForestExtent'],
-//     'PineAndPrairie': ['PineAndPrairie_Amphibians', 'PineAndPrairie_Birds', 'PineAndPrairie_RegularlyBurnedHabitat'],
-//     'UplandHardwood': ['UplandHardwoods_Birds', 'UplandHardwood_UrbanOpenSpace'],
-//     'Marine': ['Marine_Mammals', 'Marine_PotentialHardbottomCondition'],
-//     //These are landscape wide, only for inland
-//     'FreshwaterAquatic': ['FreshwaterAquatic_PermeableSurface', 'FreshwaterAquatic_RiparianBuffers', 'FreshwaterAquatic_ImperiledAquaticSpecies'],
-//     'Landscapes': ['Landscapes_LowRoadDensityPatches', 'Landscapes_LowUrbanHistoric', 'Landscapes_ResilientBiodiversityHotspots'],
-//     'Waterscapes': ['Waterscapes_MigratoryFishConnectivity', 'Waterscapes_NetworkComplexity']
-// };
-
-
-
-
 class Ecosystem extends Component {
 
 
@@ -98,19 +78,26 @@ class Ecosystem extends Component {
 
         //     <div style={Object.assign({}, styles.slide, styles.slide2)}>
 
-        const {ecosystemID, percent} = this.props;
-        // TODO: format percent
-        const {label} = ecosystemConfig[ecosystemID];
+        // const {ecosystemID, percent} = this.props;
+        // // TODO: format percent
+        // const {label} = ecosystemConfig[ecosystemID];
+        const {ecosystem, icon, percent, indicators} = this.props;
+        // const {percent, indicators} = data;
+        const {label} = ECOSYSTEMS[ecosystem];
 
         return (
 
             <div>
                 <div className="flex-container3">
-                    <div className="flex-item2"> <img src={'/icons/' + ecosystemID + '.svg'} height={40} alt=""/></div>
+                    <div className="flex-item2">
+                        <img src={icon} height={40} alt=""/>
+                    </div>
+
                     <div className="flex-item2"><h4>{label}</h4></div>
-                    <div className="flex-item2"> <p>{' ('+ percent + '% )'}</p></div>
+
+                    <div className="flex-item2">{(percent) ? ' ('+ percent + '% )' : ''}</div>
                 </div>
-                <div>{this.RenderIndicators(ecosystemID)}</div>
+                {/*<div>{this.RenderIndicators(ecosystemID)}</div>*/}
             </div>
         );
     }
