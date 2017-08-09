@@ -1,21 +1,8 @@
 import React, {Component} from 'react';
 // import PropTypes from 'prop-types';
-import Whisker from './Charts/WhiskerPlot.js';
-import WhiskerDes from './Charts/WhiskerDescription';
+import sortBy from 'lodash.sortby';
+import Indicator from './Indicator';
 
-const styles = {
-    slide: {
-        padding: 0,
-        minHeight: 410,
-        color: '#fff',
-    },
-    slide1: {
-        backgroundColor: '#Ffffff',
-    },
-    slide2: {
-        backgroundColor: 'red',
-    }
-};
 
 // Ecosystem globals live here
 const ECOSYSTEMS = {
@@ -70,21 +57,28 @@ const ECOSYSTEMS = {
     }
 };
 
+
 class Ecosystem extends Component {
 
+    renderIndicators() {
+        let indicators = Object.entries(this.props.indicators);
+
+        // TODO: sort??  Probably should be alphabetical
+        indicators = sortBy(indicators, (i) => i[0]);
+        let indicatorKeys = indicators.map((i) => i[0]);
+        console.log('Sorted indicators', indicatorKeys)
 
 
-    renderIndicatorDescription(indicatordes, name){
-        return <WhiskerDes indicatordes = {this.props.data} name = {name}/>
-    }
+        return indicatorKeys.map((indicator) =>
+            <Indicator key={indicator} indicator={indicator} {...indicators[indicator]}/>
+        );
 
-    renderIndicators(thing){ //consider using filter first
-        return Object.keys(this.props.data.indicator_stats).map((name, index)=>
-                <div onClick={(e) => {e.stopPropagation();
-                this.renderIndicatorDescription.bind(this.props.data ,name);}}>{name.includes(thing) ? <Whisker indicatorname = {name} values =
-                    {this.props.data.indicator_stats} /> : '' }
-                </div>
-        )
+        // return Object.keys(this.props.data.indicator_stats).map((name, index)=>
+        //         <div onClick={(e) => {e.stopPropagation();
+        //         this.renderIndicatorDescription.bind(this.props.data ,name);}}>{name.includes(thing) ? <Whisker indicatorname = {name} values =
+        //             {this.props.data.indicator_stats} /> : '' }
+        //         </div>
+        // )
     }
 
     render() {
@@ -105,8 +99,7 @@ class Ecosystem extends Component {
                     <div className="flex-item2"><h4>{label}</h4></div>
                     <div className="flex-item2">{(percent) ? ' ('+ percent + '% )' : ''}</div>
                 </div>
-                {/*<div>{this.renderIndicators(ecosystemID)}</div>*/}
-
+                <div>{this.renderIndicators()}</div>
             </div>
         );
     }
