@@ -14,8 +14,15 @@ class Indicator extends Component {
 
 
     render() {
+        console.log('Indicator props:', this.props)
+
         return (
-            <div></div>
+            <div className="indicator">
+
+
+
+
+            </div>
         );
     }
 }

@@ -66,9 +66,9 @@ class IndicatorsTab extends Component {
     };
 
     handleNavClick = (e, index) => {
-        console.log('Nav click')
-        console.log(e)
-        e.stopPropagation();
+        // console.log('Nav click')
+        // console.log(e)
+        // e.stopPropagation();
         this.handleChangeIndex(index);
     };
 
@@ -104,7 +104,7 @@ class IndicatorsTab extends Component {
 
         // TODO: sort ecosystems by decreasing area, so that cross-system indicators are always on the right
         let ecosystems = Object.entries(this.props.data.ecosystems);  // => [[ecosystemID, ecosystemData]...]
-        ecosystems = ecosystems.sort((e1, e2) => {
+        ecosystems.sort((e1, e2) => {
             const p1 = e1[1].percent, p2 = e2[1].percent;
             // Some of these are null: cross system ecosystems
             if (p1 === p2) {
