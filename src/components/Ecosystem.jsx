@@ -161,7 +161,8 @@ const ECOSYSTEMS = {
     },
     'MaritimeForest': {
         label: 'Maritime forest',
-        color: '#8ca252'
+        color: '#8ca252',
+        indicators: {}  // Currently has no indicators
     },
     'PineAndPrairie': {
         label: 'Pine and prairie',
@@ -431,13 +432,13 @@ const ECOSYSTEMS = {
 class Ecosystem extends Component {
 
     render() {
-        // console.log('Ecosystem props:', this.props);
+        console.log('Ecosystem props:', this.props);
 
         const {ecosystem, icon, percent, indicators} = this.props;
         const ecosystemConfig = ECOSYSTEMS[ecosystem];
         const {label} = ecosystemConfig;
         const indicatorsConfig = ecosystemConfig.indicators;
-        let indicatorKeys = Object.keys(indicators);
+        let indicatorKeys = Object.keys(indicators || {});  // some ecosystems are present but don't have indicators
         indicatorKeys.sort();
 
         // TODO:
@@ -467,9 +468,15 @@ class Ecosystem extends Component {
                     }
                 </header>
 
-                {mergedIndicators.map((indicator) =>
-                    <Indicator key={indicator.id} {...indicator}/>
-                )}
+                {
+                    mergedIndicators.length > 0
+                    ?
+                    mergedIndicators.map((indicator) =>
+                        <Indicator key={indicator.id} {...indicator}/>
+                    )
+                    :
+                    <div className="no-indicators">Ecosystem does not have any indicators</div>
+                }
             </div>
         );
     }
