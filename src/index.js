@@ -2,7 +2,7 @@ import 'babel-polyfill';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { createStore, applyMiddleware } from 'redux';
-import { selectUnit, fetchData } from './Actions/actions';
+import { selectUnit } from './Actions/actions';
 import rootReducer from './Reducers';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -31,10 +31,11 @@ const store = createStore(
     )
 )
 
+// TODO: for testing purposes only!
 store.dispatch(selectUnit('I4'));
-store
-    .dispatch(fetchData('I4'))
-    .then(() => console.log(store.getState()));
+// store
+//     .dispatch(fetchData('I4'))
+//     .then(() => console.log(store.getState()));
 
 ReactDOM.render(
     <Provider store={store}>

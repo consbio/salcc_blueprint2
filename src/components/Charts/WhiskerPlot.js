@@ -1,74 +1,82 @@
-import React from 'react';
-import WhiskerDes from './WhiskerDescription';
-//import PropTypes from 'prop-types';
-import indicators from '../../configindica';
-import {scale, linear, range} from 'd3';
+import React, {Component} from "react";
+// import PropTypes from "prop-types";
+import ReactDOM from "react-dom";
+import WhiskerDes from "./WhiskerDescription";
+import indicators from "../../configindica";
+import {scale, linear, range} from "d3";
 
-const textHeight = 12;
 
-        // const radius = this.props.radius;
-const height = 100;
-const midY = height / 2;
-const width = 300;
-const radius = 18;
+class WhiskerPlot extends Component {
 
-const margin = {
-    left: radius + 2 + 30, // these were based on word sizes
-    right: radius + 2,
-    top: 10, // may not need as much space without labels
-    bottom: 14
-};
+    // Handle width properly, from: https://github.com/codesuki/react-d3-components/issues/9
+    constructor() {
+        super();
+        this.state = {width: 0};
+        this.domNode = null;
+    }
 
-function configindicators(indicatorname){
-    return Object.keys(indicators).map((thing, index)=>
-        <div className="flex-container2">
-            <div className="flex-item2"><h4>{thing +' '}</h4></div>
-            <div className="flex-item2"> <p>{indicators[thing] + '% )'}</p></div>
-        </div>);
-}
+    fitToParentSize() {
+        const width = this.domNode.parentNode.offsetWidth  - 20;
+        if (width !== this.state.width) {
+            this.setState({width});
+        }
+    }
 
-function dataindicatorarray(values, indicatorname){
-    return <div>
-        <ul>
-            {values[indicatorname].map((num, i)=>
-                <li key={i}>{num}</li>
-            )}
-        </ul>
-        <ul>
-            {Object.keys(indicators[indicatorname]).map((indica, j)=>
-                <li key={j}>{indica + ': '+ indicators[indicatorname][indica]} </li>
-            )}
-        </ul>
-    </div>
-}
+    componentDidMount() {
+      this.fitToParentSize();
+    }
 
-function renderIndicatorDescription(indicatornameinfo){
-    return <WhiskerDes indicatordes = {indicatornameinfo}/>
-}
+    render() {
+        const {value, domain, icon, color, goodConditionThreshold} = this.props;
+        const textHeight = 12;
+        const {width} = this.state;
+        const radius = 12;
+        const margin = {
+            top: 0,
+            right: radius + 32,
+            bottom: 0,
+            left: radius + 36
+        };
+        const height = 2 * radius + margin.top + margin.bottom;
+        const midY = height / 2;
+        const textY = midY + textHeight / 2 - 2;
+        const x = scale.linear().range([margin.left, width - margin.left]).domain(domain);
 
-function Whisker({indicatorname, values}) {
-    const x = scale.linear().range([margin.left, width - margin.left]).domain(indicators[indicatorname].range);
-const {value} = values[indicatorname][1];
-    return (
-        <div>
-            <div>{dataindicatorarray(values, indicatorname)}</div>
-            <div className="indicator-chart">
-            <svg width="296" height="100">
-                <text x="10.8" y="20" textAnchor="begin" fill='#a4aab3' fontSize={14}>{indicators[indicatorname].label}</text>
-                    <line className='rangeLine' x1={10} x2={width -10} y1={midY} y2={midY} fill='#a4aab3' />
-                    <text x={x.range()[0] - 18 - 4} y={midY + textHeight +10} textAnchor='end' fill='#a4aab3' fontSize={10}>Low</text>
-                    <text x={x.range()[0] + 208 + 4} y={midY + textHeight + 10} textAnchor='begin' fill='#a4aab3' fontSize={10}>High</text>
-                    <rect x={50} y={midY -20} width="40" height="40" fill="url(#frogicon)"></rect>
-            </svg>
+        return (
+            <div ref={(node) => {this.domNode = node}}>
+                {this.state.width > 0 &&
+                    (
+                        <svg className="chart-whisker" width={width} height={height}>
+
+                            {goodConditionThreshold !== null
+                                ?
+                                (<g>
+                                    <line className="domain" x1={x.range()[0]} x2={x(goodConditionThreshold)} y1={midY} y2={midY} stroke="#FF851B"/>
+                                    <line className="domain" x1={x(goodConditionThreshold)} x2={x.range()[1]} y1={midY} y2={midY} stroke="#3D9970"/>
+                                </g>)
+                                :
+                                <line className="domain" x1={x.range()[0]} x2={x.range()[1]} y1={midY} y2={midY} stroke="#CCC"/>
+                            }
+
+                            <circle cx={x(value)} cy={midY} r={radius} fill={color}/>
+                            <text x="0" y={textY} textAnchor="begin" fill="#a4aab3" fontSize={12}>Low</text>
+                            <text x={width} y={textY} textAnchor="end" fill="#a4aab3" fontSize={12}>High</text>
+                        </svg>
+                    )
+                }
             </div>
-
-        </div>
-
-    );
+        );
+    }
 }
 
-Whisker.defaultProps ={
-    label: 'Forested Wetland Birds'
+WhiskerPlot.defaultProps = {
+    value: 0, // == mean
+    // categoricalValues: [0, 1, 2, 3, 4],  // if present, show as labels on the chart
+    domain: [0, 1], // == absolute range
+    icon: null,  // url to icon, optional
+    color: '#DDD',
+    goodConditionThreshold: null
 };
 
-export default Whisker;
+
+export default WhiskerPlot;

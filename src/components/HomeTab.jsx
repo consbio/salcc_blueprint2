@@ -3,7 +3,7 @@ import './App.css';
 
 function HomeTab() {
     return (
-    <div id = "Content">
+    <div id = "Content" className="tabs-top">
     <h2>Welcome to the Blueprint 2.1 Simple Viewer for Mobile</h2>
 
                 <p>

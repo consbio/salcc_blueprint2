@@ -62,8 +62,8 @@ class IndicaTabs extends Component {
                             <div className="flex-item"> <h4>{}</h4></div>
                         </div>
                         <div>
-                        <Whisker key = {0}/>
-                        <Whisker key = {1}/>
+                        <WhiskerPlot key = {0}/>
+                        <WhiskerPlot key = {1}/>
                     </div>
                     </div>
                     <div style={Object.assign({}, styles.slide, styles.slide2)}>
@@ -87,7 +87,7 @@ class IndicaTabs extends Component {
                     </div>
 
                 </SwipeableViews>
-                <div id ="Footer2">
+                <div id ="EcosystemsNav">
                     <div className="flex-container">
                         <div className={this.state.index === 0 ? 'flex-item2 active' : 'flex-item2'} onClick={()=>this.handleChangeIndex(0)}> <img src={'/SALCC_icons/Icon-Beachanddune.svg'} height={30} alt=""/></div>
                         <div className={this.state.index === 1 ? 'flex-item2 active' : 'flex-item2'} onClick={()=>this.handleChangeIndex(1)}> <img src={'/SALCC_icons/Icon-Estuarine.svg'} height={30} alt=""/></div>

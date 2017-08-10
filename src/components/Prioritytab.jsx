@@ -21,7 +21,7 @@ function PriorityTab({data}) {
     ];
     return (
         <div id = "Content">
-            <h2>{data.name}</h2>
+            {/*<h2>{data.name}</h2>*/}
             <svg width="100%" height="200">
                 {
                     data.blueprint.map((num, i)=>

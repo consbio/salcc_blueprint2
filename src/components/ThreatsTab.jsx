@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 function ThreatsTab({data}) {
     return (
         <div id = "Content">
-            <h2>{data.name}</h2>
+            {/*<h2>{data.name}</h2>*/}
             <h4><br/>Urbanization</h4>
             <svg width="100%" height="220">
                 <rect x="0" y="0" width="520" height="50" fill = "#AC69B3"/>
