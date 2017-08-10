@@ -62,8 +62,8 @@ class IndicaTabs extends Component {
                             <div className="flex-item"> <h4>{}</h4></div>
                         </div>
                         <div>
-                        <Whisker key = {0}/>
-                        <Whisker key = {1}/>
+                        <WhiskerPlot key = {0}/>
+                        <WhiskerPlot key = {1}/>
                     </div>
                     </div>
                     <div style={Object.assign({}, styles.slide, styles.slide2)}>

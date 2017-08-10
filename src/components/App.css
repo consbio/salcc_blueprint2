@@ -47,7 +47,7 @@
     bottom: 43px;
     top: 40px;
     background: #FFF;
-    padding: 10px;
+    /*padding: 10px;*/
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -65,21 +65,22 @@
 }
 
 #Content h2 {
-    border-bottom: 1px solid #DDD;
+    /*border-bottom: 1px solid #DDD;*/
     padding-bottom: 2px;
     margin-bottom: 4px;
     margin-top: 0px;
     font-size: 18px;
     text-align: center;
-    color: #a4aab3;
+    color: #777;
 }
 
 #Content h4 {
     padding-bottom: 2px;
     margin-bottom: 7px;
     margin-top: 4px;
-    font-size: 14px;
+    /*font-size: 14px;*/
     color: #a4aab3;
+    font-weight: normal;
 }
 
 #Content p {
@@ -160,6 +161,30 @@
     min-height: 50vh;
 }
 
+.ecosystem header {
+    padding: 6px;
+    background-color: rgba(234,244,223,.8);
+}
+
+.ecosystem header img {
+    margin-right: 4px;
+}
+
+.ecosystem header h2 {
+    padding: 0;
+    margin: 0;
+    font-weight: normal;
+}
+
+.ecosystem header span {
+    flex: 1;
+}
+
+.ecosystem section {
+    margin: 10px 10px 0 10px;
+    border: 1px solid red; /* FIXME: temp */
+}
+
 
 #MapContainer {
     position: absolute;
@@ -211,11 +236,9 @@
   background-repeat: repeat;
 }
 
-.indicator-chart svg {
-    border: 1px solid red;
-}
 
-.indicator-chart .rangeLine {
+.chart-whisker .domain {
     stroke-width:3;
     stroke: #a4aab3;
+    stroke-linecap: round;
 }

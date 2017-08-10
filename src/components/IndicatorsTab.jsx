@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import Whisker from './Charts/WhiskerPlot.js';
+// import WhiskerPlot from './Charts/WhiskerPlot.js';
 // import WhiskerDes from './Charts/WhiskerDescription';
 import Ecosystem from './Ecosystem';
 import SwipeableViews from 'react-swipeable-views';
@@ -102,7 +102,7 @@ class IndicatorsTab extends Component {
             index,
         } = this.state;
 
-        // TODO: sort ecosystems by decreasing area, so that cross-system indicators are always on the right
+        // sort ecosystems by decreasing area, so that cross-system indicators are always on the right
         let ecosystems = Object.entries(this.props.data.ecosystems);  // => [[ecosystemID, ecosystemData]...]
         ecosystems.sort((e1, e2) => {
             const p1 = e1[1].percent, p2 = e2[1].percent;

@@ -28,7 +28,7 @@ const ECOSYSTEMS = {
                     4: '60-80',
                     5: '>80'
                 },
-                absoluteRange: [10, 100],
+                domain: [10, 100],
                 datasetID: '59a112afa51e4739be6c984c0fefb02d'
             },
             UnalteredBeach: {
@@ -40,6 +40,7 @@ const ECOSYSTEMS = {
                     2: 'Less vulnerable without \nnearby jetties/groins (high)'
                 },
                 categoricalValues: range(0, 3),
+                domain: [0, 2],
                 datasetID: 'c58be422af514fbd906c93f8579efe01'
             }
         }
@@ -66,7 +67,7 @@ const ECOSYSTEMS = {
                     4: '3.7-4.0',
                     5: '>4.0'
                 },
-                absoluteRange: [1, 5],  //TODO: should this be 1.13 instead?
+                domain: [1, 5],  //TODO: should this be 1.13 instead?
                 datasetID: 'a2fddbed78a64e73bbb5ed99b114f5f7'
             },
             WaterVegetationEdge: {
@@ -80,6 +81,7 @@ const ECOSYSTEMS = {
                     4: '4.27-19.42'
                 },
                 categoricalValues: range(0, 5),
+                domain: [0, 4],
                 datasetID: '00ecbf6049d4481db1f1416e4e3b8cc2'
             },
             WetlandPatchSize: {
@@ -93,6 +95,7 @@ const ECOSYSTEMS = {
                     4: '6,088-15,154 ha'
                 },
                 categoricalValues: range(0, 5),
+                domain: [0, 4],
                 datasetID: '8f008af46e2b4cfb877a84e86bd930c9'
             }
         }
@@ -109,6 +112,7 @@ const ECOSYSTEMS = {
                     1: 'Priority Amphibian and Reptile Conservation Area (PARCA) within forested wetlands'
                 },
                 categoricalValues: range(0, 2),
+                domain: [0, 1],
                 datasetID: '7971445641934255b319b5971600eb47'
             },
             Birds: {
@@ -121,6 +125,7 @@ const ECOSYSTEMS = {
                     3: "Potential for additional presence of \nSwainson's warbler"
                 },
                 categoricalValues: range(0, 4),
+                domain: [0, 3],
                 datasetID: 'ecf2d74a50cc47fa99ae6ef42d838866'
             }
         }
@@ -143,7 +148,7 @@ const ECOSYSTEMS = {
                     2: '5-20 ha',
                     3: '>20 ha'
                 },
-                absoluteRange: [0, 11907],
+                domain: [0, 11907],
                 units: 'ha',
                 datasetID: '785b6209bae6492ba080df35c40cc5ba'
             }
@@ -165,6 +170,7 @@ const ECOSYSTEMS = {
                     1: 'Priority Amphibian and Reptile Conservation Area \n(PARCA) within pine and prairie'
                 },
                 categoricalValues: range(0, 2),
+                domain: [0, 1],
                 datasetID: '89c74fcd28b14683ae2322211104e56c'
             },
             Birds: {
@@ -177,6 +183,7 @@ const ECOSYSTEMS = {
                     3: "Potential for presence of all \n3 bird index species (Bachman's sparrow, \nbobwhite quail, and red-cockaded woodpecker)"
                 },
                 categoricalValues: range(0, 4),
+                domain: [0, 3],
                 datasetID: '68f3ce917278453a82afcd280b5ec84b'
             },
             RegularlyBurnedHabitat: {
@@ -187,6 +194,7 @@ const ECOSYSTEMS = {
                     1: 'Recently burned and open canopy'
                 },
                 categoricalValues: range(0, 2),
+                domain: [0, 1],
                 datasetID: 'ea13b5d4f83d4e27bc8bfc8878a85b2c'
             }
         }
@@ -206,6 +214,7 @@ const ECOSYSTEMS = {
                     4: "Potential for additional presence \nof Swainson's warbler"
                 },
                 categoricalValues: range(0, 5),
+                domain: [0, 4],
                 datasetID: '9a98b3bf45fc4d2aa0833a171b56533a'
             },
             UrbanOpenSpace: {
@@ -220,6 +229,7 @@ const ECOSYSTEMS = {
                     5: 'Protected land'
                 },
                 categoricalValues: range(0, 6),
+                domain: [0, 5],
                 datasetID: 'c0039f1c66c14115ba8b5f51ee22ef97'
             }
         }
@@ -246,7 +256,7 @@ const ECOSYSTEMS = {
                     4: '60-80',
                     5: '>80'
                 },
-                absoluteRange: [0, 100],
+                domain: [0, 100],
                 datasetID: 'be70e3438a6e48d798916e788f35ef6b'
             },
             PotentialHardbottomCondition: {
@@ -259,6 +269,7 @@ const ECOSYSTEMS = {
                     3: 'Hardbottom likely to be in best condition due to additional protections'
                 },
                 categoricalValues: range(0, 4),
+                domain: [0, 3],
                 datasetID: 'cbb923b746fc435b93d079f9261fa7c2'
             }
         }
@@ -286,7 +297,7 @@ const ECOSYSTEMS = {
                     3: '90-95%',
                     4: '>95%'
                 },
-                absoluteRange: [9, 100],
+                domain: [9, 100],
                 datasetID: 'aff20e09ff62451685dfb8ffedceeec1'
             },
             RiparianBuffers: {
@@ -307,7 +318,7 @@ const ECOSYSTEMS = {
                     4: '90-95%',
                     5: '>95%'
                 },
-                absoluteRange: [0, 100],
+                domain: [0, 100],
                 datasetID: 'c822c798ba724e06b5fb25d2c18ff0cb'
             },
             ImperiledAquaticSpecies: {
@@ -321,6 +332,7 @@ const ECOSYSTEMS = {
                     4: '4 or more aquatic imperiled (G1/G2) or threatened/endangered species observed'
                 },
                 categoricalValues: range(0, 5),
+                domain: [0, 4],
                 datasetID: 'f6aa9bc688814468b5ae2772375c9fc2'
             }
         }
@@ -338,6 +350,7 @@ const ECOSYSTEMS = {
                     1: 'Low road density (<1.5 km/sq km) '
                 },
                 categoricalValues: range(0, 2),
+                domain: [0, 1],
                 datasetID: '61856f9901d74185a34c08e857380395'
             },
             LowUrbanHistoric: {
@@ -349,6 +362,7 @@ const ECOSYSTEMS = {
                     2: 'Historic place with nearby low-urban buffer'
                 },
                 categoricalValues: range(0, 3),
+                domain: [0, 2],
                 datasetID: '037ecaa254ff48f88969fc1db467d917'
             },
             ResilientBiodiversityHotspots: {
@@ -365,6 +379,7 @@ const ECOSYSTEMS = {
                     7: 'Final resilience score: Far above average (>2 SD)'
                 },
                 categoricalValues: range(0, 8),
+                domain: [0, 7],
                 datasetID: '72cd46173b7b4801bfa88458b29d0d9b'
             }
         }
@@ -384,6 +399,7 @@ const ECOSYSTEMS = {
                     4: 'Presence of Gulf or Atlantic sturgeon'
                 },
                 categoricalValues: range(1, 5),
+                domain: [1, 4],
                 datasetID: '955b5af8b2e24648a11b4a0134c0b285'
             },
             NetworkComplexity: {
@@ -399,6 +415,7 @@ const ECOSYSTEMS = {
                     7: '7 connected stream size classes'
                 },
                 categoricalValues: range(1, 8),
+                domain: [1, 7],
                 datasetID: '88e4e923d1e94e1d833f0cfd5bb93d5e'
             }
         }
@@ -407,15 +424,6 @@ const ECOSYSTEMS = {
 
 
 class Ecosystem extends Component {
-
-    renderIndicators() {
-        // return Object.keys(this.props.data.indicator_stats).map((name, index)=>
-        //         <div onClick={(e) => {e.stopPropagation();
-        //         this.renderIndicatorDescription.bind(this.props.data ,name);}}>{name.includes(thing) ? <Whisker indicatorname = {name} values =
-        //             {this.props.data.indicator_stats} /> : '' }
-        //         </div>
-        // )
-    }
 
     render() {
         console.log('Ecosystem props:', this.props)
@@ -430,7 +438,7 @@ class Ecosystem extends Component {
         // TODO:
         // format percent
 
-        // TODO: merge indicators with ECOSYSTEMS[ecosystem].indicators
+        // Merge constants with dynamic data
         const mergedIndicators = indicatorKeys.map((indicator) => {
             return Object.assign(
                 {id: indicator},
@@ -439,23 +447,18 @@ class Ecosystem extends Component {
             );
         });
 
-        console.log('Merged indicators', mergedIndicators)
-
         return (
             <div className="ecosystem">
-                <div className="flex-container3">
-                    <div className="flex-item2">
-                        <img src={icon} height={40} alt=""/>
-                    </div>
-
-                    <div className="flex-item2"><h4>{label}</h4></div>
-                    <div className="flex-item2">{(percent) ? ' ('+ percent + '% )' : ''}</div>
-                </div>
-                <div>
+                <header className="flex-container flex-justify-start flex-align-center">
+                    <img src={icon} height={40} alt=""/>
+                    <h2>{label}</h2>
+                    <span className="text-quieter text-right text-small">{(percent) ? ''+ percent + '%' : ''}</span>
+                </header>
+                {/*<section>*/}
                     {mergedIndicators.map((indicator) =>
                         <Indicator key={indicator.id} {...indicator}/>
                     )}
-                </div>
+                {/*</section>*/}
             </div>
         );
     }
