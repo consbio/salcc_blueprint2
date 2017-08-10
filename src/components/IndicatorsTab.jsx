@@ -90,7 +90,6 @@ class IndicatorsTab extends Component {
 
     renderEcosystems(ecosystemIDs){
         const {ecosystems} = this.props.data;
-        console.log('Ecosystems:',ecosystems);
         return ecosystemIDs.map((ecosystem, index)=>
             <Ecosystem key={ecosystem} index={index} ecosystem={ecosystem} icon={this.getIcon(ecosystem)} {...ecosystems[ecosystem]}/>
         );

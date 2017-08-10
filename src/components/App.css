@@ -15,7 +15,7 @@
 }
 
 
-#TopBar, #Footer, #Content{
+#TopBar, #Footer{
     z-index: 5000;
 }
 
@@ -44,25 +44,16 @@
     position: absolute;
     right: 0px;
     left: 0px;
-    bottom: 43px;
-    top: 40px;
+    bottom: 53px;
+    /*top: 40px;*/
+    top: 0;
     background: #FFF;
     /*padding: 10px;*/
     overflow-y: auto;
     overflow-x: hidden;
+    z-index: 5001;
 }
 
-#Content.modal {
-    top: 50px;
-    bottom: 50px;
-    left: 10px;
-    right: 10px;
-    border: 1px solid #AAAAAA;
-}
-
-#Content.active {
-    display: block;
-}
 
 #Content h2 {
     /*border-bottom: 1px solid #DDD;*/
@@ -75,11 +66,11 @@
 }
 
 #Content h4 {
-    padding-bottom: 2px;
-    margin-bottom: 7px;
+    padding-bottom: 0;
+    margin-bottom: 4px;
     margin-top: 4px;
     /*font-size: 14px;*/
-    color: #a4aab3;
+    color: #777;
     font-weight: normal;
 }
 
@@ -106,6 +97,12 @@
     color: #a4aab3;
     font-size: 12px;
 }
+
+#Content.tabs-top {
+    top: 40px;
+    bottom: 0px;
+}
+
 
 #UnitLabel {
     color: #555;
@@ -142,7 +139,7 @@
     left: 0px;
     right: 0px;
     justify-content: center;
-    padding: 4px 0 16px;
+    padding: 4px 0 10px;
 }
 
 #EcosystemsNav img {
@@ -159,15 +156,18 @@
 
 .ecosystem {
     min-height: 50vh;
+    padding-bottom: 10px;
 }
 
 .ecosystem header {
-    padding: 6px;
-    background-color: rgba(234,244,223,.8);
+    padding: 12px;
+    /*background-color: rgba(234,244,223,.8);*/
+    border-bottom: 1px solid #EEE;
 }
 
 .ecosystem header img {
     margin-right: 4px;
+    height: 40px;
 }
 
 .ecosystem header h2 {
@@ -176,13 +176,15 @@
     font-weight: normal;
 }
 
-.ecosystem header span {
+.ecosystem header div {
     flex: 1;
 }
 
-.ecosystem section {
-    margin: 10px 10px 0 10px;
-    border: 1px solid red; /* FIXME: temp */
+.indicator {
+    margin: 16px 6px 0 6px;
+    border-radius: 8px;
+    background-color: #EEE;
+    padding: 6px 10px 10px 10px;
 }
 
 
@@ -239,6 +241,6 @@
 
 .chart-whisker .domain {
     stroke-width:3;
-    stroke: #a4aab3;
+    /*stroke: #a4aab3;*/
     stroke-linecap: round;
 }

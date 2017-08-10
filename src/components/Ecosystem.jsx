@@ -29,7 +29,8 @@ const ECOSYSTEMS = {
                     5: '>80'
                 },
                 domain: [10, 100],
-                datasetID: '59a112afa51e4739be6c984c0fefb02d'
+                datasetID: '59a112afa51e4739be6c984c0fefb02d',
+                goodConditionThreshold: 60 // Placeholder
             },
             UnalteredBeach: {
                 label: 'Unaltered beach',
@@ -41,7 +42,8 @@ const ECOSYSTEMS = {
                 },
                 categoricalValues: range(0, 3),
                 domain: [0, 2],
-                datasetID: 'c58be422af514fbd906c93f8579efe01'
+                datasetID: 'c58be422af514fbd906c93f8579efe01',
+                goodConditionThreshold: 2 // Placeholder
             }
         }
     },
@@ -68,7 +70,8 @@ const ECOSYSTEMS = {
                     5: '>4.0'
                 },
                 domain: [1, 5],  //TODO: should this be 1.13 instead?
-                datasetID: 'a2fddbed78a64e73bbb5ed99b114f5f7'
+                datasetID: 'a2fddbed78a64e73bbb5ed99b114f5f7',
+                goodConditionThreshold: 4 // Placeholder
             },
             WaterVegetationEdge: {
                 label: 'Water - vegetation edge (km/sq km)',
@@ -82,7 +85,8 @@ const ECOSYSTEMS = {
                 },
                 categoricalValues: range(0, 5),
                 domain: [0, 4],
-                datasetID: '00ecbf6049d4481db1f1416e4e3b8cc2'
+                datasetID: '00ecbf6049d4481db1f1416e4e3b8cc2',
+                goodConditionThreshold: 3 // Placeholder
             },
             WetlandPatchSize: {
                 label: 'Wetland patch size (hectares)',
@@ -105,7 +109,7 @@ const ECOSYSTEMS = {
         color: '#cedb9c',
         indicators: {
             Amphibians: {
-                label: 'Forested wetland amphibians',
+                label: 'Amphibians',
                 description: 'Forested wetland amphibians draws from the Priority Amphibian and Reptile Conservation Areas (PARCAs) located in forested wetland habitat. PARCA is an expert-driven, nonregulatory designation that captures places capable of supporting viable amphibian and reptile populations. PARCAs include areas where rare or at-risk species have been observed or are likely to occur (like embedded, isolated wetlands).',
                 valueLabels: {
                     0: 'Not a Priority Amphibian and Reptile Conservation Area (PARCA) within forested wetlands',
@@ -116,7 +120,7 @@ const ECOSYSTEMS = {
                 datasetID: '7971445641934255b319b5971600eb47'
             },
             Birds: {
-                label: 'Forested wetland birds',
+                label: 'Birds',
                 description: "Forested wetland birds is an index of habitat suitability for six bird species (Northern parula, black-throated green warbler, red-headed woodpecker, Chuck-will's widow, prothonotary warbler, Swainson's warbler) based on patch size and proximity to water. The needs of these species are increasingly restrictive at higher index values, reflecting better quality habitat.",
                 valueLabels: {
                     0: 'Less potential for presence of bird index species',
@@ -126,7 +130,8 @@ const ECOSYSTEMS = {
                 },
                 categoricalValues: range(0, 4),
                 domain: [0, 3],
-                datasetID: 'ecf2d74a50cc47fa99ae6ef42d838866'
+                datasetID: 'ecf2d74a50cc47fa99ae6ef42d838866',
+                goodConditionThreshold: 2 // Placeholder
             }
         }
     },
@@ -135,7 +140,7 @@ const ECOSYSTEMS = {
         color: '#9c9ede',
         indicators: {
             Birds: {
-                label: 'Freshwater marsh birds',
+                label: 'Birds',
                 description: 'Freshwater marsh birds is a continuous index of patch size. Larger patches are likely to support the following suite of freshwater marsh birds: least bittern, Northern pintail, Northern shoveler, and king rail.',
                 valueLabels: {
                     1: 'Less potential for presence of bird index species',
@@ -163,7 +168,7 @@ const ECOSYSTEMS = {
         color: '#bd9e39',
         indicators: {
             Amphibians: {
-                label: 'Pine and prairie amphibians',
+                label: 'Amphibians',
                 description: 'Pine and prairie amphibians draws from the Priority Amphibian and Reptile Conservation Areas (PARCAs) located in pine and prairie habitat. PARCA is an expert-driven, nonregulatory designation that captures places capable of supporting viable amphibian and reptile populations. PARCAs include areas where rare or at-risk species have been observed or are likely to occur (like embedded, isolated wetlands).',
                 valueLabels: {
                     0: 'Not a Priority Amphibian and Reptile Conservation \nArea (PARCA) within pine and prairie',
@@ -174,7 +179,7 @@ const ECOSYSTEMS = {
                 datasetID: '89c74fcd28b14683ae2322211104e56c'
             },
             Birds: {
-                label: 'Pine and prairie birds',
+                label: 'Birds',
                 description: "Pine and prairie birds is an index of habitat suitability for three bird species (Northern bobwhite, red-cockaded woodpecker, Bachman's sparrow) based on observational data and predictive models. The presence of all three species indicates high pine ecosystem quality.",
                 valueLabels: {
                     0: 'Less potential for presence of bird index species',
@@ -204,7 +209,7 @@ const ECOSYSTEMS = {
         color: '#637939',
         indicators: {
             Birds: {
-                label: 'Upland hardwood birds',
+                label: 'Birds',
                 description: "Upland hardwood birds is an index of habitat suitability for seven upland hardwood bird species (wood thrush, whip-poor-will, hooded warbler, American woodcock, Acadian flycatcher, Kentucky warbler, Swainson's warbler) based on patch size and other ecosystem characteristics such as proximity to water and proximity to forest and ecotone edge. The needs of these species are increasingly restrictive at higher index values, reflecting better quality habitat.",
                 valueLabels: {
                     0: 'Less potential for presence of \nbird index species',
@@ -426,7 +431,7 @@ const ECOSYSTEMS = {
 class Ecosystem extends Component {
 
     render() {
-        console.log('Ecosystem props:', this.props)
+        // console.log('Ecosystem props:', this.props);
 
         const {ecosystem, icon, percent, indicators} = this.props;
         const ecosystemConfig = ECOSYSTEMS[ecosystem];
@@ -437,6 +442,7 @@ class Ecosystem extends Component {
 
         // TODO:
         // format percent
+        const percentLabel = Math.round(percent) + '%';
 
         // Merge constants with dynamic data
         const mergedIndicators = indicatorKeys.map((indicator) => {
@@ -450,15 +456,20 @@ class Ecosystem extends Component {
         return (
             <div className="ecosystem">
                 <header className="flex-container flex-justify-start flex-align-center">
-                    <img src={icon} height={40} alt=""/>
+                    <img src={icon} alt=""/>
                     <h2>{label}</h2>
-                    <span className="text-quieter text-right text-small">{(percent) ? ''+ percent + '%' : ''}</span>
+                    {percent &&
+                        <div className="text-quieter text-right text-small">
+                            {percentLabel}
+                            <br/>
+                            <span className="text-smaller">of unit</span>
+                        </div>
+                    }
                 </header>
-                {/*<section>*/}
-                    {mergedIndicators.map((indicator) =>
-                        <Indicator key={indicator.id} {...indicator}/>
-                    )}
-                {/*</section>*/}
+
+                {mergedIndicators.map((indicator) =>
+                    <Indicator key={indicator.id} {...indicator}/>
+                )}
             </div>
         );
     }

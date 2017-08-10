@@ -23,6 +23,10 @@ a, a:active, a:visited {
     font-size: small;
 }
 
+.text-smaller {
+    font-size: smaller;
+}
+
 .text-right {
     text-align: right;
 }
