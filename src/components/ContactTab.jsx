@@ -2,7 +2,7 @@ import React from 'react';
 
 function ContactTab() {
     return (
-        <div id = "Content">
+        <div id = "Content" className="tabs-top">
             <h2>Give Us Feedback!</h2>
 
             <p>

@@ -188,7 +188,7 @@ function PartnersTab({data}) {
     return (
 
         <div id = "Content">
-            <h2>{data.name}</h2>
+            {/*<h2>{data.name}</h2>*/}
             <h4><br/>
                 Conserved Lands Ownership</h4>
             <div>

@@ -1,66 +1,52 @@
-import { combineReducers } from 'redux';
 import {
-    SELECT_UNIT,
     DESELECT_UNIT,
     REQUEST_DATA,
-    RECIEVE_DATA
+    RECIEVE_DATA,
+    REQUEST_ERROR
 } from '../Actions/actions';
 
-function selectedUnit (state = '', action){
-    switch (action.type){
-        case SELECT_UNIT:
-            return action.unit;
-        default:
-            return state
-    }
-}
 
-function data (
+export default function rootReducer(
     state = {
-        isFetching: false,
-        didDeselect: false,
-        items: []
-    },
-    action
-) {
-    switch (action.type) {
-        case DESELECT_UNIT:
-            return Object.assign({}, state, {
-                didDeselect: true
-            });
-        case REQUEST_DATA:
-            return Object.assign({}, state, {
-                isFetching: true,
-                didDeselect: false
-            });
-        case RECIEVE_DATA:
-            return Object.assign({}, state, {
-                isFetching: false,
-                didDeselect: false,
-                items: action.data,
-                lastUpdated: action.recievedAt
-            });
-        default:
-            return state
-    }
-}
+        // Application state
+        isPending: false,
+        hasError: false,
 
-function dataByUnit (state = {}, action){
+        // State of the selected unit
+        selectedUnit: null,
+        data: {}
+    },
+    action) {
     switch (action.type){
         case DESELECT_UNIT:
-        case RECIEVE_DATA:
+            return Object.assign({}, state, {
+                selectedUnit: null,
+                data: {}
+            });
+
         case REQUEST_DATA:
             return Object.assign({}, state, {
-                [action.unit]: data(state[action.unit], action)
+                isPending: true,
+                hasError: false,
+                selectedUnit: action.unit
             });
+
+        case RECIEVE_DATA:
+            return Object.assign({}, state, {
+                isPending: false,
+                selectedUnit: action.unit,
+                data: action.data
+            });
+
+        case REQUEST_ERROR:
+            return Object.assign({}, state, {
+                isPending: false,
+                hasError: true,
+                selectedUnit: null,
+                data: {}
+            })
+
         default:
             return state
     }
 }
-
-const rootReducer = combineReducers({
-    dataByUnit,
-    selectedUnit
-});
-
-export default rootReducer;
