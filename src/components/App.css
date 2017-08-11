@@ -252,3 +252,23 @@
     /*stroke: #a4aab3;*/
     stroke-linecap: round;
 }
+
+.flex-chart{
+    width: 100%;
+    height: 10px;
+    display: flex;
+    animation: chart-grow 1s;
+    background-color: #9da0a4;
+}
+
+.flex-chart--column {
+    flex-direction: column;
+}
+
+.flex-chart > .line{
+    padding: 0.2rem;
+    flex-basis: 0px;
+    background-color: #0074D9;
+}
+
+

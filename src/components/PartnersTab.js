@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Row, Col } from 'react-simple-flex-grid';
+
 
 
 let gapConfig = {
@@ -192,77 +194,65 @@ function PartnersTab({data}) {
             <h4><br/>
                 Conserved Lands Ownership</h4>
             <div>
-                <svg width="100%" height="200">
-                    <rect width= "520" height = "100%" fill = '#D3D3D3'/>
-                    {
-                        Object.keys(data.gap).map((num, i)=>
-                            <rect key={i} x="0" y={position[i]} width="520" height={data.gap[num]*2} fill = {gapConfig[num].color}/>
-                        )}
-                </svg>
                 <br/>
                 {Object.keys(data.gap).map((num, i)=>
                     <div>
                         <div className="flex-container2">
+                            <div className="flex-item2" >{gapConfig[num].label}</div>
                             <div className="flex-item2">
-                                <svg width ="15" height="15">
-                                    <rect key={i} width = "100%" height= "100%" fill = {gapConfig[num].color} stroke="gray" strokeWidth="1"/>
-                                </svg>
-                            </div>
-                            <div className="flex-item2" >{gapConfig[num].label+ ' (' + data.gap[num] + '%)'}</div>
-                        </div>
-                        <div className="flex-container2">
-                            <div className="flex-item2">
-                                <svg width ="15" height="15">
-                                    <rect width = "100%" height= "100%" fill = "white"/>
-                                </svg>
-                            </div>
-                            <div className="flex-item2">
-                                <p2>Ex: {gapConfig[num].detail}</p2>
+                                {"(" + data.gap[num] + '%)'}
                             </div>
                         </div>
+                        <svg width ="300" height="5">
+                                    <rect width = "100%" height="100%" fill="#d3d3d3"/>
+                                    <rect key={i} width = {data.gap[num] * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
+                                </svg>
                     </div>
                 )}
+                <div>
                 <div className="flex-container2">
-                    <div className="flex-item2">
-                        <svg width ="15" height="15">
-                            <rect width = "100%" height= "100%" fill = "#D3D3D3" stroke="gray" strokeWidth="1"/>
-                        </svg>
-                    </div>
                     <div className="flex-item2">Not conserved</div>
+                    <div className="flex-item2">
+                       (%)
+                    </div>
+                </div>
+                    <svg width ="300" height="5">
+                            <rect width = "100%" height="100%" fill="#d3d3d3"/>
+                        </svg>
                 </div>
                 <br/>
             </div>
             <h4>Land Protection Status</h4>
             <div>
-                <svg width="100%" height="200">
-                    <rect width= "520" height = "100%" fill = '#D3D3D3'/>
-                    {
-                        Object.keys(data.owner).map((num, i)=>
-                            <rect key={i} x="0" y={positionowners[i]} width="520" height={data.owner[num]*2} fill = {ownershipConfig[num].color}/>
-                        )}
-                </svg>
-                <br/>
                 {Object.keys(data.owner).map((num, i)=>
                     {
                         const {color, label} = ownershipConfig[num];
 
-                        return <div className="flex-container2">
+                        return <div><div className="flex-container2">
+                            <div className="flex-item2" >{label}</div>
                             <div className="flex-item2">
-                                <svg width ="15" height="15">
-                                    <rect key={i} width = "100%" height= "100%" fill = {color} stroke="gray" strokeWidth="1"/>
+                                {' (' + data.owner[num] + '%)'}
+                            </div>
+                        </div>
+                        <div>
+                                <svg width ="300" height="5">
+                                    <rect width = "100%" height="100%" fill="#d3d3d3"/>
+                                    <rect key={i} width = {data.owner[num] * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
                                 </svg>
                             </div>
-                            <div className="flex-item2" >{label + ' (' + data.owner[num] + '%)'}</div>
-                        </div>
+                            </div>
                     }
                 )}
+                <div>
                 <div className="flex-container2">
-                    <div className="flex-item2">
-                        <svg width ="15" height="15">
-                            <rect width = "100%" height= "100%" fill = "#D3D3D3" stroke="gray" strokeWidth="1"/>
-                        </svg>
-                    </div>
                     <div className="flex-item2">Not conserved</div>
+                    <div className="flex-item2">
+                       (%)
+                    </div>
+                </div>
+                    <svg width ="300" height="5">
+                            <rect width = "100%" height="100%" fill="#d3d3d3"/>
+                        </svg>
                 </div>
                 <br/>
             </div>

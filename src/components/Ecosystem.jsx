@@ -392,7 +392,7 @@ const ECOSYSTEMS = {
     },
     'Waterscapes': {
         label: 'Waterscapes',
-        color: 'c6dbef',
+        color: '#c6dbef',
         isUniversal: true,
         indicators: {
             MigratoryFishConnectivity: {

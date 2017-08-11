@@ -19,11 +19,11 @@ class Indicator extends Component {
         if (goodConditionThreshold !== null && goodConditionThreshold !== undefined) {
             if (mean >= goodConditionThreshold) {
                 bgColor = 'rgba(61, 153, 112, 0.1)';
-                color = '#3D9970';
+                color = '#0C5DA5';
             }
             else {
                 bgColor = 'rgba(255, 133, 27, 0.1)';
-                color = '#FF851B'
+                color = '#ff9500'
             }
         }
 
