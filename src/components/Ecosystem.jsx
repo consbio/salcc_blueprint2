@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 // import PropTypes from 'prop-types';
 import {range} from 'd3-array';
 import Indicator from './Indicator';
+import WhiskerDes from './Charts/WhiskerDescription'
 
 
 // Ecosystem globals live here
@@ -430,9 +431,25 @@ const ECOSYSTEMS = {
 
 
 class Ecosystem extends Component {
+    constructor(props) {
+        super(props);
+        this.handleIndicatorClick = this.handleIndicatorClick.bind(this);
+        this.handleCloseWhiskerDes = this.handleCloseWhiskerDes.bind(this);
+        this.state = {indicatorClick: false};
+    }
+
+    handleIndicatorClick() {
+        this.state = ({indicatorClick: true});
+    }
+
+    handleCloseWhiskerDes(){
+        this.state = ({indicatorClick: false});
+    }
 
     render() {
         console.log('Ecosystem props:', this.props);
+
+        const indicatorClick = this.state.indicatorClick;
 
         const {ecosystem, icon, percent, indicators} = this.props;
         const ecosystemConfig = ECOSYSTEMS[ecosystem];
@@ -454,6 +471,22 @@ class Ecosystem extends Component {
             );
         });
 
+        let content = null;
+        if (indicatorClick){
+            content = <WhiskerDes onClick={this.handleCloseWhiskerDes}/>;
+            console.log('indicatorclicked');
+        } else {
+            console.log('indicator not clicked');
+            content = mergedIndicators.length > 0
+                    ?
+                    mergedIndicators.map((indicator) =>
+                        <Indicator key={indicator.id} {...indicator} onClick={this.handleIndicatorClick} />
+                    )
+                    :
+                    <div className="no-indicators">Ecosystem does not have any indicators</div>;
+
+        }
+
         return (
             <div className="ecosystem">
                 <header className="flex-container flex-justify-start flex-align-center">
@@ -467,16 +500,7 @@ class Ecosystem extends Component {
                         </div>
                     }
                 </header>
-
-                {
-                    mergedIndicators.length > 0
-                    ?
-                    mergedIndicators.map((indicator) =>
-                        <Indicator key={indicator.id} {...indicator}/>
-                    )
-                    :
-                    <div className="no-indicators">Ecosystem does not have any indicators</div>
-                }
+                {content}
             </div>
         );
     }
