@@ -224,37 +224,30 @@ class Map extends Component {
             <div id="MapContainer">
                 <div ref={(node) => this._mapNode = node} id="Map" >
                     <div className="legend">
-                        <div className="flex-container2">
-                            <div className="flex-item2">
-                                <svg width ="17" height="17">
-                                    <rect width = "100%" height= "100%" fill = '#686868' stroke="gray" strokeWidth="2"/>
-                                </svg>
-                            </div>
+                        <div>
+                            Corridors
+                            <svg width ="17" height="17">
+                                <rect width = "100%" height= "100%" fill = '#686868' stroke="gray" strokeWidth="2"/>
+                            </svg>
+                            Medium
                         </div>
-                        <div className="text">Corridors</div>
-                        <div className="flex-container2">
-                            <div className="flex-item2">
-                                <svg width ="17" height="17">
-                                    <rect width = "100%" height= "100%" fill = '#fbb4b9' stroke="gray" strokeWidth="2"/>
-                                </svg>
-                            </div>
+                        <div>
+                            <svg width ="17" height="17">
+                                <rect width = "100%" height= "100%" fill = '#fbb4b9' stroke="gray" strokeWidth="2"/>
+                            </svg>
                         </div>
-                        <div className="flex-container2">
-                            <div className="flex-item2">
-                                <svg width ="17" height="17">
-                                    <rect width = "100%" height= "100%" fill = '#c51b8a' stroke="gray" strokeWidth="2"/>
-                                </svg>
-                            </div>
+                        <div>
+                            <svg width ="17" height="17">
+                                <rect width = "100%" height= "100%" fill = '#c51b8a' stroke="gray" strokeWidth="2"/>
+                            </svg>
 
                         </div>
-                        <div className="flex-container2">
-                            <div className="flex-item2">
-                                <svg width ="17" height="17">
-                                    <rect width = "100%" height= "100%" fill = '#49006a' stroke="gray" strokeWidth="2"/>
-                                </svg>
-                            </div>
+                        <div>
+                            <svg width ="17" height="17">
+                                <rect width = "100%" height= "100%" fill = '#49006a' stroke="gray" strokeWidth="2"/>
+                            </svg>
+                            Highest
                         </div>
-                        <div className="text">Highest</div>
                     </div>
                 </div>
 
