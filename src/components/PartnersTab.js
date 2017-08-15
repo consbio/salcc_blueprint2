@@ -191,34 +191,38 @@ function PartnersTab({data}) {
 
         <div id = "Content">
             {/*<h2>{data.name}</h2>*/}
-            <h4><br/>
+            <h4>
                 Conserved Lands Ownership</h4>
             <div>
-                <br/>
                 {Object.keys(data.gap).map((num, i)=>
                     <div>
                         <div className="flex-container2">
                             <div className="flex-item2" >{gapConfig[num].label}</div>
-                            <div className="flex-item2">
+                            <div className="flex-item3">
                                 {"(" + data.gap[num] + '%)'}
                             </div>
                         </div>
+                        <div className="flex-container">
                         <svg width ="300" height="5">
                                     <rect width = "100%" height="100%" fill="#d3d3d3"/>
                                     <rect key={i} width = {data.gap[num] * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
-                                </svg>
+                        </svg>
+                        </div>
+                        <br/>
                     </div>
                 )}
                 <div>
                 <div className="flex-container2">
                     <div className="flex-item2">Not conserved</div>
-                    <div className="flex-item2">
+                    <div className="flex-item3">
                        (%)
                     </div>
                 </div>
+                    <div className="flex-container">
                     <svg width ="300" height="5">
                             <rect width = "100%" height="100%" fill="#d3d3d3"/>
                         </svg>
+                    </div>
                 </div>
                 <br/>
             </div>
@@ -234,13 +238,14 @@ function PartnersTab({data}) {
                                 {' (' + data.owner[num] + '%)'}
                             </div>
                         </div>
-                        <div>
+                        <div className="flex-container">
                                 <svg width ="300" height="5">
                                     <rect width = "100%" height="100%" fill="#d3d3d3"/>
                                     <rect key={i} width = {data.owner[num] * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
                                 </svg>
-                            </div>
-                            </div>
+                        </div>
+                            <br/>
+                        </div>
                     }
                 )}
                 <div>
@@ -250,9 +255,11 @@ function PartnersTab({data}) {
                        (%)
                     </div>
                 </div>
-                    <svg width ="300" height="5">
+                    <div className="flex-container">
+                        <svg width ="300" height="5">
                             <rect width = "100%" height="100%" fill="#d3d3d3"/>
                         </svg>
+                    </div>
                 </div>
                 <br/>
             </div>

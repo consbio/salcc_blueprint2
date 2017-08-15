@@ -52,7 +52,7 @@ class WhiskerPlot extends Component {
                                 ?
                                 (<g>
                                     <line className="domain" x1={x.range()[0]} x2={x(goodConditionThreshold)} y1={midY} y2={midY} stroke="#FF851B"/>
-                                    <line className="domain" x1={x(goodConditionThreshold)} x2={x.range()[1]} y1={midY} y2={midY} stroke="#3D9970"/>
+                                    <line className="domain" x1={x(goodConditionThreshold)} x2={x.range()[1]} y1={midY} y2={midY} stroke="#0C5DA5"/>
                                 </g>)
                                 :
                                 <line className="domain" x1={x.range()[0]} x2={x.range()[1]} y1={midY} y2={midY} stroke="#CCC"/>

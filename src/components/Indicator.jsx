@@ -13,12 +13,12 @@ class Indicator extends Component {
         console.log('Indicator props:', this.props)
         const {label, mean, domain, datasetID, goodConditionThreshold} = this.props;
 
-        // Color is gray if no threshold, green if over threshold, orange otherwise
+        // Color is gray if no threshold, blue if over threshold, orange otherwise
         let bgColor = 'rgba(204, 204, 199, 0.2)';
         let color = '#CCC';
         if (goodConditionThreshold !== null && goodConditionThreshold !== undefined) {
             if (mean >= goodConditionThreshold) {
-                bgColor = 'rgba(61, 153, 112, 0.1)';
+                bgColor = 'rgba(12, 93, 165, 0.1)';
                 color = '#0C5DA5';
             }
             else {

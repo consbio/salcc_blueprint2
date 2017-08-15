@@ -75,6 +75,13 @@ a, a:active, a:visited {
     background: #DDD;
 }
 
+.flex-item3 {
+    align-items: flex-end;
+    justify-content: flex-end;
+    color: #a4aab3;
+    font-size: 12px;
+}
+
 
 /*#Footer.active {*/
 /*display: block;*/

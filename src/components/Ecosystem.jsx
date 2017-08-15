@@ -463,7 +463,7 @@ class Ecosystem extends Component {
                         <div className="text-quieter text-right text-small">
                             {percentLabel}
                             <br/>
-                            <span className="text-smaller">of unit</span>
+                            <span className="text-smaller">of area</span>
                         </div>
                     }
                 </header>
