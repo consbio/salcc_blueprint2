@@ -4,6 +4,7 @@ import indicators from '../../configindica';
 function WhiskerDes({indicatordes, name}) {
     return (
         <div>
+            whisker plot that has onclick event to close this particular page
             lots of text here and a table below
             <ul>
                 {Object.keys(indicators[indicatordes]).map((indica, j)=>

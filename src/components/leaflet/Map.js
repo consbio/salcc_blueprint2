@@ -11,9 +11,9 @@ import './Map.css';
 // Make leaflet icons work properly from webpack / react context
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
 
@@ -222,7 +222,42 @@ class Map extends Component {
     render() {
         return (
             <div id="MapContainer">
-                <div ref={(node) => this._mapNode = node} id="Map" />
+                <div ref={(node) => this._mapNode = node} id="Map" >
+                    <div className="legend">
+                        <div className="flex-container2">
+                            <div className="flex-item2">
+                                <svg width ="17" height="17">
+                                    <rect width = "100%" height= "100%" fill = '#686868' stroke="gray" strokeWidth="2"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div className="text">Corridors</div>
+                        <div className="flex-container2">
+                            <div className="flex-item2">
+                                <svg width ="17" height="17">
+                                    <rect width = "100%" height= "100%" fill = '#fbb4b9' stroke="gray" strokeWidth="2"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div className="flex-container2">
+                            <div className="flex-item2">
+                                <svg width ="17" height="17">
+                                    <rect width = "100%" height= "100%" fill = '#c51b8a' stroke="gray" strokeWidth="2"/>
+                                </svg>
+                            </div>
+
+                        </div>
+                        <div className="flex-container2">
+                            <div className="flex-item2">
+                                <svg width ="17" height="17">
+                                    <rect width = "100%" height= "100%" fill = '#49006a' stroke="gray" strokeWidth="2"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div className="text">Highest</div>
+                    </div>
+                </div>
+
             </div>
         );
     }

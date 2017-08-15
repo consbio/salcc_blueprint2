@@ -17,8 +17,8 @@
     box-shadow: 1px 2px 4px #555 !important;
     border-radius: 40px !important;
     background: #FFF;
-    margin-right: 14px !important;
-    margin-bottom: 24px !important;
+    margin-right: 10px !important;
+    margin-bottom: 128px !important;
 }
 
 .leaflet-locate-control a {
@@ -28,4 +28,22 @@
     width: 40px !important;
     height: 40px !important;
     border-radius: 40px !important;
+}
+
+.legend {
+    border: 1px solid #DDD !important;
+    box-shadow: 1px 2px 4px #555 !important;
+    position: absolute;
+    bottom: 0px !important;
+    right: 0px !important;
+    background: white;
+    width: 40px;
+    font: 9px Arial;
+    height: 120px;
+    z-index: 10000;
+}
+
+.text {
+    font: 9px Arial;
+    color: #9da0a4;
 }
