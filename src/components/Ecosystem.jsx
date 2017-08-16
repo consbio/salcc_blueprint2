@@ -439,11 +439,11 @@ class Ecosystem extends Component {
     }
 
     handleIndicatorClick() {
-        this.state = ({indicatorClick: true});
+        this.setState({indicatorClick: true});
     }
 
     handleCloseWhiskerDes(){
-        this.state = ({indicatorClick: false});
+        this.setState({indicatorClick: false});
     }
 
     render() {
@@ -473,7 +473,7 @@ class Ecosystem extends Component {
 
         let content = null;
         if (indicatorClick){
-            content = <WhiskerDes onClick={this.handleCloseWhiskerDes}/>;
+            content = <WhiskerDes onClick={this.handleCloseWhiskerDes.bind(this)} />;
             console.log('indicatorclicked');
         } else {
             console.log('indicator not clicked');
@@ -500,6 +500,7 @@ class Ecosystem extends Component {
                         </div>
                     }
                 </header>
+                {console.log(indicatorClick)}
                 {content}
             </div>
         );

@@ -28,7 +28,7 @@ class Indicator extends Component {
         }
 
         return (
-            <section className="indicator" style={{backgroundColor: bgColor}}>
+            <section className="indicator" style={{backgroundColor: bgColor}} onClick={this.props.onClick}>
                 <h4>
                     {/*only if not mobile version*/}
                     {/*<a href={`https://salcc.databasin.org/datasets/${datasetID}`} target="_blank" title="View this indicator in the Conservation Planning Atlas">*/}

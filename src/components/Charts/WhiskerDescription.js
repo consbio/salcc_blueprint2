@@ -1,10 +1,18 @@
 import React from 'react';
 import indicators from '../../configindica';
 
-function WhiskerDes() {
+function handleClose(){
+    this.setState.indicatorClick = false;
+}
+
+
+function WhiskerDes(indicatordes) {
+function handleClose(){
+    this.setState.indicatorClick = false;
+}
     return (
         <div>
-            whisker plot that has onclick event to close this particular page
+            whisker plot that has onclick event to close the particular page
             lots of text here and a table below
             <ul>
                 {/*Object.keys(indicators[indicatordes]).map((indica, j)=>
