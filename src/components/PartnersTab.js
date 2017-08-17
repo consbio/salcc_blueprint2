@@ -187,9 +187,9 @@ function PartnersTab({data}) {
     Object.keys(data.owner).map((num, i)=>
         positionowners[i+1]= data.owner[num] * 2 + positionowners[i]);
 
-    let sum = Object.keys(data.gap).reduce(function(prevVal,elem){return prevVal+ data.gap[elem]}, 0);
+    let sum = 100 - Object.keys(data.gap).reduce(function(prevVal,elem){return prevVal+ data.gap[elem]}, 0);
 
-    let ownersum = Object.keys(data.owner).reduce(function(prevVal,elem){return prevVal+ data.owner[elem]}, 0);
+    let ownersum = 100 - Object.keys(data.owner).reduce(function(prevVal,elem){return prevVal+ data.owner[elem]}, 0);
     return (
 
         <div id = "Content">
