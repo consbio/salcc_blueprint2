@@ -187,6 +187,9 @@ function PartnersTab({data}) {
     Object.keys(data.owner).map((num, i)=>
         positionowners[i+1]= data.owner[num] * 2 + positionowners[i]);
 
+    let sum = Object.keys(data.gap).reduce(function(prevVal,elem){return prevVal+ data.gap[elem]}, 0);
+
+    let ownersum = Object.keys(data.owner).reduce(function(prevVal,elem){return prevVal+ data.owner[elem]}, 0);
     return (
 
         <div id = "Content">
@@ -213,14 +216,16 @@ function PartnersTab({data}) {
                 )}
                 <div>
                 <div className="flex-container2">
-                    <div className="flex-item2">Not conserved</div>
+                    <div className="flex-item2">Not conserved </div>
                     <div className="flex-item3">
-                       (%)
+                        {' (' + sum + '%)'}
                     </div>
                 </div>
                     <div className="flex-container">
-                    <svg width ="300" height="5">
+                        <svg width ="300" height="5">
                             <rect width = "100%" height="100%" fill="#d3d3d3"/>
+                            <rect width = {sum * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
+
                         </svg>
                     </div>
                 </div>
@@ -252,12 +257,13 @@ function PartnersTab({data}) {
                 <div className="flex-container2">
                     <div className="flex-item2">Not conserved</div>
                     <div className="flex-item2">
-                       (%)
+                       ({ownersum}%)
                     </div>
                 </div>
                     <div className="flex-container">
                         <svg width ="300" height="5">
                             <rect width = "100%" height="100%" fill="#d3d3d3"/>
+                            <rect width = {ownersum * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
                         </svg>
                     </div>
                 </div>

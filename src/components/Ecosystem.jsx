@@ -442,6 +442,7 @@ class Ecosystem extends Component {
         this.setState({indicatorClick: true});
     }
 
+
     handleCloseWhiskerDes(){
         this.setState({indicatorClick: false});
     }
@@ -450,6 +451,7 @@ class Ecosystem extends Component {
         console.log('Ecosystem props:', this.props);
 
         const indicatorClick = this.state.indicatorClick;
+        const indicatorTitle = this.state.indicatorTitle;
 
         const {ecosystem, icon, percent, indicators} = this.props;
         const ecosystemConfig = ECOSYSTEMS[ecosystem];
@@ -474,7 +476,7 @@ class Ecosystem extends Component {
         let content = null;
         if (indicatorClick){
             content = <WhiskerDes onClick={this.handleCloseWhiskerDes.bind(this)} />;
-            console.log('indicatorclicked');
+            console.log('indicator clicked');
         } else {
             console.log('indicator not clicked');
             content = mergedIndicators.length > 0

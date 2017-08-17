@@ -6,7 +6,7 @@ function handleClose(){
 }
 
 
-function WhiskerDes(indicatordes) {
+function WhiskerDes(indicatortitle) {
 function handleClose(){
     this.setState.indicatorClick = false;
 }
