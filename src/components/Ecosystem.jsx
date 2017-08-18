@@ -435,12 +435,22 @@ class Ecosystem extends Component {
         super(props);
         this.handleIndicatorClick = this.handleIndicatorClick.bind(this);
         this.handleCloseWhiskerDes = this.handleCloseWhiskerDes.bind(this);
-        this.state = {indicatorClick: false};
+        this.state = {
+            indicatorClick: false,
+            indicatorTitle: null
+        };
     }
 
-    handleIndicatorClick() {
+    handleIndicatorClick(indicator, indica) {
         this.setState({indicatorClick: true});
+        if(indicator !== null){
+            this.setState({
+                indicatorTitle: indica
+            });
+        }
+        console.log("Indica: " + indica.id + "Indicarest" + indica.mean);
     }
+
 
 
     handleCloseWhiskerDes(){
@@ -475,14 +485,14 @@ class Ecosystem extends Component {
 
         let content = null;
         if (indicatorClick){
-            content = <WhiskerDes onClick={this.handleCloseWhiskerDes.bind(this)} />;
+            content = <WhiskerDes indicatorTitle = {this.state.indicatorTitle} onClick={this.handleCloseWhiskerDes} />;
             console.log('indicator clicked');
         } else {
             console.log('indicator not clicked');
             content = mergedIndicators.length > 0
                     ?
                     mergedIndicators.map((indicator) =>
-                        <Indicator key={indicator.id} {...indicator} onClick={this.handleIndicatorClick} />
+                        <Indicator key={indicator.id} {...indicator} onClick={()=>this.handleIndicatorClick(indicator.id, indicator)} />
                     )
                     :
                     <div className="no-indicators">Ecosystem does not have any indicators</div>;

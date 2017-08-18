@@ -195,7 +195,6 @@
     color: #CCC;
 }
 
-
 #MapContainer {
     position: absolute;
     top:40px;
@@ -270,4 +269,32 @@
     flex-basis: 0px;
     background-color: #0074D9;
 }
+
+.table {
+    font-family: arial, sans-serif;
+    font-size: 10px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.td .th {
+    font-size: 10px;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.tr:nth-child(even){
+    background-color: #dddddd;
+}
+
+
+
+
+
+
+
+
+
+
 
