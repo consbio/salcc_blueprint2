@@ -21,7 +21,7 @@ function WhiskerDes(props){
                     <tr>
                         <td>{indica}</td>
                         <td>{props.indicatorTitle.valueLabels[indica]}</td>
-                        <td>{props.indicatorTitle.percent[j]} %</td>
+                        <td>{parseInt(props.indicatorTitle.percent[j])}%</td>
                     </tr>
                 )}
             </table>
