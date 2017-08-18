@@ -57,6 +57,7 @@ function HomeTab() {
                         covers 50%.</div>
                     </div>
                 </div>
+                <div>
                 <h4>Next Steps</h4>
                 <h4>Basemap Credit</h4>
                 <div className="flex-container2">
@@ -69,6 +70,7 @@ function HomeTab() {
                 </div>
                 <h4>Developed By</h4>
                 <p>Conservation Biology Institute</p>
+                </div>
     </div>
 
     );

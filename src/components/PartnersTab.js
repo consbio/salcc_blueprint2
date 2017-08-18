@@ -302,6 +302,7 @@ function PartnersTab({data}) {
             )}
             <br/>
             <h4>Land Trusts</h4>
+            <div>
             {Object.keys(data.counties).map((num, i)=>
                 <div className="flex-container2">
                     <div className="flex-item2">
@@ -312,7 +313,7 @@ function PartnersTab({data}) {
                     <div className="flex-item2"><a href = {"http://findalandtrust.org/counties/"+ num} target="_blank">{data.counties[num]}</a>
                     </div>
                 </div>)}
-
+            </div>
         </div>
 
     );
