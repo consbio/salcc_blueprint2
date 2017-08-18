@@ -19,6 +19,9 @@ function PriorityTab({data}) {
         data.blueprint[0]*2+data.blueprint[1]*2+data.blueprint[2]*2+data.blueprint[3]*2,
         data.blueprint[0]*2+data.blueprint[1]*2+data.blueprint[2]*2+data.blueprint[3]*2+data.blueprint[4]*2
     ];
+
+    let sum = 100 - (data.blueprint[1] + data.blueprint[2] + data.blueprint[3] +data.blueprint[4]);
+
     return (
         <div id = "Content">
             {/*<h2>{data.name}</h2>*/}
@@ -35,7 +38,7 @@ function PriorityTab({data}) {
                             <rect width = "100%" height= "100%" fill = "#D3D3D3" stroke="gray" strokeWidth="2"/>
                         </svg>
                     </div>
-                    <div className="flex-item2">Not a priority</div>
+                    <div className="flex-item2">Not a priority {sum}%</div>
                 </div>
                 <div className="flex-container2">
                     <div className="flex-item2">
