@@ -3,6 +3,15 @@ import indicators from '../../configindica';
 import Indicator from '../Indicator';
 import '../App.css'
 
+function dashfunc(num){
+    if(num < 1){
+        return "--";
+    }else{
+        parseInt(num);
+        return num + '%';
+    }
+}
+
 function WhiskerDes(props){
     console.log("whiskerdes" + props.indicatorTitle.valueLabels);
     return (
@@ -21,7 +30,7 @@ function WhiskerDes(props){
                     <tr>
                         <td>{indica}</td>
                         <td>{props.indicatorTitle.valueLabels[indica]}</td>
-                        <td>{parseInt(props.indicatorTitle.percent[j])}%</td>
+                        <td>{dashfunc(props.indicatorTitle.percent[j])}</td>
                     </tr>
                 )}
             </table>

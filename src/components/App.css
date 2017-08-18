@@ -52,6 +52,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 5001;
+    padding-bottom: 10px;
 }
 
 

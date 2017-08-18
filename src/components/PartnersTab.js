@@ -202,13 +202,13 @@ function PartnersTab({data}) {
                         <div className="flex-container2">
                             <div className="flex-item2" >{gapConfig[num].label}</div>
                             <div className="flex-item3">
-                                {"(" + data.gap[num] + '%)'}
+                                {"(" + parseInt(data.gap[num]) + '%)'}
                             </div>
                         </div>
                         <div className="flex-container">
                         <svg width ="300" height="5">
                                     <rect width = "100%" height="100%" fill="#ececec"/>
-                                    <rect key={i} width = {data.gap[num] * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
+                                    <rect key={i} width = {data.gap[num] * 3} height= "100%" fill = "#0892D0"/>
                         </svg>
                         </div>
                         <br/>
@@ -218,13 +218,13 @@ function PartnersTab({data}) {
                 <div className="flex-container2">
                     <div className="flex-item2">Not conserved </div>
                     <div className="flex-item3">
-                        {' (' + sum + '%)'}
+                        {' (' + parseInt(sum) + '%)'}
                     </div>
                 </div>
                     <div className="flex-container">
                         <svg width ="300" height="5">
                             <rect width = "100%" height="100%" fill="#ececec"/>
-                            <rect width = {sum * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
+                            <rect width = {sum * 3} height= "100%" fill = "#0892D0"/>
 
                         </svg>
                     </div>
@@ -240,13 +240,13 @@ function PartnersTab({data}) {
                         return <div><div className="flex-container2">
                             <div className="flex-item2" >{label}</div>
                             <div className="flex-item2">
-                                {' (' + data.owner[num] + '%)'}
+                                {' (' + parseInt(data.owner[num]) + '%)'}
                             </div>
                         </div>
                         <div className="flex-container">
                                 <svg width ="300" height="5">
                                     <rect width = "100%" height="100%" fill="#ececec"/>
-                                    <rect key={i} width = {data.owner[num] * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
+                                    <rect key={i} width = {data.owner[num] * 3} height= "100%" fill = "#0892D0"/>
                                 </svg>
                         </div>
                             <br/>
@@ -257,13 +257,13 @@ function PartnersTab({data}) {
                 <div className="flex-container2">
                     <div className="flex-item2">Not conserved</div>
                     <div className="flex-item2">
-                       ({ownersum}%)
+                       ({parseInt(ownersum)}%)
                     </div>
                 </div>
                     <div className="flex-container">
                         <svg width ="300" height="5">
                             <rect width = "100%" height="100%" fill="#ececec"/>
-                            <rect width = {ownersum * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
+                            <rect width = {ownersum * 3} height= "100%" fill = "#0892D0" />
                         </svg>
                     </div>
                 </div>
