@@ -207,7 +207,7 @@ function PartnersTab({data}) {
                         </div>
                         <div className="flex-container">
                         <svg width ="300" height="5">
-                                    <rect width = "100%" height="100%" fill="#d3d3d3"/>
+                                    <rect width = "100%" height="100%" fill="#ececec"/>
                                     <rect key={i} width = {data.gap[num] * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
                         </svg>
                         </div>
@@ -223,7 +223,7 @@ function PartnersTab({data}) {
                 </div>
                     <div className="flex-container">
                         <svg width ="300" height="5">
-                            <rect width = "100%" height="100%" fill="#d3d3d3"/>
+                            <rect width = "100%" height="100%" fill="#ececec"/>
                             <rect width = {sum * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
 
                         </svg>
@@ -245,7 +245,7 @@ function PartnersTab({data}) {
                         </div>
                         <div className="flex-container">
                                 <svg width ="300" height="5">
-                                    <rect width = "100%" height="100%" fill="#d3d3d3"/>
+                                    <rect width = "100%" height="100%" fill="#ececec"/>
                                     <rect key={i} width = {data.owner[num] * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
                                 </svg>
                         </div>
@@ -262,7 +262,7 @@ function PartnersTab({data}) {
                 </div>
                     <div className="flex-container">
                         <svg width ="300" height="5">
-                            <rect width = "100%" height="100%" fill="#d3d3d3"/>
+                            <rect width = "100%" height="100%" fill="#ececec"/>
                             <rect width = {ownersum * 3} height= "100%" fill = "#0892D0" stroke="gray" strokeWidth="1"/>
                         </svg>
                     </div>

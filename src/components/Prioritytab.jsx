@@ -72,7 +72,7 @@ function PriorityTab({data}) {
                     </div>
                     <div className="flex-item2">Highest priority {data.blueprint[4]}%</div>
                 </div>
-
+            <br/>
 
             <h4>Justification</h4>
             <p>{data.justification}</p>
