@@ -4,7 +4,7 @@ import Indicator from '../Indicator';
 import '../App.css'
 
 function WhiskerDes(props){
-    console.log("whiskerdes" + props.indicatorTitle.props);
+    console.log("whiskerdes" + props.indicatorTitle.valueLabels);
     return (
         <div onClick={props.onClick}>
             <Indicator key = {props.indicatorTitle.id} {...props.indicatorTitle} />
@@ -14,20 +14,17 @@ function WhiskerDes(props){
             <table>
                 <tr>
                     <th>Value</th>
-                    <th>blank</th>
+                    <th>_____</th>
                     <th>% of Area</th>
                 </tr>
-                <tr>
-                    <th>one</th>
-                    <th>test</th>
-                    <th>two</th>
-                </tr>
+                {Object.keys(props.indicatorTitle.valueLabels).slice(0).reverse().map((indica, j)=>
+                    <tr>
+                        <td>{indica}</td>
+                        <td>{props.indicatorTitle.valueLabels[indica]}</td>
+                        <td>{props.indicatorTitle.percent[j]} %</td>
+                    </tr>
+                )}
             </table>
-            <ul>
-                {/*Object.keys(indicators[indicatordes]).map((indica, j)=>
-                    <li key={j}>{indica + ': '+ indicators[indicatordes][indica]} </li>
-                )*/}
-            </ul>
 
         </div>
 

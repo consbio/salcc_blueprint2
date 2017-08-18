@@ -270,22 +270,24 @@
     background-color: #0074D9;
 }
 
-.table {
+#Content table {
     font-family: arial, sans-serif;
-    font-size: 10px;
+    font-size: 12px;
+    color: #9da0a4;
     border-collapse: collapse;
     width: 100%;
 }
 
-.td .th {
+#Content td th {
     font-size: 10px;
-    border: 1px solid #dddddd;
+    color: #d3d3d3;
+    border: 1px solid #ececec;
     text-align: left;
     padding: 8px;
 }
 
-.tr:nth-child(even){
-    background-color: #dddddd;
+#Content tr:nth-child(even){
+    background-color: #ececec;
 }
 
 
