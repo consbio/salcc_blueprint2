@@ -88,6 +88,29 @@ class App extends Component {
         }
     }
 
+    renderFooter() {
+        console.log('App props', this.props);
+        if (this.props.selectedUnit === null) return null;
+
+        return (
+            <div id ="Footer">
+                <div id="UnitName">{(this.props.data)? this.props.data.name: ''}</div>
+                <div className="tabs">
+                {this.tabs.map((tabName, index) => (
+                    <div key={index}
+                        className={this.state.activeTab === tabName ? 'tab active' : 'tab'}
+                        onClick={() => this.changeTab(tabName)}>
+                        < img src={'/images/' + ((this.state.activeTab !== null && this.state.activeTab === tabName) ? tabName+'active' : tabName) + '.png'} height={20} alt=""/>
+                        <div className="imgwrap">{tabName}</div>
+                    </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+
+
     render() {
         return (
             <div className="App">
@@ -103,20 +126,7 @@ class App extends Component {
                 </div>
 
                 { this.renderActiveTab() }
-
-                <div id ="Footer">
-                    <div id="UnitName">{(this.props.data)? this.props.data.name: ''}</div>
-                    <div className="tabs">
-                    {this.tabs.map((tabName, index) => (
-                        <div key={index}
-                            className={this.state.activeTab === tabName ? 'tab active' : 'tab'}
-                            onClick={() => this.changeTab(tabName)}>
-                            < img src={'/images/' + ((this.state.activeTab !== null && this.state.activeTab === tabName) ? tabName+'active' : tabName) + '.png'} height={20} alt=""/>
-                            <div className="imgwrap">{tabName}</div>
-                        </div>
-                        ))}
-                    </div>
-                </div>
+                { this.renderFooter() }
             </div>
 
         );

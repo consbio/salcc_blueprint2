@@ -33,9 +33,6 @@ const store = createStore(
 
 // TODO: for testing purposes only!
 store.dispatch(selectUnit('I4'));
-// store
-//     .dispatch(fetchData('I4'))
-//     .then(() => console.log(store.getState()));
 
 ReactDOM.render(
     <Provider store={store}>
