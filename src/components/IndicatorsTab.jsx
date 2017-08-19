@@ -53,12 +53,6 @@ class IndicatorsTab extends Component {
         index: 0,
     };
 
-    // handleChangeTabs = (event, value) => {
-    //     this.setState({
-    //         index: value,
-    //     });
-    // };
-
     handleChangeIndex = (index) => {
         this.setState({
             index,
@@ -66,9 +60,6 @@ class IndicatorsTab extends Component {
     };
 
     handleNavClick = (e, index) => {
-        // console.log('Nav click')
-        // console.log(e)
-        // e.stopPropagation();
         this.handleChangeIndex(index);
     };
 
@@ -133,7 +124,7 @@ class IndicatorsTab extends Component {
 
         return (
             <div id ="Content">
-                {/*<h2>{this.props.data.name}</h2>*/}
+                {/*<h1>{this.props.data.name}</h1>*/}
                 <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex}>
                    { this.renderEcosystems(ecosystemIDs) }
                 </SwipeableViews>

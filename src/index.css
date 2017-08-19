@@ -4,6 +4,7 @@ html, body {
     height: 100%;
     width: 100%;
     font-family: sans-serif;
+    color: #333;
 }
 
 a, a:active, a:visited {
@@ -101,9 +102,6 @@ a, a:active, a:visited {
 }
 .button img{
     flex-grow: 0;
-}
-.imgwrap{
-    test-align: center;
 }
 .button + .button {
 

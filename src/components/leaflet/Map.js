@@ -20,8 +20,8 @@ L.Icon.Default.mergeOptions({
 // Map configurationParameters
 let config = {
     mapParams: {
-        center: [33.358, -78.593],
-        zoom: 5,
+        center: [33.358, -80], // TODO: [33.358, -78.593],
+        zoom: 10, //TODO: 5,
         minZoom: 3,
         maxZoom: 15,
         zoomControl: false,
@@ -208,7 +208,7 @@ class Map extends Component {
                 // clear highlight
                 this.setState({selectedID: null});
                 config.unitLayer.resetFeatureStyle(id);
-                this.props.deselectUnit();
+                this.props.onDeselectUnit();
                 return;
             }
 
@@ -217,7 +217,7 @@ class Map extends Component {
 
         this.setState({selectedID: id});
         config.unitLayer.setFeatureStyle(id, config.highlightStyle)
-        this.props.selectUnit(id); // move this to callback above
+        this.props.onSelectUnit(id); // move this to callback above
     }
 
     render() {
@@ -225,30 +225,31 @@ class Map extends Component {
             <div id="MapContainer">
                 <div ref={(node) => this._mapNode = node} id="Map"></div>
 
-                <div id="Legend">
-                    <label>Priority</label>
-                    <div className='legend-patch' style={{backgroundColor: '#49006a'}}>Highest</div>
-                    <div className='legend-patch' style={{backgroundColor: '#c51b8a'}}>High</div>
-                    <div className='legend-patch' style={{backgroundColor: '#fbb4b9', color: '#333'}}>Medium</div>
-                    <div className='legend-patch' style={{backgroundColor: '#686868', marginLeft: 20}}>Corridors</div>
-                </div>
+                {/*<div id="Legend">*/}
+                    {/*<label>Priority</label>*/}
+                    {/*<div className='legend-patch' style={{backgroundColor: '#49006a'}}>Highest</div>*/}
+                    {/*<div className='legend-patch' style={{backgroundColor: '#c51b8a'}}>High</div>*/}
+                    {/*<div className='legend-patch' style={{backgroundColor: '#fbb4b9', color: '#333'}}>Medium</div>*/}
+                    {/*<div className='legend-patch' style={{backgroundColor: '#686868', marginLeft: 20}}>Corridors</div>*/}
+                {/*</div>*/}
             </div>
         );
     }
 }
 
 Map.propTypes = {
-    selectUnit: PropTypes.func,
-    deselectUnit: PropTypes.func
-}
+    // TODO: place
+    onSelectUnit: PropTypes.func,
+    onDeselectUnit: PropTypes.func
+};
 
 
 
 Map.defaultProps = {
     place: null,
-    selectUnit: (id) => {console.log('Selected map unit: ', id)},
-    deselectUnit: () => {console.log('Deselected map unit')}
-}
+    onSelectUnit: (id) => {console.log('Selected map unit: ', id)},
+    onDeselectUnit: () => {console.log('Deselected map unit')}
+};
 
 
 export default Map;

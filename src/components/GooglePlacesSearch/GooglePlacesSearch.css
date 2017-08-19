@@ -1,3 +1,7 @@
+.gplaces-search {
+    flex: 1;
+}
+
 .gplaces-search-input-container {
     padding: 0 4px 0 6px;
     display: flex;
@@ -17,6 +21,7 @@
     border: 1px solid transparent;
     line-height: 1;
     width: 100%;
+    max-width: 300px;
 }
 
 /* Only targeting chrome and safari, so this is intentionally not provided for others */

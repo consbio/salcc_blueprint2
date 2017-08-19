@@ -35,8 +35,8 @@ class App extends Component {
         super(props);
         console.log('App props (from redux store):', props);
 
-        this.tabs = ['Priority', 'Indicators', 'Threats', 'Partners'];
-        this.toptabs = ['Home','Contact'];
+        this.tabs = ['Priority', 'Indicators', 'Partners'];  // TODO: 'Threats',
+        this.toptabs = ['Home'];  // TODO: ,'Contact'
 
         this.state = {
             activeTab: null,
@@ -67,43 +67,72 @@ class App extends Component {
         this.props.deselectUnit();
     }
 
+    handleCloseButton = () => {
+        this.props.deselectUnit();
+    }
+
+    renderHeader() {
+        // TODO: ID is temporary, for debugging!
+        if (this.props.selectedUnit !== null) {
+            return (
+                <div id="Header">
+                    <h1>{this.props.data.name} {this.props.selectedUnit}</h1>
+                    <div id="CloseButton" onClick={this.handleCloseButton}>&#9747;</div>
+                </div>
+            );
+        }
+
+        return (
+            <div id="TopBar">
+                { this.toptabs.map((tab, index) => this.renderTab(tab, index)) }
+                <Geonames onFocus={() => this.changeTab(null)} onSelect={(place) => this.setState({place: place})}/>
+            </div>
+        );
+    }
+
+
+    renderTab(tab, index) {
+        const active = this.state.activeTab === tab ? 'active' : '';
+        const className = `tab ${active}`;
+        const icon = `/images/${tab}${active}.png`; // TODO: convert to SVG
+
+        return (
+            <div key={index}
+                className={className}
+                onClick={() => this.changeTab(tab)}>
+                <img src={icon} alt=""/>
+                <label>{tab}</label>
+            </div>
+        );
+    }
 
     renderActiveTab() {
         const {data} = this.props;
         switch (this.state.activeTab) {//if the previous state is the same tab, then close the tab
             case 'Priority':
-                return <PriorityTab data={data}/>
+                return <PriorityTab data={data}/>;
             case 'Indicators':
-                return <IndicatorsTab data={data}/>
+                return <IndicatorsTab data={data}/>;
             case 'Threats':
-                return <ThreatsTab data={data}/>
+                return <ThreatsTab data={data}/>;
             case 'Partners':
-                return <PartnersTab data={data}/>
+                return <PartnersTab data={data}/>;
             case 'Home':
-                return <HomeTab/>
+                return <HomeTab/>;
             case 'Contact':
-                return <ContactTab/>
+                return <ContactTab/>;
             default:
                 return null;
         }
     }
 
     renderFooter() {
-        console.log('App props', this.props);
         if (this.props.selectedUnit === null) return null;
 
         return (
             <div id ="Footer">
-                <div id="UnitName">{(this.props.data)? this.props.data.name: ''}</div>
                 <div className="tabs">
-                {this.tabs.map((tabName, index) => (
-                    <div key={index}
-                        className={this.state.activeTab === tabName ? 'tab active' : 'tab'}
-                        onClick={() => this.changeTab(tabName)}>
-                        < img src={'/images/' + ((this.state.activeTab !== null && this.state.activeTab === tabName) ? tabName+'active' : tabName) + '.png'} height={20} alt=""/>
-                        <div className="imgwrap">{tabName}</div>
-                    </div>
-                    ))}
+                { this.tabs.map((tab, index) => this.renderTab(tab, index)) }
                 </div>
             </div>
         );
@@ -114,16 +143,12 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <Map place={this.state.place} selectUnit={this.handleUnitSelect} deselectUnit={this.handleUnitDeselect}/>
+                <Map place={this.state.place}
+                     selectedUnit={this.props.selectedUnit}
+                     onSelectUnit={this.handleUnitSelect}
+                     onDeselectUnit={this.handleUnitDeselect}/>
 
-                <div id="TopBar" className="toptabs">
-                    {this.toptabs.map((tabName, index) => (
-                        <div key={index}
-                            className={(this.state.activeTab !== null && this.state.activeTab === tabName) ?'tab active' : 'tab'}
-                            onClick={() => this.changeTab(tabName)}><img src ={'/images/'+ ((this.state.activeTab !== null && this.state.activeTab === tabName) ? tabName+'active' : tabName) +'.png'} height={20} alt=""/><div className="imgwrap">{tabName}</div></div>
-                    ))}
-                      <Geonames onFocus={()=>this.changeTab(null)} onSelect={(place)=>this.setState({place: place})}/>
-                </div>
+                { this.renderHeader() }
 
                 { this.renderActiveTab() }
                 { this.renderFooter() }

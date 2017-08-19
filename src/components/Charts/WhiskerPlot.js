@@ -1,8 +1,5 @@
 import React, {Component} from "react";
 // import PropTypes from "prop-types";
-import ReactDOM from "react-dom";
-import WhiskerDes from "./WhiskerDescription";
-import indicators from "../../configindica";
 import {scale, linear, range} from "d3";
 
 
