@@ -89,7 +89,7 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedID: null
+            selectedUnit: this.props.selectedUnit
         }
 
         this._mapNode = null;
@@ -162,11 +162,14 @@ class Map extends Component {
             position: 'topright'
         });
         map.addControl(basemapsControl);
-
+        
+        if (this.state.selectedUnit !== null) {
+            this._highlightUnit(this.state.selectedUnit)
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-        const {place} = nextProps;
+        const {place, selectedUnit} = nextProps;
 
         // place is expected to be:
         // {
@@ -181,6 +184,14 @@ class Map extends Component {
         }
         else {
             this._removeMarker();
+        }
+
+        // Set currently selected unit, clearing out previous selection if
+        // necessary
+        if (selectedUnit !== this.state.selectedUnit) {
+            this._unhighlightUnit(this.state.selectedUnit);
+            this._highlightUnit(selectedUnit);
+            this.setState({selectedUnit: selectedUnit});
         }
     }
 
@@ -202,23 +213,36 @@ class Map extends Component {
     }
 
     _handleSelect(id) {
-        console.log(this.state.selectedID, id)
-        if (this.state.selectedID !== null) {
-            if (id === this.state.selectedID) {
-                // clear highlight
-                this.setState({selectedID: null});
-                config.unitLayer.resetFeatureStyle(id);
+        console.log(this.state.selectedUnit, id)
+        if (this.state.selectedUnit !== null) {
+            this._unhighlightUnit(this.state.selectedUnit);
+
+            // Selecting the same unit again deselects it
+            if (id === this.state.selectedUnit) {
+                this.setState({selectedUnit: null});
                 this.props.onDeselectUnit();
                 return;
             }
-
-            config.unitLayer.resetFeatureStyle(this.state.selectedID);
         }
 
-        this.setState({selectedID: id});
-        config.unitLayer.setFeatureStyle(id, config.highlightStyle)
-        this.props.onSelectUnit(id); // move this to callback above
+        this._highlightUnit(id);
+        this.setState({selectedUnit: id});
+        this.props.onSelectUnit(id);
     }
+    
+    _highlightUnit(id) {
+        if (id !== null) {
+            config.unitLayer.setFeatureStyle(id, config.highlightStyle)
+        }
+    }
+    
+    _unhighlightUnit(id) {
+        if (id !== null) {
+            config.unitLayer.resetFeatureStyle(id);
+        }
+    }
+    
+    
 
     render() {
         return (
@@ -239,6 +263,7 @@ class Map extends Component {
 
 Map.propTypes = {
     // TODO: place
+    selectedUnit: PropTypes.string,
     onSelectUnit: PropTypes.func,
     onDeselectUnit: PropTypes.func
 };
@@ -247,6 +272,7 @@ Map.propTypes = {
 
 Map.defaultProps = {
     place: null,
+    selectedUnit: null,
     onSelectUnit: (id) => {console.log('Selected map unit: ', id)},
     onDeselectUnit: () => {console.log('Deselected map unit')}
 };
