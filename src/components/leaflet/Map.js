@@ -101,15 +101,6 @@ class Map extends Component {
     componentDidMount() {
         let map = this.map = L.map(this._mapNode, config.mapParams);
 
-        let basemapsControl = L.control.basemaps({
-            basemaps: config.basemaps,
-            tileX: 4,
-            tileY: 6,
-            tileZ: 4,
-            position: 'bottomleft'
-        });
-        map.addControl(basemapsControl);
-
         map.addLayer(config.blueprintLayer);
 
         let opacityScale = scaleLinear().domain([3,13]).range([0.5, 0.3]);
@@ -127,7 +118,7 @@ class Map extends Component {
 
         let locateControlClass = L.Control.extend({
             options: {
-                position: 'bottomright',
+                position: 'topright',
                 maxZoom: 14
             },
 
@@ -162,6 +153,16 @@ class Map extends Component {
         // overriding functions here to bind to outer scope
         this.locateControl.onLocationFound = (lat, lng) => {this._addMarker(lat, lng, null)};
         this.locateControl.addTo(map);
+
+        let basemapsControl = L.control.basemaps({
+            basemaps: config.basemaps,
+            tileX: 4,
+            tileY: 6,
+            tileZ: 4,
+            position: 'topright'
+        });
+        map.addControl(basemapsControl);
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -222,35 +223,15 @@ class Map extends Component {
     render() {
         return (
             <div id="MapContainer">
-                <div ref={(node) => this._mapNode = node} id="Map" >
-                    <div className="legend">
-                        <div>
-                            Corridors
-                            <svg width ="17" height="17">
-                                <rect width = "100%" height= "100%" fill = '#686868' stroke="gray" strokeWidth="2"/>
-                            </svg>
-                            Medium
-                        </div>
-                        <div>
-                            <svg width ="17" height="17">
-                                <rect width = "100%" height= "100%" fill = '#fbb4b9' stroke="gray" strokeWidth="2"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <svg width ="17" height="17">
-                                <rect width = "100%" height= "100%" fill = '#c51b8a' stroke="gray" strokeWidth="2"/>
-                            </svg>
+                <div ref={(node) => this._mapNode = node} id="Map"></div>
 
-                        </div>
-                        <div>
-                            <svg width ="17" height="17">
-                                <rect width = "100%" height= "100%" fill = '#49006a' stroke="gray" strokeWidth="2"/>
-                            </svg>
-                            Highest
-                        </div>
-                    </div>
+                <div id="Legend">
+                    <label>Priority</label>
+                    <div className='legend-patch' style={{backgroundColor: '#49006a'}}>Highest</div>
+                    <div className='legend-patch' style={{backgroundColor: '#c51b8a'}}>High</div>
+                    <div className='legend-patch' style={{backgroundColor: '#fbb4b9', color: '#333'}}>Medium</div>
+                    <div className='legend-patch' style={{backgroundColor: '#686868', marginLeft: 20}}>Corridors</div>
                 </div>
-
             </div>
         );
     }
