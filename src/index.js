@@ -32,7 +32,7 @@ const store = createStore(
 )
 
 // TODO: for testing purposes only!
-store.dispatch(selectUnit('I2054'));
+// store.dispatch(selectUnit('I2054'));
 
 ReactDOM.render(
     <Provider store={store}>

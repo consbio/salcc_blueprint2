@@ -12,6 +12,10 @@ a, a:active, a:visited {
     text-decoration: none;
 }
 
+p {
+    clear: both;
+}
+
 .text-quiet {
     color: #666;
 }

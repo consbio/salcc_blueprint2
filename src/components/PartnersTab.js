@@ -110,98 +110,116 @@ function PartnersTab({data}) {
     return (
 
         <div id = "Content">
-            {/*<h1>{data.name}</h1>*/}
-            <h4>
-                Conserved Lands Ownership</h4>
-            <div>
-                {Object.keys(data.gap).map((num, i)=>
-                    <div>
-                        <div className="flex-container2">
-                            <div className="flex-item2" >{gapConfig[num].label}</div>
-                            <div className="flex-item3">
-                                {"(" + parseInt(data.gap[num]) + '%)'}
-                            </div>
-                        </div>
-                        <div className="flex-container">
-                        <svg width ="300" height="5">
-                                    <rect width = "100%" height="100%" fill="#ececec"/>
-                                    <rect key={i} width = {data.gap[num] * 3} height= "100%" fill = "#0892D0"/>
-                        </svg>
-                        </div>
-                        <br/>
-                    </div>
-                )}
+            <section>
+                <h2>Conserved Lands Ownership</h2>
                 <div>
-                <div className="flex-container2">
-                    <div className="flex-item2">Not conserved </div>
-                    <div className="flex-item3">
-                        {' (' + parseInt(sum) + '%)'}
-                    </div>
-                </div>
-                    <div className="flex-container">
-                        <svg width ="300" height="5">
-                            <rect width = "100%" height="100%" fill="#ececec"/>
-                            <rect width = {sum * 3} height= "100%" fill = "#0892D0"/>
-
-                        </svg>
-                    </div>
-                </div>
-                <br/>
-            </div>
-            <h4>Land Protection Status</h4>
-            <div>
-                {Object.keys(data.owner).map((num, i)=>
-                    {
-                        const {color, label} = ownershipConfig[num];
-
-                        return <div><div className="flex-container2">
-                            <div className="flex-item2" >{label}</div>
-                            <div className="flex-item2">
-                                {' (' + parseInt(data.owner[num]) + '%)'}
+                    {Object.keys(data.gap).map((num, i)=>
+                        <div>
+                            <div className="flex-container2">
+                                <div className="flex-item2" >{gapConfig[num].label}</div>
+                                <div className="flex-item3">
+                                    {"(" + parseInt(data.gap[num]) + '%)'}
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex-container">
-                                <svg width ="300" height="5">
-                                    <rect width = "100%" height="100%" fill="#ececec"/>
-                                    <rect key={i} width = {data.owner[num] * 3} height= "100%" fill = "#0892D0"/>
-                                </svg>
-                        </div>
+                            <div className="flex-container">
+                            <svg width ="300" height="5">
+                                        <rect width = "100%" height="100%" fill="#ececec"/>
+                                        <rect key={i} width = {data.gap[num] * 3} height= "100%" fill = "#0892D0"/>
+                            </svg>
+                            </div>
                             <br/>
                         </div>
-                    }
-                )}
+                    )}
+                    <div>
+                    <div className="flex-container2">
+                        <div className="flex-item2">Not conserved </div>
+                        <div className="flex-item3">
+                            {' (' + parseInt(sum) + '%)'}
+                        </div>
+                    </div>
+                        <div className="flex-container">
+                            <svg width ="300" height="5">
+                                <rect width = "100%" height="100%" fill="#ececec"/>
+                                <rect width = {sum * 3} height= "100%" fill = "#0892D0"/>
+
+                            </svg>
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+            </section>
+
+            <section>
+                <h2>Land Protection Status</h2>
                 <div>
-                <div className="flex-container2">
-                    <div className="flex-item2">Not conserved</div>
-                    <div className="flex-item2">
-                       ({parseInt(ownersum)}%)
-                    </div>
-                </div>
-                    <div className="flex-container">
-                        <svg width ="300" height="5">
-                            <rect width = "100%" height="100%" fill="#ececec"/>
-                            <rect width = {ownersum * 3} height= "100%" fill = "#0892D0" />
-                        </svg>
-                    </div>
-                </div>
-                <br/>
-            </div>
+                    {Object.keys(data.owner).map((num, i)=>
+                        {
+                            const {color, label} = ownershipConfig[num];
 
+                            return <div><div className="flex-container2">
+                                <div className="flex-item2" >{label}</div>
+                                <div className="flex-item2">
+                                    {' (' + parseInt(data.owner[num]) + '%)'}
+                                </div>
+                            </div>
+                            <div className="flex-container">
+                                    <svg width ="300" height="5">
+                                        <rect width = "100%" height="100%" fill="#ececec"/>
+                                        <rect key={i} width = {data.owner[num] * 3} height= "100%" fill = "#0892D0"/>
+                                    </svg>
+                            </div>
+                                <br/>
+                            </div>
+                        }
+                    )}
+                    <div>
+                    <div className="flex-container2">
+                        <div className="flex-item2">Not conserved</div>
+                        <div className="flex-item2">
+                           ({parseInt(ownersum)}%)
+                        </div>
+                    </div>
+                        <div className="flex-container">
+                            <svg width ="300" height="5">
+                                <rect width = "100%" height="100%" fill="#ececec"/>
+                                <rect width = {ownersum * 3} height= "100%" fill = "#0892D0" />
+                            </svg>
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+            </section>
 
+            <section>
+                <h2>Land Trusts</h2>
+                <div>
+                {Object.keys(data.counties).map((num, i)=>
+                    <div className="flex-container2">
+                        <div className="flex-item2">
+                            <svg width ="7" height="7">
+                                <rect width = "100%" height= "100%" fill = "#D3D3D3"/>
+                            </svg>
+                        </div>
+                        <div className="flex-item2"><a href = {"http://findalandtrust.org/counties/"+ num} target="_blank">{data.counties[num]}</a>
+                        </div>
+                    </div>)}
+                </div>
+            </section>
         </div>
-
     );
 }
 
-PartnersTab.propTypes = {
-    data: PropTypes.shape({
-        name: PropTypes.string,
-        gap: PropTypes.shape({
-            2: PropTypes.number,
-            3: PropTypes.number,
-            39: PropTypes.number
-        })
-    })
-};
+
+// TODO:
+// PartnersTab.propTypes = {
+//     data: PropTypes.shape({
+//         name: PropTypes.string,
+//         gap: PropTypes.shape({
+//             2: PropTypes.number,
+//             3: PropTypes.number,
+//             39: PropTypes.number
+//         })
+//     })
+// };
 
 export default PartnersTab;

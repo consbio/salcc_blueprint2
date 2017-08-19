@@ -36,7 +36,7 @@ class App extends Component {
         console.log('App props (from redux store):', props);
 
         this.tabs = ['Priority', 'Indicators', 'Partners'];  // TODO: 'Threats',
-        this.toptabs = ['Home'];  // TODO: ,'Contact'
+        this.toptabs = ['Info'];  // TODO: ,'Contact'
 
         this.state = {
             activeTab: null,
@@ -77,14 +77,19 @@ class App extends Component {
             return (
                 <div id="Header">
                     <h1>{this.props.data.name} {this.props.selectedUnit}</h1>
-                    <div id="CloseButton" onClick={this.handleCloseButton}>&#9747;</div>
+                    <div id="CloseButton" onClick={this.handleCloseButton}>X</div>
                 </div>
             );
         }
 
         return (
             <div id="TopBar">
-                { this.toptabs.map((tab, index) => this.renderTab(tab, index)) }
+                {/*{ this.toptabs.map((tab, index) => this.renderTab(tab, index)) }*/}
+                <div id="InfoButton"
+                     className={this.state.activeTab === 'Home' ? 'active' : ''}
+                     onClick={() => this.changeTab("Home")}>
+                    i
+                </div>
                 <Geonames onFocus={() => this.changeTab(null)} onSelect={(place) => this.setState({place: place})}/>
             </div>
         );

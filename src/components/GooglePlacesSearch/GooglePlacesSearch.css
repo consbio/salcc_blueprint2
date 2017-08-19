@@ -1,5 +1,6 @@
 .gplaces-search {
     flex: 1;
+    border-left: 1px solid #EEE;
 }
 
 .gplaces-search-input-container {

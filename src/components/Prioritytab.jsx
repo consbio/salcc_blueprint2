@@ -109,8 +109,9 @@ function PriorityTab({data}) {
 
     return (
         <div id = "Content">
-            {/*<h1>{data.name}</h1>*/}
             <section>
+                <h2>Blueprint 2.1 Priority</h2>
+                <h3>for shared conservation action</h3>
                 {/*<div>*/}
                     {/*<svg width="100%" height="200">*/}
                         {/*{*/}
@@ -168,6 +169,8 @@ function PriorityTab({data}) {
                 <p>{data.justification}</p>
             </section>
 
+            <hr/>
+
             <section>
                 <h4>Conservation Plans</h4>
                 {data.plans.map((num, i)=>
@@ -199,22 +202,6 @@ function PriorityTab({data}) {
                         </div>
                     }
                 )}
-            </section>
-
-            <section>
-                <h4>Land Trusts</h4>
-                <div>
-                {Object.keys(data.counties).map((num, i)=>
-                    <div className="flex-container2">
-                        <div className="flex-item2">
-                            <svg width ="7" height="7">
-                                <rect width = "100%" height= "100%" fill = "#D3D3D3"/>
-                            </svg>
-                        </div>
-                        <div className="flex-item2"><a href = {"http://findalandtrust.org/counties/"+ num} target="_blank">{data.counties[num]}</a>
-                        </div>
-                    </div>)}
-                </div>
             </section>
         </div>
     );
