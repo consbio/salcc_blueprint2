@@ -3,7 +3,7 @@ import { Row, Col } from 'react-simple-flex-grid';
 import LabeledPercentBar from './Charts/LabeledPercentBar';
 
 
-let GAP = {
+const GAP = {
     1: {
         color: '#637939',
         label: 'Permanent protection for biodiversity',
@@ -37,7 +37,7 @@ let GAP = {
 };
 
 
-let OWNERSHIP = {
+const OWNERSHIP = {
     FED: {
         color: '#2ca02c',
         label: 'Federal'
@@ -88,14 +88,13 @@ class PartnersTab extends Component {
         const {key, label, percent, color} = item;
 
         return (
-            <LabeledPercentBar key={key} percent={percent} label={label} color={color}/>
+            <LabeledPercentBar key={key} percent={percent} label={label} color={color} height={6}/>
         );
     }
 
     renderLTALink(fips, countyName) {
-        console.log('renderLTA', fips, countyName)
         return (
-            <li>
+            <li key={fips}>
                 <a href={`http://findalandtrust.org/counties/${fips}`} target="_blank">
                     {countyName}
                 </a>

@@ -9,7 +9,7 @@ import ResetIcon from './icons/ResetIcon';
 //import components as needed
 import PriorityTab from './Prioritytab';
 import IndicatorsTab from './IndicatorsTab';
-import ThreatsTab from './ThreatsTab';
+// import ThreatsTab from './ThreatsTab';
 import PartnersTab from './PartnersTab';
 import InfoTab from './InfoTab';
 
@@ -63,16 +63,14 @@ class App extends Component {
         this.setState({activeTab: null});
     }
 
-    renderHeader() {
+    renderUnitName() {
         // TODO: ID is temporary, for debugging!
         if (this.props.selectedUnit === null) return null;
 
         return (
-            <div id="Header">
+            <div id="UnitName">
                 <h1>{this.props.data.name} {this.props.selectedUnit}</h1>
                 <ResetIcon id="CloseButton" onClick={this.handleCloseButton}/>
-                {/*<div id="CloseButton" onClick={this.handleCloseButton}>X</div>*/}
-                {/*<img id="CloseButton" src="/icons/reset.svg" onClick={this.handleCloseButton} />*/}
             </div>
         );
     }
@@ -114,11 +112,11 @@ class App extends Component {
         if (this.props.selectedUnit === null) return null;
 
         return (
-            <div id ="Footer">
+            <footer>
                 <div className="tabs">
                 { this.tabs.map((tab, index) => this.renderTab(tab, index)) }
                 </div>
-            </div>
+            </footer>
         );
     }
 
@@ -130,19 +128,20 @@ class App extends Component {
                      onSelectUnit={this.handleUnitSelect}
                      onDeselectUnit={this.handleUnitDeselect}/>
 
-                <div id="TopBar">
+                <header>
                     <div id="InfoButton"
-                         className={this.state.activeTab === 'Home' ? 'active' : ''}
-                         onClick={() => this.changeTab("Info")}>
+                         className={this.state.activeTab === 'Info' ? 'active' : ''}
+                         onClick={() => this.changeTab('Info')}>
                         i
                     </div>
                     <Geonames selected={this.state.place}
                         onFocus={() => this.changeTab(null)}
                         onSelect={(place) => this.setState({place: place})}/>
-                </div>
+                </header>
 
-                { this.renderHeader() }
+                { this.renderUnitName() }
                 { this.renderActiveTab() }
+
                 { this.renderFooter() }
             </div>
 

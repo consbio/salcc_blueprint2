@@ -15,12 +15,12 @@
 }
 
 
-#TopBar, #Footer{
+header, footer{
     z-index: 5000;
 }
 
 
-#TopBar {
+header {
     position: absolute;
     left: 0;
     right: 0;
@@ -33,13 +33,12 @@
     border-bottom: 1px solid #DDD;
     color: #a4aab3;
 }
-#TopBar .button {
+header .button {
     text-align: center;
 }
 
-#Header {
+#UnitName {
     background: #0892D0;
-    color: #FFF;
     height: 39px;
     position: absolute;
     z-index: 5001;
@@ -64,17 +63,18 @@
     left: 0px;
     bottom: 48px;
     top: 40px;
-    padding: 10px 16px 20px 10px; /* extra space for the scrollbar */
+    padding: 20px 10px;
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 5001;
 }
 
-#Header h1 {
+#UnitName h1 {
     padding: 0;
     margin:  4px 0;
     font-size: 16px;
     font-weight: normal;
+    color: #FFF;
     flex: 1;
 }
 
@@ -95,7 +95,6 @@
 }
 
 #CloseButton {
-    padding: 3px 8px;
     margin-right: 4px;
     fill: #FFF;
     fill-opacity: 0.75;
@@ -114,7 +113,7 @@
 
 #Content h3 {
     padding: 0;
-    margin: 0 0 0.1em 0;
+    margin: 0 0 0.2em 0;
 }
 
 #Content h4 {
@@ -126,6 +125,7 @@
 
 #Content p {
     margin-top: 0;
+    line-height: 1.4;
 }
 
 #Content ul {
@@ -166,13 +166,7 @@
 
 }
 
-#UnitName {
-    color: #9da0a4;
-    font-size: 10px;
-    margin: 3px;
-}
-
-#Footer {
+footer {
     height: 47px;
     background: #FAFAFA;
     text-align: center;
@@ -214,24 +208,22 @@
     padding-bottom: 10px;
 }
 
-.ecosystem header {
-    padding: 12px;
-    /*background-color: rgba(234,244,223,.8);*/
+.ecosystem-header {
+    padding-bottom: 14px;
     border-bottom: 1px solid #EEE;
 }
 
-.ecosystem header img {
-    margin-right: 4px;
+.ecosystem-header img {
+    margin-right: 8px;
     height: 40px;
 }
 
-.ecosystem header h2 {
+.ecosystem-header h3 {
     padding: 0;
     margin: 0;
-    font-weight: normal;
 }
 
-.ecosystem header div {
+.ecosystem-header div {
     flex: 1;
 }
 
@@ -284,16 +276,16 @@
 }
 
 
-#TopBar .tab {
+header .tab {
     flex-grow: 0;
 }
 
-#Footer .tabs {
+footer .tabs {
     display: flex;
     flex-direction: row;
 }
 
-#Footer .tab {
+footer .tab {
     width: 86px;
     padding-top: 0;
     padding-bottom: 8px;
@@ -357,17 +349,13 @@
 
 #Content section + section {
     border-top: 1px solid #EEE;
-    margin-top: 10px;
-    padding-top: 10px;
+    margin-top: 20px;
+    padding-top: 24px;
 }
 
 .priorityColorPatch {
     padding: 8px 10px;
-    /*margin: 0 0 10px 10px;*/
-    /*margin: 0 10px 10px 0;*/
     border-radius: 6px;
-    /*float: left;*/
-    /*min-width: 100px;*/
     display: flex;
     justify-content: space-between;
 }
@@ -377,7 +365,7 @@
 }
 
 .chart-labeledpercentbar {
-    margin: 0 0 14px 0;
+    margin: 0 0 20px 0;
 }
 
 #Content h4 + .chart-labeledpercentbar {

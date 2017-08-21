@@ -19,9 +19,10 @@ function formatPercent(percent) {
 
 
 
-class LabelledPercentBar extends Component {
+class LabeledPercentBar extends Component {
     render() {
         const {label, percent} = this.props;
+        console.log('percentBar prps', this.props)
 
         // TODO: make this into a utility function
         const percentLabel = formatPercent(percent);
@@ -31,7 +32,8 @@ class LabelledPercentBar extends Component {
                 <div style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    justifyContent: 'space-between'
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end'
                 }}>
                     <div>{label}</div>
                     <label>{percentLabel}%</label>
@@ -42,8 +44,8 @@ class LabelledPercentBar extends Component {
     }
 }
 
-LabelledPercentBar.propTypes = {};
+LabeledPercentBar.propTypes = {};
 
-LabelledPercentBar.defaultProps = {};
+LabeledPercentBar.defaultProps = {};
 
-export default LabelledPercentBar;
+export default LabeledPercentBar;

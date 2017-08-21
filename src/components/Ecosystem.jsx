@@ -501,9 +501,9 @@ class Ecosystem extends Component {
 
         return (
             <div className="ecosystem">
-                <header className="flex-container flex-justify-start flex-align-center">
+                <div className="ecosystem-header flex-container flex-justify-start flex-align-center">
                     <img src={icon} alt=""/>
-                    <h2>{label}</h2>
+                    <h3>{label}</h3>
                     {percent &&
                         <div className="text-quieter text-right text-small">
                             {percentLabel}
@@ -511,7 +511,7 @@ class Ecosystem extends Component {
                             <span className="text-smaller">of area</span>
                         </div>
                     }
-                </header>
+                </div>
                 {console.log(indicatorClick)}
                 {content}
             </div>

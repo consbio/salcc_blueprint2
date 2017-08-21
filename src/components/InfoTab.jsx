@@ -6,48 +6,48 @@ export const BLUEPRINT = {
         label: 'Not a priority',
         area: '50%',
         description: '',
-        background: '#D3D3D3',
-        color: '#333'
+        color: '#D3D3D3',
+        textColor: '#333'
     },
     1: {
         label: 'Corridors',
         area: '5%',
         description: 'These are connections between large patches of highest priority areas and secured lands, optimized for efficiency and indicator condition in a least cost path analysis.',
-        background: '#686868',
-        color: '#FFF'
+        color: '#686868',
+        textColor: '#FFF'
     },
     2: {
         label: 'Medium priority',
         area: '20%',
         description: 'Above-average areas for natural and cultural resources based on indicator condition, capturing potential restoration opportunities.',
-        background: '#fbb4b9',
-        color: '#333'
+        color: '#fbb4b9',
+        textColor: '#333'
     },
     3: {
         label: 'High priority',
         area: '15%',
         description: 'Important areas for natural and cultural resources based on indicator condition.',
-        background: '#c51b8a',
-        color: '#FFF'
+        color: '#c51b8a',
+        textColor: '#FFF'
     },
     4: {
         label: 'Highest priority',
         area: '10%',
         description: 'The most important areas for natural and cultural resources based on indicator condition.',
-        background: '#49006a',
-        color: '#FFF'
+        color: '#49006a',
+        textColor: '#FFF'
     }
 };
 
 
 class InfoTab extends Component {
     renderPriority(priority) {
-        const {label, area, description, background, color} = BLUEPRINT[priority];
+        const {label, area, description, color, textColor} = BLUEPRINT[priority];
 
         return (
             <div key={priority}>
                 <div className="priorityColorPatch"
-                     style={{backgroundColor: background, color: color}}>
+                     style={{backgroundColor: color, color: textColor}}>
                     <b>{label}</b>
                     <br/>
                     <span className="text-small">{area} of region</span>
@@ -62,7 +62,7 @@ class InfoTab extends Component {
 
         return (
             <div id = "Content" className="tabs-top">
-                <h2>Welcome to the Blueprint 2.1 Simple Viewer</h2>
+                <h3>Conservation Blueprint 2.1</h3>
 
                 <section>
                     <p>

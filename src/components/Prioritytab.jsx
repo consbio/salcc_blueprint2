@@ -5,15 +5,6 @@ import {BLUEPRINT} from './InfoTab';
 import LabeledPercentBar from './Charts/LabeledPercentBar';
 
 
-const colors = [
-    '#D3D3D3',
-    '#686868',
-    '#fbb4b9',
-    '#c51b8a',
-    '#49006a'
-];
-
-
 const PLANS = {
     'ACJV': {
         label: 'ACJV migratory bird priority areas',
@@ -113,24 +104,14 @@ const PLANS = {
     }
 };
 
- // {/*<div>*/}
- //                {/*<div className="priorityColorPatch"*/}
- //                     {/*style={{backgroundColor: background, color: color}}>*/}
- //                    {/*{percent}%*/}
- //                {/*</div>*/}
- //                {/*<div>*/}
- //                    {/*{label}*/}
- //                {/*</div>*/}
- //            {/*</div>*/}
-
 
 class Prioritytab extends Component {
 
     renderPriority(priority, percent) {
-        const {label, background, color} = BLUEPRINT[priority];
+        const {label, color} = BLUEPRINT[priority];
 
         return (
-            <LabeledPercentBar key={priority} label={label} percent={percent} color={background}/>
+            <LabeledPercentBar key={priority} label={label} percent={percent} color={color} height={6}/>
         )
     }
 
