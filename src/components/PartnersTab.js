@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import { Row, Col } from 'react-simple-flex-grid';
 import LabeledPercentBar from './Charts/LabeledPercentBar';
-
 
 
 let GAP = {
@@ -104,7 +102,6 @@ class PartnersTab extends Component {
             </li>
         );
     }
-
 
     render() {
         const {owner, gap, counties} = this.props.data;

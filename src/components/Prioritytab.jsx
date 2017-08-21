@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './App.css';
-import {BLUEPRINT} from './HomeTab';
+import {BLUEPRINT} from './InfoTab';
 import LabeledPercentBar from './Charts/LabeledPercentBar';
 
 

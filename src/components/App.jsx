@@ -1,31 +1,21 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import './App.css';
 import '../index.css';
-import Map from './leaflet/Map';
+import Map from './Map';
 import Geonames from './GooglePlacesSearch/GooglePlacesSearch';
 
 //import components as needed
-import PriorityTab from './Prioritytab'
-import IndicatorsTab from './IndicatorsTab'
-import ThreatsTab from './ThreatsTab'
-import PartnersTab from './PartnersTab'
-import HomeTab from './HomeTab'
-import ContactTab from './ContactTab'
+import PriorityTab from './Prioritytab';
+import IndicatorsTab from './IndicatorsTab';
+import ThreatsTab from './ThreatsTab';
+import PartnersTab from './PartnersTab';
+import InfoTab from './InfoTab';
 
 import * as UnitActions from '../Actions/actions';
 
-class App extends Component {
-    // static propTypes = {
-    //     selectedUnit: PropTypes.string.isRequired,
-    //     items: PropTypes.array.isRequired,
-    //     isFetching: PropTypes.bool.isRequired,
-    //     dispatch: PropTypes.func.isRequired
-    // }
 
-    // componentDidMount(){
-    // }
+class App extends Component {
 
     componentWillReceiveProps(nextProps) {
         console.log('Next Props: ', nextProps)
@@ -119,14 +109,12 @@ class App extends Component {
                 return <PriorityTab data={data}/>;
             case 'Indicators':
                 return <IndicatorsTab data={data}/>;
-            case 'Threats':
-                return <ThreatsTab data={data}/>;
+            // case 'Threats':
+            //     return <ThreatsTab data={data}/>;
             case 'Partners':
                 return <PartnersTab data={data}/>;
             case 'Home':
-                return <HomeTab/>;
-            case 'Contact':
-                return <ContactTab/>;
+                return <InfoTab/>;
             default:
                 return null;
         }

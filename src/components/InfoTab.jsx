@@ -40,7 +40,7 @@ export const BLUEPRINT = {
 };
 
 
-class HomeTab extends Component {
+class InfoTab extends Component {
     renderPriority(priority) {
         const {label, area, description, background, color} = BLUEPRINT[priority];
 
@@ -56,8 +56,7 @@ class HomeTab extends Component {
             </div>
         )
     }
-
-
+    
     render() {
         const sortedPriorities = [4, 3, 2, 1]; // 0 deliberately omitted
 
@@ -138,4 +137,4 @@ class HomeTab extends Component {
     }
 }
 
-export default HomeTab;
+export default InfoTab;
