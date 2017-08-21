@@ -36,7 +36,7 @@ class App extends Component {
         console.log('App props (from redux store):', props);
 
         this.tabs = ['Priority', 'Indicators', 'Partners'];  // TODO: 'Threats',
-        this.toptabs = ['Info'];  // TODO: ,'Contact'
+        this.toptabs = ['Home'];  // TODO: ,'Contact'
 
         this.state = {
             activeTab: null,
@@ -69,6 +69,7 @@ class App extends Component {
 
     handleCloseButton = () => {
         this.props.deselectUnit();
+        this.setState({activeTab: null});
     }
 
     renderHeader() {

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-simple-flex-grid';
+import LabeledPercentBar from './Charts/LabeledPercentBar';
 
 
 
@@ -38,7 +39,7 @@ let gapConfig = {
 };
 
 
-let ownershipConfig = {
+let OWNERSHIP = {
     FED: {
         color: '#2ca02c',
         label: 'Federal'
@@ -79,135 +80,206 @@ let ownershipConfig = {
 
 
 
-function PartnersTab({data}) {
-    let position = [
-        0,
-        0,
-        0,
-        0,
-        0
-    ];
 
-    let positionowners = [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-    ];
-    Object.keys(data.gap).map((num,i)=>
-        position[i+1] = data.gap[num] * 2 + position[i]);
-    Object.keys(data.owner).map((num, i)=>
-        positionowners[i+1]= data.owner[num] * 2 + positionowners[i]);
+class PartnersTab extends Component {
+    sortDescendingPercent(a, b) {
+        if (a.percent < b.percent) return 1;
+        if (a.percent > b.percent) return -1;
+        return 0;
+    }
 
-    let sum = 100 - Object.keys(data.gap).reduce(function(prevVal,elem){return prevVal+ data.gap[elem]}, 0);
 
-    let ownersum = 100 - Object.keys(data.owner).reduce(function(prevVal,elem){return prevVal+ data.owner[elem]}, 0);
-    return (
+    renderBar(item) {
+        const {key, label, percent} = item;
 
-        <div id = "Content">
-            <section>
-                <h2>Conserved Lands Ownership</h2>
-                <div>
-                    {Object.keys(data.gap).map((num, i)=>
-                        <div>
-                            <div className="flex-container2">
-                                <div className="flex-item2" >{gapConfig[num].label}</div>
-                                <div className="flex-item3">
-                                    {"(" + parseInt(data.gap[num]) + '%)'}
-                                </div>
-                            </div>
-                            <div className="flex-container">
-                            <svg width ="300" height="5">
-                                        <rect width = "100%" height="100%" fill="#ececec"/>
-                                        <rect key={i} width = {data.gap[num] * 3} height= "100%" fill = "#0892D0"/>
-                            </svg>
-                            </div>
-                            <br/>
-                        </div>
-                    )}
-                    <div>
-                    <div className="flex-container2">
-                        <div className="flex-item2">Not conserved </div>
-                        <div className="flex-item3">
-                            {' (' + parseInt(sum) + '%)'}
-                        </div>
-                    </div>
-                        <div className="flex-container">
-                            <svg width ="300" height="5">
-                                <rect width = "100%" height="100%" fill="#ececec"/>
-                                <rect width = {sum * 3} height= "100%" fill = "#0892D0"/>
+        return (
+            <LabeledPercentBar key={key} percent={percent} label={label}/>
+        );
+    }
 
-                            </svg>
-                        </div>
-                    </div>
-                    <br/>
-                </div>
-            </section>
 
-            <section>
-                <h2>Land Protection Status</h2>
-                <div>
-                    {Object.keys(data.owner).map((num, i)=>
-                        {
-                            const {color, label} = ownershipConfig[num];
+    render() {
+        const {owner} = this.props.data;
+        console.log('owner info', owner)
 
-                            return <div><div className="flex-container2">
-                                <div className="flex-item2" >{label}</div>
-                                <div className="flex-item2">
-                                    {' (' + parseInt(data.owner[num]) + '%)'}
-                                </div>
-                            </div>
-                            <div className="flex-container">
-                                    <svg width ="300" height="5">
-                                        <rect width = "100%" height="100%" fill="#ececec"/>
-                                        <rect key={i} width = {data.owner[num] * 3} height= "100%" fill = "#0892D0"/>
-                                    </svg>
-                            </div>
-                                <br/>
-                            </div>
-                        }
-                    )}
-                    <div>
-                    <div className="flex-container2">
-                        <div className="flex-item2">Not conserved</div>
-                        <div className="flex-item2">
-                           ({parseInt(ownersum)}%)
-                        </div>
-                    </div>
-                        <div className="flex-container">
-                            <svg width ="300" height="5">
-                                <rect width = "100%" height="100%" fill="#ececec"/>
-                                <rect width = {ownersum * 3} height= "100%" fill = "#0892D0" />
-                            </svg>
-                        </div>
-                    </div>
-                    <br/>
-                </div>
-            </section>
+        // transform
+        let ownership = [];
+        if (owner) {
+            ownership = Object.keys(owner).map((key) => {
+                return Object.assign({key: key, percent: owner[key]}, OWNERSHIP[key]);
+            });
 
-            <section>
-                <h2>Land Trusts</h2>
-                <div>
-                {Object.keys(data.counties).map((num, i)=>
-                    <div className="flex-container2">
-                        <div className="flex-item2">
-                            <svg width ="7" height="7">
-                                <rect width = "100%" height= "100%" fill = "#D3D3D3"/>
-                            </svg>
-                        </div>
-                        <div className="flex-item2"><a href = {"http://findalandtrust.org/counties/"+ num} target="_blank">{data.counties[num]}</a>
-                        </div>
-                    </div>)}
-                </div>
-            </section>
-        </div>
-    );
+            // Sort by descending percent
+            ownership.sort(this.sortDescendingPercent);
+        }
+
+        console.log('ownership', ownership)
+
+        return (
+            <div id = "Content">
+                {ownership.length > 0 &&
+                    <section>
+                        <h2>Conserved Lands Ownership</h2>
+
+                        {ownership.map(this.renderBar)}
+                    </section>
+                }
+
+
+            </div>
+        );
+    }
 }
+
+PartnersTab.propTypes = {};
+PartnersTab.defaultProps = {};
+
+export default PartnersTab;
+
+//
+// function PartnersTab({data}) {
+//     // let position = [
+//     //     0,
+//     //     0,
+//     //     0,
+//     //     0,
+//     //     0
+//     // ];
+//     //
+//     // let positionowners = [
+//     //     0,
+//     //     0,
+//     //     0,
+//     //     0,
+//     //     0,
+//     //     0,
+//     //     0,
+//     //     0,
+//     //     0
+//     // ];
+//     // Object.keys(data.gap).map((num,i)=>
+//     //     position[i+1] = data.gap[num] * 2 + position[i]);
+//     // Object.keys(data.owner).map((num, i)=>
+//     //     positionowners[i+1]= data.owner[num] * 2 + positionowners[i]);
+//     //
+//     // let sum = 100 - Object.keys(data.gap).reduce(function(prevVal,elem){return prevVal+ data.gap[elem]}, 0);
+//     //
+//     // let ownersum = 100 - Object.keys(data.owner).reduce(function(prevVal,elem){return prevVal+ data.owner[elem]}, 0);
+//     return (
+//
+//         <div id = "Content">
+//             <section>
+//                 <h2>Conserved Lands Ownership</h2>
+//
+//                 <LabeledPercentBar percent={10} label="Foo"/>
+//
+//                 <LabeledPercentBar percent={75} label="Bar"/>
+//
+//                 <LabeledPercentBar percent={0.51234323} label="Bar"/>
+//
+//                 <LabeledPercentBar percent={1.5432334} label="Bar"/>
+//             </section>
+//
+//         </div>
+//     );
+// }
+//
+//
+// <div>
+//                     {Object.keys(data.gap).map((num, i)=>
+//                         <div>
+//                             <div className="flex-container2">
+//                                 <div className="flex-item2" >{gapConfig[num].label}</div>
+//                                 <div className="flex-item3">
+//                                     {"(" + parseInt(data.gap[num]) + '%)'}
+//                                 </div>
+//                             </div>
+//                             <div className="flex-container">
+//                             <svg width ="300" height="5">
+//                                         <rect width = "100%" height="100%" fill="#ececec"/>
+//                                         <rect key={i} width = {data.gap[num] * 3} height= "100%" fill = "#0892D0"/>
+//                             </svg>
+//                             </div>
+//                             <br/>
+//                         </div>
+//                     )}
+//                     <div>
+//                     <div className="flex-container2">
+//                         <div className="flex-item2">Not conserved </div>
+//                         <div className="flex-item3">
+//                             {' (' + parseInt(sum) + '%)'}
+//                         </div>
+//                     </div>
+//                         <div className="flex-container">
+//                             <svg width ="300" height="5">
+//                                 <rect width = "100%" height="100%" fill="#ececec"/>
+//                                 <rect width = {sum * 3} height= "100%" fill = "#0892D0"/>
+//
+//                             </svg>
+//                         </div>
+//                     </div>
+//                     <br/>
+//                 </div>
+//             </section>
+//
+//             <section>
+//                 <h2>Land Protection Status</h2>
+//                 <div>
+//                     {Object.keys(data.owner).map((num, i)=>
+//                         {
+//                             const {color, label} = ownershipConfig[num];
+//
+//                             return <div><div className="flex-container2">
+//                                 <div className="flex-item2" >{label}</div>
+//                                 <div className="flex-item2">
+//                                     {' (' + parseInt(data.owner[num]) + '%)'}
+//                                 </div>
+//                             </div>
+//                             <div className="flex-container">
+//                                     <svg width ="300" height="5">
+//                                         <rect width = "100%" height="100%" fill="#ececec"/>
+//                                         <rect key={i} width = {data.owner[num] * 3} height= "100%" fill = "#0892D0"/>
+//                                     </svg>
+//                             </div>
+//                                 <br/>
+//                             </div>
+//                         }
+//                     )}
+//                     <div>
+//                     <div className="flex-container2">
+//                         <div className="flex-item2">Not conserved</div>
+//                         <div className="flex-item2">
+//                            ({parseInt(ownersum)}%)
+//                         </div>
+//                     </div>
+//                         <div className="flex-container">
+//                             <svg width ="300" height="5">
+//                                 <rect width = "100%" height="100%" fill="#ececec"/>
+//                                 <rect width = {ownersum * 3} height= "100%" fill = "#0892D0" />
+//                             </svg>
+//                         </div>
+//                     </div>
+//                     <br/>
+//                 </div>
+//             </section>
+//
+//             <section>
+//                 <h2>Land Trusts</h2>
+//                 <div>
+//                 {Object.keys(data.counties).map((num, i)=>
+//                     <div className="flex-container2">
+//                         <div className="flex-item2">
+//                             <svg width ="7" height="7">
+//                                 <rect width = "100%" height= "100%" fill = "#D3D3D3"/>
+//                             </svg>
+//                         </div>
+//                         <div className="flex-item2"><a href = {"http://findalandtrust.org/counties/"+ num} target="_blank">{data.counties[num]}</a>
+//                         </div>
+//                     </div>)}
+//                 </div>
+//             </section>
+
+
 
 
 // TODO:
@@ -222,4 +294,4 @@ function PartnersTab({data}) {
 //     })
 // };
 
-export default PartnersTab;
+// export default PartnersTab;

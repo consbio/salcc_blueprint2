@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 
-const BLUEPRINT = {
+export const BLUEPRINT = {
     0: {
         label: 'Not a priority',
         area: '50%',
@@ -12,28 +12,28 @@ const BLUEPRINT = {
     1: {
         label: 'Corridors',
         area: '5%',
-        description: 'connections between large patches of highest priority areas and secured lands, optimized for efficiency and indicator condition in a least cost path analysis.',
+        description: 'These are connections between large patches of highest priority areas and secured lands, optimized for efficiency and indicator condition in a least cost path analysis.',
         background: '#686868',
         color: '#FFF'
     },
     2: {
         label: 'Medium priority',
         area: '20%',
-        description: 'above-average areas for natural and cultural resources based on indicator condition, capturing potential restoration opportunities.',
+        description: 'Above-average areas for natural and cultural resources based on indicator condition, capturing potential restoration opportunities.',
         background: '#fbb4b9',
         color: '#333'
     },
     3: {
         label: 'High priority',
         area: '15%',
-        description: 'important areas for natural and cultural resources based on indicator condition.',
+        description: 'Important areas for natural and cultural resources based on indicator condition.',
         background: '#c51b8a',
         color: '#FFF'
     },
     4: {
         label: 'Highest priority',
         area: '10%',
-        description: 'the most important areas for natural and cultural resources based on indicator condition.',
+        description: 'The most important areas for natural and cultural resources based on indicator condition.',
         background: '#49006a',
         color: '#FFF'
     }
@@ -82,11 +82,11 @@ class HomeTab extends Component {
                         than 100 different organizations.
                     </p>
                     <p>
-                        <b>You can help improve the Blueprint:</b>
+                        <b>You can help improve the Blueprint</b>
                         <br/>
-                        Give us your feedback and let us know about issues.
+                        Give us your feedback and let us know about issues:
                         <br/>
-                        Email: <a href="mailto:southatlanticlcc@gmail.com">southatlanticlcc@gmail.com</a>
+                        email <a href="mailto:southatlanticlcc@gmail.com">southatlanticlcc@gmail.com</a>
                         <br/><br/>
                         or call Hilary Morris (Blueprint User Support):
                         <br/>

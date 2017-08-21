@@ -1,30 +1,13 @@
-import React, {Component} from "react";
+import React from "react";
+import ResponsiveWidthComponent from './ResponsiveWidthComponent';
 // import PropTypes from "prop-types";
 import {scale, linear, range} from "d3";
 
 
-class WhiskerPlot extends Component {
-
-    // Handle width properly, from: https://github.com/codesuki/react-d3-components/issues/9
-    constructor() {
-        super();
-        this.state = {width: 0};
-        this.domNode = null;
-    }
-
-    fitToParentSize() {
-        const width = this.domNode.parentNode.offsetWidth  - 20;
-        if (width !== this.state.width) {
-            this.setState({width});
-        }
-    }
-
-    componentDidMount() {
-      this.fitToParentSize();
-    }
+class WhiskerPlot extends ResponsiveWidthComponent {
 
     render() {
-        const {value, domain, icon, color, goodConditionThreshold} = this.props;
+        const {value, domain, color, goodConditionThreshold} = this.props;
         const textHeight = 12;
         const {width} = this.state;
         const radius = 12;
@@ -72,7 +55,9 @@ WhiskerPlot.defaultProps = {
     domain: [0, 1], // == absolute range
     icon: null,  // url to icon, optional
     color: '#DDD',
-    goodConditionThreshold: null
+    goodConditionThreshold: null,
+
+    insetWidth: 20 // parent padding
 };
 
 
