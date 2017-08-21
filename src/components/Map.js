@@ -89,8 +89,9 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            place: this.props.place,
             selectedUnit: this.props.selectedUnit
-        }
+        };
 
         this._mapNode = null;
         this.map = null;
@@ -99,6 +100,7 @@ class Map extends Component {
     }
 
     componentDidMount() {
+        let {place, selectedUnit} = this.state;
         let map = this.map = L.map(this._mapNode, config.mapParams);
 
         map.addLayer(config.blueprintLayer);
@@ -162,28 +164,27 @@ class Map extends Component {
             position: 'topright'
         });
         map.addControl(basemapsControl);
-        
-        if (this.state.selectedUnit !== null) {
-            this._highlightUnit(this.state.selectedUnit)
+
+        if (place && this.place.location !== null) {
+            this._zoomToPlace(place);
+        }
+
+        if (selectedUnit !== null) {
+            this._highlightUnit(selectedUnit)
         }
     }
 
     componentWillReceiveProps(nextProps) {
         const {place, selectedUnit} = nextProps;
 
-        // place is expected to be:
-        // {
-        //     label: 'Place name',
-        //     location: {lat: 44.1, lng: -123.2}
-        // }
-
-        // for now, intentionally ignoring label
-        if (place && place.location) {
-            this._addMarker(place.location.lat, place.location.lng, null);
-            this.map.setView([place.location.lat, place.location.lng], 12);
-        }
-        else {
-            this._removeMarker();
+        if (place !== this.state.place) {
+            if (place && place.location) {
+                this.setState({place: place});
+                this._zoomToPlace(place);
+            }
+            else {
+                this._removeMarker();
+            }
         }
 
         // Set currently selected unit, clearing out previous selection if
@@ -193,6 +194,14 @@ class Map extends Component {
             this._highlightUnit(selectedUnit);
             this.setState({selectedUnit: selectedUnit});
         }
+    }
+
+    _zoomToPlace(place) {
+        const zoom = 12;
+
+        // for now, intentionally ignoring label
+        this._addMarker(place.location.lat, place.location.lng, null);
+        this.map.setView([place.location.lat, place.location.lng], zoom);
     }
 
     _addMarker(lat, lng, label) {
@@ -262,7 +271,11 @@ class Map extends Component {
 }
 
 Map.propTypes = {
-    // TODO: place
+    // TODO: place is expected to be:
+    // {
+    //     label: 'Place name',
+    //     location: {lat: 44.1, lng: -123.2}
+    // }
     selectedUnit: PropTypes.string,
     onSelectUnit: PropTypes.func,
     onDeselectUnit: PropTypes.func

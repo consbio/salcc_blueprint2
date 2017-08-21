@@ -45,7 +45,7 @@ class InfoTab extends Component {
         const {label, area, description, background, color} = BLUEPRINT[priority];
 
         return (
-            <div>
+            <div key={priority}>
                 <div className="priorityColorPatch"
                      style={{backgroundColor: background, color: color}}>
                     <b>{label}</b>
@@ -56,7 +56,7 @@ class InfoTab extends Component {
             </div>
         )
     }
-    
+
     render() {
         const sortedPriorities = [4, 3, 2, 1]; // 0 deliberately omitted
 
