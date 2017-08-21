@@ -150,11 +150,6 @@
     bottom: 0px;
 }
 
-#PriorityValues {
-    display: flex;
-
-}
-
 
 
 
@@ -382,6 +377,9 @@
 }
 
 .chart-labeledpercentbar {
-    margin: 0 0 10px 0;
+    margin: 0 0 14px 0;
 }
 
+#Content h4 + .chart-labeledpercentbar {
+    margin-top: 14px;
+}

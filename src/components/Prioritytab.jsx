@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './App.css';
 import {BLUEPRINT} from './HomeTab';
+import LabeledPercentBar from './Charts/LabeledPercentBar';
 
 
 const colors = [
@@ -112,7 +113,15 @@ const PLANS = {
     }
 };
 
-
+ // {/*<div>*/}
+ //                {/*<div className="priorityColorPatch"*/}
+ //                     {/*style={{backgroundColor: background, color: color}}>*/}
+ //                    {/*{percent}%*/}
+ //                {/*</div>*/}
+ //                {/*<div>*/}
+ //                    {/*{label}*/}
+ //                {/*</div>*/}
+ //            {/*</div>*/}
 
 
 class Prioritytab extends Component {
@@ -121,15 +130,7 @@ class Prioritytab extends Component {
         const {label, background, color} = BLUEPRINT[priority];
 
         return (
-            <div>
-                <div className="priorityColorPatch"
-                     style={{backgroundColor: background, color: color}}>
-                    {percent}%
-                </div>
-                <div>
-                    {label}
-                </div>
-            </div>
+            <LabeledPercentBar key={priority} label={label} percent={percent} color={background}/>
         )
     }
 
@@ -148,25 +149,11 @@ class Prioritytab extends Component {
         );
     }
 
-
     render() {
         const {data} = this.props;
         let {blueprint, justification, plans} = data;
 
-
-        const position = [
-            0,
-            data.blueprint[0]*2,
-            data.blueprint[0]*2+data.blueprint[1]*2,
-            data.blueprint[0]*2+data.blueprint[1]*2+data.blueprint[2]*2,
-            data.blueprint[0]*2+data.blueprint[1]*2+data.blueprint[2]*2+data.blueprint[3]*2,
-            data.blueprint[0]*2+data.blueprint[1]*2+data.blueprint[2]*2+data.blueprint[3]*2+data.blueprint[4]*2
-        ];
-
-        let sum = 100 - (data.blueprint[1] + data.blueprint[2] + data.blueprint[3] +data.blueprint[4]);
-
         const sortedPriorities = [4, 3, 2, 1, 0];
-        blueprint.reverse(); // Flip order to match above
 
         const regionalPlans = data.plans.filter((p) => {return PLANS[p].type === 'regional'});
         const statePlans = data.plans.filter((p) => {return PLANS[p].type === 'state'});
@@ -177,60 +164,7 @@ class Prioritytab extends Component {
                 <section>
                     <h3>Blueprint 2.1 Priority</h3>
                     <h4>for shared conservation action</h4>
-                    <div id="PriorityValues">
-                        { sortedPriorities.map((p, i) => this.renderPriority(p, blueprint[i])) }
-                    </div>
-
-                    {/*<div>*/}
-                        {/*<svg width="100%" height="200">*/}
-                            {/*{*/}
-                                {/*data.blueprint.map((num, i)=>*/}
-                                    {/*<rect key={i} x="0" y={position[i]} width="520" height={num*2} fill = {colors[i]}/>*/}
-                                {/*)}*/}
-                        {/*</svg>*/}
-                    {/*</div>*/}
-                    {/*<div>*/}
-                        {/*<div className="flex-container2">*/}
-                            {/*<div className="flex-item2">*/}
-                                {/*<svg width ="17" height="17">*/}
-                                    {/*<rect width = "100%" height= "100%" fill = "#D3D3D3" stroke="gray" strokeWidth="2"/>*/}
-                                {/*</svg>*/}
-                            {/*</div>*/}
-                            {/*<div className="flex-item2">Not a priority {sum}%</div>*/}
-                        {/*</div>*/}
-                        {/*<div className="flex-container2">*/}
-                            {/*<div className="flex-item2">*/}
-                                {/*<svg width ="17" height="17">*/}
-                                    {/*<rect width = "100%" height= "100%" fill = {colors[1]} stroke="gray" strokeWidth="2"/>*/}
-                                {/*</svg>*/}
-                            {/*</div>*/}
-                            {/*<div className="flex-item2">Corridors {data.blueprint[1]}%</div>*/}
-                        {/*</div>*/}
-                        {/*<div className="flex-container2">*/}
-                            {/*<div className="flex-item2">*/}
-                                {/*<svg width ="17" height="17">*/}
-                                    {/*<rect width = "100%" height= "100%" fill = {colors[2]} stroke="gray" strokeWidth="2"/>*/}
-                                {/*</svg>*/}
-                            {/*</div>*/}
-                            {/*<div className="flex-item2">Medium priority {data.blueprint[2]}%</div>*/}
-                        {/*</div>*/}
-                        {/*<div className="flex-container2">*/}
-                            {/*<div className="flex-item2">*/}
-                                {/*<svg width ="17" height="17">*/}
-                                    {/*<rect width = "100%" height= "100%" fill = {colors[3]} stroke="gray" strokeWidth="2"/>*/}
-                                {/*</svg>*/}
-                            {/*</div>*/}
-                            {/*<div className="flex-item2">High priority {data.blueprint[3]}%</div>*/}
-                        {/*</div>*/}
-                        {/*<div className="flex-container2">*/}
-                            {/*<div className="flex-item2">*/}
-                                {/*<svg width ="17" height="17">*/}
-                                    {/*<rect width = "100%" height= "100%" fill = {colors[4]} stroke="gray" strokeWidth="2"/>*/}
-                                {/*</svg>*/}
-                            {/*</div>*/}
-                            {/*<div className="flex-item2">Highest priority {data.blueprint[4]}%</div>*/}
-                        {/*</div>*/}
-                    {/*</div>*/}
+                    { sortedPriorities.map((p, i) => this.renderPriority(p, blueprint[p])) }
                 </section>
 
                 {justification &&
@@ -263,7 +197,7 @@ class Prioritytab extends Component {
 
                         {marinePlans.length >0 &&
                             <div>
-                            <h3>Marine Conservation Plans</h3>
+                            <h4>Marine Conservation Plans</h4>
                             { marinePlans.map(this.renderPlan) }
                             </div>
                         }

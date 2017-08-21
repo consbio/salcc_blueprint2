@@ -26,9 +26,7 @@ class PercentBar extends Component {
                 }}></div>
 
                 {(remainder > 0) &&
-                    <div style={{
-                        flexGrow: remainder,
-                    }}></div>
+                    <div style={{flexGrow: remainder}}></div>
                 }
 
             </div>
