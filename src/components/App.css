@@ -42,6 +42,7 @@
     color: #FFF;
     height: 39px;
     position: absolute;
+    z-index: 5001;
     left: 0;
     right: 0;
     top: 0;
@@ -94,13 +95,12 @@
 }
 
 #CloseButton {
-    font-size: 16px;
-    color: #DDD;
-    background-color: rgba(238, 238, 244, 0.3);
-    flex: 0;
     padding: 3px 8px;
     margin-right: 4px;
-    border-radius: 20px;
+    fill: #FFF;
+    fill-opacity: 0.75;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
 }
 

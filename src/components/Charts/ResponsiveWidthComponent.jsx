@@ -12,6 +12,8 @@ class ResponsiveWidthComponent extends Component {
     }
 
     fitToParentSize() {
+        if (!(this.domNode && this.domNode.parentNode)) return;
+
         const width = this.domNode.parentNode.offsetWidth - this.props.insetWidth;
         if (width !== this.state.width) {
             this.setState({width});

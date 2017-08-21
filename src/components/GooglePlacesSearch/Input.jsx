@@ -1,4 +1,5 @@
 import React from 'react';
+import ResetIcon from '../icons/ResetIcon';
 
 
 // The value of this input is entirely managed via props (meaning it is managed from the outside)
@@ -26,12 +27,9 @@ class Input extends React.PureComponent {
         this.focus();
     };
 
-
     handleChange = (event) => {
-        const value = event.target.value;
-        this.props.onChange(value);
+        this.props.onChange(event.target.value);
     };
-
 
     renderSpinner = () => {
         if (this.props.isPending) {
@@ -63,24 +61,16 @@ class Input extends React.PureComponent {
         }
 
         return null;
-    }
+    };
 
     renderReset = () => {
         if (this.props.value) {
-            return <svg onClick={this.reset} className='gplaces-search-reset' height='18' viewBox='0 0 24 24' width='18'
-                        xmlns='http://www.w3.org/2000/svg'>
-                <path d='M0 0h24v24H0z' fill='none'/>
-                <path
-                    d='M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z'/>
-            </svg>;
+            return <ResetIcon className='gplaces-search-reset' onClick={this.reset} />
         }
-
         return null;
     };
 
-
     render() {
-
         const icon = <svg fill='#888'
                           height='30' width='30' viewBox='2 -2 22 24'
                           xmlns='http://www.w3.org/2000/svg'
@@ -103,7 +93,6 @@ class Input extends React.PureComponent {
             spinner = this.renderSpinner(),
 
             reset = this.renderReset();
-
 
         return <div className={this.props.className}>
             {icon}

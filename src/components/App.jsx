@@ -4,6 +4,7 @@ import './App.css';
 import '../index.css';
 import Map from './Map';
 import Geonames from './GooglePlacesSearch/GooglePlacesSearch';
+import ResetIcon from './icons/ResetIcon';
 
 //import components as needed
 import PriorityTab from './Prioritytab';
@@ -64,28 +65,17 @@ class App extends Component {
 
     renderHeader() {
         // TODO: ID is temporary, for debugging!
-        if (this.props.selectedUnit !== null) {
-            return (
-                <div id="Header">
-                    <h1>{this.props.data.name} {this.props.selectedUnit}</h1>
-                    <div id="CloseButton" onClick={this.handleCloseButton}>X</div>
-                </div>
-            );
-        }
+        if (this.props.selectedUnit === null) return null;
 
         return (
-            <div id="TopBar">
-                {/*{ this.toptabs.map((tab, index) => this.renderTab(tab, index)) }*/}
-                <div id="InfoButton"
-                     className={this.state.activeTab === 'Home' ? 'active' : ''}
-                     onClick={() => this.changeTab("Home")}>
-                    i
-                </div>
-                <Geonames onFocus={() => this.changeTab(null)} onSelect={(place) => this.setState({place: place})}/>
+            <div id="Header">
+                <h1>{this.props.data.name} {this.props.selectedUnit}</h1>
+                <ResetIcon id="CloseButton" onClick={this.handleCloseButton}/>
+                {/*<div id="CloseButton" onClick={this.handleCloseButton}>X</div>*/}
+                {/*<img id="CloseButton" src="/icons/reset.svg" onClick={this.handleCloseButton} />*/}
             </div>
         );
     }
-
 
     renderTab(tab, index) {
         const active = this.state.activeTab === tab ? 'active' : '';
@@ -113,7 +103,7 @@ class App extends Component {
             //     return <ThreatsTab data={data}/>;
             case 'Partners':
                 return <PartnersTab data={data}/>;
-            case 'Home':
+            case 'Info':
                 return <InfoTab/>;
             default:
                 return null;
@@ -132,8 +122,6 @@ class App extends Component {
         );
     }
 
-
-
     render() {
         return (
             <div className="App">
@@ -142,8 +130,18 @@ class App extends Component {
                      onSelectUnit={this.handleUnitSelect}
                      onDeselectUnit={this.handleUnitDeselect}/>
 
-                { this.renderHeader() }
+                <div id="TopBar">
+                    <div id="InfoButton"
+                         className={this.state.activeTab === 'Home' ? 'active' : ''}
+                         onClick={() => this.changeTab("Info")}>
+                        i
+                    </div>
+                    <Geonames selected={this.state.place}
+                        onFocus={() => this.changeTab(null)}
+                        onSelect={(place) => this.setState({place: place})}/>
+                </div>
 
+                { this.renderHeader() }
                 { this.renderActiveTab() }
                 { this.renderFooter() }
             </div>
