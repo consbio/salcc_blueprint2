@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 // import PropTypes from 'prop-types';
 import {range} from 'd3-array';
+import {formatPercent} from '../utils';
 import Indicator from './Indicator';
 import WhiskerDes from './Charts/WhiskerDescription'
 
@@ -470,10 +471,6 @@ class Ecosystem extends Component {
         let indicatorKeys = Object.keys(indicators || {});  // some ecosystems are present but don't have indicators
         indicatorKeys.sort();
 
-        // TODO:
-        // format percent
-        const percentLabel = Math.round(percent) + '%';
-
         // Merge constants with dynamic data
         const mergedIndicators = indicatorKeys.map((indicator) => {
             return Object.assign(
@@ -506,7 +503,7 @@ class Ecosystem extends Component {
                     <h3>{label}</h3>
                     {percent &&
                         <div className="text-quieter text-right text-small">
-                            {percentLabel}
+                            {formatPercent(percent)}%
                             <br/>
                             <span className="text-smaller">of area</span>
                         </div>

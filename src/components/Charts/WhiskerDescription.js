@@ -1,5 +1,4 @@
 import React from 'react';
-import indicators from '../../configindica';
 import Indicator from '../Indicator';
 import '../App.css'
 

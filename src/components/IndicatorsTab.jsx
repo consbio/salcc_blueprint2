@@ -88,9 +88,7 @@ class IndicatorsTab extends Component {
 
 
     render(){
-        const {
-            index,
-        } = this.state;
+        const {index} = this.state;
 
         // sort ecosystems by decreasing area, so that cross-system indicators are always on the right
         let ecosystems = Object.entries(this.props.data.ecosystems);  // => [[ecosystemID, ecosystemData]...]
@@ -120,11 +118,8 @@ class IndicatorsTab extends Component {
 
         const ecosystemIDs = ecosystems.map((e) => e[0]);
 
-        // TODO: use flexbox or abs positioning for nav instead of fixed, it isn't working properly
-
         return (
-            <div id ="Content">
-                {/*<h1>{this.props.data.name}</h1>*/}
+            <div id="Content">
                 <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex}>
                    { this.renderEcosystems(ecosystemIDs) }
                 </SwipeableViews>

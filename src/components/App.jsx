@@ -116,11 +116,13 @@ class App extends Component {
     }
 
     renderFooter() {
-        // Animate bottom property
-        const bottom = (this.props.selectedUnit === null || this.props.isPending)? -47: 0;
+        if (this.state.activeTab === 'Info') return null;
+
+        // Animate opacity property
+        const opacity = (this.props.selectedUnit === null || this.props.isPending)? 0: 1;
 
         return (
-            <footer style={{bottom: bottom}}>
+            <footer style={{opacity: opacity}}>
                 <div className="tabs">
                 { this.tabs.map((tab, index) => this.renderTab(tab, index)) }
                 </div>

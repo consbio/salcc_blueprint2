@@ -157,28 +157,29 @@ header .button {
 }
 
 .tabContentHolder {
-  width: 100%;
+    width: 100%;
     height: 100%;
     position: relative;
-  background: #FFF;
-
+    background: #FFF;
 }
 
 footer {
+    opacity: 0;
     height: 47px;
     background: #FAFAFA;
     text-align: center;
     position: absolute;
-    bottom: -47px;
-    left: 0px;
-    right: 0px;
+    bottom: 0;
+    left: 0;
+    right: 0;
     border-top: 1px solid #DDD;
     display: flex;
     justify-content: center;
     align-content: stretch;
     flex-direction: column;
-    transition: bottom 0.25s ease 0.1s;
+    transition: opacity 0.25s ease 0.1s;
 }
+
 
 #EcosystemsNav {
     background: #FFF;
