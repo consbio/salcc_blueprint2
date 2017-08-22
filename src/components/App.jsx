@@ -46,22 +46,22 @@ class App extends Component {
     handleUnitSelect = (id) => {
         console.log('Select map unit: ', id);
         this.props.selectUnit(id);
-    }
+    };
 
     handleUnitDeselect = () => {
         console.log('Deselect map unit');
         this.props.deselectUnit();
-    }
+    };
 
     handleCloseButton = () => {
         this.props.deselectUnit();
         this.setState({activeTab: null});
-    }
+    };
 
     handleTryAgainClick = (event) => {
         event.preventDefault();
         this.props.deselectUnit();
-    }
+    };
 
     renderUnitName() {
         if (this.props.selectedUnit === null) return null;
@@ -99,16 +99,15 @@ class App extends Component {
     }
 
     renderActiveTab() {
-        const {data} = this.props;
         switch (this.state.activeTab) {//if the previous state is the same tab, then close the tab
             case 'Priority':
-                return <PriorityTab data={data}/>;
+                return <PriorityTab {...this.props}/>;
             case 'Indicators':
-                return <IndicatorsTab data={data}/>;
+                return <IndicatorsTab  {...this.props}/>;
             // case 'Threats':
-            //     return <ThreatsTab data={data}/>;
+            //     return <ThreatsTab  {...this.props}/>;
             case 'Partners':
-                return <PartnersTab data={data}/>;
+                return <PartnersTab  {...this.props}/>;
             case 'Info':
                 return <InfoTab/>;
             default:

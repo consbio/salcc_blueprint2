@@ -6,12 +6,12 @@ import LabeledPercentBar from './Charts/LabeledPercentBar';
 const GAP = {
     1: {
         color: '#637939',
-        label: 'Permanent protection for biodiversity',
+        label: 'Permanently protected for biodiversity',
         description: ' Nature reserves, research natural areas, wilderness areas, Forever Wild easements'
     },
     2: {
         color: '#b5cf6b',
-        label: 'Permanent protection to maintain a primarily natural state',
+        label: 'Permanently protected to maintain a primarily natural state',
         description: ' National Wildlife Refuges, many State Parks, high-use National Parks'
     },
     3: {
@@ -31,7 +31,7 @@ const GAP = {
     },
     9: {
         color: '#9edae5',
-        label: 'Unknown - protection status unknown',
+        label: 'Unknown - protected lands status unknown',
         description: 'Protection status unknown'
     }
 };
@@ -76,12 +76,30 @@ const OWNERSHIP = {
     }
 };
 
+const NOT_CONSERVED = {
+    color: '#D3D3D3',
+    label: 'Not conserved',
+    description: 'lands not currently known to be conserved'
+};
+
+
+function sumPercent(items) {
+    return items.map((item) => item.percent).reduce((a, b) => a + b, 0);
+}
+
+function sortDescendingPercent(a, b) {
+    if (a.percent < b.percent) return 1;
+    if (a.percent > b.percent) return -1;
+    return 0;
+}
 
 class PartnersTab extends Component {
-    sortDescendingPercent(a, b) {
-        if (a.percent < b.percent) return 1;
-        if (a.percent > b.percent) return -1;
-        return 0;
+    renderNoContent() {
+        return (
+            <div id = "Content">
+                <h4 className="text-center">No partner information available.</h4>
+            </div>
+        );
     }
 
     renderBar(item) {
@@ -102,64 +120,103 @@ class PartnersTab extends Component {
         );
     }
 
+    renderOwnership(ownership) {
+        if (!ownership.length) return null;
+
+        return (
+            <section>
+                <h3>Conserved Lands Ownership</h3>
+                {ownership.map(this.renderBar)}
+            </section>
+        );
+    }
+
+    renderProtectedLands(protectedLands) {
+        if (!protectedLands.length) return null;
+
+        return (
+            <section>
+                <h3>Land Protection Status</h3>
+                {protectedLands.map(this.renderBar)}
+            </section>
+        );
+    }
+
+    renderLTAs(counties) {
+        if (!counties) return null;
+
+        return (
+            <section>
+                <h3>Land Trusts</h3>
+                <h4>Land Trust Alliance reports by county</h4>
+                <ul>
+                    {Object.entries(counties).map((pair) =>
+                        this.renderLTALink(pair[0], pair[1] ))}
+                </ul>
+            </section>
+        );
+    }
+
     render() {
-        const {owner, gap, counties} = this.props.data;
+        const {selectedUnit, data} = this.props;
 
-        // transform ownership
+        // Marine units currently have no info for this tab
+        if (selectedUnit.indexOf('M') === 0) {
+            return this.renderNoContent();
+        }
+
+        let {owner, gap, counties} = data;
+        owner = owner || {};  // incoming may be undefined
+        gap = gap || {};  // incoming may be undefined
+
+        let remainder = 0;
         let ownership = [];
-        if (owner) {
-            ownership = Object.keys(owner).map((key) => {
-                return Object.assign({key: key, percent: owner[key]}, OWNERSHIP[key]);
-            });
+        let protectedLands = [];
 
-            ownership.sort(this.sortDescendingPercent);
+        // transform ownership into structure needed and add
+        // "not conserved" if sum is < 100%
+        ownership = Object.keys(owner).map((key) => {
+            return Object.assign({
+                key: key,
+                percent: owner[key]
+            }, OWNERSHIP[key]);
+        });
+        ownership.sort(sortDescendingPercent);
+
+        remainder = 100 - sumPercent(ownership);
+        if (remainder > 0) {
+            ownership.push(Object.assign({
+                key: 'notconserved',
+                percent: remainder
+            }, NOT_CONSERVED));
         }
 
-        // transform GAP
-        let protection = [];
-        if (gap) {
-            protection = Object.keys(gap).map((key) => {
-                return Object.assign({key: key, percent: gap[key]}, GAP[key]);
-            });
+        // transform GAP (level of protection) into structure needed and add
+        // "not conserved" if sum is < 100%
+        protectedLands = Object.keys(gap).map((key) => {
+            return Object.assign({key: key, percent: gap[key]}, GAP[key]);
+        });
+        protectedLands.sort(sortDescendingPercent);
 
-            protection.sort(this.sortDescendingPercent);
+        remainder = 100 - sumPercent(protectedLands);
+        if (remainder > 0) {
+            protectedLands.push(Object.assign({
+                key: 'notconserved',
+                percent: remainder
+            }, NOT_CONSERVED));
         }
 
-        if (!(ownership.length + protection.length > 1 && counties)) {
-            return (
-                <div id = "Content">
-                    <h4 className="text-center">No partner information available.</h4>
-                </div>
-            );
+        if (!(ownership.length + protectedLands.length > 1 && counties)) {
+            return this.renderNoContent();
         }
 
         return (
             <div id = "Content">
-                {ownership.length > 0 &&
-                    <section>
-                        <h3>Conserved Lands Ownership</h3>
-                        {ownership.map(this.renderBar)}
-                    </section>
-                }
+                { this.renderOwnership(ownership) }
+                { this.renderProtectedLands(protectedLands) }
+                { this.renderLTAs(counties) }
 
-                {protection.length > 0 &&
-                    <section>
-                        <h3>Land Protection Status</h3>
-                        {protection.map(this.renderBar)}
-                    </section>
-                }
-
-                {counties &&
-                    <section>
-                        <h3>Land Trusts</h3>
-                        <ul>
-                            {Object.entries(counties).map((pair) =>
-                                this.renderLTALink(pair[0], pair[1] ))}
-                        </ul>
-                    </section>
-                }
-
-                {(ownership.length + protection.length) > 0 &&
+                {(ownership.length + protectedLands.length) > 0 &&
                     <section>
                         <h4>Credits</h4>
                         <p className="text-quiet text-small">
