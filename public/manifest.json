@@ -1,9 +1,19 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "SALCC Blueprint",
+  "name": "SALCC Blueprint Mobile Viewer",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "logo_96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "logo_144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "logo_192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     }

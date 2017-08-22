@@ -128,9 +128,12 @@ class IndicatorsTab extends Component {
                 <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex}>
                    { this.renderEcosystems(ecosystemIDs) }
                 </SwipeableViews>
-                <div id="EcosystemsNav" className="flex-container">
-                        { this.renderNav(ecosystemIDs) }
-                </div>
+
+                {ecosystems.length > 1 &&
+                    <div id="EcosystemsNav" className="flex-container">
+                        {this.renderNav(ecosystemIDs)}
+                    </div>
+                }
             </div>
         );
     }

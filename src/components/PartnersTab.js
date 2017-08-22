@@ -125,6 +125,14 @@ class PartnersTab extends Component {
             protection.sort(this.sortDescendingPercent);
         }
 
+        if (!(ownership.length + protection.length > 1 && counties)) {
+            return (
+                <div id = "Content">
+                    <h4 className="text-center">No partner information available.</h4>
+                </div>
+            );
+        }
+
         return (
             <div id = "Content">
                 {ownership.length > 0 &&
