@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
 import './App.css';
 import '../index.css';
 import Map from './Map';
@@ -17,17 +18,11 @@ import * as UnitActions from '../Actions/actions';
 
 
 class App extends Component {
-
-    componentWillReceiveProps(nextProps) {
-        console.log('Next Props: ', nextProps)
-    }
-
     constructor(props) {
         super(props);
         console.log('App props (from redux store):', props);
 
-        this.tabs = ['Priority', 'Indicators', 'Partners'];  // TODO: 'Threats',
-        this.toptabs = ['Home'];  // TODO: ,'Contact'
+        this.tabs = ['Priority', 'Indicators', 'Partners'];  // TODO: 'Threats'
 
         this.state = {
             activeTab: null,
@@ -63,13 +58,26 @@ class App extends Component {
         this.setState({activeTab: null});
     }
 
+    handleTryAgainClick = (event) => {
+        event.preventDefault();
+        this.props.deselectUnit();
+    }
+
     renderUnitName() {
-        // TODO: ID is temporary, for debugging!
         if (this.props.selectedUnit === null) return null;
+
+        if (this.props.isPending) {
+            return (
+                <div id="UnitName">
+                    <h1>Loading...</h1>
+                    <ResetIcon id="CloseButton" onClick={this.handleCloseButton}/>
+                </div>
+            );
+        }
 
         return (
             <div id="UnitName">
-                <h1>{this.props.data.name} {this.props.selectedUnit}</h1>
+                <h1>{this.props.data.name}</h1>
                 <ResetIcon id="CloseButton" onClick={this.handleCloseButton}/>
             </div>
         );
@@ -109,14 +117,31 @@ class App extends Component {
     }
 
     renderFooter() {
-        if (this.props.selectedUnit === null) return null;
+        // Animate bottom property
+        const bottom = (this.props.selectedUnit === null || this.props.isPending)? -47: 0;
 
         return (
-            <footer>
+            <footer style={{bottom: bottom}}>
                 <div className="tabs">
                 { this.tabs.map((tab, index) => this.renderTab(tab, index)) }
                 </div>
             </footer>
+        );
+    }
+
+    renderError () {
+        if (!this.props.hasError) return null;
+
+        return (
+            <div id="FullScrim">
+                <p>Oops!  Something went wrong...</p>
+                <p>
+                    <a href="#" onClick={this.handleTryAgainClick}>Try again?</a>
+                </p>
+                <p>
+                    If this doesn't work, try reloading this website.
+                </p>
+            </div>
         );
     }
 
@@ -143,6 +168,8 @@ class App extends Component {
                 { this.renderActiveTab() }
 
                 { this.renderFooter() }
+
+                { this.renderError() }
             </div>
 
         );

@@ -151,8 +151,6 @@ header .button {
 }
 
 
-
-
 #UnitLabel {
     color: #555;
     padding-top: 4px;
@@ -179,6 +177,7 @@ footer {
     justify-content: center;
     align-content: stretch;
     flex-direction: column;
+    transition: bottom 0.25s ease 0.1s;
 }
 
 #EcosystemsNav {

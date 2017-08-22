@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+
 /*
  * action types
  */
@@ -26,11 +27,8 @@ export function selectUnit(unit){
 }
 export const DESELECT_UNIT = 'DESELECT_UNIT';
 
-export function deselectUnit(unit){
-    return {
-        type: DESELECT_UNIT,
-        unit
-    }
+export function deselectUnit(){
+    return {type: DESELECT_UNIT}
 }
 
 export const REQUEST_DATA = 'REQUEST_DATA';
