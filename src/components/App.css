@@ -181,12 +181,20 @@ footer {
 }
 
 
+#Ecosystems {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#Ecosystems > div:first-child {
+    flex: 1;
+    height: 100%;
+}
+
 #EcosystemsNav {
     background: #FFF;
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
+    flex: 0;
     justify-content: center;
     padding: 4px 0 10px;
 }

@@ -68,14 +68,20 @@ class IndicatorsTab extends Component {
     }
 
     renderNav(ecosystemIDs){
-        return ecosystemIDs.map((ecosystem, index)=>
+        if (ecosystemIDs.length < 2) return null;
 
-                <img key={ecosystem}
-                     src={this.getIcon(ecosystem)}
-                     height={20}
-                     alt=""
-                     className={this.state.index === index ? 'active' : ''}
-                     onClick={(e) => {this.handleNavClick(e, index)}}/>
+        return (
+            <div id="EcosystemsNav" className="flex-container">
+                {ecosystemIDs.map((ecosystem, index)=>
+
+                    <img key={ecosystem}
+                         src={this.getIcon(ecosystem)}
+                         height={20}
+                         alt=""
+                         className={this.state.index === index ? 'active' : ''}
+                         onClick={(e) => {this.handleNavClick(e, index)}}/>
+                )}
+            </div>
         );
     }
 
@@ -120,15 +126,13 @@ class IndicatorsTab extends Component {
 
         return (
             <div id="Content">
-                <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex}>
-                   { this.renderEcosystems(ecosystemIDs) }
-                </SwipeableViews>
+                <div id="Ecosystems">
+                    <SwipeableViews index={index} onChangeIndex={this.handleChangeIndex}>
+                       { this.renderEcosystems(ecosystemIDs) }
+                    </SwipeableViews>
 
-                {ecosystems.length > 1 &&
-                    <div id="EcosystemsNav" className="flex-container">
-                        {this.renderNav(ecosystemIDs)}
-                    </div>
-                }
+                    {this.renderNav(ecosystemIDs)}
+                </div>
             </div>
         );
     }
