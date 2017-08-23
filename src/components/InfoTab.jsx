@@ -68,7 +68,7 @@ class InfoTab extends Component {
                     <p>
                         The Conservation Blueprint is a living spatial plan to conserve
                         natural and cultural resources for future generations.
-                        It identifies priority areas for <b>shared conservation action</b>.
+                        It identifies priority areas for shared conservation action.
                     </p>
                     <p>
                         Blueprint 2.1 is a completely data-driven approach based on models of
@@ -77,8 +77,8 @@ class InfoTab extends Component {
                         Indicators in better condition suggest higher ecosystem integrity and
                         higher importance for natural and cultural resources.
                         Development of the Blueprint is a collaborative process that has
-                        involved active participation from more than 400 people across more
-                        than 100 different organizations.
+                        involved active participation from more than 400 people from
+                        over 100 different organizations.
                     </p>
                     <p>
                         <b>You can help improve the Blueprint</b>
@@ -108,7 +108,7 @@ class InfoTab extends Component {
 
                 <section>
                     <h3>Credits</h3>
-                    <h4>Developed by:</h4>
+                    <h4>Application developed by:</h4>
 
                     <div  style={{fontSize: 14, marginBottom: 20}}>
                         <div>
@@ -146,7 +146,7 @@ class InfoTab extends Component {
                         <a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a><br/>
                         <a href="http://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a><br/>
                         <a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a><br/>
-                        <span className="text-small">(note: applies to the basemap, not the Blueprint)</span>
+                        <span className="text-small text-quiet">(note: applies to the basemap, not the Blueprint)</span>
                     </p>
                 </section>
             </div>
