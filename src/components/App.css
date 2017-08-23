@@ -126,6 +126,7 @@ header .button {
 #Content p {
     margin-top: 0;
     line-height: 1.4;
+    font-size: 15px;
 }
 
 #Content ul {
@@ -313,7 +314,6 @@ footer .tab {
 
 .chart-whisker .domain {
     stroke-width:3;
-    /*stroke: #a4aab3;*/
     stroke-linecap: round;
 }
 
@@ -333,26 +333,6 @@ footer .tab {
     padding: 0.2rem;
     flex-basis: 0px;
     background-color: #0074D9;
-}
-
-#Content table {
-    font-family: arial, sans-serif;
-    font-size: 12px;
-    color: #9da0a4;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-#Content td th {
-    font-size: 10px;
-    color: #d3d3d3;
-    border: 1px solid #ececec;
-    text-align: left;
-    padding: 12px;
-}
-
-#Content tr:nth-child(even){
-    background-color: #ececec;
 }
 
 #Content section + section {
@@ -378,4 +358,39 @@ footer .tab {
 
 #Content h4 + .chart-labeledpercentbar {
     margin-top: 14px;
+}
+
+.react-swipeable-view-container {
+    height: 100%;
+}
+
+
+#IndicatorDetails p {
+    font-size: 14px;
+}
+
+#IndicatorDetails table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #777;
+}
+
+#IndicatorDetails th {
+    border-bottom: 1px solid #EEE;
+    text-align: right;
+}
+
+#IndicatorDetails tr:nth-child(even){
+    background-color: #F6F6F6;
+}
+
+#IndicatorDetails td {
+    padding: 6px 0;
+}
+
+#IndicatorDetails td + td {
+    width: 50px;
+    text-align: center;
 }

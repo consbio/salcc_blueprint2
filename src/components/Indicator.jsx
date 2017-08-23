@@ -1,17 +1,13 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 import WhiskerPlot from './Charts/WhiskerPlot.js';
-import WhiskerDes from './Charts/WhiskerDescription';
-
-
 
 
 class Indicator extends Component {
 
     render() {
-        console.log('Indicator props:', this.props)
-        const {label, mean, domain, datasetID, goodConditionThreshold} = this.props;
+        const {label, mean, domain, goodConditionThreshold} = this.props;
 
         // Color is gray if no threshold, blue if over threshold, orange otherwise
         let bgColor = 'rgba(204, 204, 199, 0.2)';
@@ -37,13 +33,12 @@ class Indicator extends Component {
                     {label}
                 </h4>
                 <WhiskerPlot value={mean} domain={domain} color={color} goodConditionThreshold={goodConditionThreshold}/>
-
             </section>
         );
     }
 }
 
-Indicator.propTypes = {};
-Indicator.defaultProps = {};
+// Indicator.propTypes = {};
+// Indicator.defaultProps = {};
 
 export default Indicator;

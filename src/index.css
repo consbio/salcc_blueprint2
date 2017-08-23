@@ -17,26 +17,26 @@ p {
 }
 
 .text-quiet {
-    color: #666;
+    color: #666 !important;
 }
 
 .text-quieter {
-    color: #999;
+    color: #999 !important;
 }
 
 .text-small {
-    font-size: small;
+    font-size: small !important;
 }
 
 .text-smaller {
-    font-size: smaller;
+    font-size: smaller !important;
 }
 
 .text-right {
-    text-align: right;
+    text-align: right !important;
 }
 .text-center {
-    text-align: center;
+    text-align: center !important;
 }
 
 .flex-container{
@@ -51,12 +51,6 @@ p {
     flex-direction: row;
     justify-content: flex-start;
 }
-/*.flex-container3{*/
-    /*display: -webkit-flex;*/
-    /*display:flex;*/
-    /*flex-direction: row;*/
-    /*justify-content: flex-start;*/
-/*}*/
 
 .flex-justify-start {
     justify-content: flex-start;

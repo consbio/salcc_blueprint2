@@ -137,7 +137,7 @@ class App extends Component {
             <div id="FullScrim">
                 <p>Oops!  Something went wrong...</p>
                 <p>
-                    <a href="#" onClick={this.handleTryAgainClick}>Try again?</a>
+                    <a href="" onClick={this.handleTryAgainClick}>Try again?</a>
                 </p>
                 <p>
                     If this doesn't work, try reloading this website.

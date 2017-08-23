@@ -1,7 +1,7 @@
 import React from "react";
 import ResponsiveWidthComponent from './ResponsiveWidthComponent';
 // import PropTypes from "prop-types";
-import {scale, linear, range} from "d3";
+import {scale} from "d3";
 
 
 class WhiskerPlot extends ResponsiveWidthComponent {

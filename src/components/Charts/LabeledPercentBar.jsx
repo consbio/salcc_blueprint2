@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import {formatPercent} from '../../utils';
 import PercentBar from './PercentBar';
 
@@ -30,8 +30,7 @@ class LabeledPercentBar extends Component {
     }
 }
 
-LabeledPercentBar.propTypes = {};
-
-LabeledPercentBar.defaultProps = {};
+// LabeledPercentBar.propTypes = {};
+// LabeledPercentBar.defaultProps = {};
 
 export default LabeledPercentBar;
