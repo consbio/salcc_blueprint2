@@ -39,6 +39,11 @@ p {
     text-align: center !important;
 }
 
+.inline-middle {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .flex-container{
     display: -webkit-flex;
     display:flex;

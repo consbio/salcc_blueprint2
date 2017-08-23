@@ -11,8 +11,6 @@ class IndicatorDescription extends Component {
     }
 
     render() {
-        console.log('Indicator props:', this.props)
-
         const {label, description, valueLabels, percent, ecosystemLabel} = this.props;
 
         let percents = Object.keys(valueLabels).map((value, i) => {
@@ -22,8 +20,7 @@ class IndicatorDescription extends Component {
                 percent: percent[i]
             };
         });
-
-        console.log('percents', percents)
+        percents.reverse();
 
         return (
             <div id='IndicatorDetails'>
@@ -42,10 +39,10 @@ class IndicatorDescription extends Component {
                             <th colSpan={2}>% of area</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="text-quieter">
                         {percents.map((item) => {
                             return (
-                                <tr>
+                                <tr key={item.value}>
                                     <td>{item.label}</td>
                                     <td>{(item.percent)? formatPercent(item.percent) + '%': '-'}</td>
                                 </tr>

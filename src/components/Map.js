@@ -71,14 +71,14 @@ let config = {
                 fill: true,
                 fillOpacity: 0,
                 weight: 1,
-                color: '#009C8B'
+                color: '#0892D0'
             }
         },
         getFeatureId: (f) => {return f.properties.ID}
     }),
     highlightStyle: {
-        color: '#009C8B',
-        fillColor: '#009C8B',
+        color: '#0892D0',
+        fillColor: '#0892D0',
         fillOpacity: 0.3,
         fill: true,
         weight: 3
@@ -151,11 +151,6 @@ class Map extends Component {
             }
         });
 
-        this.locateControl = new locateControlClass();
-        // overriding functions here to bind to outer scope
-        this.locateControl.onLocationFound = (lat, lng) => {this._addMarker(lat, lng, null)};
-        this.locateControl.addTo(map);
-
         let basemapsControl = L.control.basemaps({
             basemaps: config.basemaps,
             tileX: 4,
@@ -164,6 +159,11 @@ class Map extends Component {
             position: 'topright'
         });
         map.addControl(basemapsControl);
+
+        this.locateControl = new locateControlClass();
+        // overriding functions here to bind to outer scope
+        this.locateControl.onLocationFound = (lat, lng) => {this._addMarker(lat, lng, null)};
+        this.locateControl.addTo(map);
 
         if (place && this.place.location !== null) {
             this._zoomToPlace(place);

@@ -39,18 +39,18 @@ header .button {
 
 #UnitName {
     background: #0892D0;
-    height: 39px;
+    height: 40px;
     position: absolute;
-    z-index: 5001;
+    z-index: 5010;
     left: 0;
     right: 0;
     top: 0;
-    border-bottom: 1px solid #DDD;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     text-align: center;
+    box-shadow: 0 2px 6px #333;
 }
 
 
@@ -119,14 +119,19 @@ header .button {
 #Content h4 {
     padding: 0;
     margin: 0 0 0.1em 0;
-    color: #777;
+    color: #666;
     font-weight: normal;
+}
+
+#Content h5 {
+    font-weight: normal;
+    margin: 0 0 0.1em 0;
 }
 
 #Content p {
     margin-top: 0;
     line-height: 1.4;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 #Content ul {
@@ -336,9 +341,7 @@ footer .tab {
 }
 
 #Content section + section {
-    border-top: 1px solid #EEE;
     margin-top: 20px;
-    padding-top: 24px;
 }
 
 .priorityColorPatch {
@@ -364,17 +367,11 @@ footer .tab {
     height: 100%;
 }
 
-
-#IndicatorDetails p {
-    font-size: 14px;
-}
-
 #IndicatorDetails table {
     width: 100%;
     border-collapse: collapse;
     font-size: 12px;
     line-height: 1.4;
-    color: #777;
 }
 
 #IndicatorDetails th {

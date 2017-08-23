@@ -141,7 +141,7 @@ class Prioritytab extends Component {
         const marinePlans = data.plans.filter((p) => {return PLANS[p].type === 'marine'});
 
         return (
-            <div id = "Content">
+            <div id="Content">
                 <section>
                     <h3>Blueprint 2.1 Priority</h3>
                     <h4>for shared conservation action</h4>
@@ -150,38 +150,31 @@ class Prioritytab extends Component {
 
                 {justification &&
                     <section>
-                        <h3>Priority Justification</h3>
-                        <h4>Blueprint 1.0 Workshop Feedback</h4>
-                        <p className="text-small">{justification}</p>
+                        <h3>Blueprint 1.0 Workshop Feedback</h3>
+                        <p>{justification}</p>
                     </section>
                 }
 
-                {plans.length > 0 &&
+                {regionalPlans.length > 0 &&
                     <section>
-                        <h3>Other Conservation Plans</h3>
+                        <h3>Regional Conservation Plans</h3>
+                        <ul>
+                            { regionalPlans.map(this.renderPlan) }
+                        </ul>
+                    </section>
+                }
 
-                        {regionalPlans.length > 0 &&
-                        <div>
-                            <h4>Regional Conservation Plans</h4>
-                            <ul>
-                                { regionalPlans.map(this.renderPlan) }
-                            </ul>
-                        </div>
-                        }
+                {statePlans.length >0 &&
+                    <section>
+                        <h3>Statewide Conservation Plans</h3>
+                        { statePlans.map(this.renderPlan) }
+                    </section>
+                }
 
-                        {statePlans.length >0 &&
-                            <div>
-                            <h4>Statewide Conservation Plans</h4>
-                            { statePlans.map(this.renderPlan) }
-                            </div>
-                        }
-
-                        {marinePlans.length >0 &&
-                            <div>
-                            <h4>Marine Conservation Plans</h4>
-                            { marinePlans.map(this.renderPlan) }
-                            </div>
-                        }
+                {marinePlans.length >0 &&
+                    <section>
+                        <h3>Marine Conservation Plans</h3>
+                        { marinePlans.map(this.renderPlan) }
                     </section>
                 }
             </div>

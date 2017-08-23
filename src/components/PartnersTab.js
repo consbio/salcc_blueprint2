@@ -125,6 +125,7 @@ class PartnersTab extends Component {
         return (
             <section>
                 <h3>Conserved Lands Ownership</h3>
+                <p className="text-small text-quieter">Only showing types greater than 10 acres.</p>
                 {ownership.map(this.renderBar)}
             </section>
         );
@@ -136,6 +137,7 @@ class PartnersTab extends Component {
         return (
             <section>
                 <h3>Land Protection Status</h3>
+                <p className="text-small text-quieter">Only showing types greater than 10 acres.</p>
                 {protectedLands.map(this.renderBar)}
             </section>
         );
@@ -146,8 +148,7 @@ class PartnersTab extends Component {
 
         return (
             <section>
-                <h3>Land Trusts</h3>
-                <h4>Land Trust Alliance reports by county</h4>
+                <h3>Land Trusts By County</h3>
                 <ul>
                     {Object.entries(counties).map((pair) =>
                         this.renderLTALink(pair[0], pair[1] ))}
@@ -214,16 +215,6 @@ class PartnersTab extends Component {
                 { this.renderOwnership(ownership) }
                 { this.renderProtectedLands(protectedLands) }
                 { this.renderLTAs(counties) }
-
-                {(ownership.length + protectedLands.length) > 0 &&
-                    <section>
-                        <h4>Credits</h4>
-                        <p className="text-quiet text-small">
-                            Secured Lands From TNC Eastern Division - 2014 Edition.<br/>
-                            Only showing types >=10 acres.
-                        </p>
-                    </section>
-                }
             </div>
         );
     }

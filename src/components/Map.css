@@ -1,7 +1,7 @@
 /* Leaflet basemap overrides */
 .basemaps {
     padding: 0;
-    margin-top: 10px !important;
+    margin-top: 40px !important;
 }
 
 .basemap img {
@@ -17,7 +17,6 @@
     box-shadow: 1px 2px 4px #555 !important;
     border-radius: 40px !important;
     background: #FFF;
-    margin-top: 40px !important;
     margin-right: 12px !important;
 }
 
