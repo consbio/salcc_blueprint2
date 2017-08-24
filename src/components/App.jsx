@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import './App.css';
-import '../index.css';
 import Map from './Map';
 import Geonames from './GooglePlacesSearch/GooglePlacesSearch';
 import ResetIcon from './icons/ResetIcon';
 
-//import components as needed
+
 import PrioritiesTab from './PrioritiesTab';
 import IndicatorsTab from './IndicatorsTab';
 // import ThreatsTab from './ThreatsTab';
@@ -22,7 +21,6 @@ import * as UnitActions from '../Actions/actions';
 class App extends Component {
     constructor(props) {
         super(props);
-        console.log('App props (from redux store):', props);
 
         this.tabs = ['Priorities', 'Indicators', 'Partners'];  // TODO: 'Threats'
 
@@ -51,7 +49,6 @@ class App extends Component {
     };
 
     handleUnitDeselect = () => {
-        console.log('Deselect map unit');
         this.props.deselectUnit();
     };
 
@@ -68,18 +65,11 @@ class App extends Component {
     renderUnitName() {
         if (this.props.selectedUnit === null) return null;
 
-        if (this.props.isPending) {
-            return (
-                <div id="UnitName">
-                    <h1>Loading...</h1>
-                    <ResetIcon id="CloseButton" onClick={this.handleCloseButton}/>
-                </div>
-            );
-        }
+        const name = (this.props.isPending)? 'Loading...': this.props.data.name;
 
         return (
-            <div id="UnitName">
-                <h1>{this.props.data.name}</h1>
+            <div id="UnitName"  className="flex-container flex-justify-center flex-align-center">
+                <h1>{name}</h1>
                 <ResetIcon id="CloseButton" onClick={this.handleCloseButton}/>
             </div>
         );
@@ -124,10 +114,8 @@ class App extends Component {
         const opacity = (this.props.selectedUnit === null || this.props.isPending)? 0: 1;
 
         return (
-            <footer style={{opacity: opacity}}>
-                <div className="tabs">
+            <footer className="flex-container flex-justify-center" style={{opacity: opacity}}>
                 { this.tabs.map((tab, index) => this.renderTab(tab, index)) }
-                </div>
             </footer>
         );
     }

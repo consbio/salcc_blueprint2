@@ -56,7 +56,7 @@ class IndicatorsTab extends Component {
         if (this.state.hasSelectedIndicator || ecosystemIDs.length < 2) return null;
 
         return (
-            <div id="EcosystemsNav" className="flex-container">
+            <div id="EcosystemsNav" className="flex-container flex-justify-center">
                 {ecosystemIDs.map((ecosystem, index)=>
 
                     <img key={ecosystem}
@@ -92,7 +92,7 @@ class IndicatorsTab extends Component {
         const ecosystemIDs = ecosystems.map((e) => e[0]);
 
         return (
-            <div id="Content">
+            <div id="Content" className="flex-container-column">
                 <div id="Ecosystems">
                     <SwipeableViews index={this.state.index} onChangeIndex={this.handleChangeIndex}>
                        { this.renderEcosystems(ecosystemIDs) }

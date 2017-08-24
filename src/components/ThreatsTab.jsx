@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 function ThreatsTab({data}) {
     return (
-        <div id = "Content">
+        <div id="Content" className="flex-container-column">
             {/*<h2>{data.name}</h2>*/}
             <h4><br/>Urbanization</h4>
             <svg width="100%" height="220">

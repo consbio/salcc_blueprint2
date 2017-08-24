@@ -95,7 +95,7 @@ function sortDescendingPercent(a, b) {
 class PartnersTab extends Component {
     renderNoContent() {
         return (
-            <div id = "Content">
+            <div id="Content" className="flex-container-column">
                 <h4 className="text-center">No partner information available.</h4>
             </div>
         );
@@ -211,7 +211,7 @@ class PartnersTab extends Component {
         }
 
         return (
-            <div id = "Content">
+            <div id="Content" className="flex-container-column">
                 { this.renderOwnership(ownership) }
                 { this.renderProtectedLands(protectedLands) }
                 { this.renderLTAs(counties) }

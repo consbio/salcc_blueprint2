@@ -136,12 +136,12 @@ class PrioritiesTab extends Component {
 
         const sortedPriorities = [4, 3, 2, 1, 0];
 
-        const regionalPlans = data.plans.filter((p) => {return PLANS[p].type === 'regional'});
-        const statePlans = data.plans.filter((p) => {return PLANS[p].type === 'state'});
-        const marinePlans = data.plans.filter((p) => {return PLANS[p].type === 'marine'});
+        const regionalPlans = plans.filter((p) => {return PLANS[p].type === 'regional'});
+        const statePlans = plans.filter((p) => {return PLANS[p].type === 'state'});
+        const marinePlans = plans.filter((p) => {return PLANS[p].type === 'marine'});
 
         return (
-            <div id="Content">
+            <div id="Content" className="flex-container-column">
                 <section>
                     <h3>Blueprint 2.1 Priority</h3>
                     <h4>for shared conservation action</h4>

@@ -6,7 +6,6 @@ import 'leaflet.vectorgrid';
 import 'leaflet-basemaps';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-basemaps/L.Control.Basemaps.css';
-import './Map.css';
 
 // Make leaflet icons work properly from webpack / react context
 delete L.Icon.Default.prototype._getIconUrl;
@@ -34,25 +33,7 @@ let config = {
         }),
         L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ', {
             opacity: 0.6
-        }),
-
-        // L.tileLayer('//{s}.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-        //     attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-        //     maxZoom: 16,
-        //     subdomains: ['server', 'services'],
-        //     label: 'ESRI Gray'
-        // }),
-        // L.tileLayer('//{s}.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-        //     attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
-        //     subdomains: ['server', 'services'],
-        //     label: 'ESRI Topo',
-        //     opacity: 0.6
-        // }),
-        // L.tileLayer('//server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        //     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-        //     label: 'ESRI Imagery',
-        //     opacity: 0.6
-        // })
+        })
     ],
     blueprintLayer: L.tileLayer('http://52.43.202.160/services/salcc/blueprint_2_1/tiles/{z}/{x}/{y}.png', {
         maxNativeZoom: 13,
@@ -222,7 +203,6 @@ class Map extends Component {
     }
 
     _handleSelect(id) {
-        console.log(this.state.selectedUnit, id)
         if (this.state.selectedUnit !== null) {
             this._unhighlightUnit(this.state.selectedUnit);
 

@@ -61,7 +61,7 @@ class InfoTab extends Component {
         const sortedPriorities = [4, 3, 2, 1]; // 0 deliberately omitted
 
         return (
-            <div id = "Content" className="tabs-top">
+            <div id="Content" className="tabs-top flex-container-column">
                 <h3>Conservation Blueprint 2.1</h3>
 
                 <section>
@@ -95,7 +95,7 @@ class InfoTab extends Component {
                         This <b>Simple Viewer</b> summarizes the Blueprint 2.1 priorities
                         and supporting information within subwatersheds and marine lease blocks.
                         <br/>
-                        <a href="http://www.southatlanticlcc.org/blueprint/" target="_blank">
+                        <a href="http://www.southatlanticlcc.org/blueprint/" target="_blank" rel="noopener noreferrer">
                             More information about the Blueprint.
                         </a>
                     </p>
@@ -112,18 +112,18 @@ class InfoTab extends Component {
 
                     <div  style={{fontSize: 14, marginBottom: 20}}>
                         <div>
-                            <img src="/consbio.png" style={{height: 26, padding:8, verticalAlign: 'middle'}}/>
+                            <img src="/consbio.png" style={{height: 26, padding:8, verticalAlign: 'middle'}} alt="CBI Logo"/>
                             <div className="inline-middle" style={{width:250}}>
-                                <a href="https://consbio.org" target="_blank">
+                                <a href="https://consbio.org" target="_blank" rel="noopener noreferrer">
                                     the Conservation Biology Institute
                                 </a>
                             </div>
                         </div>
 
                         <div>
-                            <img src="/logo_96x96.png" style={{height: 32, padding:6, verticalAlign: 'middle'}}/>
+                            <img src="/logo_96x96.png" style={{height: 32, padding:6, verticalAlign: 'middle'}} alt="SALCC Logo"/>
                             <div className="inline-middle" style={{width:250}}>
-                                <a href="" target="_blank">
+                                <a href="" target="_blank" rel="noopener noreferrer">
                                     South Atlantic Landscape Conservation Cooperative
                                 </a>
                             </div>
@@ -143,15 +143,15 @@ class InfoTab extends Component {
 
                     <h4>Basemaps:</h4>
                     <p>
-                        <a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a><br/>
-                        <a href="http://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a><br/>
-                        <a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a><br/>
+                        <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener noreferrer">© Mapbox</a><br/>
+                        <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap</a><br/>
+                        <a href="https://www.mapbox.com/map-feedback/" target="_blank" rel="noopener noreferrer">Improve this map</a><br/>
                         <span className="text-small text-quiet">(note: applies to the basemap, not the Blueprint)</span>
                     </p>
 
                     <h4>Icons:</h4>
                     <p>
-                        <div>Priorities, Indicators, and Partners icons made by <a href="https://www.flaticon.com/authors/those-icons">Those Icons</a>  <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a> <span className="text-small text-quiet">(from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>)</span></div>
+                        <div>Priorities, Indicators, and Partners icons made by <a href="https://www.flaticon.com/authors/those-icons" target="_blank" rel="noopener noreferrer">Those Icons</a>  <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer" title="Creative Commons BY 3.0">CC 3.0 BY</a> <span className="text-small text-quiet">(from <a href="https://www.flaticon.com/" target="_blank" rel="noopener noreferrer" title="Flaticon">www.flaticon.com</a>)</span></div>
                     </p>
                 </section>
             </div>

@@ -24,10 +24,6 @@ class IndicatorDescription extends Component {
 
         return (
             <div id='IndicatorDetails'>
-                {/*<div>*/}
-                    {/*<a href="" onClick={this.handleBackClick}>&lt; {ecosystemLabel}</a>*/}
-                {/*</div>*/}
-
                 <div className="ecosystem-header flex-container flex-justify-start flex-align-center" onClick={this.handleBackClick} >
                     <a href="">&lt;&lt;</a>
                     <img src={ecosystemIcon} alt=""/>

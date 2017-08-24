@@ -39,8 +39,8 @@ class WhiskerPlot extends ResponsiveWidthComponent {
                             }
 
                             <circle cx={x(value)} cy={midY} r={radius} fill={color}/>
-                            <text x="0" y={textY} textAnchor="begin" fill="#a4aab3" fontSize={12}>Low</text>
-                            <text x={width} y={textY} textAnchor="end" fill="#a4aab3" fontSize={12}>High</text>
+                            <text x="0" y={textY} textAnchor="begin" fill="#AAA" fontSize={12}>Low</text>
+                            <text x={width} y={textY} textAnchor="end" fill="#AAA" fontSize={12}>High</text>
                         </svg>
                     )
                 }
