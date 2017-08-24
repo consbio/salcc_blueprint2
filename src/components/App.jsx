@@ -8,11 +8,13 @@ import Geonames from './GooglePlacesSearch/GooglePlacesSearch';
 import ResetIcon from './icons/ResetIcon';
 
 //import components as needed
-import PriorityTab from './Prioritytab';
+import PrioritiesTab from './PrioritiesTab';
 import IndicatorsTab from './IndicatorsTab';
 // import ThreatsTab from './ThreatsTab';
 import PartnersTab from './PartnersTab';
 import InfoTab from './InfoTab';
+import TabIcons from './icons/TabIcons';
+
 
 import * as UnitActions from '../Actions/actions';
 
@@ -22,7 +24,7 @@ class App extends Component {
         super(props);
         console.log('App props (from redux store):', props);
 
-        this.tabs = ['Priority', 'Indicators', 'Partners'];  // TODO: 'Threats'
+        this.tabs = ['Priorities', 'Indicators', 'Partners'];  // TODO: 'Threats'
 
         this.state = {
             activeTab: null,
@@ -84,15 +86,15 @@ class App extends Component {
     }
 
     renderTab(tab, index) {
-        const active = this.state.activeTab === tab ? 'active' : '';
-        const className = `tab ${active}`;
-        const icon = `/images/${tab}${active}.png`; // TODO: convert to SVG
+        const active = (this.state.activeTab === tab) ? 'active' : '';
+        const indicators = (tab === 'Indicators')? 'indicators': '';
+        const className = `tab ${active} ${indicators}`;
 
         return (
             <div key={index}
                 className={className}
                 onClick={() => this.changeTab(tab)}>
-                <img src={icon} alt=""/>
+                <TabIcons icon={tab} height={24} />
                 <label>{tab}</label>
             </div>
         );
@@ -100,8 +102,8 @@ class App extends Component {
 
     renderActiveTab() {
         switch (this.state.activeTab) {//if the previous state is the same tab, then close the tab
-            case 'Priority':
-                return <PriorityTab {...this.props}/>;
+            case 'Priorities':
+                return <PrioritiesTab {...this.props}/>;
             case 'Indicators':
                 return <IndicatorsTab  {...this.props}/>;
             // case 'Threats':

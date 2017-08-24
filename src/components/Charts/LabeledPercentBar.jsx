@@ -8,9 +8,6 @@ import PercentBar from './PercentBar';
 class LabeledPercentBar extends Component {
     render() {
         const {label, percent} = this.props;
-        console.log('percentBar prps', this.props)
-
-        // TODO: make this into a utility function
         const percentLabel = formatPercent(percent);
 
         return (

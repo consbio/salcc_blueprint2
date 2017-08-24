@@ -228,6 +228,7 @@ footer {
 }
 
 .ecosystem-header img {
+    /*margin-left: 33px;*/
     margin-right: 8px;
     height: 40px;
 }
@@ -274,16 +275,27 @@ footer {
     color:#AAA;
     font-size: 10px;
     flex-grow: 1;
-    padding-top: 5px;
     cursor: pointer;
     text-align: center;
     min-width: 50px;
 }
+.tab svg {
+    fill: #AAA;
+}
+
+.tab.indicators svg {
+    transform: rotate(90deg);
+}
+
 .tab.active {
   color: #0892D0;
 }
+.tab.active svg{
+    fill: #0892D0;
+}
+
 .tab img {
-    height: 20px;
+    height: 24px;
 }
 .tab label {
     display: block;
@@ -301,8 +313,6 @@ footer .tabs {
 
 footer .tab {
     width: 86px;
-    padding-top: 0;
-    padding-bottom: 8px;
 }
 
 
@@ -390,4 +400,9 @@ footer .tab {
 #IndicatorDetails td + td {
     width: 50px;
     text-align: center;
+}
+
+
+#IndicatorDetails .ecosystem-header img {
+    margin-left: 14px;
 }

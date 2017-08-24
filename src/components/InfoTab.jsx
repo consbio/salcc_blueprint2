@@ -148,6 +148,11 @@ class InfoTab extends Component {
                         <a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a><br/>
                         <span className="text-small text-quiet">(note: applies to the basemap, not the Blueprint)</span>
                     </p>
+
+                    <h4>Icons:</h4>
+                    <p>
+                        <div>Priorities, Indicators, and Partners icons made by <a href="https://www.flaticon.com/authors/those-icons">Those Icons</a>  <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a> <span className="text-small text-quiet">(from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>)</span></div>
+                    </p>
                 </section>
             </div>
         );

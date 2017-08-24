@@ -482,7 +482,10 @@ class Ecosystem extends Component {
 
         if (selectedIndicator !== null) {
             return (
-                <IndicatorDetails ecosystemLabel={label} {...selectedIndicator} onClick={this.handleIndicatorDeselect} />
+                <IndicatorDetails ecosystemLabel={label}
+                                  ecosystemIcon={icon}
+                                  {...selectedIndicator}
+                                  onClick={this.handleIndicatorDeselect} />
             );
         }
 

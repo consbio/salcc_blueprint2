@@ -105,7 +105,7 @@ const PLANS = {
 };
 
 
-class Prioritytab extends Component {
+class PrioritiesTab extends Component {
 
     renderPriority(priority, percent) {
         const {label, color} = BLUEPRINT[priority];
@@ -182,7 +182,7 @@ class Prioritytab extends Component {
     }
 }
 
-Prioritytab.propTypes = {
+PrioritiesTab.propTypes = {
     data: PropTypes.shape({
         blueprint: PropTypes.array,
         justification: PropTypes.string,
@@ -190,9 +190,9 @@ Prioritytab.propTypes = {
     })
 };
 
-Prioritytab.defaultProps = {};
+PrioritiesTab.defaultProps = {};
 
-export default Prioritytab;
+export default PrioritiesTab;
 
 
 
