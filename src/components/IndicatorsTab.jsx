@@ -92,8 +92,8 @@ class IndicatorsTab extends Component {
         const ecosystemIDs = ecosystems.map((e) => e[0]);
 
         return (
-            <div id="Content" className="flex-container-column">
-                <div id="Ecosystems">
+            <div id="Content">
+                <div id="Ecosystems" className="flex-container-column">
                     <SwipeableViews index={this.state.index} onChangeIndex={this.handleChangeIndex}>
                        { this.renderEcosystems(ecosystemIDs) }
                     </SwipeableViews>

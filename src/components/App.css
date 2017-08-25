@@ -359,14 +359,13 @@ header, footer{
 
 /* Leaflet basemap overrides */
 .basemaps {
-    padding: 0;
+    padding: 0 !important;
     margin-top: 40px !important;
 }
-
 .basemap img {
-    width: 40px;
-    box-shadow: 1px 2px 4px #555;
-    border: none;
+    width: 40px !important;
+    box-shadow: 1px 2px 4px #555 !important;
+    border: none !important;
 }
 
 /* Locate control */
