@@ -161,7 +161,7 @@ header, footer{
 }
 
 #CloseButton {
-    margin-right: 4px;
+    margin-right: 8px;
     fill: #FFF;
     fill-opacity: 0.75;
     width: 24px;

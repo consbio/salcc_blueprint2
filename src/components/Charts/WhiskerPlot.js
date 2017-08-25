@@ -1,7 +1,7 @@
 import React from "react";
 import ResponsiveWidthComponent from './ResponsiveWidthComponent';
 // import PropTypes from "prop-types";
-import {scale} from "d3";
+import {scaleLinear} from 'd3-scale';
 
 
 class WhiskerPlot extends ResponsiveWidthComponent {
@@ -20,7 +20,7 @@ class WhiskerPlot extends ResponsiveWidthComponent {
         const height = 2 * radius + margin.top + margin.bottom;
         const midY = height / 2;
         const textY = midY + textHeight / 2 - 2;
-        const x = scale.linear().range([margin.left, width - margin.left]).domain(domain);
+        const x = scaleLinear().range([margin.left, width - margin.left]).domain(domain);
 
         return (
             <div ref={(node) => {this.domNode = node}}>
