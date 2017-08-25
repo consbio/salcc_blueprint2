@@ -35,12 +35,12 @@ let config = {
             opacity: 0.6
         })
     ],
-    blueprintLayer: L.tileLayer('http://52.43.202.160/services/salcc/blueprint_2_1/tiles/{z}/{x}/{y}.png', {
+    blueprintLayer: L.tileLayer('https://m.blueprint.salcc.databasin.org/services/salcc/blueprint_2_1/tiles/{z}/{x}/{y}.png', {
         maxNativeZoom: 13,
         bounds: [[29.257276664000074, -85.89853697199993], [37.45876403900007, -71.28723321899992]],
         zIndex: 2
     }),
-    unitLayer: L.vectorGrid.protobuf('http://52.43.202.160/services/salcc/salcc_id/tiles/{z}/{x}/{y}.pbf', {
+    unitLayer: L.vectorGrid.protobuf('https://m.blueprint.salcc.databasin.org/services/salcc/salcc_id/tiles/{z}/{x}/{y}.pbf', {
         minZoom: 10,
         maxZoom: 15,
         zIndex: 3,
