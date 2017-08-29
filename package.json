@@ -31,6 +31,6 @@
     "eject": "react-scripts eject",
     "clean": "rm -rf build/*",
     "predeploy": "npm run build",
-    "deploy": "rm -rf /var/www/* && cp -r build/* /var/www"
+    "deploy": "mv /var/www/data /tmp && rm -rf /var/www/* && cp -r build/* /var/www && mv /tmp/data /var/www/data"
   }
 }
