@@ -1,33 +1,13 @@
-import React, {Component} from "react";
+import React from "react";
+import ResponsiveWidthComponent from './ResponsiveWidthComponent';
 // import PropTypes from "prop-types";
-import ReactDOM from "react-dom";
-import WhiskerDes from "./WhiskerDescription";
-import indicators from "../../configindica";
-import {scale, linear, range} from "d3";
+import {scaleLinear} from 'd3-scale';
 
 
-class WhiskerPlot extends Component {
-
-    // Handle width properly, from: https://github.com/codesuki/react-d3-components/issues/9
-    constructor() {
-        super();
-        this.state = {width: 0};
-        this.domNode = null;
-    }
-
-    fitToParentSize() {
-        const width = this.domNode.parentNode.offsetWidth  - 20;
-        if (width !== this.state.width) {
-            this.setState({width});
-        }
-    }
-
-    componentDidMount() {
-      this.fitToParentSize();
-    }
+class WhiskerPlot extends ResponsiveWidthComponent {
 
     render() {
-        const {value, domain, icon, color, goodConditionThreshold} = this.props;
+        const {value, domain, color, goodConditionThreshold} = this.props;
         const textHeight = 12;
         const {width} = this.state;
         const radius = 12;
@@ -40,7 +20,7 @@ class WhiskerPlot extends Component {
         const height = 2 * radius + margin.top + margin.bottom;
         const midY = height / 2;
         const textY = midY + textHeight / 2 - 2;
-        const x = scale.linear().range([margin.left, width - margin.left]).domain(domain);
+        const x = scaleLinear().range([margin.left, width - margin.left]).domain(domain);
 
         return (
             <div ref={(node) => {this.domNode = node}}>
@@ -59,8 +39,8 @@ class WhiskerPlot extends Component {
                             }
 
                             <circle cx={x(value)} cy={midY} r={radius} fill={color}/>
-                            <text x="0" y={textY} textAnchor="begin" fill="#a4aab3" fontSize={12}>Low</text>
-                            <text x={width} y={textY} textAnchor="end" fill="#a4aab3" fontSize={12}>High</text>
+                            <text x="0" y={textY} textAnchor="begin" fill="#AAA" fontSize={12}>Low</text>
+                            <text x={width} y={textY} textAnchor="end" fill="#AAA" fontSize={12}>High</text>
                         </svg>
                     )
                 }
@@ -75,7 +55,9 @@ WhiskerPlot.defaultProps = {
     domain: [0, 1], // == absolute range
     icon: null,  // url to icon, optional
     color: '#DDD',
-    goodConditionThreshold: null
+    goodConditionThreshold: null,
+
+    insetWidth: 20 // parent padding
 };
 
 

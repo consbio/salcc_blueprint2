@@ -20,6 +20,8 @@ export default function rootReducer(
     switch (action.type){
         case DESELECT_UNIT:
             return Object.assign({}, state, {
+                isPending: false,
+                hasError: false,
                 selectedUnit: null,
                 data: {}
             });
@@ -28,7 +30,8 @@ export default function rootReducer(
             return Object.assign({}, state, {
                 isPending: true,
                 hasError: false,
-                selectedUnit: action.unit
+                selectedUnit: action.unit,
+                data: {}
             });
 
         case RECIEVE_DATA:

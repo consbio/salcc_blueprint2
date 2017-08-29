@@ -25,12 +25,12 @@ class GooglePlacesSearch extends React.Component {
         this._getAutocomplete = debounce(this._getAutocomplete, 500);
     }
 
-
     componentWillMount() {
         if (typeof window === 'undefined') {
             return;
         }
 
+        // Initialize Google Place APIs
         var googleMaps = this.props.googleMaps || (window.google && window.google.maps) || this.googleMaps;
 
         if (!googleMaps) {
@@ -45,11 +45,9 @@ class GooglePlacesSearch extends React.Component {
         this.geocoder = new googleMaps.Geocoder();
     }
 
-
     componentWillUnmount() {
         clearTimeout(this.timer);
     }
-
 
     onInputChange = value => {
         if (!!value) {
@@ -58,8 +56,7 @@ class GooglePlacesSearch extends React.Component {
         else {
             this.setState({value, results: [], isResultsHidden: true, isPending: false});
         }
-    }
-
+    };
 
     onInputFocus = () => {
         this.props.onFocus();
@@ -71,9 +68,6 @@ class GooglePlacesSearch extends React.Component {
             this.setState({isResultsHidden: true, isPending: false});
         }, 100);
     };
-
-
-
 
     _getAutocomplete = () => {
         const options = {
@@ -102,7 +96,7 @@ class GooglePlacesSearch extends React.Component {
                 }
             );
         });
-    }
+    };
 
     // Parse google results for display
     _extractResultInfo = (result) => {
@@ -117,8 +111,7 @@ class GooglePlacesSearch extends React.Component {
         }
 
         return {id: result.place_id, label: parts.join(', ')}
-    }
-
+    };
 
     _getResultLocation = () => {
         // Get geocoded result
@@ -137,8 +130,7 @@ class GooglePlacesSearch extends React.Component {
                 this.props.onSelect(result);
             }
         );
-    }
-
+    };
 
     handleResultClick(result) {
         this.setState(
@@ -146,7 +138,6 @@ class GooglePlacesSearch extends React.Component {
             this._getResultLocation
         );
     }
-
 
     renderResults = () => {
         if (this.state.isResultsHidden || this.state.isPending || !this.state.focused || !this.state.value) {
@@ -181,8 +172,7 @@ class GooglePlacesSearch extends React.Component {
                 </li>
             })}
         </ul>;
-    }
-
+    };
 
     render() {
         const input = <Input ref={(i) => {this.input = i}}
@@ -209,7 +199,7 @@ GooglePlacesSearch.defaultProps = {
         console.log('selected result', result);
     },
     country: 'us'
-}
+};
 
 
 export default GooglePlacesSearch;

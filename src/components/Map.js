@@ -6,7 +6,6 @@ import 'leaflet.vectorgrid';
 import 'leaflet-basemaps';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-basemaps/L.Control.Basemaps.css';
-import './Map.css';
 
 // Make leaflet icons work properly from webpack / react context
 delete L.Icon.Default.prototype._getIconUrl;
@@ -20,8 +19,8 @@ L.Icon.Default.mergeOptions({
 // Map configurationParameters
 let config = {
     mapParams: {
-        center: [33.358, -78.593],
-        zoom: 5,
+        center: [33.358, -80], // TODO: [33.358, -78.593],
+        zoom: 10, //TODO: 5,
         minZoom: 3,
         maxZoom: 15,
         zoomControl: false,
@@ -34,32 +33,14 @@ let config = {
         }),
         L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ', {
             opacity: 0.6
-        }),
-
-        // L.tileLayer('//{s}.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-        //     attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-        //     maxZoom: 16,
-        //     subdomains: ['server', 'services'],
-        //     label: 'ESRI Gray'
-        // }),
-        // L.tileLayer('//{s}.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-        //     attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
-        //     subdomains: ['server', 'services'],
-        //     label: 'ESRI Topo',
-        //     opacity: 0.6
-        // }),
-        // L.tileLayer('//server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        //     attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-        //     label: 'ESRI Imagery',
-        //     opacity: 0.6
-        // })
+        })
     ],
-    blueprintLayer: L.tileLayer('http://52.43.202.160/services/salcc/blueprint_2_1/tiles/{z}/{x}/{y}.png', {
+    blueprintLayer: L.tileLayer('https://m.blueprint.salcc.databasin.org/services/salcc/blueprint_2_1/tiles/{z}/{x}/{y}.png', {
         maxNativeZoom: 13,
         bounds: [[29.257276664000074, -85.89853697199993], [37.45876403900007, -71.28723321899992]],
         zIndex: 2
     }),
-    unitLayer: L.vectorGrid.protobuf('http://52.43.202.160/services/salcc/salcc_id/tiles/{z}/{x}/{y}.pbf', {
+    unitLayer: L.vectorGrid.protobuf('https://m.blueprint.salcc.databasin.org/services/salcc/salcc_id/tiles/{z}/{x}/{y}.pbf', {
         minZoom: 10,
         maxZoom: 15,
         zIndex: 3,
@@ -71,14 +52,14 @@ let config = {
                 fill: true,
                 fillOpacity: 0,
                 weight: 1,
-                color: '#009C8B'
+                color: '#0892D0'
             }
         },
         getFeatureId: (f) => {return f.properties.ID}
     }),
     highlightStyle: {
-        color: '#009C8B',
-        fillColor: '#009C8B',
+        color: '#0892D0',
+        fillColor: '#0892D0',
         fillOpacity: 0.3,
         fill: true,
         weight: 3
@@ -89,8 +70,9 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedID: null
-        }
+            place: this.props.place,
+            selectedUnit: this.props.selectedUnit
+        };
 
         this._mapNode = null;
         this.map = null;
@@ -99,16 +81,8 @@ class Map extends Component {
     }
 
     componentDidMount() {
+        let {place, selectedUnit} = this.state;
         let map = this.map = L.map(this._mapNode, config.mapParams);
-
-        let basemapsControl = L.control.basemaps({
-            basemaps: config.basemaps,
-            tileX: 4,
-            tileY: 6,
-            tileZ: 4,
-            position: 'bottomleft'
-        });
-        map.addControl(basemapsControl);
 
         map.addLayer(config.blueprintLayer);
 
@@ -127,7 +101,7 @@ class Map extends Component {
 
         let locateControlClass = L.Control.extend({
             options: {
-                position: 'bottomright',
+                position: 'topright',
                 maxZoom: 14
             },
 
@@ -158,29 +132,57 @@ class Map extends Component {
             }
         });
 
+        let basemapsControl = L.control.basemaps({
+            basemaps: config.basemaps,
+            tileX: 4,
+            tileY: 6,
+            tileZ: 4,
+            position: 'topright'
+        });
+        map.addControl(basemapsControl);
+
         this.locateControl = new locateControlClass();
         // overriding functions here to bind to outer scope
         this.locateControl.onLocationFound = (lat, lng) => {this._addMarker(lat, lng, null)};
         this.locateControl.addTo(map);
+
+        if (place && this.place.location !== null) {
+            this._zoomToPlace(place);
+        }
+
+        if (selectedUnit !== null) {
+            this._highlightUnit(selectedUnit)
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-        const {place} = nextProps;
+        const {place, selectedUnit} = nextProps;
 
-        // place is expected to be:
-        // {
-        //     label: 'Place name',
-        //     location: {lat: 44.1, lng: -123.2}
-        // }
+        if (place !== this.state.place) {
+            if (place && place.location) {
+                this.setState({place: place});
+                this._zoomToPlace(place);
+            }
+            else {
+                this._removeMarker();
+            }
+        }
+
+        // Set currently selected unit, clearing out previous selection if
+        // necessary
+        if (selectedUnit !== this.state.selectedUnit) {
+            this._unhighlightUnit(this.state.selectedUnit);
+            this._highlightUnit(selectedUnit);
+            this.setState({selectedUnit: selectedUnit});
+        }
+    }
+
+    _zoomToPlace(place) {
+        const zoom = 12;
 
         // for now, intentionally ignoring label
-        if (place && place.location) {
-            this._addMarker(place.location.lat, place.location.lng, null);
-            this.map.setView([place.location.lat, place.location.lng], 12);
-        }
-        else {
-            this._removeMarker();
-        }
+        this._addMarker(place.location.lat, place.location.lng, null);
+        this.map.setView([place.location.lat, place.location.lng], zoom);
     }
 
     _addMarker(lat, lng, label) {
@@ -201,73 +203,72 @@ class Map extends Component {
     }
 
     _handleSelect(id) {
-        console.log(this.state.selectedID, id)
-        if (this.state.selectedID !== null) {
-            if (id === this.state.selectedID) {
-                // clear highlight
-                this.setState({selectedID: null});
-                config.unitLayer.resetFeatureStyle(id);
-                this.props.deselectUnit();
+        if (this.state.selectedUnit !== null) {
+            this._unhighlightUnit(this.state.selectedUnit);
+
+            // Selecting the same unit again deselects it
+            if (id === this.state.selectedUnit) {
+                this.setState({selectedUnit: null});
+                this.props.onDeselectUnit();
                 return;
             }
-
-            config.unitLayer.resetFeatureStyle(this.state.selectedID);
         }
 
-        this.setState({selectedID: id});
-        config.unitLayer.setFeatureStyle(id, config.highlightStyle)
-        this.props.selectUnit(id); // move this to callback above
+        this._highlightUnit(id);
+        this.setState({selectedUnit: id});
+        this.props.onSelectUnit(id);
     }
+    
+    _highlightUnit(id) {
+        if (id !== null) {
+            config.unitLayer.setFeatureStyle(id, config.highlightStyle)
+        }
+    }
+    
+    _unhighlightUnit(id) {
+        if (id !== null) {
+            config.unitLayer.resetFeatureStyle(id);
+        }
+    }
+    
+    
 
     render() {
         return (
             <div id="MapContainer">
-                <div ref={(node) => this._mapNode = node} id="Map" >
-                    <div className="legend">
-                        <div>
-                            Corridors
-                            <svg width ="17" height="17">
-                                <rect width = "100%" height= "100%" fill = '#686868' stroke="gray" strokeWidth="2"/>
-                            </svg>
-                            Medium
-                        </div>
-                        <div>
-                            <svg width ="17" height="17">
-                                <rect width = "100%" height= "100%" fill = '#fbb4b9' stroke="gray" strokeWidth="2"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <svg width ="17" height="17">
-                                <rect width = "100%" height= "100%" fill = '#c51b8a' stroke="gray" strokeWidth="2"/>
-                            </svg>
+                <div ref={(node) => this._mapNode = node} id="Map"></div>
 
-                        </div>
-                        <div>
-                            <svg width ="17" height="17">
-                                <rect width = "100%" height= "100%" fill = '#49006a' stroke="gray" strokeWidth="2"/>
-                            </svg>
-                            Highest
-                        </div>
-                    </div>
-                </div>
-
+                {/*<div id="Legend">*/}
+                    {/*<label>Priority</label>*/}
+                    {/*<div className='legend-patch' style={{backgroundColor: '#49006a'}}>Highest</div>*/}
+                    {/*<div className='legend-patch' style={{backgroundColor: '#c51b8a'}}>High</div>*/}
+                    {/*<div className='legend-patch' style={{backgroundColor: '#fbb4b9', color: '#333'}}>Medium</div>*/}
+                    {/*<div className='legend-patch' style={{backgroundColor: '#686868', marginLeft: 20}}>Corridors</div>*/}
+                {/*</div>*/}
             </div>
         );
     }
 }
 
 Map.propTypes = {
-    selectUnit: PropTypes.func,
-    deselectUnit: PropTypes.func
-}
+    // TODO: place is expected to be:
+    // {
+    //     label: 'Place name',
+    //     location: {lat: 44.1, lng: -123.2}
+    // }
+    selectedUnit: PropTypes.string,
+    onSelectUnit: PropTypes.func,
+    onDeselectUnit: PropTypes.func
+};
 
 
 
 Map.defaultProps = {
     place: null,
-    selectUnit: (id) => {console.log('Selected map unit: ', id)},
-    deselectUnit: () => {console.log('Deselected map unit')}
-}
+    selectedUnit: null,
+    onSelectUnit: (id) => {console.log('Selected map unit: ', id)},
+    onDeselectUnit: () => {console.log('Deselected map unit')}
+};
 
 
 export default Map;

@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 // import PropTypes from 'prop-types';
 import {range} from 'd3-array';
+import {formatPercent} from '../utils';
 import Indicator from './Indicator';
-import WhiskerDes from './Charts/WhiskerDescription'
+import IndicatorDetails from './IndicatorDetails';
 
 
 // Ecosystem globals live here
@@ -110,7 +111,7 @@ const ECOSYSTEMS = {
         color: '#cedb9c',
         indicators: {
             Amphibians: {
-                label: 'Amphibians',
+                label: 'Forested wetland amphibians',
                 description: 'Forested wetland amphibians draws from the Priority Amphibian and Reptile Conservation Areas (PARCAs) located in forested wetland habitat. PARCA is an expert-driven, nonregulatory designation that captures places capable of supporting viable amphibian and reptile populations. PARCAs include areas where rare or at-risk species have been observed or are likely to occur (like embedded, isolated wetlands).',
                 valueLabels: {
                     0: 'Not a Priority Amphibian and Reptile Conservation Area (PARCA) within forested wetlands',
@@ -121,7 +122,7 @@ const ECOSYSTEMS = {
                 datasetID: '7971445641934255b319b5971600eb47'
             },
             Birds: {
-                label: 'Birds',
+                label: 'Forested wetland birds',
                 description: "Forested wetland birds is an index of habitat suitability for six bird species (Northern parula, black-throated green warbler, red-headed woodpecker, Chuck-will's widow, prothonotary warbler, Swainson's warbler) based on patch size and proximity to water. The needs of these species are increasingly restrictive at higher index values, reflecting better quality habitat.",
                 valueLabels: {
                     0: 'Less potential for presence of bird index species',
@@ -141,7 +142,7 @@ const ECOSYSTEMS = {
         color: '#9c9ede',
         indicators: {
             Birds: {
-                label: 'Birds',
+                label: 'Freshwater marsh birds',
                 description: 'Freshwater marsh birds is a continuous index of patch size. Larger patches are likely to support the following suite of freshwater marsh birds: least bittern, Northern pintail, Northern shoveler, and king rail.',
                 valueLabels: {
                     1: 'Less potential for presence of bird index species',
@@ -170,7 +171,7 @@ const ECOSYSTEMS = {
         color: '#bd9e39',
         indicators: {
             Amphibians: {
-                label: 'Amphibians',
+                label: 'Pine and prairie amphibians',
                 description: 'Pine and prairie amphibians draws from the Priority Amphibian and Reptile Conservation Areas (PARCAs) located in pine and prairie habitat. PARCA is an expert-driven, nonregulatory designation that captures places capable of supporting viable amphibian and reptile populations. PARCAs include areas where rare or at-risk species have been observed or are likely to occur (like embedded, isolated wetlands).',
                 valueLabels: {
                     0: 'Not a Priority Amphibian and Reptile Conservation \nArea (PARCA) within pine and prairie',
@@ -181,7 +182,7 @@ const ECOSYSTEMS = {
                 datasetID: '89c74fcd28b14683ae2322211104e56c'
             },
             Birds: {
-                label: 'Birds',
+                label: 'Pine and prairie birds',
                 description: "Pine and prairie birds is an index of habitat suitability for three bird species (Northern bobwhite, red-cockaded woodpecker, Bachman's sparrow) based on observational data and predictive models. The presence of all three species indicates high pine ecosystem quality.",
                 valueLabels: {
                     0: 'Less potential for presence of bird index species',
@@ -211,7 +212,7 @@ const ECOSYSTEMS = {
         color: '#637939',
         indicators: {
             Birds: {
-                label: 'Birds',
+                label: 'Upland hardwood birds',
                 description: "Upland hardwood birds is an index of habitat suitability for seven upland hardwood bird species (wood thrush, whip-poor-will, hooded warbler, American woodcock, Acadian flycatcher, Kentucky warbler, Swainson's warbler) based on patch size and other ecosystem characteristics such as proximity to water and proximity to forest and ecotone edge. The needs of these species are increasingly restrictive at higher index values, reflecting better quality habitat.",
                 valueLabels: {
                     0: 'Less potential for presence of \nbird index species',
@@ -433,46 +434,64 @@ const ECOSYSTEMS = {
 class Ecosystem extends Component {
     constructor(props) {
         super(props);
-        this.handleIndicatorClick = this.handleIndicatorClick.bind(this);
-        this.handleCloseWhiskerDes = this.handleCloseWhiskerDes.bind(this);
-        this.state = {
-            indicatorClick: false,
-            indicatorTitle: null
-        };
+
+        this.state = {selectedIndicator: null};
     }
 
-    handleIndicatorClick(indicator, indica) {
-        this.setState({indicatorClick: true});
-        if(indicator !== null){
-            this.setState({
-                indicatorTitle: indica
-            });
-        }
-        console.log("Indica: " + indica.id + "Indicarest" + indica.mean);
+    handleIndicatorSelect = (indicator) => {
+        this.setState({selectedIndicator: indicator});
+        this.props.onSelectIndicator();
     }
 
+    handleIndicatorDeselect = () => {
+        this.setState({selectedIndicator: null});
+        this.props.onDeselectIndicator();
+    }
 
+    renderHeader(icon, label, percent) {
+        return (
+            <div className="ecosystem-header flex-container flex-justify-start flex-align-center">
+                <img src={icon} alt=""/>
+                <h3>{label}</h3>
+                {percent &&
+                    <div className="text-quieter text-right text-small">
+                        {formatPercent(percent)}%
+                        <br/>
+                        <span className="text-smaller">of area</span>
+                    </div>
+                }
+            </div>
+        );
+    }
 
-    handleCloseWhiskerDes(){
-        this.setState({indicatorClick: false});
+    renderIndicators(indicators) {
+        if (indicators.length === 0) return <div className="no-indicators">Ecosystem does not have any indicators</div>;
+
+        return indicators.map((indicator) =>
+            <Indicator key={indicator.id}
+                       {...indicator}
+                       onClick={()=>this.handleIndicatorSelect(indicator)} />
+        );
     }
 
     render() {
-        console.log('Ecosystem props:', this.props);
-
-        const indicatorClick = this.state.indicatorClick;
-        const indicatorTitle = this.state.indicatorTitle;
-
+        const {selectedIndicator} = this.state;
         const {ecosystem, icon, percent, indicators} = this.props;
         const ecosystemConfig = ECOSYSTEMS[ecosystem];
         const {label} = ecosystemConfig;
+
+        if (selectedIndicator !== null) {
+            return (
+                <IndicatorDetails ecosystemLabel={label}
+                                  ecosystemIcon={icon}
+                                  {...selectedIndicator}
+                                  onClick={this.handleIndicatorDeselect} />
+            );
+        }
+
         const indicatorsConfig = ecosystemConfig.indicators;
         let indicatorKeys = Object.keys(indicators || {});  // some ecosystems are present but don't have indicators
         indicatorKeys.sort();
-
-        // TODO:
-        // format percent
-        const percentLabel = Math.round(percent) + '%';
 
         // Merge constants with dynamic data
         const mergedIndicators = indicatorKeys.map((indicator) => {
@@ -483,43 +502,21 @@ class Ecosystem extends Component {
             );
         });
 
-        let content = null;
-        if (indicatorClick){
-            content = <WhiskerDes indicatorTitle = {this.state.indicatorTitle} onClick={this.handleCloseWhiskerDes} />;
-            console.log('indicator clicked');
-        } else {
-            console.log('indicator not clicked');
-            content = mergedIndicators.length > 0
-                    ?
-                    mergedIndicators.map((indicator) =>
-                        <Indicator key={indicator.id} {...indicator} onClick={()=>this.handleIndicatorClick(indicator.id, indicator)} />
-                    )
-                    :
-                    <div className="no-indicators">Ecosystem does not have any indicators</div>;
-
-        }
-
         return (
             <div className="ecosystem">
-                <header className="flex-container flex-justify-start flex-align-center">
-                    <img src={icon} alt=""/>
-                    <h2>{label}</h2>
-                    {percent &&
-                        <div className="text-quieter text-right text-small">
-                            {percentLabel}
-                            <br/>
-                            <span className="text-smaller">of area</span>
-                        </div>
-                    }
-                </header>
-                {console.log(indicatorClick)}
-                {content}
+                { this.renderHeader(icon, label, percent) }
+
+                { this.renderIndicators(mergedIndicators) }
+
             </div>
         );
     }
 }
 
 Ecosystem.propTypes = {};
-Ecosystem.defaultProps = {};
+Ecosystem.defaultProps = {
+    onSelectIndicator: function() {},
+    onDeselectIndicator: function() {}
+};
 
 export default Ecosystem;

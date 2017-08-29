@@ -1,8 +1,14 @@
+.gplaces-search {
+    flex: 1;
+    border-left: 1px solid #EEE;
+}
+
 .gplaces-search-input-container {
     padding: 0 4px 0 6px;
     display: flex;
     align-content: stretch;
     align-items: center;
+    justify-content: flex-end;
 }
 
 .gplaces-search input {
@@ -11,12 +17,13 @@
     padding: 4px 22px 4px 4px;
     outline: none;
     font-size: 16px;
-    color: #a4aab3;
+    color: #AAA;
     background: #EEE;
     border-radius: 6px;
     border: 1px solid transparent;
     line-height: 1;
     width: 100%;
+    max-width: 300px;
 }
 
 /* Only targeting chrome and safari, so this is intentionally not provided for others */
@@ -31,6 +38,8 @@
     right: 6px;
     top: 11px;
     cursor: pointer;
+    height: 18px;
+    width: 18px;
     fill: #AAA;
 }
 

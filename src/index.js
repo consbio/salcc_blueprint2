@@ -2,24 +2,18 @@ import 'babel-polyfill';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { createStore, applyMiddleware } from 'redux';
-import { selectUnit } from './Actions/actions';
 import rootReducer from './Reducers';
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import react router deps
-//import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
-//import store, { history } from './store';
 
-import './index.css';
 
 //import components
 import App from './components/App';
-//import registerServiceWorker from './registerServiceWorker';
+import registerServiceWorker from './registerServiceWorker';
 
 
-//ReactDOM.render(<App />, document.getElementById('root'));
-//registerServiceWorker();
+registerServiceWorker();
 
 const loggerMiddleware = createLogger();
 
@@ -30,12 +24,6 @@ const store = createStore(
         loggerMiddleware
     )
 )
-
-// TODO: for testing purposes only!
-store.dispatch(selectUnit('I4'));
-// store
-//     .dispatch(fetchData('I4'))
-//     .then(() => console.log(store.getState()));
 
 ReactDOM.render(
     <Provider store={store}>
