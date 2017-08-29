@@ -19,8 +19,8 @@ L.Icon.Default.mergeOptions({
 // Map configurationParameters
 let config = {
     mapParams: {
-        center: [33.358, -80], // TODO: [33.358, -78.593],
-        zoom: 10, //TODO: 5,
+        center: [33.358, -78.593], // [33.358, -80]
+        zoom: 5,
         minZoom: 3,
         maxZoom: 15,
         zoomControl: false,
@@ -35,12 +35,12 @@ let config = {
             opacity: 0.6
         })
     ],
-    blueprintLayer: L.tileLayer('https://m.blueprint.salcc.databasin.org/services/salcc/blueprint_2_1/tiles/{z}/{x}/{y}.png', {
+    blueprintLayer: L.tileLayer('https://m.salcc.databasin.org/services/blueprint_2_1/tiles/{z}/{x}/{y}.png', {
         maxNativeZoom: 13,
         bounds: [[29.257276664000074, -85.89853697199993], [37.45876403900007, -71.28723321899992]],
         zIndex: 2
     }),
-    unitLayer: L.vectorGrid.protobuf('https://m.blueprint.salcc.databasin.org/services/salcc/salcc_id/tiles/{z}/{x}/{y}.pbf', {
+    unitLayer: L.vectorGrid.protobuf('https://m.salcc.databasin.org/services/salcc_id/tiles/{z}/{x}/{y}.pbf', {
         minZoom: 10,
         maxZoom: 15,
         zIndex: 3,

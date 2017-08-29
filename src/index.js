@@ -13,7 +13,7 @@ import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 
 
-registerServiceWorker();
+// registerServiceWorker();
 
 const loggerMiddleware = createLogger();
 
