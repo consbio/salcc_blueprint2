@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 // import PropTypes from 'prop-types';
 import {formatPercent} from '../utils';
+import LabeledPercentBar from './Charts/LabeledPercentBar';
 
 
 class IndicatorDescription extends Component {
@@ -8,6 +9,14 @@ class IndicatorDescription extends Component {
     handleBackClick = (event) => {
         event.preventDefault();
         this.props.onClick();
+    }
+
+    renderValue(item) {
+        const {value, label, percent} = item;
+
+        return (
+            <LabeledPercentBar className="text-quiet" key={value} label={label} percent={percent} height={6}/>
+        )
     }
 
     render() {
@@ -37,23 +46,9 @@ class IndicatorDescription extends Component {
                 <p>
                     {description}
                 </p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th colSpan={2}>% of area</th>
-                        </tr>
-                    </thead>
-                    <tbody className="text-quieter">
-                        {percents.map((item) => {
-                            return (
-                                <tr key={item.value}>
-                                    <td>{item.label}</td>
-                                    <td>{(item.percent)? formatPercent(item.percent) + '%': '-'}</td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
+                <div style={{marginTop: 30}}>
+                    {percents.map(this.renderValue)}
+                </div>
             </div>
         );
     }

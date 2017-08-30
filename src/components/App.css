@@ -336,29 +336,33 @@ header, footer{
 }
 
 
-#IndicatorDetails table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-    line-height: 1.4;
-}
-#IndicatorDetails th {
-    border-bottom: 1px solid #EEE;
-    text-align: right;
-}
-#IndicatorDetails tr:nth-child(even){
-    background-color: #F6F6F6;
-}
-#IndicatorDetails td {
-    padding: 6px 0;
-}
-#IndicatorDetails td + td {
-    width: 50px;
-    text-align: center;
-}
+/*#IndicatorDetails table {*/
+    /*width: 100%;*/
+    /*border-collapse: collapse;*/
+    /*font-size: 12px;*/
+    /*line-height: 1.4;*/
+/*}*/
+/*#IndicatorDetails th {*/
+    /*border-bottom: 1px solid #EEE;*/
+    /*text-align: right;*/
+/*}*/
+/*#IndicatorDetails tr:nth-child(even){*/
+    /*background-color: #F6F6F6;*/
+/*}*/
+/*#IndicatorDetails td {*/
+    /*padding: 6px 0;*/
+/*}*/
+/*#IndicatorDetails td + td {*/
+    /*width: 50px;*/
+    /*text-align: center;*/
+/*}*/
 #IndicatorDetails .ecosystem-header img {
     margin-left: 14px;
 }
+#IndicatorDetails .chart-labeledpercentbar {
+    font-size: 12px;
+}
+
 
 .chart-whisker .domain {
     stroke-width:3;

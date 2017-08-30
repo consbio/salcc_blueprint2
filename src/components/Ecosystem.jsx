@@ -17,9 +17,9 @@ const ECOSYSTEMS = {
                 description: "Beach birds is an index of habitat suitability for four shorebird species (Wilson's plover, American oystercatcher, least tern, piping plover). The relative use of beach habitat by these species for nesting, foraging, and breeding is an indicator of beach quality.",
                 valueLabels: {
                     1: 'Below the 20th percentile of importance for bird index species',
-                    2: '20th-40th percentile of importance',
-                    3: '40th-60th percentile of importance',
-                    4: '60th-80th percentile of importance',
+                    2: '20th - 40th percentile of importance',
+                    3: '40th - 60th percentile of importance',
+                    4: '60th - 80th percentile of importance',
                     5: 'Above the 80th percentile of importance for bird index species (American oystercatcher, Wilsonâ€™s plover, least tern, and piping plover)'
                 },
                 categoricalValues: range(1, 6),
@@ -38,9 +38,9 @@ const ECOSYSTEMS = {
                 label: 'Unaltered beach',
                 description: 'Unaltered beach is an index of impacts from hardened structures like jetties, groins, and human infrastructure. Shoreline infrastructure degrades beach habitat, impedes beach migration and barrier island rollover processes, and can cause erosion.',
                 valueLabels: {
-                    0: 'Vulnerable to alteration, \nwith/without nearby jetties/groins (low)',
-                    1: 'Less vulnerable with \nnearby jetties/groins',
-                    2: 'Less vulnerable without \nnearby jetties/groins (high)'
+                    0: 'Vulnerable to alteration, with/without nearby jetties/groins (low)',
+                    1: 'Less vulnerable with nearby jetties/groins',
+                    2: 'Less vulnerable without nearby jetties/groins (high)'
                 },
                 categoricalValues: range(0, 3),
                 domain: [0, 2],
@@ -79,11 +79,11 @@ const ECOSYSTEMS = {
                 label: 'Water - vegetation edge (km/sq km)',
                 description: 'Water-vegetation edge is an index of edge length between open water and vegetation where estuarine waters meet wetland marshes. This zone is highly productive for shrimp, crab, fish, and other nekton and provides valuable foraging habitat for marsh birds. ',
                 valueLabels: {
-                    0: '0-0.61', // (km/sq km)
-                    1: '0.61-1.68',
-                    2: '1.68-2.82',
-                    3: '2.82-4.27',
-                    4: '4.27-19.42'
+                    0: '0 - 0.61 km/sq km', // (km/sq km)
+                    1: '0.61 - 1.68 km/sq km',
+                    2: '1.68 - 2.82 km/sq km',
+                    3: '2.82 - 4.27 km/sq km',
+                    4: '4.27 - 19.42 km/sq km'
                 },
                 categoricalValues: range(0, 5),
                 domain: [0, 4],
@@ -94,11 +94,11 @@ const ECOSYSTEMS = {
                 label: 'Wetland patch size (hectares)',
                 description: 'Wetland patch size is an index based on the size of wetland patches. Larger, better connected wetland patches benefit fish and marsh birds and protect inland areas from waves during storm events.',
                 valueLabels: {
-                    0: '1-328 ha', // (hectares)
-                    1: '329-1,228 ha',
-                    2: '1,229-3,087 ha',
-                    3: '3,088-6,088 ha',
-                    4: '6,088-15,154 ha'
+                    0: '1 - 328 ha', // (hectares)
+                    1: '329 - 1,228 ha',
+                    2: '1,229 - 3,087 ha',
+                    3: '3,088 - 6,088 ha',
+                    4: '6,088 - 15,154 ha'
                 },
                 categoricalValues: range(0, 5),
                 domain: [0, 4],
@@ -126,9 +126,9 @@ const ECOSYSTEMS = {
                 description: "Forested wetland birds is an index of habitat suitability for six bird species (Northern parula, black-throated green warbler, red-headed woodpecker, Chuck-will's widow, prothonotary warbler, Swainson's warbler) based on patch size and proximity to water. The needs of these species are increasingly restrictive at higher index values, reflecting better quality habitat.",
                 valueLabels: {
                     0: 'Less potential for presence of bird index species',
-                    1: "Potential for presence of Northern parula,\nblack-throated green warbler,\nred-headed woodpecker, \nor Chuck-will's widow",
-                    2: 'Potential for additional presence of \nprothonotary warbler',
-                    3: "Potential for additional presence of \nSwainson's warbler"
+                    1: "Potential for presence of Northern parula,black-throated green warbler,red-headed woodpecker, or Chuck-will's widow",
+                    2: 'Potential for additional presence of prothonotary warbler',
+                    3: "Potential for additional presence of Swainson's warbler"
                 },
                 categoricalValues: range(0, 4),
                 domain: [0, 3],
@@ -151,9 +151,9 @@ const ECOSYSTEMS = {
                 },
                 categoricalValues: range(1, 4),
                 categories: {
-                    1: '<5 ha',
-                    2: '5-20 ha',
-                    3: '>20 ha'
+                    1: 'Less than 5 ha',
+                    2: '5 to 20 ha',
+                    3: 'Greater than 20 ha'
                 },
                 domain: [0, 11907],
                 units: 'ha',
@@ -174,8 +174,8 @@ const ECOSYSTEMS = {
                 label: 'Pine and prairie amphibians',
                 description: 'Pine and prairie amphibians draws from the Priority Amphibian and Reptile Conservation Areas (PARCAs) located in pine and prairie habitat. PARCA is an expert-driven, nonregulatory designation that captures places capable of supporting viable amphibian and reptile populations. PARCAs include areas where rare or at-risk species have been observed or are likely to occur (like embedded, isolated wetlands).',
                 valueLabels: {
-                    0: 'Not a Priority Amphibian and Reptile Conservation \nArea (PARCA) within pine and prairie',
-                    1: 'Priority Amphibian and Reptile Conservation Area \n(PARCA) within pine and prairie'
+                    0: 'Not a Priority Amphibian and Reptile Conservation Area (PARCA) within pine and prairie',
+                    1: 'Priority Amphibian and Reptile Conservation Area (PARCA) within pine and prairie'
                 },
                 categoricalValues: range(0, 2),
                 domain: [0, 1],
@@ -188,7 +188,7 @@ const ECOSYSTEMS = {
                     0: 'Less potential for presence of bird index species',
                     1: 'Potential for presence of 1 bird index species',
                     2: 'Potential for presence of 2 bird index species',
-                    3: "Potential for presence of all \n3 bird index species (Bachman's sparrow, \nbobwhite quail, and red-cockaded woodpecker)"
+                    3: "Potential for presence of all 3 bird index species (Bachman's sparrow, bobwhite quail, and red-cockaded woodpecker)"
                 },
                 categoricalValues: range(0, 4),
                 domain: [0, 3],
@@ -215,11 +215,11 @@ const ECOSYSTEMS = {
                 label: 'Upland hardwood birds',
                 description: "Upland hardwood birds is an index of habitat suitability for seven upland hardwood bird species (wood thrush, whip-poor-will, hooded warbler, American woodcock, Acadian flycatcher, Kentucky warbler, Swainson's warbler) based on patch size and other ecosystem characteristics such as proximity to water and proximity to forest and ecotone edge. The needs of these species are increasingly restrictive at higher index values, reflecting better quality habitat.",
                 valueLabels: {
-                    0: 'Less potential for presence of \nbird index species',
-                    1: 'Potential for presence of wood \nthrush or whip-poor-will',
-                    2: 'Potential for additional presence \nof hooded warbler or American woodcock',
-                    3: 'Potential for additional presence \nof Acadian flycatcher or Kentucky warbler',
-                    4: "Potential for additional presence \nof Swainson's warbler"
+                    0: 'Less potential for presence of bird index species',
+                    1: 'Potential for presence of wood thrush or whip-poor-will',
+                    2: 'Potential for additional presence of hooded warbler or American woodcock',
+                    3: 'Potential for additional presence of Acadian flycatcher or Kentucky warbler',
+                    4: "Potential for additional presence of Swainson's warbler"
                 },
                 categoricalValues: range(0, 5),
                 domain: [0, 4],
@@ -230,10 +230,10 @@ const ECOSYSTEMS = {
                 description: 'Urban open space is an index based on distance of urban areas from open space. This cultural resource indicator is intended to capture equitable access to open space for urban residents. Protected natural areas in urban environments offer refugia for some species while providing people a nearby place to connect with nature.',
                 valueLabels: {
                     0: 'Existing development',
-                    1: 'Undeveloped area <400 m from protected land',
-                    2: 'Undeveloped area 400-800 m from protected land',
-                    3: 'Undeveloped area 800-1600 m from protected land',
-                    4: 'Undeveloped area >1600 m from protected land',
+                    1: 'Undeveloped area less than 400 m from protected land',
+                    2: 'Undeveloped area 400 - 800 m from protected land',
+                    3: 'Undeveloped area 800 - 1600 m from protected land',
+                    4: 'Undeveloped area greater than 1600 m from protected land',
                     5: 'Protected land'
                 },
                 categoricalValues: range(0, 6),
@@ -251,9 +251,9 @@ const ECOSYSTEMS = {
                 description: 'Marine mammals is a continuous index of dolphin and whale density based on monthly density predictions for ten species of cetaceans and yearly density predictions for three rarer cetacean species. Marine mammals help identify key areas of ocean productivity and overall ocean health because they have long life spans, feed at high trophic levels, and can accumulate anthropogenic chemicals and toxins in their large blubber stores.',
                 valueLabels: {
                     1: 'Below the 20th percentile of importance for seasonal density of marine mammal index species',
-                    2: '20th-40th percentile of importance',
-                    3: '40th-60th percentile of importance',
-                    4: '60th-80th percentile of importance',
+                    2: '20th - 40th percentile of importance',
+                    3: '40th - 60th percentile of importance',
+                    4: '60th - 80th percentile of importance',
                     5: 'Above the 80th percentile of importance for seasonal density of marine mammal index species'
                 },
                 categoricalValues: range(1, 6),
@@ -293,10 +293,10 @@ const ECOSYSTEMS = {
                 label: 'Permeable surface',
                 description: 'Permeable surface is a continuous indicator that measures the percent of non-impervious cover by catchment. High levels of impervious surface degrade water quality and alter freshwater flow.',
                 valueLabels: {
-                    1: '<70% of catchment permeable, likely degraded instream flow, water quality, and aquatic species communities',
-                    2: '70-90% of catchment permeable, likely degraded water quality and not supporting many aquatic species',
-                    3: '90-95% of catchment permeable, likely declining water quality and supporting most aquatic species',
-                    4: '>95% of catchment permeable, likely high water quality and supporting most sensitive aquatic species'
+                    1: 'Less than 70% of catchment permeable, likely degraded instream flow, water quality, and aquatic species communities',
+                    2: '70 - 90% of catchment permeable, likely degraded water quality and not supporting many aquatic species',
+                    3: '90 - 95% of catchment permeable, likely declining water quality and supporting most aquatic species',
+                    4: 'Greater than 95% of catchment permeable, likely high water quality and supporting most sensitive aquatic species'
                 },
                 //categoricalValues: d3.range(1, 5),
                 categories: {
@@ -312,19 +312,19 @@ const ECOSYSTEMS = {
                 label: 'Riparian buffers',
                 description: 'Riparian buffers measures the amount of natural habitat surrounding rivers and streams. This continuous indicator applies to the Active River Area, which spatially defines the dynamic relationship between riverine systems and the lands around them. The Active River Area includes meander belts, riparian wetlands, floodplains, terraces, and material contribution areas. Riparian buffers are strongly linked to water quality as well as water availability (i.e., instream flow).',
                 valueLabels: {
-                    1: '<80% natural habitat surrounding rivers and streams',
-                    2: '80-85% natural cover',
-                    3: '85-90% natural cover',
-                    4: '90-95% natural cover',
-                    5: '>95% natural habitat surrounding rivers and streams'
+                    1: 'Less than 80% natural habitat surrounding rivers and streams',
+                    2: '80 - 85% natural cover',
+                    3: '85 - 90% natural cover',
+                    4: '90 - 95% natural cover',
+                    5: 'Greater than 95% natural habitat surrounding rivers and streams'
                 },
                 categoricalValues: range(1, 6),
                 categories: {
-                    1: '<80%',
-                    2: '80-85%',
-                    3: '85-90%',
-                    4: '90-95%',
-                    5: '>95%'
+                    1: 'Less than 80%',
+                    2: '80 - 85%',
+                    3: '85 - 90%',
+                    4: '90 - 95%',
+                    5: 'Greater than 95%'
                 },
                 domain: [0, 100],
                 datasetID: 'c822c798ba724e06b5fb25d2c18ff0cb'
