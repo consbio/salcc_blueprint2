@@ -87,7 +87,7 @@ class Map extends Component {
 
         map.addLayer(config.blueprintLayer);
 
-        let opacityScale = scaleLinear().domain([3,13]).range([0.5, 0.3]);
+        let opacityScale = scaleLinear().domain([3, 13]).range([0.5, 0.3]);
         config.blueprintLayer.setOpacity(opacityScale(map.getZoom()));  // do this on initial load too
 
         map.on('zoomend', () => {
@@ -109,9 +109,10 @@ class Map extends Component {
                 maxZoom: 10
             },
 
-            onLocationFound: (lat, lng) => {},
+            onLocationFound: (lat, lng) => {
+            },
 
-            onAdd: function(map) {
+            onAdd: function (map) {
                 this._map = map;
                 let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-locate-control');
                 L.DomEvent.disableClickPropagation(container);
@@ -121,7 +122,9 @@ class Map extends Component {
 
                 L.DomEvent.on(link, 'click', L.DomEvent.stopPropagation)
                     .on(link, 'click', L.DomEvent.preventDefault)
-                    .on(link, 'click', () => {this._map.locate({setView: true, maxZoom: this.options.maxZoom})})
+                    .on(link, 'click', () => {
+                        this._map.locate({setView: true, maxZoom: this.options.maxZoom})
+                    })
                     .on(link, 'dblclick', L.DomEvent.stopPropagation);
 
                 map.on('locationfound', (e) => {
@@ -147,7 +150,13 @@ class Map extends Component {
 
         this.locateControl = new locateControlClass();
         // overriding functions here to bind to outer scope
-        this.locateControl.onLocationFound = (lat, lng) => {this._addMarker(lat, lng, null)};
+        this.locateControl.onLocationFound = (lat, lng) => {
+            const place = {
+                label: null,
+                location: {lat: lat, lng: lng}
+            };
+            this.props.onSetLocation(place);
+        };
         this.locateControl.addTo(map);
 
         if (place && this.place.location !== null) {
@@ -246,14 +255,6 @@ class Map extends Component {
                     </div>
                 }
                 <div ref={(node) => this._mapNode = node} id="Map" onClick={this.props.onClick}></div>
-
-                {/*<div id="Legend">*/}
-                    {/*<label>Priority</label>*/}
-                    {/*<div className='legend-patch' style={{backgroundColor: '#49006a'}}>Highest</div>*/}
-                    {/*<div className='legend-patch' style={{backgroundColor: '#c51b8a'}}>High</div>*/}
-                    {/*<div className='legend-patch' style={{backgroundColor: '#fbb4b9', color: '#333'}}>Medium</div>*/}
-                    {/*<div className='legend-patch' style={{backgroundColor: '#686868', marginLeft: 20}}>Corridors</div>*/}
-                {/*</div>*/}
             </div>
         );
     }
@@ -276,7 +277,8 @@ Map.defaultProps = {
     place: null,
     selectedUnit: null,
     onSelectUnit: (id) => {console.log('Selected map unit: ', id)},
-    onDeselectUnit: () => {console.log('Deselected map unit')}
+    onDeselectUnit: () => {console.log('Deselected map unit')},
+    onSetLocation: (place) => {console.log('Set location using location services', place);}
 };
 
 

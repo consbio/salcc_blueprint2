@@ -70,6 +70,10 @@ class App extends Component {
         }
     };
 
+    handlePlaceSelect = (place) => {
+        this.setState({place: place});
+    }
+
     renderUnitName() {
         if (this.props.selectedUnit === null) return null;
 
@@ -151,6 +155,7 @@ class App extends Component {
                      selectedUnit={this.props.selectedUnit}
                      onSelectUnit={this.handleUnitSelect}
                      onDeselectUnit={this.handleUnitDeselect}
+                     onSetLocation={this.handlePlaceSelect}
                      onClick={this.handleMapClick} />
 
                 <header>
@@ -161,7 +166,7 @@ class App extends Component {
                     </div>
                     <GooglePlacesSearch ref={(ref) => this.placeSearch = ref} selected={this.state.place}
                         onFocus={() => this.changeTab(null)}
-                        onSelect={(place) => this.setState({place: place})}/>
+                        onSelect={this.handlePlaceSelect}/>
                 </header>
 
                 { this.renderUnitName() }

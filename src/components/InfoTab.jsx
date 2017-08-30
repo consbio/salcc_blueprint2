@@ -109,17 +109,13 @@ class InfoTab extends Component {
                 <section>
                     <h3>How To Use This Viewer</h3>
                     <p>
-                        Use pinch-zoom and swipe to navigate using the map, just like you would use another map-based application.
-                        <br/><br/>
-                        You can also search by placename, or go to your location, to zoom to a specific area faster.
-                        <br/><br/>
                         Once you have zoomed in far enough, the map will show boundaries of areas that you can select for
                         more information.  Tap on an area to show details.  Clear the selected area by tapping that area
-                        again, or tap the close button in the upper right
+                        again, or tap the close button in the upper right.
                         <br/><br/>
                         Use the tabs at the bottom of the screen to navigate the different types of summary information available.
                         <br/><br/>
-                        On the indicators tab, you can swipe between ecosystems to see the average value for each indicator
+                        On the Indicators tab, you can swipe between ecosystems to see the average value for each indicator
                         present in that area.
                         <br/><br/>
                         Tap on an indicator to see more details.
