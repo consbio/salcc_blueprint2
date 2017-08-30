@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import './App.css';
 import Map from './Map';
-import Geonames from './GooglePlacesSearch/GooglePlacesSearch';
+import GooglePlacesSearch from './GooglePlacesSearch/GooglePlacesSearch';
 import ResetIcon from './icons/ResetIcon';
 
 
@@ -28,6 +28,8 @@ class App extends Component {
             activeTab: null,
             place: null
         };
+
+        this.placeSearch = null;
     }
 
     changeTab(tab) {
@@ -60,6 +62,12 @@ class App extends Component {
     handleTryAgainClick = (event) => {
         event.preventDefault();
         this.props.deselectUnit();
+    };
+
+    handleMapClick = () => {
+        if (this.placeSearch !== null) {
+            this.placeSearch.blur();
+        }
     };
 
     renderUnitName() {
@@ -142,7 +150,8 @@ class App extends Component {
                 <Map place={this.state.place}
                      selectedUnit={this.props.selectedUnit}
                      onSelectUnit={this.handleUnitSelect}
-                     onDeselectUnit={this.handleUnitDeselect}/>
+                     onDeselectUnit={this.handleUnitDeselect}
+                     onClick={this.handleMapClick} />
 
                 <header>
                     <div id="InfoButton"
@@ -150,7 +159,7 @@ class App extends Component {
                          onClick={() => this.changeTab('Info')}>
                         i
                     </div>
-                    <Geonames selected={this.state.place}
+                    <GooglePlacesSearch ref={(ref) => this.placeSearch = ref} selected={this.state.place}
                         onFocus={() => this.changeTab(null)}
                         onSelect={(place) => this.setState({place: place})}/>
                 </header>

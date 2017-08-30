@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 
 //import components
 import App from './components/App';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 
 
 // registerServiceWorker();

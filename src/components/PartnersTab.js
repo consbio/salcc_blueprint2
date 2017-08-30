@@ -76,7 +76,7 @@ const OWNERSHIP = {
 };
 
 const NOT_CONSERVED = {
-    color: '#D3D3D3',
+    color: '#AAA',
     label: 'Not conserved',
     description: 'lands not currently known to be conserved'
 };

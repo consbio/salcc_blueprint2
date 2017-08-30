@@ -52,6 +52,9 @@ header, footer{
     z-index: 5000;
 }
 
+.hidden {
+    display: none !important;
+}
 
 .text-quiet {
     color: #666 !important;
@@ -218,6 +221,8 @@ header, footer{
     margin: 0;
     color: #AAA;
     font-size: 12px;
+    min-width: 30px;
+    text-align: right;
 }
 #Content.tabs-top {
     top: 40px;
@@ -302,6 +307,16 @@ header, footer{
 #Map {
     height: 100%;
     width: 100%;
+}
+
+#ZoomInNote {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    padding: 4px 0;
+    background: rgba(255, 255, 255, 0.8);
 }
 
 

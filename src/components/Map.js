@@ -71,7 +71,8 @@ class Map extends Component {
         super(props);
         this.state = {
             place: this.props.place,
-            selectedUnit: this.props.selectedUnit
+            selectedUnit: this.props.selectedUnit,
+            zoom: config.mapParams.zoom
         };
 
         this._mapNode = null;
@@ -88,9 +89,12 @@ class Map extends Component {
 
         let opacityScale = scaleLinear().domain([3,13]).range([0.5, 0.3]);
         config.blueprintLayer.setOpacity(opacityScale(map.getZoom()));  // do this on initial load too
-        map.on('zoomend', function(){
-            config.blueprintLayer.setOpacity(opacityScale(map.getZoom()));
-        });
+
+        map.on('zoomend', () => {
+            const zoom = map.getZoom();
+            config.blueprintLayer.setOpacity(opacityScale(zoom));
+            this.setState({zoom: zoom});
+        })
 
         config.unitLayer.on('click', (f) => {
             this._handleSelect(f.layer.properties.ID);
@@ -102,7 +106,7 @@ class Map extends Component {
         let locateControlClass = L.Control.extend({
             options: {
                 position: 'topright',
-                maxZoom: 14
+                maxZoom: 10
             },
 
             onLocationFound: (lat, lng) => {},
@@ -178,7 +182,7 @@ class Map extends Component {
     }
 
     _zoomToPlace(place) {
-        const zoom = 12;
+        const zoom = 10;
 
         // for now, intentionally ignoring label
         this._addMarker(place.location.lat, place.location.lng, null);
@@ -231,12 +235,17 @@ class Map extends Component {
         }
     }
     
-    
 
     render() {
         return (
             <div id="MapContainer">
-                <div ref={(node) => this._mapNode = node} id="Map"></div>
+                {this.state.zoom < 10 &&
+                    <div ref={(node) => this._zoomNote = node} id="ZoomInNote"
+                         className="text-center text-small text-quieter">
+                        Zoom in to select an area
+                    </div>
+                }
+                <div ref={(node) => this._mapNode = node} id="Map" onClick={this.props.onClick}></div>
 
                 {/*<div id="Legend">*/}
                     {/*<label>Priority</label>*/}

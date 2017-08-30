@@ -11,7 +11,7 @@ class Indicator extends Component {
 
         // Color is gray if no threshold, blue if over threshold, orange otherwise
         let bgColor = 'rgba(204, 204, 199, 0.2)';
-        let color = '#CCC';
+        let color = '#777';
         if (goodConditionThreshold !== null && goodConditionThreshold !== undefined) {
             if (mean >= goodConditionThreshold) {
                 bgColor = 'rgba(12, 93, 165, 0.1)';

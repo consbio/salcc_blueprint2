@@ -49,6 +49,10 @@ class GooglePlacesSearch extends React.Component {
         clearTimeout(this.timer);
     }
 
+    blur() {
+        if (this.input !== null) this.input.blur();
+    }
+
     onInputChange = value => {
         if (!!value) {
             this.setState({value, results: [], isResultsHidden: false, isPending: true}, this._getAutocomplete);

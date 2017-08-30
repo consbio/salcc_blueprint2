@@ -15,7 +15,7 @@ class PercentBar extends Component {
                      flexDirection: 'row',
                      height: height,
                      backgroundColor: backgroundColor,
-                     border: `2px solid ${backgroundColor}`,
+                     border: `1px solid ${backgroundColor}`,
                      borderRadius: height
                  }}>
 
@@ -42,7 +42,7 @@ PercentBar.propTypes = {
 };
 
 PercentBar.defaultProps = {
-    backgroundColor: '#ececec',
+    backgroundColor: '#EEE',
     color: '#0892D0',
     height: 10,
     percent: 50  // the glass is neither half full nor half empty, but both simultaneously

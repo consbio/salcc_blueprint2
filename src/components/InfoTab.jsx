@@ -6,7 +6,7 @@ export const BLUEPRINT = {
         label: 'Not a priority',
         area: '50%',
         description: '',
-        color: '#D3D3D3',
+        color: '#FFFFC8',
         textColor: '#333'
     },
     1: {
@@ -115,7 +115,7 @@ class InfoTab extends Component {
                             <img src="/consbio.png" style={{height: 26, padding:8, verticalAlign: 'middle'}} alt="CBI Logo"/>
                             <div className="inline-middle" style={{width:250}}>
                                 <a href="https://consbio.org" target="_blank" rel="noopener noreferrer">
-                                    the Conservation Biology Institute
+                                    Conservation Biology Institute
                                 </a>
                             </div>
                         </div>
@@ -151,7 +151,7 @@ class InfoTab extends Component {
 
                     <h4>Icons:</h4>
                     <p>
-                        <div>Priorities, Indicators, and Partners icons made by <a href="https://www.flaticon.com/authors/those-icons" target="_blank" rel="noopener noreferrer">Those Icons</a>  <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer" title="Creative Commons BY 3.0">CC 3.0 BY</a> <span className="text-small text-quiet">(from <a href="https://www.flaticon.com/" target="_blank" rel="noopener noreferrer" title="Flaticon">www.flaticon.com</a>)</span></div>
+                        Priorities, Indicators, and Partners icons made by <a href="https://www.flaticon.com/authors/those-icons" target="_blank" rel="noopener noreferrer">Those Icons</a>  <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer" title="Creative Commons BY 3.0">CC 3.0 BY</a> <span className="text-small text-quiet">(from <a href="https://www.flaticon.com/" target="_blank" rel="noopener noreferrer" title="Flaticon">www.flaticon.com</a>)</span>
                     </p>
                 </section>
             </div>
