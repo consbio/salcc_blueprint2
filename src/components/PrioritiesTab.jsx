@@ -101,6 +101,12 @@ const PLANS = {
         description: 'Buffer around National Seashores',
         url: null,
         type: 'marine'
+    },
+    'ShelfBreak': {
+        label: 'Shelf Breaks',
+        description: 'Shelf Breaks',
+        url: null,
+        type: 'marine'
     }
 };
 
@@ -118,21 +124,24 @@ class PrioritiesTab extends Component {
     renderPlan(plan) {
         const {label, url} = PLANS[plan];
 
+        if (url !== null) {
+            return (
+                <li key={plan}>
+                    <a href={url} target="_blank">{label}</a>
+                </li>
+            );
+        }
+
         return (
             <li key={plan}>
-                {(url !== null)
-                    ?
-                    <a href={url} target="_blank">{label}</a>
-                    :
-                    {label}
-                }
+                {label}
             </li>
         );
     }
 
     render() {
         const {data} = this.props;
-        let {blueprint, justification, plans} = data;
+        const {blueprint, justification, plans} = data;
 
         const sortedPriorities = [4, 3, 2, 1, 0];
 

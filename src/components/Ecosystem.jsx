@@ -432,10 +432,6 @@ const ECOSYSTEMS = {
 
 
 class Ecosystem extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     handleIndicatorSelect = (indicator) => {
         this.props.onSetIndicator(this.props.ecosystem, indicator);
     }
