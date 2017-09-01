@@ -5,16 +5,8 @@ import WhiskerPlot from './Charts/WhiskerPlot.js';
 
 
 class Indicator extends Component {
-
-    handleClick = () => {
-        console.log('indicator onclick')
-        this.props.onClick();
-    }
-
-
     render() {
         const {label, mean, domain, goodConditionThreshold} = this.props;
-        console.log('render indicator', label)
 
         // Color is gray if no threshold, blue if over threshold, orange otherwise
         let bgColor = 'rgba(204, 204, 199, 0.2)';
@@ -31,7 +23,7 @@ class Indicator extends Component {
         }
 
         return (
-            <section className="indicator" style={{backgroundColor: bgColor}} onClick={this.handleClick}>
+            <section className="indicator" style={{backgroundColor: bgColor}} onClick={this.props.onClick}>
                 <h4>
                     {/*only if not mobile version*/}
                     {/*<a href={`https://salcc.databasin.org/datasets/${datasetID}`} target="_blank" title="View this indicator in the Conservation Planning Atlas">*/}
