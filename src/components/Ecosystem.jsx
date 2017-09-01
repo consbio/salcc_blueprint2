@@ -434,18 +434,14 @@ const ECOSYSTEMS = {
 class Ecosystem extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {selectedIndicator: null};
     }
 
     handleIndicatorSelect = (indicator) => {
-        this.setState({selectedIndicator: indicator});
-        this.props.onSelectIndicator();
+        this.props.onSetIndicator(this.props.ecosystem, indicator);
     }
 
     handleIndicatorDeselect = () => {
-        this.setState({selectedIndicator: null});
-        this.props.onDeselectIndicator();
+        this.props.onSetIndicator(null, null);
     }
 
     renderHeader(icon, label, percent) {
@@ -475,8 +471,7 @@ class Ecosystem extends Component {
     }
 
     render() {
-        const {selectedIndicator} = this.state;
-        const {ecosystem, icon, percent, indicators} = this.props;
+        const {ecosystem, icon, selectedIndicator} = this.props;
         const ecosystemConfig = ECOSYSTEMS[ecosystem];
         const {label} = ecosystemConfig;
 
@@ -489,6 +484,7 @@ class Ecosystem extends Component {
             );
         }
 
+        const {percent, indicators} = this.props;
         const indicatorsConfig = ecosystemConfig.indicators;
         let indicatorKeys = Object.keys(indicators || {});  // some ecosystems are present but don't have indicators
         indicatorKeys.sort();
@@ -515,8 +511,8 @@ class Ecosystem extends Component {
 
 Ecosystem.propTypes = {};
 Ecosystem.defaultProps = {
-    onSelectIndicator: function() {},
-    onDeselectIndicator: function() {}
+    selectedIndicator: null,
+    onSetIndicator: function() {}
 };
 
 export default Ecosystem;

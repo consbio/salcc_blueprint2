@@ -7,19 +7,19 @@ class IndicatorsTab extends Component {
 
     state = {
         index: 0,
-        hasSelectedIndicator: false
+        ecosystem: null,  // selected ecosystem
+        indicator: null  // selected indicator
     };
 
     handleChangeIndex = (index) => {
         this.setState({index});
     };
 
-    handleSelectIndicator = () => {
-        this.setState({hasSelectedIndicator: true});
-    }
-
-    handleDeselectIndicator = () => {
-        this.setState({hasSelectedIndicator: false});
+    handleSetIndicator = (ecosystem, indicator) => {
+        this.setState({
+            ecosystem: ecosystem,
+            indicator: indicator
+        });
     }
 
     getIcon(ecosystem) {
@@ -53,7 +53,7 @@ class IndicatorsTab extends Component {
     }
 
     renderNav(ecosystemIDs){
-        if (this.state.hasSelectedIndicator || ecosystemIDs.length < 2) return null;
+        if (ecosystemIDs.length < 2) return null;
 
         return (
             <div id="EcosystemsNav" className="flex-container flex-justify-center">
@@ -78,13 +78,31 @@ class IndicatorsTab extends Component {
                        ecosystem={ecosystem}
                        icon={this.getIcon(ecosystem)}
                        {...ecosystems[ecosystem]}
-                       onSelectIndicator={this.handleSelectIndicator}
-                       onDeselectIndicator={this.handleDeselectIndicator} />
+                       onSetIndicator={this.handleSetIndicator}
+            />
         );
     }
 
 
     render(){
+        // if there is an ecosystem selected, only show that
+        const {ecosystem, indicator} = this.state;
+        if (ecosystem !== null) {
+            return (
+                <div id="Content">
+                    <div id="Ecosystems" className="flex-container-column">
+                        <Ecosystem key={ecosystem}
+                                index={0}
+                                ecosystem={ecosystem}
+                                icon={this.getIcon(ecosystem)}
+                                selectedIndicator={indicator}
+                                onSetIndicator={this.handleSetIndicator} />
+                    </div>
+                </div>
+            );
+        }
+
+
         // sort ecosystems by decreasing area, so that cross-system indicators are always on the right
         let ecosystems = Object.entries(this.props.data.ecosystems);  // => [[ecosystemID, ecosystemData]...]
         ecosystems.sort(this.sortEcosystems);
