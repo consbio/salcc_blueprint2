@@ -61,11 +61,3 @@ function recieveData(unit, data){
         data: data
     }
 }
-
-
-export function showError(message) {
-    return function(dispatch) {
-        console.log('Received error', message)
-        dispatch(requestError('123')); // FIXME
-    }
-}
