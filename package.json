@@ -12,6 +12,8 @@
     "leaflet-basemaps": "^0.2.2",
     "leaflet.vectorgrid": "^1.2.0",
     "lodash.debounce": "^4.0.8",
+    "raven-for-redux": "^1.0.0",
+    "raven-js": "^3.17.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",

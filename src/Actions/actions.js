@@ -1,8 +1,6 @@
 import fetch from 'isomorphic-fetch';
+import {logException} from '../log';
 
-/*
- * action types
- */
 
 export const SELECT_UNIT = 'SELECT_UNIT';
 
@@ -20,16 +18,19 @@ export function selectUnit(unit){
             )
             .then(data => dispatch(recieveData(unit, data)))
             .catch((error) => {
-                console.error('Error occured fetching unit:', error);
+                logException(`Error occured fetching unit: ${error}`);
                 dispatch(requestError(unit));
             })
     }
 }
+
+
 export const DESELECT_UNIT = 'DESELECT_UNIT';
 
 export function deselectUnit(){
     return {type: DESELECT_UNIT}
 }
+
 
 export const REQUEST_DATA = 'REQUEST_DATA';
 
@@ -39,6 +40,7 @@ function requestData(unit){
         unit
     }
 }
+
 
 export const REQUEST_ERROR = 'REQUEST_ERROR';
 
@@ -57,5 +59,13 @@ function recieveData(unit, data){
         type: RECIEVE_DATA,
         unit,
         data: data
+    }
+}
+
+
+export function showError(message) {
+    return function(dispatch) {
+        console.log('Received error', message)
+        dispatch(requestError('123')); // FIXME
     }
 }
