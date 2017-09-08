@@ -10,14 +10,12 @@ class WhiskerPlot extends ResponsiveWidthComponent {
         const {value, domain, color, goodConditionThreshold} = this.props;
         const textHeight = 12;
         const {width} = this.state;
-        // const radius = 12;
         const margin = {
             top: 0,
             right: 32,
             bottom: 0,
             left: 36
         };
-        // const height = 2 * radius + margin.top + margin.bottom;
         const height = margin.top + margin.bottom + 40;
         const midY = height / 2;
         const textY = midY + textHeight / 2 - 2;
@@ -38,8 +36,8 @@ class WhiskerPlot extends ResponsiveWidthComponent {
                             {goodConditionThreshold !== null
                                 ?
                                 (<g>
-                                    <line className="domain" x1={x.range()[0]} x2={x(goodConditionThreshold)} y1={midY} y2={midY} stroke="#FF851B"/>
-                                    <line className="domain" x1={x(goodConditionThreshold)} x2={x.range()[1]} y1={midY} y2={midY} stroke="#0C5DA5"/>
+                                    <line className="domain" x1={x.range()[0]} x2={x(goodConditionThreshold)} y1={midY} y2={midY} stroke="#990707"/>
+                                    <line className="domain" x1={x(goodConditionThreshold)} x2={x.range()[1]} y1={midY} y2={midY} stroke="#169516"/>
                                 </g>)
                                 :
                                 <line className="domain" x1={x.range()[0]} x2={x.range()[1]} y1={midY} y2={midY} stroke="#777"/>

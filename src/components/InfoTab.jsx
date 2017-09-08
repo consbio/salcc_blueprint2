@@ -66,19 +66,13 @@ class InfoTab extends Component {
 
                 <section>
                     <p>
-                        The Conservation Blueprint is a living spatial plan to conserve
-                        natural and cultural resources for future generations.
-                        It identifies priority areas for shared conservation action.
-                    </p>
-                    <p>
-                        Blueprint 2.1 is a completely data-driven approach based on models of
-                        current indicator condition and connectivity for key ecosystems in
-                        the region.
-                        Indicators in better condition suggest higher ecosystem integrity and
-                        higher importance for natural and cultural resources.
-                        Development of the Blueprint is a collaborative process that has
-                        involved active participation from more than 400 people from
-                        over 100 different organizations.
+                        The Conservation Blueprint is a living spatial plan to conserve natural and cultural resources
+                        for future generations. It identifies priority areas for shared conservation action.
+                        Blueprint 2.1 is completely data-driven, prioritizing the lands and waters of the South Atlantic
+                        region based on ecosystem indicator models and a connectivity analysis. Better indicator condition
+                        suggests higher ecosystem integrity and higher importance for natural and cultural resources
+                        across all ecosystems collectively. So far, more than 400 people from 100 organizations
+                        actively participated in the collaborative development of the Blueprint.
                     </p>
                     <p>
                         <b>You can help improve the Blueprint</b>

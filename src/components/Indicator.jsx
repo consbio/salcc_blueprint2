@@ -13,12 +13,12 @@ class Indicator extends Component {
         let color = '#777';
         if (goodConditionThreshold !== null && goodConditionThreshold !== undefined) {
             if (mean >= goodConditionThreshold) {
-                bgColor = 'rgba(12, 93, 165, 0.1)';
-                color = '#0C5DA5';
+                bgColor = 'rgba(22, 149, 22, 0.1)';
+                color = '#169516';
             }
             else {
-                bgColor = 'rgba(255, 133, 27, 0.1)';
-                color = '#ff9500'
+                bgColor = 'rgba(153, 7, 7, 0.1)';
+                color = '#990707'
             }
         }
 
