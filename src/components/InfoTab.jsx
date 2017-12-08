@@ -62,16 +62,16 @@ class InfoTab extends Component {
 
         return (
             <div id="Content" className="tabs-top flex-container-column">
-                <h3>Conservation Blueprint 2.1</h3>
+                <h3>Conservation Blueprint 2.2</h3>
 
                 <section>
                     <p>
                         The Conservation Blueprint is a living spatial plan to conserve natural and cultural resources
                         for future generations. It identifies priority areas for shared conservation action.
-                        Blueprint 2.1 is completely data-driven, prioritizing the lands and waters of the South Atlantic
+                        Blueprint 2.2 is completely data-driven, prioritizing the lands and waters of the South Atlantic
                         region based on ecosystem indicator models and a connectivity analysis. Better indicator condition
                         suggests higher ecosystem integrity and higher importance for natural and cultural resources
-                        across all ecosystems collectively. So far, more than 400 people from 100 organizations
+                        across all ecosystems collectively. So far, more than 500 people from 150 organizations
                         actively participated in the collaborative development of the Blueprint.
                     </p>
                     <p>
@@ -86,7 +86,7 @@ class InfoTab extends Component {
                         <a href="tel:19197070252">(919) 707-0252</a>
                     </p>
                     <p>
-                        This <b>Simple Viewer</b> summarizes the Blueprint 2.1 priorities
+                        This <b>Simple Viewer</b> summarizes the Blueprint priorities
                         and supporting information within subwatersheds and marine lease blocks.
                         <br/>
                         <a href="http://www.southatlanticlcc.org/blueprint/" target="_blank" rel="noopener noreferrer">
@@ -143,12 +143,12 @@ class InfoTab extends Component {
                     <h4>Citation:</h4>
                     <p>
                         South Atlantic Landscape Conservation Cooperative.
-                        2016. The Conservation Blueprint Version 2.1.
+                        2017. The Conservation Blueprint Version 2.2.
                     </p>
 
                     <h4>Land ownership and conservation status:</h4>
                     <p>
-                        Secured Lands Database from TNC Eastern Division - 2014 Edition.
+                        Secured Lands Database from TNC Eastern Division - 2015 Edition.
                     </p>
 
                     <h4>Basemaps:</h4>

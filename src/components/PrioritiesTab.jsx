@@ -152,7 +152,7 @@ class PrioritiesTab extends Component {
         return (
             <div id="Content" className="flex-container-column">
                 <section>
-                    <h3>Blueprint 2.1 Priority</h3>
+                    <h3>Blueprint 2.2 Priority</h3>
                     <h4>for shared conservation action</h4>
                     { sortedPriorities.map((p, i) => this.renderPriority(p, blueprint[p])) }
                 </section>

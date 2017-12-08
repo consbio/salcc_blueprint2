@@ -14,7 +14,7 @@ const ECOSYSTEMS = {
         indicators: {
             BeachBirds: {
                 label: 'Beach birds',
-                description: "Beach birds is an index of habitat suitability for four shorebird species (Wilson's plover, American oystercatcher, least tern, piping plover). The relative use of beach habitat by these species for nesting, foraging, and breeding is an indicator of beach quality.",
+                description: "Beach birds is a continuous index of habitat suitability for four shorebird species (Wilson's plover, American oystercatcher, least tern, piping plover). The relative use of beach habitat by these species for nesting, foraging, and breeding is an indicator of beach quality.",
                 valueLabels: {
                     1: 'Below the 20th percentile of importance for bird index species',
                     2: '20th - 40th percentile of importance',
@@ -76,10 +76,10 @@ const ECOSYSTEMS = {
                 goodConditionThreshold: 4 // Placeholder
             },
             WaterVegetationEdge: {
-                label: 'Water - vegetation edge (km/sq km)',
+                label: 'Water - vegetation edge',
                 description: 'Water-vegetation edge is an index of edge length between open water and vegetation where estuarine waters meet wetland marshes. This zone is highly productive for shrimp, crab, fish, and other nekton and provides valuable foraging habitat for marsh birds. ',
                 valueLabels: {
-                    0: '0 - 0.61 km/sq km', // (km/sq km)
+                    0: '0 - 0.61 km/sq km',
                     1: '0.61 - 1.68 km/sq km',
                     2: '1.68 - 2.82 km/sq km',
                     3: '2.82 - 4.27 km/sq km',
@@ -91,7 +91,7 @@ const ECOSYSTEMS = {
                 goodConditionThreshold: 3 // Placeholder
             },
             WetlandPatchSize: {
-                label: 'Wetland patch size (hectares)',
+                label: 'Wetland patch size',
                 description: 'Wetland patch size is an index based on the size of wetland patches. Larger, better connected wetland patches benefit fish and marsh birds and protect inland areas from waves during storm events.',
                 valueLabels: {
                     0: '1 - 328 ha', // (hectares)

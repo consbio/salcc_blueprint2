@@ -1,1 +1,1 @@
-SALCC Blueprint 2.1
+SALCC Blueprint 2.2
