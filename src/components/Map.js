@@ -35,7 +35,7 @@ let config = {
             opacity: 0.6
         })
     ],
-    blueprintLayer: L.tileLayer('https://m.salcc.databasin.org/services/blueprint_2_1/tiles/{z}/{x}/{y}.png', {
+    blueprintLayer: L.tileLayer('https://m.salcc.databasin.org/services/blueprint2_2/tiles/{z}/{x}/{y}.png', {
         maxNativeZoom: 13,
         bounds: [[29.257276664000074, -85.89853697199993], [37.45876403900007, -71.28723321899992]],
         zIndex: 2

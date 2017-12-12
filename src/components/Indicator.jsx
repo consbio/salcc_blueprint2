@@ -6,21 +6,11 @@ import WhiskerPlot from './Charts/WhiskerPlot.js';
 
 class Indicator extends Component {
     render() {
-        const {label, mean, domain, goodConditionThreshold} = this.props;
+        console.log('render', this.props)
+        const {label, mean, domain} = this.props;
 
-        // Color is gray if no threshold, blue if over threshold, orange otherwise
         let bgColor = 'rgba(204, 204, 199, 0.2)';
         let color = '#777';
-        if (goodConditionThreshold !== null && goodConditionThreshold !== undefined) {
-            if (mean >= goodConditionThreshold) {
-                bgColor = 'rgba(22, 149, 22, 0.1)';
-                color = '#169516';
-            }
-            else {
-                bgColor = 'rgba(153, 7, 7, 0.1)';
-                color = '#990707'
-            }
-        }
 
         return (
             <section className="indicator" style={{backgroundColor: bgColor}} onClick={this.props.onClick}>
@@ -31,7 +21,7 @@ class Indicator extends Component {
                     {/*</a>*/}
                     {label}
                 </h4>
-                <WhiskerPlot value={mean} domain={domain} color={color} goodConditionThreshold={goodConditionThreshold}/>
+                <WhiskerPlot value={mean} domain={domain} color={color}/>
             </section>
         );
     }

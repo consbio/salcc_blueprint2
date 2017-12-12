@@ -31,8 +31,7 @@ const ECOSYSTEMS = {
                     5: '>80'
                 },
                 domain: [10, 100],
-                datasetID: '59a112afa51e4739be6c984c0fefb02d',
-                goodConditionThreshold: 60 // Placeholder
+                datasetID: '8331dd16ec304f7695bffcb1e835444e'
             },
             UnalteredBeach: {
                 label: 'Unaltered beach',
@@ -44,8 +43,7 @@ const ECOSYSTEMS = {
                 },
                 categoricalValues: range(0, 3),
                 domain: [0, 2],
-                datasetID: 'c58be422af514fbd906c93f8579efe01',
-                goodConditionThreshold: 2 // Placeholder
+                datasetID: 'e9603ae3c1e545edaff95dc14231f428'
             }
         }
     },
@@ -72,8 +70,7 @@ const ECOSYSTEMS = {
                     5: '>4.0'
                 },
                 domain: [1, 5],  //TODO: should this be 1.13 instead?
-                datasetID: 'a2fddbed78a64e73bbb5ed99b114f5f7',
-                goodConditionThreshold: 4 // Placeholder
+                datasetID: 'a2fddbed78a64e73bbb5ed99b114f5f7'
             },
             WaterVegetationEdge: {
                 label: 'Water - vegetation edge',
@@ -87,8 +84,7 @@ const ECOSYSTEMS = {
                 },
                 categoricalValues: range(0, 5),
                 domain: [0, 4],
-                datasetID: '00ecbf6049d4481db1f1416e4e3b8cc2',
-                goodConditionThreshold: 3 // Placeholder
+                datasetID: '00ecbf6049d4481db1f1416e4e3b8cc2'
             },
             WetlandPatchSize: {
                 label: 'Wetland patch size',
@@ -132,8 +128,18 @@ const ECOSYSTEMS = {
                 },
                 categoricalValues: range(0, 4),
                 domain: [0, 3],
-                datasetID: 'ecf2d74a50cc47fa99ae6ef42d838866',
-                goodConditionThreshold: 2 // Placeholder
+                datasetID: 'ecf2d74a50cc47fa99ae6ef42d838866'
+            },
+            Extent: {
+                label: 'Forested wetland extent',
+                description: "Forested wetland extent represents the amount of overall acres of existing forested wetlands present in the South Atlantic geography. Overall acreage of existing forested wetlands provides an indicator of whether forested wetlands being inundated by sea level rise are being replaced or restored somewhere else.",
+                valueLabels: {
+                    0: 'Not currently forested wetland (within forested wetland ecosystem)',
+                    1: 'Currently forested wetland (within forested wetland ecosystem)'
+                },
+                categoricalValues: range(0, 2),
+                domain: [0, 1],
+                datasetID: '72e6a105442444679fc61714feec49b4'
             }
         }
     },
@@ -158,13 +164,36 @@ const ECOSYSTEMS = {
                 domain: [0, 11907],
                 units: 'ha',
                 datasetID: '785b6209bae6492ba080df35c40cc5ba'
+            },
+            Extent: {
+                label: 'Freshwater wetland extent',
+                description: "Freshwater marsh extent captures the overall acres of freshwater marsh in the South Atlantic geography. Overall acreage provides an indicator of whether tidal freshwater marsh being inundated by sea level rise is being replaced or restored somewhere else.",
+                valueLabels: {
+                    0: 'Not currently freshwater marsh (within extent of freshwater marsh ecosystem)',
+                    1: 'Currently freshwater marsh (within extent of freshwater marsh ecosystem)'
+                },
+                categoricalValues: range(0, 2),
+                domain: [0, 1],
+                datasetID: '2456d31e940441f8a2b9558bb0fca704'
             }
         }
     },
     'MaritimeForest': {
         label: 'Maritime forest',
         color: '#8ca252',
-        indicators: {}  // Currently has no indicators
+        indicators: {
+            Extent: {
+                label: 'Maritime forest extent',
+                description: "Maritime forest extent represents the overall acres of maritime forest currently present in the South Atlantic geography. Since maritime forest has been substantially reduced from its historic extent, protecting the remaining acreage of existing maritime forest is important.",
+                valueLabels: {
+                    0: 'Not currently maritime forest (within extent of maritime forest ecosystem)',
+                    1: 'Currently maritime forest (within extent of maritime forest ecosystem)'
+                },
+                categoricalValues: range(0, 2),
+                domain: [0, 1],
+                datasetID: 'a5969b1b865b470482071d5ff2b1bbbc'
+            }
+        }
     },
     'PineAndPrairie': {
         label: 'Pine and prairie',
@@ -246,6 +275,27 @@ const ECOSYSTEMS = {
         label: 'Marine',
         color: '#1f77b4',
         indicators: {
+            Birds: {
+                label: 'Marine birds',
+                description: 'Marine birds is a continuous index of highly productive areas for birds that feed exclusively or mainly at sea. It uses seasonal predictions of relative abundance for sixteen species of marine birds. Marine birds help identify key areas of ocean productivity and complement the marine mammal index by providing finer spatial resolution and stronger connections to forage fish productivity.',
+                valueLabels: {
+                    1: 'Below the 20th percentile of importance for seasonal density of marine bird index species',
+                    2: '20th-40th percentile of importance',
+                    3: '40th-60th percentile of importance',
+                    4: '60th-80th percentile of importance',
+                    5: 'Above the 80th percentile of importance for seasonal density of marine bird index species'
+                },
+                categoricalValues: range(0, 6),
+                categories: {
+                    1: '<20',
+                    2: '20-40',
+                    3: '40-60',
+                    4: '60-80',
+                    5: '>80'
+                },
+                domain: [0, 100],
+                datasetID: '13aa474921e243e7860c7412d2988b4e'
+            },
             Mammals: {
                 label: 'Marine mammals',
                 description: 'Marine mammals is a continuous index of dolphin and whale density based on monthly density predictions for ten species of cetaceans and yearly density predictions for three rarer cetacean species. Marine mammals help identify key areas of ocean productivity and overall ocean health because they have long life spans, feed at high trophic levels, and can accumulate anthropogenic chemicals and toxins in their large blubber stores.',
@@ -388,7 +438,7 @@ const ECOSYSTEMS = {
                 },
                 categoricalValues: range(0, 8),
                 domain: [0, 7],
-                datasetID: '72cd46173b7b4801bfa88458b29d0d9b'
+                datasetID: '62f821c124bb418298b0375dfcce830b'
             }
         }
     },
@@ -427,6 +477,12 @@ const ECOSYSTEMS = {
                 datasetID: '88e4e923d1e94e1d833f0cfd5bb93d5e'
             }
         }
+    },
+    'Waterbodies': {
+        // Not really an ecosystem, does not have indicators
+        label: 'Inland waterbodies',
+        color: '#004DA8',
+        indicators: {}
     }
 };
 
@@ -468,10 +524,13 @@ class Ecosystem extends Component {
 
     render() {
         const {ecosystem, icon, selectedIndicator} = this.props;
+        console.log('render props', this.props)
+
         const ecosystemConfig = ECOSYSTEMS[ecosystem];
         const {label} = ecosystemConfig;
 
         if (selectedIndicator !== null) {
+            console.log('selected', selectedIndicator)
             return (
                 <IndicatorDetails ecosystemLabel={label}
                                   ecosystemIcon={icon}
@@ -493,6 +552,8 @@ class Ecosystem extends Component {
                 indicators[indicator]
             );
         });
+
+        console.log('merged', mergedIndicators)
 
         return (
             <div className="ecosystem">

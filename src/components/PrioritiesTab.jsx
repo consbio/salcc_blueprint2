@@ -143,7 +143,7 @@ class PrioritiesTab extends Component {
         const {data} = this.props;
         const {blueprint, justification, plans} = data;
 
-        const sortedPriorities = [4, 3, 2, 1, 0];
+        const sortedPriorities = [5, 4, 3, 2, 1, 0];
 
         const regionalPlans = plans.filter((p) => {return PLANS[p].type === 'regional'});
         const statePlans = plans.filter((p) => {return PLANS[p].type === 'state'});

@@ -7,7 +7,7 @@ import {scaleLinear} from 'd3-scale';
 class WhiskerPlot extends ResponsiveWidthComponent {
 
     render() {
-        const {value, domain, color, goodConditionThreshold} = this.props;
+        const {value, domain, color} = this.props;
         const textHeight = 12;
         const {width} = this.state;
         const margin = {
@@ -32,18 +32,7 @@ class WhiskerPlot extends ResponsiveWidthComponent {
                 {this.state.width > 0 &&
                     (
                         <svg className="chart-whisker" width={width} height={height}>
-
-                            {goodConditionThreshold !== null
-                                ?
-                                (<g>
-                                    <line className="domain" x1={x.range()[0]} x2={x(goodConditionThreshold)} y1={midY} y2={midY} stroke="#990707"/>
-                                    <line className="domain" x1={x(goodConditionThreshold)} x2={x.range()[1]} y1={midY} y2={midY} stroke="#169516"/>
-                                </g>)
-                                :
-                                <line className="domain" x1={x.range()[0]} x2={x.range()[1]} y1={midY} y2={midY} stroke="#777"/>
-                            }
-
-                            {/*<circle cx={x(value)} cy={midY} r={radius} fill={color}/>*/}
+                            <line className="domain" x1={x.range()[0]} x2={x.range()[1]} y1={midY} y2={midY} stroke="#777"/>
                             <polygon points={poly} fill={color} />
                             <text x="0" y={textY} textAnchor="begin" fill="#AAA" fontSize={12}>Low</text>
                             <text x={width} y={textY} textAnchor="end" fill="#AAA" fontSize={12}>High</text>
@@ -61,7 +50,6 @@ WhiskerPlot.defaultProps = {
     domain: [0, 1], // == absolute range
     icon: null,  // url to icon, optional
     color: '#DDD',
-    goodConditionThreshold: null,
 
     insetWidth: 20 // parent padding
 };

@@ -105,6 +105,7 @@ class IndicatorsTab extends Component {
 
         // sort ecosystems by decreasing area, so that cross-system indicators are always on the right
         let ecosystems = Object.entries(this.props.data.ecosystems);  // => [[ecosystemID, ecosystemData]...]
+        ecosystems = ecosystems.filter((d) => d[1].indicators);  // only keep the ecosystems that have indicators
         ecosystems.sort(this.sortEcosystems);
 
         const ecosystemIDs = ecosystems.map((e) => e[0]);
