@@ -6,7 +6,6 @@ import WhiskerPlot from './Charts/WhiskerPlot.js';
 
 class Indicator extends Component {
     render() {
-        console.log('render', this.props)
         const {label, mean, domain} = this.props;
 
         let bgColor = 'rgba(204, 204, 199, 0.2)';

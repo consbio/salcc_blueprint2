@@ -524,13 +524,11 @@ class Ecosystem extends Component {
 
     render() {
         const {ecosystem, icon, selectedIndicator} = this.props;
-        console.log('render props', this.props)
 
         const ecosystemConfig = ECOSYSTEMS[ecosystem];
         const {label} = ecosystemConfig;
 
         if (selectedIndicator !== null) {
-            console.log('selected', selectedIndicator)
             return (
                 <IndicatorDetails ecosystemLabel={label}
                                   ecosystemIcon={icon}
@@ -552,8 +550,6 @@ class Ecosystem extends Component {
                 indicators[indicator]
             );
         });
-
-        console.log('merged', mergedIndicators)
 
         return (
             <div className="ecosystem">
