@@ -57,17 +57,23 @@
     position: absolute;
     z-index: 10000;
     top: 40px;
-    left: 0;
     right: 0;
     background: #F7F7F7;
     color: #777;
+    width: 100%;
+    max-width: 768px;
+    box-shadow: 1px 1px 3px #555;
 }
 
 .gplaces-search-results li {
     padding: 8px;
-    border-bottom: 1px solid #DDD;
     cursor: pointer;
 }
+
+.gplaces-search-results li + li {
+    border-top: 1px solid #DDD;
+}
+
 
 .gplaces-search-results li b {
     color: #333;
