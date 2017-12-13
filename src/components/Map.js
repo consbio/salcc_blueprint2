@@ -36,7 +36,7 @@ let config = {
         })
     ],
     blueprintLayer: L.tileLayer('https://m.salcc.databasin.org/services/blueprint2_2/tiles/{z}/{x}/{y}.png', {
-        maxNativeZoom: 13,
+        maxNativeZoom: 15,
         bounds: [[29.257276664000074, -85.89853697199993], [37.45876403900007, -71.28723321899992]],
         zIndex: 2
     }),
