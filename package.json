@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "babel-polyfill": "^6.23.0",
+    "chart.js": "^1.1.1",
+    "bulma": "^0.6.1",
     "d3-array": "^1.2.0",
     "d3-scale": "1.0.6",
     "es6-promise": "^4.1.1",

@@ -26,7 +26,8 @@ class App extends Component {
 
         this.state = {
             activeTab: null,
-            place: null
+            place: null,
+            width: window.innerWidth
         };
 
         this.placeSearch = null;
@@ -115,7 +116,19 @@ class App extends Component {
             case 'Info':
                 return <InfoTab/>;
             default:
-                return null;
+                if(this.state.width > 700 && this.props.selectedUnit === null){
+                    console.log('width is ', this.width);
+                    return <InfoTab/>;
+                }
+                else if (this.state.width > 700 && this.props.selectedUnit !== null && !this.props.isPending){
+                    if (this.props.selectedUnit === null) return null;
+
+                    const info = (this.props.isPending)? 'Loading...': this.props;
+                    return <PrioritiesTab {...this.props}/>;
+                }
+                else {
+                    return null;
+                }
         }
     }
 

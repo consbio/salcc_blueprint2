@@ -22,7 +22,7 @@ const loggerMiddleware = createLogger();
 const store = createStore(
     rootReducer,
     applyMiddleware(
-        createRavenMiddleware(Raven),
+        /*createRavenMiddleware(Raven),*/
         thunkMiddleware,
         loggerMiddleware
     )

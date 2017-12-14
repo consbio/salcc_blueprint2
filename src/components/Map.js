@@ -6,6 +6,7 @@ import 'leaflet.vectorgrid';
 import 'leaflet-basemaps';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-basemaps/L.Control.Basemaps.css';
+import './customleaflet.css';
 
 // Make leaflet icons work properly from webpack / react context
 delete L.Icon.Default.prototype._getIconUrl;
