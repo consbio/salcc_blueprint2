@@ -104,6 +104,7 @@ class App extends Component {
     }
 
     renderActiveTab() {
+        if(this.props.isPending) return null;
         switch (this.state.activeTab) {//if the previous state is the same tab, then close the tab
             case 'Priorities':
                 return <PrioritiesTab {...this.props}/>;
@@ -117,14 +118,18 @@ class App extends Component {
                 return <InfoTab/>;
             default:
                 if(this.state.width > 700 && this.props.selectedUnit === null){
-                    console.log('width is ', this.width);
+                    console.log('width is ', this.state.width);
+                    //this.changeTab('Info');
+                    console.log(this.state.activeTab);
                     return <InfoTab/>;
                 }
                 else if (this.state.width > 700 && this.props.selectedUnit !== null && !this.props.isPending){
                     if (this.props.selectedUnit === null) return null;
 
-                    const info = (this.props.isPending)? 'Loading...': this.props;
-                    return <PrioritiesTab {...this.props}/>;
+                    //this.changeTab('Priorities');
+                    //else if(this.state.activeTab === 'Priorities') return <PrioritiesTab {...this.props}/>;
+                    //this.renderActiveTab();
+                    //return <PrioritiesTab {...this.props}/>;
                 }
                 else {
                     return null;
@@ -181,6 +186,7 @@ class App extends Component {
                         onFocus={() => this.changeTab(null)}
                         onSelect={this.handlePlaceSelect}/>
                 </header>
+                <div id="blankContent">Select a tab</div>
 
                 { this.renderUnitName() }
                 { this.renderActiveTab() }
