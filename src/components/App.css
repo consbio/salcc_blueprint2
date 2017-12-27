@@ -34,6 +34,12 @@ header .button {
     text-align: center;
 }
 
+@media screen and (min-width: 700px) {
+    header {
+
+    }
+}
+
 footer {
     opacity: 0;
     height: 47px;
@@ -51,7 +57,7 @@ footer {
 @media screen and (min-width: 700px) {
     footer {
         top: 80px;
-        width: 370px;
+        width: 490px;
         position: absolute;
         border-bottom: 1px solid #DDD;
         z-index: 5005;
@@ -153,7 +159,7 @@ header, footer{
 @media screen and (min-width: 700px) {
     #UnitName {
         top: 40px;
-        width: 370px;
+        width: 490px;
         bottom: 0px;
         box-shadow: 0 2px 2px #555;
     }
@@ -177,7 +183,7 @@ header, footer{
 @media screen and (min-width: 700px) {
     #Content {
         top: 129px;
-        width: 350px;
+        width: 470px;
         bottom: 0px;
         box-shadow: 0 6px 6px #555;
     }
@@ -192,7 +198,7 @@ header, footer{
 @media screen and (min-width: 700px) {
     #blankContent {
         top: 121px;
-        width: 350px;
+        width: 470px;
         bottom: 0px;
         background: #FFF;
         color: #AAA;

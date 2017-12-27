@@ -95,8 +95,8 @@ class App extends Component {
 
         return (
             <div key={index}
-                className={className}
-                onClick={() => this.changeTab(tab)}>
+                 className={className}
+                 onClick={() => this.changeTab(tab)}>
                 <TabIcons icon={tab} height={24} />
                 <label>{tab}</label>
             </div>
@@ -126,7 +126,7 @@ class App extends Component {
                 else if (this.state.width > 700 && this.props.selectedUnit !== null && !this.props.isPending){
                     if (this.props.selectedUnit === null) return null;
 
-                    //this.changeTab('Priorities');
+                    this.changeTab('Priorities');
                     //else if(this.state.activeTab === 'Priorities') return <PrioritiesTab {...this.props}/>;
                     //this.renderActiveTab();
                     //return <PrioritiesTab {...this.props}/>;
@@ -148,6 +148,39 @@ class App extends Component {
                 { this.tabs.map((tab, index) => this.renderTab(tab, index)) }
             </footer>
         );
+    }
+
+    renderHeader(){
+        if(this.state.width > 700){
+
+            return(
+            <header>
+                <div className="flex-container flex-justify-center flex-align-center" style={{}}>
+                    <img src="/logo_96x96.png" style={{height: 32, padding:6, verticalAlign: 'middle'}} alt="SALCC Logo"/>
+                    South Atlantic Conservation Blueprint 2.2
+                </div>
+
+                <GooglePlacesSearch ref={(ref) => this.placeSearch = ref} selected={this.state.place}
+                                        onFocus={() => this.changeTab(null)}
+                                        onSelect={this.handlePlaceSelect}/>
+            </header>
+            );
+        }
+        else{
+            return(
+            <header>
+                <div id="InfoButton"
+                         className={this.state.activeTab === 'Info' ? 'active' : ''}
+                         onClick={() => this.changeTab('Info')}>
+                        i
+                    </div>
+
+                    <GooglePlacesSearch ref={(ref) => this.placeSearch = ref} selected={this.state.place}
+                                        onFocus={() => this.changeTab(null)}
+                                        onSelect={this.handlePlaceSelect}/>
+            </header>
+            );
+        }
     }
 
     renderError () {
@@ -176,16 +209,10 @@ class App extends Component {
                      onSetLocation={this.handlePlaceSelect}
                      onClick={this.handleMapClick} />
 
-                <header>
-                    <div id="InfoButton"
-                         className={this.state.activeTab === 'Info' ? 'active' : ''}
-                         onClick={() => this.changeTab('Info')}>
-                        i
-                    </div>
-                    <GooglePlacesSearch ref={(ref) => this.placeSearch = ref} selected={this.state.place}
-                        onFocus={() => this.changeTab(null)}
-                        onSelect={this.handlePlaceSelect}/>
-                </header>
+
+                    { this.renderHeader() }
+
+
                 <div id="blankContent">Select a tab</div>
 
                 { this.renderUnitName() }
