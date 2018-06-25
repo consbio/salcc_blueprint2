@@ -1,6 +1,6 @@
 .gplaces-search {
     flex: 1;
-    border-left: 1px solid #EEE;
+    border-left: 1px solid #eee;
 }
 
 .gplaces-search-input-container {
@@ -17,8 +17,8 @@
     padding: 4px 22px 4px 4px;
     outline: none;
     font-size: 16px;
-    color: #AAA;
-    background: #EEE;
+    color: #aaa;
+    background: #eee;
     border-radius: 6px;
     border: 1px solid transparent;
     line-height: 1;
@@ -30,7 +30,7 @@
 .gplaces-search input::-webkit-input-placeholder {
     font-size: small;
     line-height: 1.5;
-    color: #AAA;
+    color: #aaa;
 }
 
 .gplaces-search-reset {
@@ -40,14 +40,14 @@
     cursor: pointer;
     height: 18px;
     width: 18px;
-    fill: #AAA;
+    fill: #aaa;
 }
 
 .gplaces-search-spinner {
     position: absolute;
     right: 28px;
     top: 10px;
-    background: #EEE;
+    background: #eee;
 }
 
 .gplaces-search-results {
@@ -58,7 +58,7 @@
     z-index: 10000;
     top: 40px;
     right: 0;
-    background: #F7F7F7;
+    background: #f7f7f7;
     color: #777;
     width: 100%;
     max-width: 768px;
@@ -71,9 +71,8 @@
 }
 
 .gplaces-search-results li + li {
-    border-top: 1px solid #DDD;
+    border-top: 1px solid #ddd;
 }
-
 
 .gplaces-search-results li b {
     color: #333;
@@ -88,7 +87,7 @@
     top: 40px;
     left: 0;
     right: 0;
-    color: #AAA;
-    background: #F7F7F7;
-    border-bottom: 1px solid #DDD;
+    color: #aaa;
+    background: #f7f7f7;
+    border-bottom: 1px solid #ddd;
 }

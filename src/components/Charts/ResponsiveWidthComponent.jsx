@@ -1,36 +1,36 @@
-import {Component} from 'react';
-import PropTypes from 'prop-types';
+import { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class ResponsiveWidthComponent extends Component {
     // Handle width properly, inspired by:
     // https://github.com/codesuki/react-d3-components/issues/9
 
     constructor(props) {
-        super(props);
-        this.state = {width: 0};
-        this.domNode = null;
-    }
-
-    fitToParentSize() {
-        if (!(this.domNode && this.domNode.parentNode)) return;
-
-        const width = this.domNode.parentNode.offsetWidth - this.props.insetWidth;
-        if (width !== this.state.width) {
-            this.setState({width});
-        }
+        super(props)
+        this.state = { width: 0 }
+        this.domNode = null
     }
 
     componentDidMount() {
-        window.addEventListener('resize', this.fitToParentSize.bind(this));
-        this.fitToParentSize();
+        window.addEventListener('resize', this.fitToParentSize.bind(this))
+        this.fitToParentSize()
     }
 
     componentWillReceiveProps() {
-        this.fitToParentSize();
+        this.fitToParentSize()
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.fitToParentSize.bind(this));
+        window.removeEventListener('resize', this.fitToParentSize.bind(this))
+    }
+
+    fitToParentSize() {
+        if (!(this.domNode && this.domNode.parentNode)) return
+
+        const width = this.domNode.parentNode.offsetWidth - this.props.insetWidth
+        if (width !== this.state.width) {
+            this.setState({ width })
+        }
     }
 
     // Root node of component MUST set reference for this.domNode
@@ -39,15 +39,14 @@ class ResponsiveWidthComponent extends Component {
     //         <div ref={(node) => {this.domNode = node}}></div>
     //     );
     // }
-
 }
 
 ResponsiveWidthComponent.propTypes = {
     insetWidth: PropTypes.number
-};
+}
 
 ResponsiveWidthComponent.defaultProps = {
-    insetWidth: 0  // corresponds to the total padding width of the parent node
-};
+    insetWidth: 0 // corresponds to the total padding width of the parent node
+}
 
-export default ResponsiveWidthComponent;
+export default ResponsiveWidthComponent
