@@ -1,0 +1,38 @@
+{
+    "FED": {
+        "color": "#2ca02c",
+        "label": "Federal"
+    },
+    "STP": {
+        "color": "#1f77b4",
+        "label": "State/province"
+    },
+    "LOC": {
+        "color": "#aec7e8",
+        "label": "Local"
+    },
+    "TNC": {
+        "color": "#98df8a",
+        "label": "The Nature Conservancy"
+    },
+    "PNP": {
+        "color": "#ad494a",
+        "label": "Private non-profit"
+    },
+    "PFP": {
+        "color": "#ff7f0e",
+        "label": "Private for-profit"
+    },
+    "PLO": {
+        "color": "#d62728",
+        "label": "Private land owner"
+    },
+    "TRB": {
+        "color": "#9467bd",
+        "label": "Tribal"
+    },
+    "UNK": {
+        "color": "#c49c94",
+        "label": "Ownership unknown"
+    }
+}

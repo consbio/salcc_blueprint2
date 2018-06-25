@@ -1,0 +1,196 @@
+{
+    "plans": [
+        // list of plans for this summary unit.  See src/config/plans.json for lookup table
+        "PARCA",
+        "TNC",
+        "ACJV",
+        "NBCI",
+        "Florida"
+    ],
+    "gap": {
+        // keys are gap codes (see src/config/protection.json)
+        "2": 15.3,
+        "3": 4.6
+    },
+    "owner": {
+        // keys are owner codes (see src/config/owners.json)
+        "STP": 4.6,
+        "FED": 15.3
+    },
+    "name": "Barnett Creek-Black Point Swamp Frontal", // summary unit name
+    "justification":
+        "Part of the Okefenokee/Osceola/Eglin AFB Complex and Big Bend coastline. This is a large landscape containing longleaf pine, large swamps, and rivers (Suwanee and St. Marys).  Also this area ties the Gulf and Atlantic coasts together. There is a group of stakeholders that have done conservation planning in the Okefenokee/Osceola area and they should be consulted regarding management actions. Important area for coastal to inland migration of communities and species. A key area for management and protection in response to sea level rise and an important area for economy for inshore/near-shore harvest (clams, scallops, oysters). A rich estuarine habitat with a dependency on freshwater flows and inputs. There is connectivity from coastal waters to inland freshwater and many threatened/endangered species. Concentration of working forests and fisheries.",
+    "counties": {
+        // keys are county FIPS code (used for building link to Land Trust Alliance website); values are the name and state of the county
+        "12075": "Levy County, Florida"
+    },
+    "SRCID": "031101010504", // HUC12 or Marine block ID
+    "basin": "Aucilla-Waccasassa",
+    "blueprint": [5, 0, 0, 95, 1, 0], // Blueprint priorities: percent.  Order is same as src/config/priorities.json (first percent is same as index 0 in priorities.json)
+    "ecosystems": {
+        // list of ecosystem keys.  See src/config/ecosystems for ecosystem names and other info
+        // Not all ecosystems have a percent value
+        "FreshwaterAquatic": {
+            "indicators": {
+                // list of indicators for this ecosystem
+                "ImperiledAquaticSpecies": {
+                    "min": 0, // min value observed in this summary unit (not currently used)
+                    "mean": 0.9993, // mean value observed in this summary unit (used to show triangle indicator on ecosystem chart)
+                    "max": 1, // max value observed in this summary unit (not currently used)
+                    "percent": [0.1, 99.9, 0, 0, 0] // percent of indicator in each category in src/config/ecosystems[ecosystem][indcator]['categories'] (also valueLabels)
+                },
+                "RiparianBuffers": {
+                    "min": 85,
+                    "mean": 98.3912,
+                    "max": 100,
+                    "percent": [0, 0, 0, 1.5, 98.5]
+                },
+                "PermeableSurface": {
+                    "min": 98,
+                    "mean": 99.964,
+                    "max": 100,
+                    "percent": [0, 0, 0, 100]
+                }
+            }
+        },
+        "MaritimeForest": {
+            "indicators": {
+                "Extent": {
+                    "min": 1,
+                    "mean": 1,
+                    "max": 1,
+                    "percent": [0, 100]
+                }
+            },
+            "percent": 0.1 // percent of this ecosystem within the summary unit
+        },
+        "Estuarine": {
+            "indicators": {
+                "WaterVegetationEdge": {
+                    "min": 0,
+                    "mean": 1.8332,
+                    "max": 4,
+                    "percent": [34.8, 13.8, 12.4, 11.3, 27.7]
+                },
+                "CoastalCondition": {
+                    "min": 2.6667,
+                    "mean": 2.6667,
+                    "max": 2.6667,
+                    "percent": [0, 0, 100, 0, 0]
+                },
+                "WetlandPatchSize": {
+                    "min": 0,
+                    "mean": 2.2094,
+                    "max": 3,
+                    "percent": [26.4, 0, 0, 73.6, 0]
+                }
+            },
+            "percent": 70.7
+        },
+        "PineAndPrairie": {
+            "indicators": {
+                "Amphibians": {
+                    "min": 0,
+                    "mean": 0,
+                    "max": 0,
+                    "percent": [100, 0]
+                },
+                "RegularlyBurnedHabitat": {
+                    "min": 0,
+                    "mean": 0.4029,
+                    "max": 1,
+                    "percent": [59.7, 40.3]
+                },
+                "Birds": {
+                    "min": 0,
+                    "mean": 0.881,
+                    "max": 2,
+                    "percent": [27.3, 57.3, 15.4, 0]
+                }
+            },
+            "percent": 8.7
+        },
+        "FreshwaterMarsh": {
+            "indicators": {
+                "Birds": {
+                    "min": 0,
+                    "mean": 14.6082,
+                    "max": 34,
+                    "percent": [33, 33, 34]
+                },
+                "Extent": {
+                    "min": 0,
+                    "mean": 0.4037,
+                    "max": 1,
+                    "percent": [59.6, 40.4]
+                }
+            },
+            "percent": 1.7
+        },
+        "Marine": {
+            "percent": 6.7
+        },
+        "Landscapes": {
+            "indicators": {
+                "LowUrbanHistoric": {
+                    "min": 0,
+                    "mean": 0.0003,
+                    "max": 1,
+                    "percent": [100, 0, 0]
+                },
+                "ResilientBiodiversityHotspots": {
+                    "min": 0,
+                    "mean": 4.2213,
+                    "max": 7,
+                    "percent": [17.1, 0, 0, 0.3, 26.2, 25.6, 27, 3.8]
+                },
+                "LowRoadDensityPatches": {
+                    "min": 0,
+                    "mean": 0.4464,
+                    "max": 1,
+                    "percent": [55.4, 44.6]
+                }
+            }
+        },
+        "ForestedWetland": {
+            "indicators": {
+                "Amphibians": {
+                    "min": 0,
+                    "mean": 0.0066,
+                    "max": 1,
+                    "percent": [99.3, 0.7]
+                },
+                "Extent": {
+                    "min": 0,
+                    "mean": 0.8322,
+                    "max": 1,
+                    "percent": [16.8, 83.2]
+                },
+                "Birds": {
+                    "min": 0,
+                    "mean": 0.8925,
+                    "max": 2,
+                    "percent": [49.3, 12.2, 38.5, 0]
+                }
+            },
+            "percent": 12.1
+        },
+        "Waterscapes": {
+            "indicators": {
+                "MigratoryFishConnectivity": {
+                    "min": 1,
+                    "mean": 1.3909,
+                    "max": 4,
+                    "percent": [61, 39, 0, 0]
+                },
+                "NetworkComplexity": {
+                    "min": 1,
+                    "mean": 1.3927,
+                    "max": 6,
+                    "percent": [61.5, 38.4, 0, 0, 0, 0.2, 0]
+                }
+            }
+        }
+    },
+    "acres": 91204 // size of the summary unit, in acres
+}
