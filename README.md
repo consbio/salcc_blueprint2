@@ -20,7 +20,7 @@ the React front-end application over HTTPS, and `mbtileserver` to provide the ma
 
 The server currently runs Caddy as the reverse proxy and static fileserver.
 
-Server configuration steps are available in the [wiki](https://bitbucket.org/databasin/salcc-mobile-dev/wiki/Home).
+Server configuration steps are available in the [wiki](https://github.com/consbio/salcc_blueprint2/wiki).
 
 
 1. check in and push latest version of the code
