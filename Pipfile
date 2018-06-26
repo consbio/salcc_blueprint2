@@ -9,5 +9,7 @@ pandas = "*"
 geopandas = "*"
 fiona = "*"
 python-docx = "*"
+pytest = "*"
 
 [dev-packages]
+pytest = "*"
