@@ -12,15 +12,15 @@ DOC_STYLE = 'SALCC'
 PLACEHOLDER_REGEX = re.compile(r'{{(?P<scope>\w+):(?P<key>\w+)}}')
 
 
-def create_docx_report(pk):
+def create_report(id, path):
     """
         Creates reports for analyses in docx format.
     """
     doc = Document('template.docx')
 
-    path = '/root/public/data/report.docx'
+    # path = '/root/api/tests/report.docx'
 
-    context = generate_report_context(pk)
+    context = generate_report_context(id)
 
     for p in doc.paragraphs:
         # Assumption: placeholders are always completely contained within a run
@@ -55,72 +55,72 @@ def create_docx_report(pk):
     doc.save(path)
 
 
-def generate_report_context(pk):
+def generate_report_context(id):
     """
         Retrieve data from Analysis and related objects
     """
 
-    with open(os.path.join('/root/src/config/ecosystems.json')) as e_json_file:
+    with open(os.path.join('../src/config/ecosystems.json')) as e_json_file:
         ecosystems_json = json.loads(e_json_file.read())
-    with open(os.path.join('/root/src/config/owners.json')) as o_json_file:
+    with open(os.path.join('../src/config/owners.json')) as o_json_file:
         owners_json = json.loads(o_json_file.read())
-    with open(os.path.join('/root/src/config/plans.json')) as pl_json_file:
+    with open(os.path.join('../src/config/plans.json')) as pl_json_file:
         plans_json = json.loads(pl_json_file.read())
-    with open(os.path.join('/root/src/config/priorities.json')) as pri_json_file:
+    with open(os.path.join('../src/config/priorities.json')) as pri_json_file:
         priorities_json = json.loads(pri_json_file.read())
-    with open(os.path.join('/root/src/config/protection.json')) as pro_json_file:
+    with open(os.path.join('../src/config/protection.json')) as pro_json_file:
         protection_json = json.loads(pro_json_file.read())
 
-    with open(os.path.join('/root/src/config/{}.json'.format(pk))) as json_file:
+    with open(os.path.join('../public/data/{0}.json'.format(id))) as json_file:
         context_json = json.loads(json_file.read())
 
     context = {}
 
     context['value'] = {'summary_unit_name': context_json['name']}
 
-    partners = {}
+    partners = []
     for plan in context_json['plans']:
         partners.append(plans_json[plan])
-    print(partners)
+    # print(partners)
 
     context['partners'] = partners
-
-    # TODO: build tables
+    #
+    # # TODO: build tables
     context['table'] = {'priorities': [], 'ecosystems': [], 'ownership': [], 'protection': []}
 
-    print(context)
+    # print(context)
     return context
 
 
-def create_table(doc, data):
-    """
-    Builds table at end of doc
-
-    Parameters
-    ----------
-    doc: docx.Document object
-    data: dict
-        table data; 'data' contains a list of column names ('col_names') and a list of rows ('rows'),
-        where each row is a list of values for each column
-    """
-
-    styles = doc.styles
-    ncols = len(data['col_names'])
-    # Create table with one row for column headings
-    table = doc.add_table(rows=1, cols=ncols)
-    table.style = styles[DOC_STYLE]
-
-    for index, heading in enumerate(data['col_names']):
-        cell = table.cell(0, index)
-        cell.text = heading
-
-    for datarow in data['rows']:
-        row = table.add_row()
-        for index, datacell in enumerate(datarow):
-            row.cells[index].text = datacell
-
-    # Ensure any following tables are separated from this one by inserting an empty paragraph
-    doc.add_paragraph('')
+# def create_table(doc, data):
+#     """
+#     Builds table at end of doc
+#
+#     Parameters
+#     ----------
+#     doc: docx.Document object
+#     data: dict
+#         table data; 'data' contains a list of column names ('col_names') and a list of rows ('rows'),
+#         where each row is a list of values for each column
+#     """
+#
+#     styles = doc.styles
+#     ncols = len(data['col_names'])
+#     # Create table with one row for column headings
+#     table = doc.add_table(rows=1, cols=ncols)
+#     table.style = styles[DOC_STYLE]
+#
+#     for index, heading in enumerate(data['col_names']):
+#         cell = table.cell(0, index)
+#         cell.text = heading
+#
+#     for datarow in data['rows']:
+#         row = table.add_row()
+#         for index, datacell in enumerate(datarow):
+#             row.cells[index].text = datacell
+#
+#     # Ensure any following tables are separated from this one by inserting an empty paragraph
+#     doc.add_paragraph('')
 
 
 def _resolve(scope, key, context):
@@ -148,3 +148,10 @@ def _resolve(scope, key, context):
         raise ValueError('Key {0} is not found in context!'.format(key))
 
     return context[scope][key]
+
+
+if __name__ == '__main__':
+    id = 'I1'
+    # outpath = '/tmp/{0}.docx'.format(id)
+    outpath = 'tests/{0}.docx'.format(id)
+    create_report(id, outpath)
