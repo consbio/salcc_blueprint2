@@ -1,20 +1,20 @@
-import React, {Component} from 'react';
-// import PropTypes from 'prop-types';
-import {range} from 'd3-array';
-import {formatPercent} from '../utils';
-import Indicator from './Indicator';
-import IndicatorDetails from './IndicatorDetails';
-
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { range } from 'd3-array'
+import { formatPercent } from '../utils'
+import Indicator from './Indicator'
+import IndicatorDetails from './IndicatorDetails'
 
 // Ecosystem globals live here
 const ECOSYSTEMS = {
-    'BeachAndDune': {
+    BeachAndDune: {
         label: 'Beach and dune',
         color: '#e7cb94',
         indicators: {
             BeachBirds: {
                 label: 'Beach birds',
-                description: "Beach birds is a continuous index of habitat suitability for four shorebird species (Wilson's plover, American oystercatcher, least tern, piping plover). The relative use of beach habitat by these species for nesting, foraging, and breeding is an indicator of beach quality.",
+                description:
+                    "Beach birds is a continuous index of habitat suitability for four shorebird species (Wilson's plover, American oystercatcher, least tern, piping plover). The relative use of beach habitat by these species for nesting, foraging, and breeding is an indicator of beach quality.",
                 valueLabels: {
                     1: 'Below the 20th percentile of importance for bird index species',
                     2: '20th - 40th percentile of importance',
@@ -35,7 +35,8 @@ const ECOSYSTEMS = {
             },
             UnalteredBeach: {
                 label: 'Unaltered beach',
-                description: 'Unaltered beach is an index of impacts from hardened structures like jetties, groins, and human infrastructure. Shoreline infrastructure degrades beach habitat, impedes beach migration and barrier island rollover processes, and can cause erosion.',
+                description:
+                    'Unaltered beach is an index of impacts from hardened structures like jetties, groins, and human infrastructure. Shoreline infrastructure degrades beach habitat, impedes beach migration and barrier island rollover processes, and can cause erosion.',
                 valueLabels: {
                     0: 'Vulnerable to alteration, with/without nearby jetties/groins (low)',
                     1: 'Less vulnerable with nearby jetties/groins',
@@ -47,13 +48,14 @@ const ECOSYSTEMS = {
             }
         }
     },
-    'Estuarine': {
+    Estuarine: {
         label: 'Estuarine',
         color: '#9edae5',
         indicators: {
             CoastalCondition: {
                 label: 'Coastal condition',
-                description: 'Coastal condition is a continuous index of water quality, sediment quality, and benthic community condition that reflects the overall abiotic status of open water estuaries and estuarine marsh. Developed by the Environmental Protection Agency (EPA), these measures capture human impacts on the environment like nonpoint source pollution.',
+                description:
+                    'Coastal condition is a continuous index of water quality, sediment quality, and benthic community condition that reflects the overall abiotic status of open water estuaries and estuarine marsh. Developed by the Environmental Protection Agency (EPA), these measures capture human impacts on the environment like nonpoint source pollution.',
                 valueLabels: {
                     1: 'Poor',
                     2: 'Fair to poor',
@@ -69,12 +71,13 @@ const ECOSYSTEMS = {
                     4: '3.7-4.0',
                     5: '>4.0'
                 },
-                domain: [1, 5],  //TODO: should this be 1.13 instead?
+                domain: [1, 5], // TODO: should this be 1.13 instead?
                 datasetID: 'a2fddbed78a64e73bbb5ed99b114f5f7'
             },
             WaterVegetationEdge: {
                 label: 'Water - vegetation edge',
-                description: 'Water-vegetation edge is an index of edge length between open water and vegetation where estuarine waters meet wetland marshes. This zone is highly productive for shrimp, crab, fish, and other nekton and provides valuable foraging habitat for marsh birds. ',
+                description:
+                    'Water-vegetation edge is an index of edge length between open water and vegetation where estuarine waters meet wetland marshes. This zone is highly productive for shrimp, crab, fish, and other nekton and provides valuable foraging habitat for marsh birds. ',
                 valueLabels: {
                     0: '0 - 0.61 km/sq km',
                     1: '0.61 - 1.68 km/sq km',
@@ -88,7 +91,8 @@ const ECOSYSTEMS = {
             },
             WetlandPatchSize: {
                 label: 'Wetland patch size',
-                description: 'Wetland patch size is an index based on the size of wetland patches. Larger, better connected wetland patches benefit fish and marsh birds and protect inland areas from waves during storm events.',
+                description:
+                    'Wetland patch size is an index based on the size of wetland patches. Larger, better connected wetland patches benefit fish and marsh birds and protect inland areas from waves during storm events.',
                 valueLabels: {
                     0: '1 - 328 ha', // (hectares)
                     1: '329 - 1,228 ha',
@@ -102,13 +106,14 @@ const ECOSYSTEMS = {
             }
         }
     },
-    'ForestedWetland': {
+    ForestedWetland: {
         label: 'Forested wetland',
         color: '#cedb9c',
         indicators: {
             Amphibians: {
                 label: 'Forested wetland amphibians',
-                description: 'Forested wetland amphibians draws from the Priority Amphibian and Reptile Conservation Areas (PARCAs) located in forested wetland habitat. PARCA is an expert-driven, nonregulatory designation that captures places capable of supporting viable amphibian and reptile populations. PARCAs include areas where rare or at-risk species have been observed or are likely to occur (like embedded, isolated wetlands).',
+                description:
+                    'Forested wetland amphibians draws from the Priority Amphibian and Reptile Conservation Areas (PARCAs) located in forested wetland habitat. PARCA is an expert-driven, nonregulatory designation that captures places capable of supporting viable amphibian and reptile populations. PARCAs include areas where rare or at-risk species have been observed or are likely to occur (like embedded, isolated wetlands).',
                 valueLabels: {
                     0: 'Not a Priority Amphibian and Reptile Conservation Area (PARCA) within forested wetlands',
                     1: 'Priority Amphibian and Reptile Conservation Area (PARCA) within forested wetlands'
@@ -119,7 +124,8 @@ const ECOSYSTEMS = {
             },
             Birds: {
                 label: 'Forested wetland birds',
-                description: "Forested wetland birds is an index of habitat suitability for six bird species (Northern parula, black-throated green warbler, red-headed woodpecker, Chuck-will's widow, prothonotary warbler, Swainson's warbler) based on patch size and proximity to water. The needs of these species are increasingly restrictive at higher index values, reflecting better quality habitat.",
+                description:
+                    "Forested wetland birds is an index of habitat suitability for six bird species (Northern parula, black-throated green warbler, red-headed woodpecker, Chuck-will's widow, prothonotary warbler, Swainson's warbler) based on patch size and proximity to water. The needs of these species are increasingly restrictive at higher index values, reflecting better quality habitat.",
                 valueLabels: {
                     0: 'Less potential for presence of bird index species',
                     1: "Potential for presence of Northern parula,black-throated green warbler,red-headed woodpecker, or Chuck-will's widow",
@@ -132,7 +138,8 @@ const ECOSYSTEMS = {
             },
             Extent: {
                 label: 'Forested wetland extent',
-                description: "Forested wetland extent represents the amount of overall acres of existing forested wetlands present in the South Atlantic geography. Overall acreage of existing forested wetlands provides an indicator of whether forested wetlands being inundated by sea level rise are being replaced or restored somewhere else.",
+                description:
+                    'Forested wetland extent represents the amount of overall acres of existing forested wetlands present in the South Atlantic geography. Overall acreage of existing forested wetlands provides an indicator of whether forested wetlands being inundated by sea level rise are being replaced or restored somewhere else.',
                 valueLabels: {
                     0: 'Not currently forested wetland (within forested wetland ecosystem)',
                     1: 'Currently forested wetland (within forested wetland ecosystem)'
@@ -143,13 +150,14 @@ const ECOSYSTEMS = {
             }
         }
     },
-    'FreshwaterMarsh': {
+    FreshwaterMarsh: {
         label: 'Freshwater marsh',
         color: '#9c9ede',
         indicators: {
             Birds: {
                 label: 'Freshwater marsh birds',
-                description: 'Freshwater marsh birds is a continuous index of patch size. Larger patches are likely to support the following suite of freshwater marsh birds: least bittern, Northern pintail, Northern shoveler, and king rail.',
+                description:
+                    'Freshwater marsh birds is a continuous index of patch size. Larger patches are likely to support the following suite of freshwater marsh birds: least bittern, Northern pintail, Northern shoveler, and king rail.',
                 valueLabels: {
                     1: 'Less potential for presence of bird index species',
                     2: 'Potential for presence of least bittern, Northern pintail, and Northern shoveler',
@@ -167,7 +175,8 @@ const ECOSYSTEMS = {
             },
             Extent: {
                 label: 'Freshwater wetland extent',
-                description: "Freshwater marsh extent captures the overall acres of freshwater marsh in the South Atlantic geography. Overall acreage provides an indicator of whether tidal freshwater marsh being inundated by sea level rise is being replaced or restored somewhere else.",
+                description:
+                    'Freshwater marsh extent captures the overall acres of freshwater marsh in the South Atlantic geography. Overall acreage provides an indicator of whether tidal freshwater marsh being inundated by sea level rise is being replaced or restored somewhere else.',
                 valueLabels: {
                     0: 'Not currently freshwater marsh (within extent of freshwater marsh ecosystem)',
                     1: 'Currently freshwater marsh (within extent of freshwater marsh ecosystem)'
@@ -178,13 +187,14 @@ const ECOSYSTEMS = {
             }
         }
     },
-    'MaritimeForest': {
+    MaritimeForest: {
         label: 'Maritime forest',
         color: '#8ca252',
         indicators: {
             Extent: {
                 label: 'Maritime forest extent',
-                description: "Maritime forest extent represents the overall acres of maritime forest currently present in the South Atlantic geography. Since maritime forest has been substantially reduced from its historic extent, protecting the remaining acreage of existing maritime forest is important.",
+                description:
+                    'Maritime forest extent represents the overall acres of maritime forest currently present in the South Atlantic geography. Since maritime forest has been substantially reduced from its historic extent, protecting the remaining acreage of existing maritime forest is important.',
                 valueLabels: {
                     0: 'Not currently maritime forest (within extent of maritime forest ecosystem)',
                     1: 'Currently maritime forest (within extent of maritime forest ecosystem)'
@@ -195,13 +205,14 @@ const ECOSYSTEMS = {
             }
         }
     },
-    'PineAndPrairie': {
+    PineAndPrairie: {
         label: 'Pine and prairie',
         color: '#bd9e39',
         indicators: {
             Amphibians: {
                 label: 'Pine and prairie amphibians',
-                description: 'Pine and prairie amphibians draws from the Priority Amphibian and Reptile Conservation Areas (PARCAs) located in pine and prairie habitat. PARCA is an expert-driven, nonregulatory designation that captures places capable of supporting viable amphibian and reptile populations. PARCAs include areas where rare or at-risk species have been observed or are likely to occur (like embedded, isolated wetlands).',
+                description:
+                    'Pine and prairie amphibians draws from the Priority Amphibian and Reptile Conservation Areas (PARCAs) located in pine and prairie habitat. PARCA is an expert-driven, nonregulatory designation that captures places capable of supporting viable amphibian and reptile populations. PARCAs include areas where rare or at-risk species have been observed or are likely to occur (like embedded, isolated wetlands).',
                 valueLabels: {
                     0: 'Not a Priority Amphibian and Reptile Conservation Area (PARCA) within pine and prairie',
                     1: 'Priority Amphibian and Reptile Conservation Area (PARCA) within pine and prairie'
@@ -212,7 +223,8 @@ const ECOSYSTEMS = {
             },
             Birds: {
                 label: 'Pine and prairie birds',
-                description: "Pine and prairie birds is an index of habitat suitability for three bird species (Northern bobwhite, red-cockaded woodpecker, Bachman's sparrow) based on observational data and predictive models. The presence of all three species indicates high pine ecosystem quality.",
+                description:
+                    "Pine and prairie birds is an index of habitat suitability for three bird species (Northern bobwhite, red-cockaded woodpecker, Bachman's sparrow) based on observational data and predictive models. The presence of all three species indicates high pine ecosystem quality.",
                 valueLabels: {
                     0: 'Less potential for presence of bird index species',
                     1: 'Potential for presence of 1 bird index species',
@@ -225,7 +237,8 @@ const ECOSYSTEMS = {
             },
             RegularlyBurnedHabitat: {
                 label: 'Regularly burned habitat',
-                description: 'Regularly burned habitat is an an indicator of acres of fire-maintained, open canopy habitat. It attempts to capture recent fire in the pine ecosystem by using LANDFIRE data (1999-2010) as a proxy for regularly burned habitat.',
+                description:
+                    'Regularly burned habitat is an an indicator of acres of fire-maintained, open canopy habitat. It attempts to capture recent fire in the pine ecosystem by using LANDFIRE data (1999-2010) as a proxy for regularly burned habitat.',
                 valueLabels: {
                     0: 'Not recently burned or not open canopy',
                     1: 'Recently burned and open canopy'
@@ -236,13 +249,14 @@ const ECOSYSTEMS = {
             }
         }
     },
-    'UplandHardwood': {
+    UplandHardwood: {
         label: 'Upland hardwood',
         color: '#637939',
         indicators: {
             Birds: {
                 label: 'Upland hardwood birds',
-                description: "Upland hardwood birds is an index of habitat suitability for seven upland hardwood bird species (wood thrush, whip-poor-will, hooded warbler, American woodcock, Acadian flycatcher, Kentucky warbler, Swainson's warbler) based on patch size and other ecosystem characteristics such as proximity to water and proximity to forest and ecotone edge. The needs of these species are increasingly restrictive at higher index values, reflecting better quality habitat.",
+                description:
+                    "Upland hardwood birds is an index of habitat suitability for seven upland hardwood bird species (wood thrush, whip-poor-will, hooded warbler, American woodcock, Acadian flycatcher, Kentucky warbler, Swainson's warbler) based on patch size and other ecosystem characteristics such as proximity to water and proximity to forest and ecotone edge. The needs of these species are increasingly restrictive at higher index values, reflecting better quality habitat.",
                 valueLabels: {
                     0: 'Less potential for presence of bird index species',
                     1: 'Potential for presence of wood thrush or whip-poor-will',
@@ -256,7 +270,8 @@ const ECOSYSTEMS = {
             },
             UrbanOpenSpace: {
                 label: 'Urban open space',
-                description: 'Urban open space is an index based on distance of urban areas from open space. This cultural resource indicator is intended to capture equitable access to open space for urban residents. Protected natural areas in urban environments offer refugia for some species while providing people a nearby place to connect with nature.',
+                description:
+                    'Urban open space is an index based on distance of urban areas from open space. This cultural resource indicator is intended to capture equitable access to open space for urban residents. Protected natural areas in urban environments offer refugia for some species while providing people a nearby place to connect with nature.',
                 valueLabels: {
                     0: 'Existing development',
                     1: 'Undeveloped area less than 400 m from protected land',
@@ -271,13 +286,14 @@ const ECOSYSTEMS = {
             }
         }
     },
-    'Marine': {
+    Marine: {
         label: 'Marine',
         color: '#1f77b4',
         indicators: {
             Birds: {
                 label: 'Marine birds',
-                description: 'Marine birds is a continuous index of highly productive areas for birds that feed exclusively or mainly at sea. It uses seasonal predictions of relative abundance for sixteen species of marine birds. Marine birds help identify key areas of ocean productivity and complement the marine mammal index by providing finer spatial resolution and stronger connections to forage fish productivity.',
+                description:
+                    'Marine birds is a continuous index of highly productive areas for birds that feed exclusively or mainly at sea. It uses seasonal predictions of relative abundance for sixteen species of marine birds. Marine birds help identify key areas of ocean productivity and complement the marine mammal index by providing finer spatial resolution and stronger connections to forage fish productivity.',
                 valueLabels: {
                     1: 'Below the 20th percentile of importance for seasonal density of marine bird index species',
                     2: '20th-40th percentile of importance',
@@ -298,7 +314,8 @@ const ECOSYSTEMS = {
             },
             Mammals: {
                 label: 'Marine mammals',
-                description: 'Marine mammals is a continuous index of dolphin and whale density based on monthly density predictions for ten species of cetaceans and yearly density predictions for three rarer cetacean species. Marine mammals help identify key areas of ocean productivity and overall ocean health because they have long life spans, feed at high trophic levels, and can accumulate anthropogenic chemicals and toxins in their large blubber stores.',
+                description:
+                    'Marine mammals is a continuous index of dolphin and whale density based on monthly density predictions for ten species of cetaceans and yearly density predictions for three rarer cetacean species. Marine mammals help identify key areas of ocean productivity and overall ocean health because they have long life spans, feed at high trophic levels, and can accumulate anthropogenic chemicals and toxins in their large blubber stores.',
                 valueLabels: {
                     1: 'Below the 20th percentile of importance for seasonal density of marine mammal index species',
                     2: '20th - 40th percentile of importance',
@@ -319,7 +336,8 @@ const ECOSYSTEMS = {
             },
             PotentialHardbottomCondition: {
                 label: 'Potential hardbottom condition',
-                description: 'Potential hardbottom condition measures the protected status or potential stress (i.e., shipping traffic, dredge disposal) of solid substrate and rocky outcroppings. Hardbottom provides an anchor for important seafloor habitat such as deepwater corals, plants, and sponges, supporting associated invertebrate and fish species.',
+                description:
+                    'Potential hardbottom condition measures the protected status or potential stress (i.e., shipping traffic, dredge disposal) of solid substrate and rocky outcroppings. Hardbottom provides an anchor for important seafloor habitat such as deepwater corals, plants, and sponges, supporting associated invertebrate and fish species.',
                 valueLabels: {
                     0: 'Hardbottom not predicted',
                     1: 'Hardbottom likely to be stressed by human activities',
@@ -334,21 +352,22 @@ const ECOSYSTEMS = {
     },
 
     // universal(cross-system) ecosystems, these will not have a percent
-    'FreshwaterAquatic': {
+    FreshwaterAquatic: {
         label: 'Freshwater aquatic',
         color: '#1f77b4',
         isUniversal: true,
         indicators: {
             PermeableSurface: {
                 label: 'Permeable surface',
-                description: 'Permeable surface is a continuous indicator that measures the percent of non-impervious cover by catchment. High levels of impervious surface degrade water quality and alter freshwater flow.',
+                description:
+                    'Permeable surface is a continuous indicator that measures the percent of non-impervious cover by catchment. High levels of impervious surface degrade water quality and alter freshwater flow.',
                 valueLabels: {
                     1: 'Less than 70% of catchment permeable, likely degraded instream flow, water quality, and aquatic species communities',
                     2: '70 - 90% of catchment permeable, likely degraded water quality and not supporting many aquatic species',
                     3: '90 - 95% of catchment permeable, likely declining water quality and supporting most aquatic species',
                     4: 'Greater than 95% of catchment permeable, likely high water quality and supporting most sensitive aquatic species'
                 },
-                //categoricalValues: d3.range(1, 5),
+                // categoricalValues: d3.range(1, 5),
                 categories: {
                     1: '<70%',
                     2: '70-90%',
@@ -360,7 +379,8 @@ const ECOSYSTEMS = {
             },
             RiparianBuffers: {
                 label: 'Riparian buffers',
-                description: 'Riparian buffers measures the amount of natural habitat surrounding rivers and streams. This continuous indicator applies to the Active River Area, which spatially defines the dynamic relationship between riverine systems and the lands around them. The Active River Area includes meander belts, riparian wetlands, floodplains, terraces, and material contribution areas. Riparian buffers are strongly linked to water quality as well as water availability (i.e., instream flow).',
+                description:
+                    'Riparian buffers measures the amount of natural habitat surrounding rivers and streams. This continuous indicator applies to the Active River Area, which spatially defines the dynamic relationship between riverine systems and the lands around them. The Active River Area includes meander belts, riparian wetlands, floodplains, terraces, and material contribution areas. Riparian buffers are strongly linked to water quality as well as water availability (i.e., instream flow).',
                 valueLabels: {
                     1: 'Less than 80% natural habitat surrounding rivers and streams',
                     2: '80 - 85% natural cover',
@@ -381,7 +401,8 @@ const ECOSYSTEMS = {
             },
             ImperiledAquaticSpecies: {
                 label: 'Imperiled aquatic species',
-                description: "Imperiled aquatic species measures the number of aquatic species within each watershed that are listed as G1 (globally critically imperiled), G2 (globally imperiled), or threatened/endangered under the U.S. Endangered Species Act. This indicator captures patterns of rare and endemic species diversity not well-represented by other freshwater aquatic indicators. It applies only to the Active River Area, which spatially defines the dynamic relationship between riverine systems and the lands around them; it includes meander belts, riparian wetlands, floodplains, terraces, and material contribution areas.",
+                description:
+                    'Imperiled aquatic species measures the number of aquatic species within each watershed that are listed as G1 (globally critically imperiled), G2 (globally imperiled), or threatened/endangered under the U.S. Endangered Species Act. This indicator captures patterns of rare and endemic species diversity not well-represented by other freshwater aquatic indicators. It applies only to the Active River Area, which spatially defines the dynamic relationship between riverine systems and the lands around them; it includes meander belts, riparian wetlands, floodplains, terraces, and material contribution areas.',
                 valueLabels: {
                     0: 'No aquatic imperiled (G1/G2) or threatened/endangered species observed',
                     1: '1 aquatic imperiled (G1/G2) or threatened/endangered species observed',
@@ -395,14 +416,15 @@ const ECOSYSTEMS = {
             }
         }
     },
-    'Landscapes': {
+    Landscapes: {
         label: 'Landscapes',
         color: '#c7e9c0',
         isUniversal: true,
         indicators: {
             LowRoadDensityPatches: {
                 label: 'Low road density',
-                description: 'Low road density is an index of areas with few roads, measuring the length of roads within a square kilometer area. It represents habitat fragmentation. Extensive road networks are harmful to many species, including reptiles and amphibians, birds, and large mammals.',
+                description:
+                    'Low road density is an index of areas with few roads, measuring the length of roads within a square kilometer area. It represents habitat fragmentation. Extensive road networks are harmful to many species, including reptiles and amphibians, birds, and large mammals.',
                 valueLabels: {
                     0: 'High road density (\u22651.5 km/sq km)',
                     1: 'Low road density (<1.5 km/sq km) '
@@ -413,7 +435,8 @@ const ECOSYSTEMS = {
             },
             LowUrbanHistoric: {
                 label: 'Low-urban historic landscapes',
-                description: 'Low-urban historic landscapes is an index of sites on the National Register of Historic Places surrounded by limited urban development. This cultural resource indicator identifies significant historic places that remain connected to their context in the natural world.',
+                description:
+                    'Low-urban historic landscapes is an index of sites on the National Register of Historic Places surrounded by limited urban development. This cultural resource indicator identifies significant historic places that remain connected to their context in the natural world.',
                 valueLabels: {
                     0: 'Not in the National Register of Historic Places',
                     1: 'Historic place with nearby high-urban buffer',
@@ -425,7 +448,8 @@ const ECOSYSTEMS = {
             },
             ResilientBiodiversityHotspots: {
                 label: 'Resilient biodiversity hotspots',
-                description: 'Resilient biodiversity hotspots is an index of mostly natural high-diversity areas potentially resilient to climate change. This indicator measures landscape diversity (geophysical features like soil and topography) and local connectedness. Areas with these characteristics will likely continue to support species richness and movement in a changing climate (i.e., are resilient).',
+                description:
+                    'Resilient biodiversity hotspots is an index of mostly natural high-diversity areas potentially resilient to climate change. This indicator measures landscape diversity (geophysical features like soil and topography) and local connectedness. Areas with these characteristics will likely continue to support species richness and movement in a changing climate (i.e., are resilient).',
                 valueLabels: {
                     0: 'Urban',
                     1: 'Final resilience score: Far below average (<-2 SD)',
@@ -442,14 +466,15 @@ const ECOSYSTEMS = {
             }
         }
     },
-    'Waterscapes': {
+    Waterscapes: {
         label: 'Waterscapes',
         color: '#c6dbef',
         isUniversal: true,
         indicators: {
             MigratoryFishConnectivity: {
                 label: 'Migratory fish connectivity',
-                description: 'Migratory fish connectivity is an index capturing how far upstream migratory fish have been observed. It also includes adjacent areas where habitat access could be restored through fish passage and hydrological barrier removal efforts. Migratory fish presence reflects uninterrupted connections between freshwater, estuarine, and marine ecosystems.',
+                description:
+                    'Migratory fish connectivity is an index capturing how far upstream migratory fish have been observed. It also includes adjacent areas where habitat access could be restored through fish passage and hydrological barrier removal efforts. Migratory fish presence reflects uninterrupted connections between freshwater, estuarine, and marine ecosystems.',
                 valueLabels: {
                     1: 'Migratory fish connectivity index species not adjacent/not observed',
                     2: 'Adjacent to presence of migratory fish connectivity index species',
@@ -462,7 +487,8 @@ const ECOSYSTEMS = {
             },
             NetworkComplexity: {
                 label: 'Network complexity',
-                description: 'Network complexity depicts the number of different stream size classes in a river network not separated by large dams. River networks with a variety of connected stream classes help retain aquatic biodiversity in a changing climate by allowing species to access climate refugia and move between habitats.',
+                description:
+                    'Network complexity depicts the number of different stream size classes in a river network not separated by large dams. River networks with a variety of connected stream classes help retain aquatic biodiversity in a changing climate by allowing species to access climate refugia and move between habitats.',
                 valueLabels: {
                     1: '1 connected stream size class',
                     2: '2 connected stream size classes',
@@ -478,94 +504,94 @@ const ECOSYSTEMS = {
             }
         }
     },
-    'Waterbodies': {
+    Waterbodies: {
         // Not really an ecosystem, does not have indicators
         label: 'Inland waterbodies',
         color: '#004DA8',
         indicators: {}
     }
-};
-
+}
 
 class Ecosystem extends Component {
     handleIndicatorSelect = (indicator) => {
-        this.props.onSetIndicator(this.props.ecosystem, indicator);
+        this.props.onSetIndicator(this.props.ecosystem, indicator)
     }
 
     handleIndicatorDeselect = () => {
-        this.props.onSetIndicator(null, null);
+        this.props.onSetIndicator(null, null)
     }
 
-    renderHeader(icon, label, percent) {
-        return (
-            <div className="ecosystem-header flex-container flex-justify-start flex-align-center">
-                <img src={icon} alt=""/>
-                <h3>{label}</h3>
-                {percent &&
-                    <div className="text-quieter text-right text-small">
-                        {formatPercent(percent)}%
-                        <br/>
-                        <span className="text-smaller">of area</span>
-                    </div>
-                }
-            </div>
-        );
-    }
+    renderHeader = (icon, label, percent) => (
+        <div className="ecosystem-header flex-container flex-justify-start flex-align-center">
+            <img src={icon} alt="" />
+            <h3>{label}</h3>
+            {percent && (
+                <div className="text-quieter text-right text-small">
+                    {formatPercent(percent)}%
+                    <br />
+                    <span className="text-smaller">of area</span>
+                </div>
+            )}
+        </div>
+    )
 
     renderIndicators(indicators) {
-        if (indicators.length === 0) return <div className="no-indicators">Ecosystem does not have any indicators</div>;
+        if (indicators.length === 0) return <div className="no-indicators">Ecosystem does not have any indicators</div>
 
-        return indicators.map((indicator) =>
-            <Indicator key={indicator.id}
-                       {...indicator}
-                       onClick={()=>this.handleIndicatorSelect(indicator)} />
-        );
+        return indicators.map(indicator => (
+            <Indicator key={indicator.id} {...indicator} onClick={() => this.handleIndicatorSelect(indicator)} />
+        ))
     }
 
     render() {
-        const {ecosystem, icon, selectedIndicator} = this.props;
+        const { ecosystem, icon, selectedIndicator } = this.props
 
-        const ecosystemConfig = ECOSYSTEMS[ecosystem];
-        const {label} = ecosystemConfig;
+        const ecosystemConfig = ECOSYSTEMS[ecosystem]
+        const { label } = ecosystemConfig
 
         if (selectedIndicator !== null) {
             return (
-                <IndicatorDetails ecosystemLabel={label}
-                                  ecosystemIcon={icon}
-                                  {...selectedIndicator}
-                                  onClick={this.handleIndicatorDeselect} />
-            );
+                <IndicatorDetails
+                    ecosystemLabel={label}
+                    ecosystemIcon={icon}
+                    {...selectedIndicator}
+                    onClick={this.handleIndicatorDeselect}
+                />
+            )
         }
 
-        const {percent, indicators} = this.props;
-        const indicatorsConfig = ecosystemConfig.indicators;
-        let indicatorKeys = Object.keys(indicators || {});  // some ecosystems are present but don't have indicators
-        indicatorKeys.sort();
+        const { percent, indicators } = this.props
+        const indicatorsConfig = ecosystemConfig.indicators
+        const indicatorKeys = Object.keys(indicators || {}) // some ecosystems are present but don't have indicators
+        indicatorKeys.sort()
 
         // Merge constants with dynamic data
-        const mergedIndicators = indicatorKeys.map((indicator) => {
-            return Object.assign(
-                {id: indicator},
-                indicatorsConfig[indicator],
-                indicators[indicator]
-            );
-        });
+        const mergedIndicators = indicatorKeys.map(indicator =>
+            Object.assign({ id: indicator }, indicatorsConfig[indicator], indicators[indicator]))
 
         return (
             <div className="ecosystem">
-                { this.renderHeader(icon, label, percent) }
+                {this.renderHeader(icon, label, percent)}
 
-                { this.renderIndicators(mergedIndicators) }
-
+                {this.renderIndicators(mergedIndicators)}
             </div>
-        );
+        )
     }
 }
 
-Ecosystem.propTypes = {};
+Ecosystem.propTypes = {
+    ecosystem: PropTypes.string.isRequired,
+    percent: PropTypes.number.isRequired,
+    icon: PropTypes.string.isRequired,
+    /* eslint-disable react/forbid-prop-types */
+    indicators: PropTypes.object.isRequired,
+    selectedIndicator: PropTypes.object,
+    onSetIndicator: PropTypes.func
+}
+
 Ecosystem.defaultProps = {
     selectedIndicator: null,
-    onSetIndicator: function() {}
-};
+    onSetIndicator: (ecosystem, indicator) => console.log('onSetIndicator', ecosystem, indicator)
+}
 
-export default Ecosystem;
+export default Ecosystem

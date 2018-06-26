@@ -1,59 +1,53 @@
-import React, {Component} from 'react';
-// import PropTypes from 'prop-types';
-import LabeledPercentBar from './Charts/LabeledPercentBar';
+import React from 'react'
+import PropTypes from 'prop-types'
 
+import LabeledPercentBar from './Charts/LabeledPercentBar'
 
-class IndicatorDescription extends Component {
-
-    handleBackClick = (event) => {
-        event.preventDefault();
-        this.props.onClick();
+const IndicatorDetails = ({
+    label, description, valueLabels, percent, ecosystemLabel, ecosystemIcon, onClick
+}) => {
+    const handleBackClick = (event) => {
+        event.preventDefault()
+        onClick()
     }
 
-    renderValue(item) {
-        const {value, label, percent} = item;
+    const percents = Object.keys(valueLabels).map((value, i) => ({
+        value,
+        label: valueLabels[value],
+        percent: percent[i]
+    }))
+    percents.reverse()
 
-        return (
-            <LabeledPercentBar className="text-quiet" key={value} label={label} percent={percent} height={6}/>
-        )
-    }
-
-    render() {
-        const {label, description, valueLabels, percent, ecosystemLabel, ecosystemIcon} = this.props;
-
-        let percents = Object.keys(valueLabels).map((value, i) => {
-            return {
-                value: value,
-                label: valueLabels[value],
-                percent: percent[i]
-            };
-        });
-        percents.reverse();
-
-        return (
-            <div id='IndicatorDetails'>
-                <div className="ecosystem-header flex-container flex-justify-start flex-align-center" onClick={this.handleBackClick} >
-                    <a href="">&lt;&lt;</a>
-                    <img src={ecosystemIcon} alt=""/>
-                    <h3>{ecosystemLabel}</h3>
-                </div>
-
-
-                <h3 style={{marginTop: 10}}>
-                    {label}
-                </h3>
-                <p>
-                    {description}
-                </p>
-                <div style={{marginTop: 30}}>
-                    {percents.map(this.renderValue)}
-                </div>
+    return (
+        <div id="IndicatorDetails">
+            <div
+                className="ecosystem-header flex-container flex-justify-start flex-align-center"
+                onClick={handleBackClick}
+            >
+                <a href="">&lt;&lt;</a>
+                <img src={ecosystemIcon} alt="" />
+                <h3>{ecosystemLabel}</h3>
             </div>
-        );
-    }
+
+            <h3 style={{ marginTop: 10 }}>{label}</h3>
+            <p>{description}</p>
+            <div style={{ marginTop: 30 }}>
+                {percents.map(entry => (
+                    <LabeledPercentBar className="text-quiet" key={entry.value} {...entry} height={6} />
+                ))}
+            </div>
+        </div>
+    )
 }
 
-// IndicatorDescription.propTypes = {};
-// IndicatorDescription.defaultProps = {};
+IndicatorDetails.propTypes = {
+    label: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    valueLabels: PropTypes.arrayOf([PropTypes.string]).isRequired,
+    percent: PropTypes.number.isRequired,
+    ecosystemLabel: PropTypes.string.isRequired,
+    ecosystemIcon: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired
+}
 
-export default IndicatorDescription;
+export default IndicatorDetails
