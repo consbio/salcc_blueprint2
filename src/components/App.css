@@ -403,27 +403,6 @@ header, footer{
     margin: 4px 4px 20px 4px;
 }
 
-
-/*#IndicatorDetails table {*/
-    /*width: 100%;*/
-    /*border-collapse: collapse;*/
-    /*font-size: 12px;*/
-    /*line-height: 1.4;*/
-/*}*/
-/*#IndicatorDetails th {*/
-    /*border-bottom: 1px solid #EEE;*/
-    /*text-align: right;*/
-/*}*/
-/*#IndicatorDetails tr:nth-child(even){*/
-    /*background-color: #F6F6F6;*/
-/*}*/
-/*#IndicatorDetails td {*/
-    /*padding: 6px 0;*/
-/*}*/
-/*#IndicatorDetails td + td {*/
-    /*width: 50px;*/
-    /*text-align: center;*/
-/*}*/
 #IndicatorDetails .ecosystem-header img {
     margin-left: 14px;
 }
@@ -501,4 +480,13 @@ header, footer{
     min-width: 40px;
     padding: 1px 4px;
     opacity: 0.75;
+}
+
+
+
+/* Viewport dependent rendering */
+@media screen and (min-width: 700px){
+    .leaflet-locate-control{
+        display: none;
+    }
 }

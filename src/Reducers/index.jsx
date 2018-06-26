@@ -8,7 +8,7 @@ export default function rootReducer(
 
         // State of the selected unit
         selectedUnit: null,
-        data: {}
+        data: null
     },
     action
 ) {
@@ -18,7 +18,7 @@ export default function rootReducer(
                 isPending: false,
                 hasError: false,
                 selectedUnit: null,
-                data: {}
+                data: null
             })
 
         case REQUEST_DATA:
@@ -26,14 +26,14 @@ export default function rootReducer(
                 isPending: true,
                 hasError: false,
                 selectedUnit: action.unit,
-                data: {}
+                data: null
             })
 
         case RECIEVE_DATA:
             return Object.assign({}, state, {
                 isPending: false,
                 selectedUnit: action.unit,
-                data: action.data
+                data: action.data || null
             })
 
         case REQUEST_ERROR:
@@ -41,7 +41,7 @@ export default function rootReducer(
                 isPending: false,
                 hasError: true,
                 selectedUnit: null,
-                data: {}
+                data: null
             })
 
         default:

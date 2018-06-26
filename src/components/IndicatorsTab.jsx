@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import SwipeableViews from 'react-swipeable-views'
 
 import Ecosystem from './Ecosystem'
+import { EcosystemPropType } from '../CustomPropTypes'
 
 class IndicatorsTab extends Component {
     state = {
@@ -60,7 +60,7 @@ class IndicatorsTab extends Component {
                 {ecosystemIDs.map((ecosystem, index) => {
                     const onClick = () => this.handleChangeIndex(index)
                     return (
-                        <a key={ecosystem} href="#" onClick={onClick} >
+                        <a key={ecosystem} href="#" onClick={onClick}>
                             <img
                                 src={this.getIcon(ecosystem)}
                                 height={20}
@@ -75,7 +75,7 @@ class IndicatorsTab extends Component {
     }
 
     renderEcosystems(ecosystemIDs) {
-        const { ecosystems } = this.props.data
+        const { ecosystems } = this.props
         return ecosystemIDs.map((ecosystem, index) => (
             <Ecosystem
                 key={ecosystem}
@@ -109,7 +109,7 @@ class IndicatorsTab extends Component {
         }
 
         // sort ecosystems by decreasing area, so that cross-system indicators are always on the right
-        let ecosystems = Object.entries(this.props.data.ecosystems) // => [[ecosystemID, ecosystemData]...]
+        let ecosystems = Object.entries(this.props.ecosystems) // => [[ecosystemID, ecosystemData]...]
         ecosystems = ecosystems.filter(d => d[1].indicators) // only keep the ecosystems that have indicators
         ecosystems.sort(this.sortEcosystems)
 
@@ -130,7 +130,7 @@ class IndicatorsTab extends Component {
 }
 
 IndicatorsTab.propTypes = {
-    data: PropTypes.object.isRequired
+    ecosystems: EcosystemPropType.isRequired
 }
 
 export default IndicatorsTab

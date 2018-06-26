@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { scaleLinear } from 'd3-scale'
@@ -9,7 +10,6 @@ import 'leaflet.vectorgrid'
 import 'leaflet-basemaps'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-basemaps/L.Control.Basemaps.css'
-import './customleaflet.css'
 
 // Make leaflet icons work properly from webpack / react context
 /* eslint-disable no-underscore-dangle */
@@ -101,13 +101,13 @@ const LocateControlClass = L.Control.extend({
         })
 
         map.on('locationerror', () => {
+            /* eslint-disable-next-line no-alert */
             alert('Unable to determine location.  Make sure your settings allow location services.')
         })
 
         return container
     }
 })
-
 
 class Map extends Component {
     constructor(props) {
@@ -147,7 +147,6 @@ class Map extends Component {
         })
 
         map.addLayer(config.unitLayer)
-
 
         const basemapsControl = L.control.basemaps({
             basemaps: config.basemaps,
@@ -257,14 +256,22 @@ class Map extends Component {
             <div id="MapContainer">
                 {this.state.zoom < 10 && (
                     <div
-                        ref={(node) => { this._zoomNote = node }}
+                        ref={(node) => {
+                            this._zoomNote = node
+                        }}
                         id="ZoomInNote"
                         className="text-center text-small text-quieter"
                     >
                         Zoom in to select an area
                     </div>
                 )}
-                <div ref={(node) => { this._mapNode = node }} id="Map" onClick={this.props.onClick} />
+                <div
+                    ref={(node) => {
+                        this._mapNode = node
+                    }}
+                    id="Map"
+                    onClick={this.props.onClick}
+                />
             </div>
         )
     }
@@ -294,15 +301,15 @@ Map.defaultProps = {
     place: null,
     selectedUnit: null,
     onSelectUnit: (id) => {
-        console.log('Selected map unit: ', id)
+        console.log('Selected map unit: ', id) /* eslint-disable-line no-console */
     },
     onDeselectUnit: () => {
-        console.log('Deselected map unit')
+        console.log('Deselected map unit') /* eslint-disable-line no-console */
     },
     onSetLocation: (place) => {
-        console.log('Set location using location services', place)
+        console.log('Set location using location services', place) /* eslint-disable-line no-console */
     },
-    onClick: () => console.log('map onClick')
+    onClick: () => console.log('map onClick') /* eslint-disable-line no-console */
 }
 
 export default Map

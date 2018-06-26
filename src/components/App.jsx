@@ -13,6 +13,7 @@ import IndicatorsTab from './IndicatorsTab'
 import PartnersTab from './PartnersTab'
 import InfoTab from './InfoTab'
 import TabIcons from './icons/TabIcons'
+import { UnitDataPropType } from '../CustomPropTypes'
 
 import * as UnitActions from '../Actions/actions'
 
@@ -44,7 +45,7 @@ class App extends Component {
     }
 
     handleUnitSelect = (id) => {
-        console.log('Select map unit: ', id)
+        console.log('Select map unit: ', id) /* eslint-disable-line no-console */
         this.props.selectUnit(id)
     }
 
@@ -99,36 +100,37 @@ class App extends Component {
     }
 
     renderActiveTab() {
-        if (this.props.isPending) return null
+        const { data, isPending, selectedUnit } = this.props
+        const { activeTab, width } = this.state
+
+        if (isPending) return null
+
+        if (activeTab === 'Info') return <InfoTab />
+
+        // if there is no data, show the InfoTab if wide enough
+        if (data === null) {
+            if (width > 700) {
+                if (selectedUnit === null) {
+                    return <InfoTab />
+                }
+                this.changeTab('Priorities') // TODO: need to return if there are no data
+            }
+            return null
+        }
+
+        const { ecosystems } = data
+
         switch (
             this.state.activeTab // if the previous state is the same tab, then close the tab
         ) {
             case 'Priorities':
                 return <PrioritiesTab {...this.props} />
             case 'Indicators':
-                return <IndicatorsTab {...this.props} />
+                return <IndicatorsTab ecosystems={ecosystems} />
             // case 'Threats':
             //     return <ThreatsTab  {...this.props}/>;
             case 'Partners':
                 return <PartnersTab {...this.props} />
-            case 'Info':
-                return <InfoTab />
-            default:
-                if (this.state.width > 700 && this.props.selectedUnit === null) {
-                    console.log('width is ', this.state.width)
-                    // this.changeTab('Info');
-                    console.log(this.state.activeTab)
-                    return <InfoTab />
-                } else if (this.state.width > 700 && this.props.selectedUnit !== null && !this.props.isPending) {
-                    if (this.props.selectedUnit === null) return null
-
-                    this.changeTab('Priorities')
-                    // else if(this.state.activeTab === 'Priorities') return <PrioritiesTab {...this.props}/>;
-                    // this.renderActiveTab();
-                    // return <PrioritiesTab {...this.props}/>;
-                } else {
-                    return null
-                }
         }
         return null
     }
@@ -160,7 +162,9 @@ class App extends Component {
                     </div>
 
                     <GooglePlacesSearch
-                        ref={(ref) => { this.placeSearch = ref }}
+                        ref={(ref) => {
+                            this.placeSearch = ref
+                        }}
                         selected={this.state.place}
                         onFocus={() => this.changeTab(null)}
                         onSelect={this.handlePlaceSelect}
@@ -175,11 +179,13 @@ class App extends Component {
                     className={this.state.activeTab === 'Info' ? 'active' : ''}
                     onClick={() => this.changeTab('Info')}
                 >
-                        i
+                    i
                 </div>
 
                 <GooglePlacesSearch
-                    ref={(ref) => { this.placeSearch = ref }}
+                    ref={(ref) => {
+                        this.placeSearch = ref
+                    }}
                     selected={this.state.place}
                     onFocus={() => this.changeTab(null)}
                     onSelect={this.handlePlaceSelect}
@@ -237,16 +243,13 @@ App.propTypes = {
     selectUnit: PropTypes.func.isRequired,
     isPending: PropTypes.bool.isRequired,
     hasError: PropTypes.bool.isRequired,
-
-    /* eslint-disable react/forbid-prop-types */
-    data: PropTypes.object
+    data: UnitDataPropType
 }
 
 App.defaultProps = {
     selectedUnit: null,
-    data: {}
+    data: null
 }
-
 
 function mapStateToProps(state) {
     return state

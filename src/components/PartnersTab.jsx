@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import { UnitDataPropType } from '../CustomPropTypes'
 import LabeledPercentBar from './Charts/LabeledPercentBar'
 
 const GAP = {
@@ -220,7 +221,7 @@ class PartnersTab extends Component {
 }
 
 PartnersTab.propTypes = {
-    data: PropTypes.object.isRequired,
+    data: UnitDataPropType.isRequired,
     selectedUnit: PropTypes.string.isRequired
 }
 

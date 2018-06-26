@@ -40,6 +40,7 @@ class GooglePlacesSearch extends React.Component {
 
         if (!googleMaps) {
             if (console) {
+                /* eslint-disable-next-line no-console */
                 console.error('Google map api was not found in the page.')
             }
             return
@@ -240,7 +241,7 @@ GooglePlacesSearch.defaultProps = {
     onFocus: () => {},
     // onBlur: () => {},
     onSelect: (result) => {
-        console.log('selected result', result)
+        console.log('selected result', result) /* eslint-disable-line no-console */
     },
     country: 'us'
 }

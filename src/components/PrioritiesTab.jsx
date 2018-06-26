@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import './App.css'
 import { BLUEPRINT } from './InfoTab'
 import LabeledPercentBar from './Charts/LabeledPercentBar'
+import { UnitDataPropType } from '../CustomPropTypes'
+
 
 const PLANS = {
     ACJV: {
@@ -187,11 +187,7 @@ class PrioritiesTab extends Component {
 }
 
 PrioritiesTab.propTypes = {
-    data: PropTypes.shape({
-        blueprint: PropTypes.array,
-        justification: PropTypes.string,
-        name: PropTypes.string
-    }).isRequired
+    data: UnitDataPropType.isRequired
 }
 
 PrioritiesTab.defaultProps = {}
