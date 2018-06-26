@@ -43,7 +43,7 @@ const IndicatorDetails = ({
 IndicatorDetails.propTypes = {
     label: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    valueLabels: PropTypes.arrayOf([PropTypes.string]).isRequired,
+    valueLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
     percent: PropTypes.number.isRequired,
     ecosystemLabel: PropTypes.string.isRequired,
     ecosystemIcon: PropTypes.string.isRequired,

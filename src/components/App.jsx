@@ -232,14 +232,19 @@ class App extends Component {
 }
 
 App.propTypes = {
-    selectedUnit: PropTypes.string.isRequired,
+    selectedUnit: PropTypes.string,
     deselectUnit: PropTypes.func.isRequired,
     selectUnit: PropTypes.func.isRequired,
     isPending: PropTypes.bool.isRequired,
     hasError: PropTypes.bool.isRequired,
 
     /* eslint-disable react/forbid-prop-types */
-    data: PropTypes.object.isRequired
+    data: PropTypes.object
+}
+
+App.defaultProps = {
+    selectedUnit: null,
+    data: {}
 }
 
 

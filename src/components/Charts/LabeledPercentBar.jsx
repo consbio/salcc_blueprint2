@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import PercentBar from './PercentBar'
 import { formatPercent } from '../../utils'
 
-const LabeledPercentBar = ({ label, percent }) => {
+const LabeledPercentBar = (props) => {
+    const { label, percent } = props
     const percentLabel = formatPercent(percent)
 
     return (
@@ -20,7 +21,7 @@ const LabeledPercentBar = ({ label, percent }) => {
                 <div>{label}</div>
                 <label>{percentLabel}%</label>
             </div>
-            <PercentBar {...this.props} />
+            <PercentBar {...props} />
         </div>
     )
 }

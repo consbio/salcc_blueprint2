@@ -36,7 +36,7 @@ class GooglePlacesSearch extends React.Component {
         }
 
         // Initialize Google Place APIs
-        const googleMaps = this.props.googleMaps || (window.google && window.google.maps) || this.googleMaps
+        const googleMaps = (window.google && window.google.maps) || this.googleMaps
 
         if (!googleMaps) {
             if (console) {
@@ -230,7 +230,6 @@ class GooglePlacesSearch extends React.Component {
 }
 
 GooglePlacesSearch.propTypes = {
-    googleMaps: PropTypes.object.isRequired, // Google maps object
     onFocus: PropTypes.func,
     // onBlur: PropTypes.func,
     onSelect: PropTypes.func,

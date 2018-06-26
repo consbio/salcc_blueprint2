@@ -1,4 +1,4 @@
-const formatPercent = (percent) => {
+export const formatPercent = (percent) => {
     if (percent < 1) {
         return '< 1'
     }
@@ -12,4 +12,4 @@ const formatPercent = (percent) => {
     return Math.round(percent)
 }
 
-export default formatPercent
+export default { formatPercent }

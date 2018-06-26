@@ -22,7 +22,8 @@
         "sourceType": "module"
     },
     "globals": {
-        "DEBUG": false
+        "DEBUG": false,
+        "NODE_ENV": false
     },
     "rules": {
         "brace-style": [

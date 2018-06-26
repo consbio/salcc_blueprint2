@@ -146,6 +146,8 @@ class PartnersTab extends Component {
     render() {
         const { selectedUnit, data } = this.props
 
+        if (selectedUnit === null) return null
+
         // Marine units currently have no info for this tab
         if (selectedUnit.indexOf('M') === 0) {
             return this.renderNoContent()

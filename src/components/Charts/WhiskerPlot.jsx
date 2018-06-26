@@ -63,7 +63,7 @@ class WhiskerPlot extends ResponsiveWidthComponent {
 
 WhiskerPlot.propTypes = {
     value: PropTypes.number.isRequired,
-    domain: PropTypes.arrayOf([PropTypes.number]).isRequired,
+    domain: PropTypes.arrayOf(PropTypes.number).isRequired,
     color: PropTypes.string.isRequired,
     insetWidth: PropTypes.number
 }

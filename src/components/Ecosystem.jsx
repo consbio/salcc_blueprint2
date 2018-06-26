@@ -581,7 +581,7 @@ class Ecosystem extends Component {
 
 Ecosystem.propTypes = {
     ecosystem: PropTypes.string.isRequired,
-    percent: PropTypes.number.isRequired,
+    percent: PropTypes.number,
     icon: PropTypes.string.isRequired,
     /* eslint-disable react/forbid-prop-types */
     indicators: PropTypes.object.isRequired,
@@ -590,6 +590,7 @@ Ecosystem.propTypes = {
 }
 
 Ecosystem.defaultProps = {
+    percent: null,  // some ecosystems don't have a percent
     selectedIndicator: null,
     onSetIndicator: (ecosystem, indicator) => console.log('onSetIndicator', ecosystem, indicator)
 }
