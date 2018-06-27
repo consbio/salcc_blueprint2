@@ -21,9 +21,6 @@ def create_report(id, path):
 
     # path = '/root/api/tests/report.docx'
 
-    partner_headers_all = {'regional': 'Regional Conservation Plans', 'state': 'Statewide Conservation Plans',
-                           'marine': 'Marine Conservation Plans'}
-
     context = generate_report_context(id)
 
     for p in doc.paragraphs:
@@ -55,13 +52,16 @@ def create_report(id, path):
             # Remove '{{PARTNERS}}'placeholder and add the report content above empty p.text
             p.text = ''
             for category in context['partners']:
-                doc.add_heading(partner_headers_all[category])
+                doc.add_heading(context['partner_headers'][category], 3)
                 for partner in context['partners'][category]:
                     doc.add_paragraph(
-                        partner[0], style='ListBullet'
+                        # partner[0], style='List Bullet'
+                        partner[0]
                     )
 
     doc.save(path)
+
+
 
 
 def generate_report_context(id):
@@ -89,24 +89,43 @@ def generate_report_context(id):
 
     # Partner name and url separated by categories
 
+    partner_headers_all = {'regional': 'Regional Conservation Plans', 'state': 'Statewide Conservation Plans',
+                           'marine': 'Marine Conservation Plans'}
+
     partners_regional = []
     partners_state = []
     partners_marine = []
+    partner_headers = {}
 
     for plan_key in context_json['plans']:
         plan = plans_json[plan_key]
         if plan['type'] == 'regional':
             partners_regional.append([plan['label'], plan['url']])
+            if plan['type'] not in partner_headers:
+                partner_headers['regional'] = 'Regional Conservation Plans'
         elif plan['type'] == 'state':
             partners_state.append([plan['label'], plan['url']])
+            if plan['type'] not in partner_headers:
+                partner_headers['state'] = 'Statewide Conservation Plans'
         elif plan['type'] == 'marine':
             partners_marine.append([plan['label'], plan['url']])
+            if plan['type'] not in partner_headers:
+                partner_headers['marine'] = 'Marine Conservation Plans'
 
-    context['partners'] = {
-        'regional': partners_regional,
-        'state': partners_state,
-        'marine': partners_marine
-    }
+    print('partner_headers: ', partner_headers)
+
+    context['partner_headers'] = partner_headers
+
+    context['partners'] = {}
+
+    if partners_regional:
+        context['partners']['regional'] = partners_regional
+    if partners_state:
+        context['partners']['state'] = partners_state
+    if partners_marine:
+        context['partners']['marine'] = partners_marine
+
+    print('context partners: ', context['partners'])
 
     # Counties - name and url
 
