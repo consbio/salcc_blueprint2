@@ -3,10 +3,11 @@ import os
 import json
 
 from docx import Document
+# from docx.shared import Inches
 
 
 # TODO: Create custom table style in template.docx
-DOC_STYLE = 'SALCC'
+# DOC_STYLE = 'SALCC'
 
 # Example placeholder: {{label:title}}
 PLACEHOLDER_REGEX = re.compile(r'{{(?P<scope>\w+):(?P<key>\w+)}}')
@@ -19,6 +20,9 @@ def create_report(id, path):
     doc = Document('template.docx')
 
     # path = '/root/api/tests/report.docx'
+
+    partner_headers_all = {'regional': 'Regional Conservation Plans', 'state': 'Statewide Conservation Plans',
+                           'marine': 'Marine Conservation Plans'}
 
     context = generate_report_context(id)
 
@@ -45,12 +49,17 @@ def create_report(id, path):
 
         # if '{{ECOSYSTEMS}}' in p.text:
         #     # Remove '{{ECOSYSTEMS}}'placeholder and add the report content above empty p.text
-        #     p.text = ""
+        #     p.text = ''
         #     # do things
-        # elif '{{PARTNERS}}' in p.text:
-        #     # Remove '{{PARTNERS}}'placeholder and add the report content above empty p.text
-        #     p.text = ""
-        #     # do things
+        if '{{PARTNERS}}' in p.text:
+            # Remove '{{PARTNERS}}'placeholder and add the report content above empty p.text
+            p.text = ''
+            for category in context['partners']:
+                doc.add_heading(partner_headers_all[category])
+                for partner in context['partners'][category]:
+                    doc.add_paragraph(
+                        partner[0], style='ListBullet'
+                    )
 
     doc.save(path)
 
@@ -78,13 +87,41 @@ def generate_report_context(id):
 
     context['value'] = {'summary_unit_name': context_json['name']}
 
-    partners = []
-    for plan in context_json['plans']:
-        partners.append(plans_json[plan])
-    # print(partners)
+    # Partner name and url separated by categories
 
-    context['partners'] = partners
-    #
+    partners_regional = []
+    partners_state = []
+    partners_marine = []
+
+    for plan_key in context_json['plans']:
+        plan = plans_json[plan_key]
+        if plan['type'] == 'regional':
+            partners_regional.append([plan['label'], plan['url']])
+        elif plan['type'] == 'state':
+            partners_state.append([plan['label'], plan['url']])
+        elif plan['type'] == 'marine':
+            partners_marine.append([plan['label'], plan['url']])
+
+    context['partners'] = {
+        'regional': partners_regional,
+        'state': partners_state,
+        'marine': partners_marine
+    }
+
+    # Counties - name and url
+
+    counties = []
+
+    for index, (key, value) in enumerate(context_json['counties'].items()):
+        # key is FIPS and value is county with state
+        county_data = {
+            'name': value,
+            'url': 'http://findalandtrust.org/counties/{0}'.format(key)
+        }
+        counties.append(county_data)
+
+    context['counties'] = counties
+
     # # TODO: build tables
     context['table'] = {'priorities': [], 'ecosystems': [], 'ownership': [], 'protection': []}
 
@@ -151,7 +188,7 @@ def _resolve(scope, key, context):
 
 
 if __name__ == '__main__':
-    id = 'I1'
+    id = 'I2'
     # outpath = '/tmp/{0}.docx'.format(id)
     outpath = 'tests/{0}.docx'.format(id)
     create_report(id, outpath)
