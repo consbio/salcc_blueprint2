@@ -51,13 +51,27 @@ def create_report(id, path):
         if '{{PARTNERS}}' in p.text:
             # Remove '{{PARTNERS}}'placeholder and add the report content above empty p.text
             p.text = ''
+
+            # Where to insert the next heading
+            h_insert_point = p
             for category in context['partners']:
-                doc.add_heading(context['partner_headers'][category], 3)
+                heading = doc.add_heading(context['partner_headers'][category], 3)
+                # Headings are created at the end of the doc and must be moved into place
+                _move_heading_after(heading, h_insert_point)
+
+                # Where to insert the next partner name
+                p_insert_point = heading
                 for partner in context['partners'][category]:
-                    doc.add_paragraph(
+                    part = doc.add_paragraph(
                         # partner[0], style='List Bullet'
                         partner[0]
                     )
+                    # Paragraphs are created at the end of the doc and must be moved into place
+                    _move_heading_after(part, p_insert_point)
+                    p_insert_point = part
+
+                # Next heading created will be moved below the last partner in the preceding list
+                h_insert_point = part
 
     doc.save(path)
 
@@ -178,6 +192,40 @@ def generate_report_context(id):
 #     # Ensure any following tables are separated from this one by inserting an empty paragraph
 #     doc.add_paragraph('')
 
+
+def _move_heading_after(heading, paragraph):
+    """
+    Move the table after 'pararaph.'
+    Normally, tables are created at the end of the document.
+    This function allows you to move them to a different location in the document.
+    The paragraph passed in is not modified, it is just used as a reference point for inserting the table.
+
+    Parameters
+    ----------
+    heading
+        heading to be moved
+    paragraph
+        location where table will be moved
+
+    """
+    paragraph._p.addnext(heading._p)
+
+# def _move_para_after(table, paragraph):
+#     """
+#     Move the table after 'pararaph.'
+#     Normally, tables are created at the end of the document.
+#     This function allows you to move them to a different location in the document.
+#     The paragraph passed in is not modified, it is just used as a reference point for inserting the table.
+#
+#     Parameters
+#     ----------
+#     table
+#         table to be moved
+#     paragraph
+#         location where table will be moved
+#
+#     """
+#     paragraph._p.addnext(table._tbl)
 
 def _resolve(scope, key, context):
     """
