@@ -36,11 +36,6 @@ header .button {
     text-align: center;
 }
 
-@media screen and (min-width: 700px) {
-    header {
-    }
-}
-
 footer {
     opacity: 0;
     height: 47px;
@@ -53,17 +48,6 @@ footer {
     border-top: 1px solid #ddd;
     align-content: stretch;
     transition: opacity 0.25s ease 0.1s;
-}
-
-@media screen and (min-width: 700px) {
-    footer {
-        top: 80px;
-        width: 490px;
-        position: absolute;
-        border-bottom: 1px solid #ddd;
-        z-index: 5005;
-        box-shadow: 0 0px 6px #555;
-    }
 }
 
 header,
@@ -160,15 +144,6 @@ footer {
     box-shadow: 0 2px 6px #333;
 }
 
-@media screen and (min-width: 700px) {
-    #UnitName {
-        top: 40px;
-        width: 490px;
-        bottom: 0px;
-        box-shadow: 0 2px 2px #555;
-    }
-}
-
 #Content {
     background: #fff;
     display: flex;
@@ -184,34 +159,10 @@ footer {
     z-index: 5001;
 }
 
-@media screen and (min-width: 700px) {
-    #Content {
-        top: 129px;
-        width: 470px;
-        bottom: 0px;
-        box-shadow: 0 6px 6px #555;
-    }
-}
-
 #blankContent {
     position: absolute;
     right: 0px;
     left: 0px;
-}
-
-@media screen and (min-width: 700px) {
-    #blankContent {
-        top: 121px;
-        width: 470px;
-        bottom: 0px;
-        background: #fff;
-        color: #aaa;
-        padding: 20px 10px;
-        align-items: center;
-        text-align: center;
-        z-index: 5000;
-        box-shadow: 0 6px 6px #555;
-    }
 }
 
 #UnitName h1 {
@@ -294,12 +245,6 @@ footer {
     bottom: 0px;
 }
 
-@media screen and (min-width: 700px) {
-    #Content.tabs-top {
-        z-index: 5020;
-    }
-}
-
 #Content section + section {
     margin-top: 20px;
 }
@@ -376,6 +321,7 @@ footer {
     right: 0;
     z-index: 1;
 }
+
 #Map {
     height: 100%;
     width: 100%;
@@ -574,7 +520,50 @@ footer {
 }
 
 /* Viewport dependent rendering */
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 768px) {
+    footer {
+        top: 80px;
+        width: 470px;
+        position: absolute;
+        border-bottom: 1px solid #ddd;
+        z-index: 5005;
+        box-shadow: 0 0px 6px #555;
+    }
+
+    #Content {
+        top: 129px;
+        width: 470px;
+        bottom: 0px;
+        box-shadow: 0 6px 6px #555;
+    }
+
+    #Content.tabs-top {
+        z-index: 5020;
+    }
+
+    #MapContainer {
+        left: 470px;
+    }
+
+    #UnitName {
+        top: 40px;
+        width: 470px;
+        bottom: 0px;
+        box-shadow: 0 2px 2px #555;
+    }
+
+    #BlankContent {
+        top: 121px;
+        width: 470px;
+        bottom: 0px;
+        background: #fff;
+        color: #aaa;
+        padding: 20px 10px;
+        align-items: center;
+        text-align: center;
+        z-index: 5000;
+    }
+
     .leaflet-locate-control {
         display: none;
     }

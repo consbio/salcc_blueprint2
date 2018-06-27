@@ -15,7 +15,7 @@ import InfoTab from './InfoTab'
 import TabIcons from './icons/TabIcons'
 import { UnitDataPropType } from '../CustomPropTypes'
 
-import * as UnitActions from '../Actions/actions'
+import * as actions from '../Actions/actions'
 
 class App extends Component {
     constructor(props) {
@@ -24,27 +24,25 @@ class App extends Component {
         this.tabs = ['Priorities', 'Indicators', 'Partners'] // TODO: 'Threats'
 
         this.state = {
-            activeTab: null,
-            place: null,
-            width: window.innerWidth
+            place: null
         }
 
         this.placeSearch = null
     }
 
-    changeTab(tab) {
-        // Toggle tab visibility - if already showing it, then hide again
-        // TODO: only do this for the mobile viewport!
-        if (tab === this.state.activeTab) {
-            this.setState({
-                activeTab: null
-            })
-        } else {
-            this.setState({
-                activeTab: tab
-            })
-        }
-    }
+    // changeTab(tab) {
+    //     // Toggle tab visibility - if already showing it, then hide again
+    //     // TODO: only do this for the mobile viewport!
+    //     if (tab === this.state.activeTab) {
+    //         this.setState({
+    //             activeTab: null
+    //         })
+    //     } else {
+    //         this.setState({
+    //             activeTab: tab
+    //         })
+    //     }
+    // }
 
     handleUnitSelect = (id) => {
         console.log('Select map unit: ', id) /* eslint-disable-line no-console */
@@ -57,7 +55,7 @@ class App extends Component {
 
     handleCloseButton = () => {
         this.props.deselectUnit()
-        this.setState({ activeTab: null })
+        // this.setState({ activeTab: null })
     }
 
     handleTryAgainClick = (event) => {
@@ -89,12 +87,14 @@ class App extends Component {
     }
 
     renderTab(tab, index) {
-        const active = this.state.activeTab === tab ? 'active' : ''
-        const indicators = tab === 'Indicators' ? 'indicators' : ''
-        const className = `tab ${active} ${indicators}`
+        const { activeTab, setTab } = this.props
+        const isActive = activeTab === tab ? 'active' : ''
+        const isIndicatorsTab = tab === 'Indicators' ? 'indicators' : ''
+        const className = `tab ${isActive} ${isIndicatorsTab}`
+        const handleClick = () => setTab(tab)
 
         return (
-            <div key={index} className={className} onClick={() => this.changeTab(tab)}>
+            <div key={index} className={className} onClick={handleClick}>
                 <TabIcons icon={tab} height={24} />
                 <label>{tab}</label>
             </div>
@@ -102,8 +102,9 @@ class App extends Component {
     }
 
     renderActiveTab() {
-        const { data, isPending, selectedUnit } = this.props
-        const { activeTab, width } = this.state
+        const {
+            data, isPending, selectedUnit, activeTab, browser
+        } = this.props
 
         if (isPending) return null
 
@@ -111,7 +112,7 @@ class App extends Component {
 
         // if there is no data, show the InfoTab if wide enough
         if (data === null) {
-            if (width > 700) {
+            if (browser.greaterThan.small) {
                 if (selectedUnit === null) {
                     return <InfoTab />
                 }
@@ -139,8 +140,8 @@ class App extends Component {
     }
 
     renderFooter() {
-        const { activeTab } = this.state
-        const { selectedUnit, isPending } = this.props
+        // const { activeTab } = this.state
+        const { activeTab, selectedUnit, isPending } = this.props
 
         if (activeTab === 'Info') return null
 
@@ -155,8 +156,10 @@ class App extends Component {
     }
 
     renderHeader() {
-        const { activeTab, place, width } = this.state
-        if (width > 700) {
+        const { place } = this.state
+        const { activeTab, browser } = this.props
+
+        if (browser.greaterThan.small) {
             return (
                 <header>
                     <div className="flex-container flex-justify-center flex-align-center" style={{}}>
@@ -184,6 +187,7 @@ class App extends Component {
                 <div
                     id="InfoButton"
                     className={activeTab === 'Info' ? 'active' : ''}
+                    // TODO:
                     onClick={() => this.changeTab('Info')}
                 >
                     i
@@ -234,7 +238,7 @@ class App extends Component {
 
                 {this.renderHeader()}
 
-                <div id="blankContent">Select a tab</div>
+                <div id="BlankContent">Select a tab</div>
 
                 {this.renderUnitName()}
                 {this.renderActiveTab()}
@@ -248,24 +252,30 @@ class App extends Component {
 }
 
 App.propTypes = {
+    activeTab: PropTypes.string,
     selectedUnit: PropTypes.string,
-    deselectUnit: PropTypes.func.isRequired,
-    selectUnit: PropTypes.func.isRequired,
     isPending: PropTypes.bool.isRequired,
     hasError: PropTypes.bool.isRequired,
-    data: UnitDataPropType
+    data: UnitDataPropType,
+    browser: PropTypes.object.isRequired, // responsive browser state
+
+    setTab: PropTypes.func.isRequired,
+    deselectUnit: PropTypes.func.isRequired,
+    selectUnit: PropTypes.func.isRequired
 }
 
 App.defaultProps = {
+    activeTab: null,
     selectedUnit: null,
     data: null
 }
 
-function mapStateToProps(state) {
-    return state
+const mapStateToProps = (state) => {
+    const { app, browser } = state
+    return { ...app, browser }
 }
 
 export default connect(
     mapStateToProps,
-    UnitActions
+    actions
 )(App)
