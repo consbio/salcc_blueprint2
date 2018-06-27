@@ -13,8 +13,6 @@ import debounce from 'lodash.debounce'
 
 import Input from './Input'
 
-import './GooglePlacesSearch.css'
-
 
 class GooglePlacesSearch extends React.Component {
     constructor(props) {
@@ -150,6 +148,7 @@ class GooglePlacesSearch extends React.Component {
     }
 
     handleResultClick(result) {
+        console.log('handleResultClicked')
         this.setState(
             {
                 value: result.label,
@@ -175,15 +174,19 @@ class GooglePlacesSearch extends React.Component {
                 {this.state.results.map((result) => {
                     const { label } = result
                     const offset = label.toLowerCase().indexOf(value.toLowerCase())
-                    const handleClick = () => this.handleResultClick(result)
+                    const handleClick = (e) => {
+                        console.log('clicked')
+                        e.preventDefault()
+                        this.handleResultClick(result)
+                    }
 
                     if (offset === -1) {
                         return (
-                            <li key={label}>
-                                <a href="#" onClick={handleClick}>
+                            <a key={label} href="#" onClick={handleClick}>
+                                <li>
                                     {label}
-                                </a>
-                            </li>
+                                </li>
+                            </a>
                         )
                     }
 
@@ -191,13 +194,13 @@ class GooglePlacesSearch extends React.Component {
                     const highlight = label.slice(offset, offset + value.length)
                     const tail = label.slice(offset + value.length)
                     return (
-                        <li key={label}>
-                            <a href="#" onClick={handleClick}>
+                        <a href="#" onClick={handleClick}>
+                            <li key={label}>
                                 {head}
                                 <b>{highlight}</b>
                                 {tail}
-                            </a>
-                        </li>
+                            </li>
+                        </a>
                     )
                 })}
             </ul>
@@ -205,26 +208,20 @@ class GooglePlacesSearch extends React.Component {
     }
 
     render() {
-        const input = (
-            <Input
-                ref={(i) => {
-                    this.input = i
-                }}
-                value={this.state.value}
-                className="gplaces-search-input-container"
-                isPending={this.state.isPending}
-                onChange={this.onInputChange}
-                onFocus={this.onInputFocus}
-                onBlur={this.onInputBlur}
-            />
-        )
-
-        const resultsList = this.renderResults()
-
+        const { value, isPending } = this.state
         return (
-            <div className="gplaces-search">
-                {input}
-                {resultsList}
+            <div className="gplaces-search flex-container-column flex-align-end">
+                <Input
+                    ref={(i) => {
+                        this.input = i
+                    }}
+                    value={value}
+                    isPending={isPending}
+                    onChange={this.onInputChange}
+                    onFocus={this.onInputFocus}
+                    onBlur={this.onInputBlur}
+                />
+                {this.renderResults()}
             </div>
         )
     }

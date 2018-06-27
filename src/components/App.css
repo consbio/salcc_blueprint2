@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -7,15 +8,16 @@ html, body {
     color: #333;
 }
 
-a, a:active, a:visited {
-    color: #0074D9;
+a,
+a:active,
+a:visited {
+    color: #0074d9;
     text-decoration: none;
 }
 
 p {
     clear: both;
 }
-
 
 header {
     position: absolute;
@@ -25,10 +27,10 @@ header {
     display: flex;
     flex-direction: row;
     align-content: stretch;
-    background: #FAFAFA;
+    background: #fafafa;
     height: 39px;
-    border-bottom: 1px solid #DDD;
-    color: #AAA;
+    border-bottom: 1px solid #ddd;
+    color: #aaa;
 }
 header .button {
     text-align: center;
@@ -36,20 +38,19 @@ header .button {
 
 @media screen and (min-width: 700px) {
     header {
-
     }
 }
 
 footer {
     opacity: 0;
     height: 47px;
-    background: #FAFAFA;
+    background: #fafafa;
     text-align: center;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    border-top: 1px solid #DDD;
+    border-top: 1px solid #ddd;
     align-content: stretch;
     transition: opacity 0.25s ease 0.1s;
 }
@@ -59,13 +60,14 @@ footer {
         top: 80px;
         width: 490px;
         position: absolute;
-        border-bottom: 1px solid #DDD;
+        border-bottom: 1px solid #ddd;
         z-index: 5005;
         box-shadow: 0 0px 6px #555;
     }
 }
 
-header, footer{
+header,
+footer {
     z-index: 5000;
 }
 
@@ -97,12 +99,12 @@ header, footer{
     vertical-align: middle;
 }
 
-.flex-container{
-    display:flex;
+.flex-container {
+    display: flex;
     flex-direction: row;
 }
 .flex-container-column {
-    display:flex;
+    display: flex;
     flex-direction: column;
 }
 
@@ -113,13 +115,15 @@ header, footer{
     justify-content: center;
 }
 
-
 .flex-align-center {
     align-items: center;
 }
+.flex-align-end {
+    align-items: flex-end;
+}
 
 .tab {
-    color:#AAA;
+    color: #aaa;
     font-size: 10px;
     flex-grow: 1;
     cursor: pointer;
@@ -128,23 +132,23 @@ header, footer{
     padding-top: 4px;
 }
 .tab svg {
-    fill: #AAA;
+    fill: #aaa;
 }
 .tab.indicators svg {
     transform: rotate(90deg);
 }
 .tab.active {
-  color: #0892D0;
+    color: #0892d0;
 }
 .tab.active svg {
-    fill: #0892D0;
+    fill: #0892d0;
 }
 .tab label {
     display: block;
 }
 
 #UnitName {
-    background: #0892D0;
+    background: #0892d0;
     height: 40px;
     position: absolute;
     z-index: 5010;
@@ -166,7 +170,7 @@ header, footer{
 }
 
 #Content {
-    background: #FFF;
+    background: #fff;
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -200,8 +204,8 @@ header, footer{
         top: 121px;
         width: 470px;
         bottom: 0px;
-        background: #FFF;
-        color: #AAA;
+        background: #fff;
+        color: #aaa;
         padding: 20px 10px;
         align-items: center;
         text-align: center;
@@ -212,10 +216,10 @@ header, footer{
 
 #UnitName h1 {
     padding: 0;
-    margin:  4px 0;
+    margin: 4px 0;
     font-size: 16px;
     font-weight: normal;
-    color: #FFF;
+    color: #fff;
     flex: 1;
 }
 
@@ -232,13 +236,13 @@ header, footer{
 }
 
 #InfoButton.active {
-    color: #0892D0;
-    border-color: #0892D0;
+    color: #0892d0;
+    border-color: #0892d0;
 }
 
 #CloseButton {
     margin-right: 8px;
-    fill: #FFF;
+    fill: #fff;
     fill-opacity: 0.75;
     width: 24px;
     height: 24px;
@@ -280,7 +284,7 @@ header, footer{
 }
 #Content label {
     margin: 0;
-    color: #AAA;
+    color: #aaa;
     font-size: 12px;
     min-width: 30px;
     text-align: right;
@@ -309,7 +313,7 @@ header, footer{
 }
 
 #EcosystemsNav {
-    background: #FFF;
+    background: #fff;
     flex: 0;
     padding: 4px 0 10px;
 }
@@ -331,7 +335,7 @@ header, footer{
 
 .ecosystem-header {
     padding-bottom: 14px;
-    border-bottom: 1px solid #EEE;
+    border-bottom: 1px solid #eee;
 }
 .ecosystem-header img {
     margin-right: 8px;
@@ -352,7 +356,7 @@ header, footer{
 .indicator {
     margin: 16px 6px 0 6px;
     border-radius: 8px;
-    background-color: #EEE;
+    background-color: #eee;
     padding: 6px 10px 10px 10px;
 }
 
@@ -361,15 +365,15 @@ header, footer{
     font-style: italic;
     font-size: large;
     text-align: center;
-    color: #CCC;
+    color: #ccc;
 }
 
 #MapContainer {
     position: absolute;
-    top:40px;
-    bottom:0;
+    top: 40px;
+    bottom: 0;
     left: 0;
-    right:0;
+    right: 0;
     z-index: 1;
 }
 #Map {
@@ -387,10 +391,9 @@ header, footer{
     background: rgba(255, 255, 255, 0.8);
 }
 
-
 .crosshatch {
-  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><path fill='#fff' d='M0 0h8v8h-8z'/><path d='M0 0l8 8zm8 0l-8 8z' stroke-width='.5' stroke='#aaa'/></svg>");
-  background-repeat: repeat;
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><path fill='#fff' d='M0 0h8v8h-8z'/><path d='M0 0l8 8zm8 0l-8 8z' stroke-width='.5' stroke='#aaa'/></svg>");
+    background-repeat: repeat;
 }
 
 .priorityColorPatch {
@@ -410,9 +413,8 @@ header, footer{
     font-size: 12px;
 }
 
-
 .chart-whisker .domain {
-    stroke-width:3;
+    stroke-width: 3;
     stroke-linecap: round;
 }
 
@@ -421,6 +423,95 @@ header, footer{
 }
 #Content h4 + .chart-labeledpercentbar {
     margin-top: 14px;
+}
+
+.gplaces-search {
+    flex: 1;
+    height: 100%;
+    padding-left: 8px;
+}
+
+.gplaces-search-input-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    align-content: stretch;
+    align-items: center;
+}
+
+.gplaces-search input {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: #aaa;
+    background: transparent;
+    line-height: 1;
+    flex-grow: 1;
+    height: 100%;
+}
+
+/* Only targeting chrome and safari, so this is intentionally not provided for others */
+.gplaces-search input::-webkit-input-placeholder {
+    font-size: small;
+    line-height: 1.5;
+    color: #aaa;
+}
+
+.gplaces-search-reset {
+    cursor: pointer;
+    height: 24px;
+    width: 24px;
+    fill: #aaa;
+    padding: 0 8px;
+}
+
+.gplaces-search-results {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    z-index: 10000;
+    top: 40px;
+    right: 0;
+    background: #f7f7f7;
+    width: 100%;
+    max-width: 768px;
+    box-shadow: 1px 1px 3px #555;
+}
+
+.gplaces-search-results li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.gplaces-search-results a {
+    display: block;
+    color: #777;
+}
+
+.gplaces-search-results a + a {
+    border-top: 1px solid #ddd;
+}
+
+.gplaces-search-results li b {
+    color: #333;
+}
+
+.gplaces-search-noresults {
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    position: absolute;
+    z-index: 10000;
+    top: 40px;
+    right: 0;
+    width: 100%;
+    max-width: 768px;
+    color: #aaa;
+    background: #f7f7f7;
+    border-bottom: 1px solid #ddd;
 }
 
 /* Leaflet basemap overrides */
@@ -439,7 +530,7 @@ header, footer{
     border: none !important;
     box-shadow: 1px 2px 4px #555 !important;
     border-radius: 40px !important;
-    background: #FFF;
+    background: #fff;
     margin-right: 12px !important;
 }
 
@@ -458,7 +549,7 @@ header, footer{
     left: 0;
     right: 0;
     top: 0;
-    background: rgba(175,175,175,0.75);
+    background: rgba(175, 175, 175, 0.75);
     z-index: 10000;
 
     font-size: 10px;
@@ -466,27 +557,25 @@ header, footer{
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    color: #FFF;
+    color: #fff;
 }
 #Legend label {
     font-size: 12px;
     margin-right: 6px;
-    color: #EEE;
+    color: #eee;
 }
 
 .legend-patch {
-    color: #FFF;
+    color: #fff;
     text-align: center;
     min-width: 40px;
     padding: 1px 4px;
     opacity: 0.75;
 }
 
-
-
 /* Viewport dependent rendering */
-@media screen and (min-width: 700px){
-    .leaflet-locate-control{
+@media screen and (min-width: 700px) {
+    .leaflet-locate-control {
         display: none;
     }
 }
