@@ -33,6 +33,8 @@ class App extends Component {
     }
 
     changeTab(tab) {
+        // Toggle tab visibility - if already showing it, then hide again
+        // TODO: only do this for the mobile viewport!
         if (tab === this.state.activeTab) {
             this.setState({
                 activeTab: null
@@ -113,16 +115,17 @@ class App extends Component {
                 if (selectedUnit === null) {
                     return <InfoTab />
                 }
-                this.changeTab('Priorities') // TODO: need to return if there are no data
+                // TODO: Why is this here?  If we are trying to route here, we should catch sooner
+                console.log('Change tab to priorities')
+                this.changeTab('Priorities')
             }
             return null
         }
 
         const { ecosystems } = data
 
-        switch (
-            this.state.activeTab // if the previous state is the same tab, then close the tab
-        ) {
+        // if the previous state is the same tab, then close the tab
+        switch (activeTab) {
             case 'Priorities':
                 return <PrioritiesTab {...this.props} />
             case 'Indicators':
@@ -136,10 +139,13 @@ class App extends Component {
     }
 
     renderFooter() {
-        if (this.state.activeTab === 'Info') return null
+        const { activeTab } = this.state
+        const { selectedUnit, isPending } = this.props
+
+        if (activeTab === 'Info') return null
 
         // Animate opacity property
-        const opacity = this.props.selectedUnit === null || this.props.isPending ? 0 : 1
+        const opacity = selectedUnit === null || isPending ? 0 : 1
 
         return (
             <footer className="flex-container flex-justify-center" style={{ opacity }}>
@@ -149,7 +155,8 @@ class App extends Component {
     }
 
     renderHeader() {
-        if (this.state.width > 700) {
+        const { activeTab, place, width } = this.state
+        if (width > 700) {
             return (
                 <header>
                     <div className="flex-container flex-justify-center flex-align-center" style={{}}>
@@ -165,7 +172,7 @@ class App extends Component {
                         ref={(ref) => {
                             this.placeSearch = ref
                         }}
-                        selected={this.state.place}
+                        selected={place}
                         onFocus={() => this.changeTab(null)}
                         onSelect={this.handlePlaceSelect}
                     />
@@ -176,7 +183,7 @@ class App extends Component {
             <header>
                 <div
                     id="InfoButton"
-                    className={this.state.activeTab === 'Info' ? 'active' : ''}
+                    className={activeTab === 'Info' ? 'active' : ''}
                     onClick={() => this.changeTab('Info')}
                 >
                     i
@@ -186,7 +193,7 @@ class App extends Component {
                     ref={(ref) => {
                         this.placeSearch = ref
                     }}
-                    selected={this.state.place}
+                    selected={place}
                     onFocus={() => this.changeTab(null)}
                     onSelect={this.handlePlaceSelect}
                 />
@@ -211,11 +218,14 @@ class App extends Component {
     }
 
     render() {
+        const { place } = this.state
+        const { selectedUnit } = this.props
+
         return (
             <div className="App">
                 <Map
-                    place={this.state.place}
-                    selectedUnit={this.props.selectedUnit}
+                    place={place}
+                    selectedUnit={selectedUnit}
                     onSelectUnit={this.handleUnitSelect}
                     onDeselectUnit={this.handleUnitDeselect}
                     onSetLocation={this.handlePlaceSelect}

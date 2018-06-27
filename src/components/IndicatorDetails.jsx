@@ -4,11 +4,11 @@ import PropTypes from 'prop-types'
 import LabeledPercentBar from './Charts/LabeledPercentBar'
 
 const IndicatorDetails = ({
-    label, description, valueLabels, percent, ecosystemLabel, ecosystemIcon, onClick
+    label, description, valueLabels, percent, ecosystemLabel, ecosystemIcon, onBackClick
 }) => {
     const handleBackClick = (event) => {
         event.preventDefault()
-        onClick()
+        onBackClick()
     }
 
     const percents = Object.keys(valueLabels).map((value, i) => ({
@@ -43,11 +43,11 @@ const IndicatorDetails = ({
 IndicatorDetails.propTypes = {
     label: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    valueLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
-    percent: PropTypes.number.isRequired,
+    valueLabels: PropTypes.objectOf(PropTypes.string).isRequired,
+    percent: PropTypes.arrayOf(PropTypes.number).isRequired,
     ecosystemLabel: PropTypes.string.isRequired,
     ecosystemIcon: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired
+    onBackClick: PropTypes.func.isRequired
 }
 
 export default IndicatorDetails

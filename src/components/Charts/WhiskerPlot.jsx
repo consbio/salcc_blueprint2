@@ -63,16 +63,12 @@ class WhiskerPlot extends ResponsiveWidthComponent {
 
 WhiskerPlot.propTypes = {
     value: PropTypes.number.isRequired,
-    domain: PropTypes.arrayOf(PropTypes.number).isRequired,
+    domain: PropTypes.arrayOf(PropTypes.number).isRequired, // absolute range: [0, 1]
     color: PropTypes.string.isRequired,
     insetWidth: PropTypes.number
 }
 
 WhiskerPlot.defaultProps = {
-    // value: 0, // == mean
-    // domain: [0, 1], // == absolute range
-    // color: '#DDD',
-
     insetWidth: 20 // parent padding
 }
 

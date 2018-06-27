@@ -20,7 +20,8 @@ L.Icon.Default.mergeOptions({ iconRetinaUrl, iconUrl, shadowUrl })
 const config = {
     mapParams: {
         center: [33.358, -78.593], // [33.358, -80]
-        zoom: 5,
+        // zoom: 5,
+        zoom: 13,
         minZoom: 3,
         maxZoom: 15,
         zoomControl: false,
