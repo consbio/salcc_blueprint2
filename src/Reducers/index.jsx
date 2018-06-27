@@ -1,10 +1,4 @@
-import {
-    DESELECT_UNIT,
-    REQUEST_DATA,
-    RECIEVE_DATA,
-    REQUEST_ERROR
-} from '../Actions/actions';
-
+import { DESELECT_UNIT, REQUEST_DATA, RECIEVE_DATA, REQUEST_ERROR } from '../Actions/actions'
 
 export default function rootReducer(
     state = {
@@ -14,39 +8,40 @@ export default function rootReducer(
 
         // State of the selected unit
         selectedUnit: null,
-        data: {}
+        data: null
     },
-    action) {
-    switch (action.type){
+    action
+) {
+    switch (action.type) {
         case DESELECT_UNIT:
             return Object.assign({}, state, {
                 isPending: false,
                 hasError: false,
                 selectedUnit: null,
-                data: {}
-            });
+                data: null
+            })
 
         case REQUEST_DATA:
             return Object.assign({}, state, {
                 isPending: true,
                 hasError: false,
                 selectedUnit: action.unit,
-                data: {}
-            });
+                data: null
+            })
 
         case RECIEVE_DATA:
             return Object.assign({}, state, {
                 isPending: false,
                 selectedUnit: action.unit,
-                data: action.data
-            });
+                data: action.data || null
+            })
 
         case REQUEST_ERROR:
             return Object.assign({}, state, {
                 isPending: false,
                 hasError: true,
                 selectedUnit: null,
-                data: {}
+                data: null
             })
 
         default:

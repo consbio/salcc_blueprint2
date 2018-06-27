@@ -12,6 +12,11 @@ We also obtain the US Census TIGER States shapefile to extract state and county 
 3. the output JSON files are stored in `public/data` which is not versioned due to the volume of files.
 
 
+## Development
+
+To startup the frontend application:
+`yarn start`
+
 
 ## Deployment
 
