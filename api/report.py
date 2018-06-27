@@ -193,7 +193,7 @@ def generate_report_context(id):
 #     doc.add_paragraph('')
 
 
-def _move_p_after(p_move, p_place):
+def _move_p_after(p_move, p_destination):
     """
     Move the table after 'pararaph.'
     Normally, tables are created at the end of the document.
@@ -208,7 +208,7 @@ def _move_p_after(p_move, p_place):
         location where table will be moved
 
     """
-    p_place._p.addnext(p_move._p)
+    p_destination._p.addnext(p_move._p)
 
 
 def _resolve(scope, key, context):
