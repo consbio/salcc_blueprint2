@@ -1,6 +1,8 @@
-import React, {Component} from 'react';
-import LabeledPercentBar from './Charts/LabeledPercentBar';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
+import { UnitDataPropType } from '../CustomPropTypes'
+import LabeledPercentBar from './Charts/LabeledPercentBar'
 
 const GAP = {
     1: {
@@ -33,8 +35,7 @@ const GAP = {
         label: 'Unknown - protected lands status unknown',
         description: 'Protection status unknown'
     }
-};
-
+}
 
 const OWNERSHIP = {
     FED: {
@@ -73,54 +74,43 @@ const OWNERSHIP = {
         color: '#c49c94',
         label: 'Ownership unknown'
     }
-};
+}
 
 const NOT_CONSERVED = {
     color: '#AAA',
     label: 'Not conserved',
     description: 'lands not currently known to be conserved'
-};
-
+}
 
 function sumPercent(items) {
-    return items.map((item) => item.percent).reduce((a, b) => a + b, 0);
+    return items.map(item => item.percent).reduce((a, b) => a + b, 0)
 }
 
 function sortDescendingPercent(a, b) {
-    if (a.percent < b.percent) return 1;
-    if (a.percent > b.percent) return -1;
-    return 0;
+    if (a.percent < b.percent) return 1
+    if (a.percent > b.percent) return -1
+    return 0
 }
 
 class PartnersTab extends Component {
-    renderNoContent() {
-        return (
-            <div id="Content" className="flex-container-column">
-                <h4 className="text-center">No partner information available.</h4>
-            </div>
-        );
-    }
+    renderNoContent = () => (
+        <div id="Content" className="flex-container-column">
+            <h4 className="text-center">No partner information available.</h4>
+        </div>
+    )
 
-    renderBar(item) {
-        const {key, label, percent, color} = item;
+    renderBar = item => <LabeledPercentBar {...item} height={6} />
 
-        return (
-            <LabeledPercentBar key={key} percent={percent} label={label} color={color} height={6}/>
-        );
-    }
-
-    renderLTALink(fips, countyName) {
-        return (
-            <li key={fips}>
-                <a href={`http://findalandtrust.org/counties/${fips}`} target="_blank">
-                    {countyName}
-                </a>
-            </li>
-        );
-    }
+    renderLTALink = (fips, countyName) => (
+        <li key={fips}>
+            <a href={`http://findalandtrust.org/counties/${fips}`} target="_blank" rel="noopener noreferrer">
+                {countyName}
+            </a>
+        </li>
+    )
 
     renderOwnership(ownership) {
-        if (!ownership.length) return null;
+        if (!ownership.length) return null
 
         return (
             <section>
@@ -128,11 +118,11 @@ class PartnersTab extends Component {
                 <p className="text-small text-quieter">Only showing types greater than 10 acres.</p>
                 {ownership.map(this.renderBar)}
             </section>
-        );
+        )
     }
 
     renderProtectedLands(protectedLands) {
-        if (!protectedLands.length) return null;
+        if (!protectedLands.length) return null
 
         return (
             <section>
@@ -140,84 +130,99 @@ class PartnersTab extends Component {
                 <p className="text-small text-quieter">Only showing types greater than 10 acres.</p>
                 {protectedLands.map(this.renderBar)}
             </section>
-        );
+        )
     }
 
     renderLTAs(counties) {
-        if (!counties) return null;
+        if (!counties) return null
 
         return (
             <section>
                 <h3>Land Trusts By County</h3>
-                <ul>
-                    {Object.entries(counties).map((pair) =>
-                        this.renderLTALink(pair[0], pair[1] ))}
-                </ul>
+                <ul>{Object.entries(counties).map(pair => this.renderLTALink(pair[0], pair[1]))}</ul>
             </section>
-        );
+        )
     }
 
     render() {
-        const {selectedUnit, data} = this.props;
+        const { selectedUnit, data } = this.props
+
+        if (selectedUnit === null) return null
 
         // Marine units currently have no info for this tab
         if (selectedUnit.indexOf('M') === 0) {
-            return this.renderNoContent();
+            return this.renderNoContent()
         }
 
-        let {owner, gap, counties} = data;
-        owner = owner || {};  // incoming may be undefined
-        gap = gap || {};  // incoming may be undefined
+        const { counties } = data
+        let { owner, gap } = data
+        owner = owner || {} // incoming may be undefined
+        gap = gap || {} // incoming may be undefined
 
-        let remainder = 0;
-        let ownership = [];
-        let protectedLands = [];
+        let remainder = 0
+        let ownership = []
+        let protectedLands = []
 
         // transform ownership into structure needed and add
         // "not conserved" if sum is < 100%
-        ownership = Object.keys(owner).map((key) => {
-            return Object.assign({
-                key: key,
-                percent: owner[key]
-            }, OWNERSHIP[key]);
-        });
-        ownership.sort(sortDescendingPercent);
+        ownership = Object.keys(owner).map(key =>
+            Object.assign(
+                {
+                    key,
+                    percent: owner[key]
+                },
+                OWNERSHIP[key]
+            ))
+        ownership.sort(sortDescendingPercent)
 
-        remainder = 100 - sumPercent(ownership);
+        remainder = 100 - sumPercent(ownership)
         if (remainder > 0) {
-            ownership.push(Object.assign({
-                key: 'notconserved',
-                percent: remainder
-            }, NOT_CONSERVED));
+            ownership.push(
+                Object.assign(
+                    {
+                        key: 'notconserved',
+                        percent: remainder
+                    },
+                    NOT_CONSERVED
+                )
+            )
         }
 
         // transform GAP (level of protection) into structure needed and add
         // "not conserved" if sum is < 100%
-        protectedLands = Object.keys(gap).map((key) => {
-            return Object.assign({key: key, percent: gap[key]}, GAP[key]);
-        });
-        protectedLands.sort(sortDescendingPercent);
+        protectedLands = Object.keys(gap).map(key => Object.assign({ key, percent: gap[key] }, GAP[key]))
+        protectedLands.sort(sortDescendingPercent)
 
-        remainder = 100 - sumPercent(protectedLands);
+        remainder = 100 - sumPercent(protectedLands)
         if (remainder > 0) {
-            protectedLands.push(Object.assign({
-                key: 'notconserved',
-                percent: remainder
-            }, NOT_CONSERVED));
+            protectedLands.push(
+                Object.assign(
+                    {
+                        key: 'notconserved',
+                        percent: remainder
+                    },
+                    NOT_CONSERVED
+                )
+            )
         }
 
         if (!(ownership.length + protectedLands.length > 1 && counties)) {
-            return this.renderNoContent();
+            return this.renderNoContent()
         }
 
         return (
             <div id="Content" className="flex-container-column">
-                { this.renderOwnership(ownership) }
-                { this.renderProtectedLands(protectedLands) }
-                { this.renderLTAs(counties) }
+                {this.renderOwnership(ownership)}
+                {this.renderProtectedLands(protectedLands)}
+                {this.renderLTAs(counties)}
             </div>
-        );
+        )
     }
 }
 
-export default PartnersTab;
+PartnersTab.propTypes = {
+    data: UnitDataPropType.isRequired,
+    selectedUnit: PropTypes.string.isRequired
+}
+
+export default PartnersTab
