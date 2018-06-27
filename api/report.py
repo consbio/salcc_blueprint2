@@ -57,7 +57,7 @@ def create_report(id, path):
             for category in context['partners']:
                 heading = doc.add_heading(context['partner_headers'][category], 3)
                 # Headings are created at the end of the doc and must be moved into place
-                _move_heading_after(heading, h_insert_point)
+                _move_p_after(heading, h_insert_point)
 
                 # Where to insert the next partner name
                 p_insert_point = heading
@@ -67,7 +67,7 @@ def create_report(id, path):
                         partner[0]
                     )
                     # Paragraphs are created at the end of the doc and must be moved into place
-                    _move_heading_after(part, p_insert_point)
+                    _move_p_after(part, p_insert_point)
                     p_insert_point = part
 
                 # Next heading created will be moved below the last partner in the preceding list
@@ -193,7 +193,7 @@ def generate_report_context(id):
 #     doc.add_paragraph('')
 
 
-def _move_heading_after(heading, paragraph):
+def _move_p_after(p_move, p_place):
     """
     Move the table after 'pararaph.'
     Normally, tables are created at the end of the document.
@@ -208,24 +208,8 @@ def _move_heading_after(heading, paragraph):
         location where table will be moved
 
     """
-    paragraph._p.addnext(heading._p)
+    p_place._p.addnext(p_move._p)
 
-# def _move_para_after(table, paragraph):
-#     """
-#     Move the table after 'pararaph.'
-#     Normally, tables are created at the end of the document.
-#     This function allows you to move them to a different location in the document.
-#     The paragraph passed in is not modified, it is just used as a reference point for inserting the table.
-#
-#     Parameters
-#     ----------
-#     table
-#         table to be moved
-#     paragraph
-#         location where table will be moved
-#
-#     """
-#     paragraph._p.addnext(table._tbl)
 
 def _resolve(scope, key, context):
     """
