@@ -27,7 +27,7 @@ export const UnitDataPropType = PropTypes.shape({
 })
 
 export const PlacePropType = PropTypes.shape({
-    label: PropTypes.string.isRequired,
+    label: PropTypes.string,
     location: PropTypes.shape({
         lat: PropTypes.number.isRequired,
         lng: PropTypes.number.isRequired

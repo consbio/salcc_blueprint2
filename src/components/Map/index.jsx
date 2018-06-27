@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable max-len, no-underscore-dangle */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { scaleLinear } from 'd3-scale'
@@ -11,19 +11,22 @@ import 'leaflet-basemaps'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-basemaps/L.Control.Basemaps.css'
 
-import { PlacePropType } from '../CustomPropTypes'
+import LocateControl from './LocateControl'
+import { PlacePropType } from '../../CustomPropTypes'
+
+const MAPBOX_TOKEN = 'pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ'
 
 // Make leaflet icons work properly from webpack / react context
-/* eslint-disable no-underscore-dangle */
+
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({ iconRetinaUrl, iconUrl, shadowUrl })
 
 // Map configurationParameters
 const config = {
     mapParams: {
-        center: [33.358, -78.593], // [33.358, -80]
+        center: [33.358, -80], // FIXME: [33.358, -78.593],
         // zoom: 5,
-        zoom: 13,
+        zoom: 12,
         minZoom: 3,
         maxZoom: 15,
         zoomControl: false,
@@ -33,11 +36,11 @@ const config = {
     },
     basemaps: [
         L.tileLayer(
-            'https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ',
+            `https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`,
             {}
         ),
         L.tileLayer(
-            'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ',
+            `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`,
             {
                 opacity: 0.6
             }
@@ -74,44 +77,6 @@ const config = {
     }
 }
 
-const LocateControlClass = L.Control.extend({
-    options: {
-        position: 'topright',
-        maxZoom: 10
-    },
-
-    // Connection point
-    /* eslint-disable no-unused-vars */
-    onLocationFound: (lat, lng) => {},
-
-    onAdd(map) {
-        this._map = map
-        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-locate-control')
-        L.DomEvent.disableClickPropagation(container)
-
-        const link = L.DomUtil.create('a', '', container)
-        link.href = '#'
-
-        L.DomEvent.on(link, 'click', L.DomEvent.stopPropagation)
-            .on(link, 'click', L.DomEvent.preventDefault)
-            .on(link, 'click', () => {
-                this._map.locate({ setView: true, maxZoom: this.options.maxZoom })
-            })
-            .on(link, 'dblclick', L.DomEvent.stopPropagation)
-
-        map.on('locationfound', (e) => {
-            this.onLocationFound(e.latlng.lat, e.latlng.lng)
-        })
-
-        map.on('locationerror', () => {
-            /* eslint-disable-next-line no-alert */
-            alert('Unable to determine location.  Make sure your settings allow location services.')
-        })
-
-        return container
-    }
-})
-
 class Map extends Component {
     constructor(props) {
         super(props)
@@ -131,6 +96,9 @@ class Map extends Component {
         const { place, selectedUnit } = this.state
         const map = L.map(this._mapNode, config.mapParams)
         this.map = map
+
+        // for easier debugging
+        window.map = map
 
         map.addLayer(config.blueprintLayer)
 
@@ -160,7 +128,7 @@ class Map extends Component {
         })
         map.addControl(basemapsControl)
 
-        this.locateControl = new LocateControlClass()
+        this.locateControl = new LocateControl()
         // overriding functions here to bind to outer scope
         this.locateControl.onLocationFound = (lat, lng) => {
             this.props.onSetLocation({

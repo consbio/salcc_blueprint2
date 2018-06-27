@@ -79,9 +79,9 @@ class GooglePlacesSearch extends React.Component {
     }
 
     onInputBlur = () => {
-        this.timer = setTimeout(() => {
-            this.setState({ isResultsHidden: true, isPending: false })
-        }, 100)
+        // this.timer = setTimeout(() => {
+        //     this.setState({ isResultsHidden: true, isPending: false })
+        // }, 100)
     }
 
     blur() {

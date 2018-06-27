@@ -25,19 +25,15 @@ class App extends Component {
         this.placeSearch = null
     }
 
-    // changeTab(tab) {
-    //     // Toggle tab visibility - if already showing it, then hide again
-    //     // TODO: only do this for the mobile viewport!
-    //     if (tab === this.state.activeTab) {
-    //         this.setState({
-    //             activeTab: null
-    //         })
-    //     } else {
-    //         this.setState({
-    //             activeTab: tab
-    //         })
-    //     }
-    // }
+    handleSetTab = (tab) => {
+        const { activeTab, setTab, isMobile } = this.props
+        // toggle current tab
+        if (isMobile && activeTab === tab) {
+            setTab(null)
+        } else {
+            setTab(tab)
+        }
+    }
 
     handleUnitSelect = (id) => {
         console.log('Select map unit: ', id) /* eslint-disable-line no-console */
@@ -78,11 +74,11 @@ class App extends Component {
     }
 
     renderTab(tab, index) {
-        const { activeTab, setTab } = this.props
+        const { activeTab } = this.props
         const isActive = activeTab === tab ? 'active' : ''
         const isIndicatorsTab = tab === 'Indicators' ? 'indicators' : ''
         const className = `tab ${isActive} ${isIndicatorsTab}`
-        const handleClick = () => setTab(tab)
+        const handleClick = () => this.handleSetTab(tab)
 
         return (
             <div key={index} className={className} onClick={handleClick}>
@@ -108,23 +104,24 @@ class App extends Component {
             if (selectedUnit === null) {
                 return <InfoTab />
             }
-            // TODO: Why is this here?  If we are trying to route here, we should catch sooner
-            console.log('Change tab to priorities')
-            this.changeTab('Priorities')
         }
 
-        const { ecosystems } = data
+        const {
+            ecosystems, blueprint, justification, plans, gap, owner, counties
+        } = data
+
+        const isMarine = selectedUnit.indexOf('M') === 0
 
         // if the previous state is the same tab, then close the tab
         switch (activeTab) {
             case 'Priorities':
-                return <PrioritiesTab {...this.props} />
+                return <PrioritiesTab blueprint={blueprint} justification={justification} plans={plans} />
             case 'Indicators':
                 return <IndicatorsTab ecosystems={ecosystems} />
             // case 'Threats':
             //     return <ThreatsTab  {...this.props}/>;
             case 'Partners':
-                return <PartnersTab {...this.props} />
+                return <PartnersTab counties={counties} gap={gap} owner={owner} isMarine={isMarine} />
         }
         return null
     }
@@ -149,10 +146,14 @@ class App extends Component {
             activeTab, isMobile, place, setPlace, setTab
         } = this.props
 
-        const handleResetTab = () => setTab(null)
-
         if (isMobile) {
-            const handleInfoClick = () => setTab('Info')
+            const handleInfoClick = () => this.handleSetTab('Info')
+
+            // hide current tab so that we can show the point on the map
+            const handleSetPlace = (newPlace) => {
+                setTab(null)
+                setPlace(newPlace)
+            }
 
             return (
                 <header>
@@ -165,8 +166,7 @@ class App extends Component {
                             this.placeSearch = ref
                         }}
                         selected={place}
-                        onFocus={handleResetTab}
-                        onSelect={setPlace}
+                        onSelect={handleSetPlace}
                     />
                 </header>
             )
@@ -188,7 +188,6 @@ class App extends Component {
                         this.placeSearch = ref
                     }}
                     selected={place}
-                    onFocus={handleResetTab}
                     onSelect={setPlace}
                 />
             </header>
@@ -227,7 +226,7 @@ class App extends Component {
 
                 {this.renderHeader()}
 
-                <div id="BlankContent">Select a tab</div>
+                {/* <div id="BlankContent">Select a tab</div> */}
 
                 {this.renderUnitName()}
                 {this.renderActiveTab()}
