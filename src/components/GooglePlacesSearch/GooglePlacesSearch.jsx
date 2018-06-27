@@ -13,7 +13,6 @@ import debounce from 'lodash.debounce'
 
 import Input from './Input'
 
-
 class GooglePlacesSearch extends React.Component {
     constructor(props) {
         super(props)
@@ -53,7 +52,6 @@ class GooglePlacesSearch extends React.Component {
         clearTimeout(this.timer)
     }
 
-
     onInputChange = (value) => {
         if (value) {
             this.setState(
@@ -89,7 +87,6 @@ class GooglePlacesSearch extends React.Component {
     blur() {
         if (this.input !== null) this.input.blur()
     }
-
 
     _getAutocomplete = () => {
         const options = {
@@ -183,9 +180,7 @@ class GooglePlacesSearch extends React.Component {
                     if (offset === -1) {
                         return (
                             <a key={label} href="#" onClick={handleClick}>
-                                <li>
-                                    {label}
-                                </li>
+                                <li>{label}</li>
                             </a>
                         )
                     }
@@ -194,8 +189,8 @@ class GooglePlacesSearch extends React.Component {
                     const highlight = label.slice(offset, offset + value.length)
                     const tail = label.slice(offset + value.length)
                     return (
-                        <a href="#" onClick={handleClick}>
-                            <li key={label}>
+                        <a key={label} href="#" onClick={handleClick}>
+                            <li>
                                 {head}
                                 <b>{highlight}</b>
                                 {tail}

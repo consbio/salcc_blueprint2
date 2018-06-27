@@ -11,6 +11,8 @@ import 'leaflet-basemaps'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-basemaps/L.Control.Basemaps.css'
 
+import { PlacePropType } from '../CustomPropTypes'
+
 // Make leaflet icons work properly from webpack / react context
 /* eslint-disable no-underscore-dangle */
 delete L.Icon.Default.prototype._getIconUrl
@@ -284,13 +286,7 @@ Map.propTypes = {
     //     label: 'Place name',
     //     location: {lat: 44.1, lng: -123.2}
     // }
-    place: PropTypes.shape({
-        label: PropTypes.string.isRequired,
-        location: PropTypes.shape({
-            lat: PropTypes.number.isRequired,
-            lng: PropTypes.number.isRequired
-        }).isRequired
-    }),
+    place: PlacePropType,
     selectedUnit: PropTypes.string,
     onSelectUnit: PropTypes.func,
     onDeselectUnit: PropTypes.func,

@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { responsiveStateReducer } from 'redux-responsive'
 
-import { DESELECT_UNIT, REQUEST_DATA, RECIEVE_DATA, REQUEST_ERROR, SET_TAB } from '../Actions/actions'
+import { DESELECT_UNIT, REQUEST_DATA, RECIEVE_DATA, REQUEST_ERROR, SET_TAB, SET_PLACE } from '../Actions/actions'
 
 const updateObject = (oldObject, newObject) => Object.assign({}, oldObject, newObject)
 
@@ -9,8 +9,8 @@ const initialState = {
     // Application state
     isPending: false,
     hasError: false,
-    // width: window.innerWidth,
     activeTab: null,
+    place: null,  // location from search
 
     // State of the selected unit
     selectedUnit: null,
@@ -49,6 +49,9 @@ const mainReducer = (state = initialState, action) => {
                 selectedUnit: null,
                 data: null
             })
+
+        case SET_PLACE:
+            return updateObject(state, { place: action.place })
 
         case SET_TAB:
             return updateObject(state, { activeTab: action.tab })

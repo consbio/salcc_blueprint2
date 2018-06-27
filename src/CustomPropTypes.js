@@ -26,4 +26,17 @@ export const UnitDataPropType = PropTypes.shape({
     justification: PropTypes.string
 })
 
-export default { UnitDataPropType }
+export const PlacePropType = PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    location: PropTypes.shape({
+        lat: PropTypes.number.isRequired,
+        lng: PropTypes.number.isRequired
+    }).isRequired
+})
+
+export default {
+    EcosystemPropType,
+    IndicatorPropType,
+    PlacePropType,
+    UnitDataPropType
+}

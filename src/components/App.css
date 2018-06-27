@@ -159,7 +159,7 @@ footer {
     z-index: 5001;
 }
 
-#blankContent {
+#BlankContent {
     position: absolute;
     right: 0px;
     left: 0px;
@@ -523,7 +523,7 @@ footer {
 @media screen and (min-width: 768px) {
     footer {
         top: 80px;
-        width: 470px;
+        width: 490px;
         position: absolute;
         border-bottom: 1px solid #ddd;
         z-index: 5005;
@@ -547,7 +547,7 @@ footer {
 
     #UnitName {
         top: 40px;
-        width: 470px;
+        width: 490px;
         bottom: 0px;
         box-shadow: 0 2px 2px #555;
     }

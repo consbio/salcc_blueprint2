@@ -13,7 +13,7 @@ import IndicatorsTab from './IndicatorsTab'
 import PartnersTab from './PartnersTab'
 import InfoTab from './InfoTab'
 import TabIcons from './icons/TabIcons'
-import { UnitDataPropType } from '../CustomPropTypes'
+import { PlacePropType, UnitDataPropType } from '../CustomPropTypes'
 
 import * as actions from '../Actions/actions'
 
@@ -22,11 +22,6 @@ class App extends Component {
         super(props)
 
         this.tabs = ['Priorities', 'Indicators', 'Partners'] // TODO: 'Threats'
-
-        this.state = {
-            place: null
-        }
-
         this.placeSearch = null
     }
 
@@ -69,10 +64,6 @@ class App extends Component {
         }
     }
 
-    handlePlaceSelect = (place) => {
-        this.setState({ place })
-    }
-
     renderUnitName() {
         if (this.props.selectedUnit === null) return null
 
@@ -103,24 +94,23 @@ class App extends Component {
 
     renderActiveTab() {
         const {
-            data, isPending, selectedUnit, activeTab, browser
+            data, isPending, selectedUnit, activeTab, isMobile
         } = this.props
 
         if (isPending) return null
 
         if (activeTab === 'Info') return <InfoTab />
 
-        // if there is no data, show the InfoTab if wide enough
         if (data === null) {
-            if (browser.greaterThan.small) {
-                if (selectedUnit === null) {
-                    return <InfoTab />
-                }
-                // TODO: Why is this here?  If we are trying to route here, we should catch sooner
-                console.log('Change tab to priorities')
-                this.changeTab('Priorities')
+            if (isMobile) return null
+
+            // if there is no data, show the InfoTab if wide enough
+            if (selectedUnit === null) {
+                return <InfoTab />
             }
-            return null
+            // TODO: Why is this here?  If we are trying to route here, we should catch sooner
+            console.log('Change tab to priorities')
+            this.changeTab('Priorities')
         }
 
         const { ecosystems } = data
@@ -140,7 +130,6 @@ class App extends Component {
     }
 
     renderFooter() {
-        // const { activeTab } = this.state
         const { activeTab, selectedUnit, isPending } = this.props
 
         if (activeTab === 'Info') return null
@@ -156,19 +145,19 @@ class App extends Component {
     }
 
     renderHeader() {
-        const { place } = this.state
-        const { activeTab, browser } = this.props
+        const {
+            activeTab, isMobile, place, setPlace, setTab
+        } = this.props
 
-        if (browser.greaterThan.small) {
+        const handleResetTab = () => setTab(null)
+
+        if (isMobile) {
+            const handleInfoClick = () => setTab('Info')
+
             return (
                 <header>
-                    <div className="flex-container flex-justify-center flex-align-center" style={{}}>
-                        <img
-                            src="/logo_96x96.png"
-                            style={{ height: 32, padding: 6, verticalAlign: 'middle' }}
-                            alt="SALCC Logo"
-                        />
-                        South Atlantic Conservation Blueprint 2.2
+                    <div id="InfoButton" className={activeTab === 'Info' ? 'active' : ''} onClick={handleInfoClick}>
+                        i
                     </div>
 
                     <GooglePlacesSearch
@@ -176,21 +165,22 @@ class App extends Component {
                             this.placeSearch = ref
                         }}
                         selected={place}
-                        onFocus={() => this.changeTab(null)}
-                        onSelect={this.handlePlaceSelect}
+                        onFocus={handleResetTab}
+                        onSelect={setPlace}
                     />
                 </header>
             )
         }
+
         return (
             <header>
-                <div
-                    id="InfoButton"
-                    className={activeTab === 'Info' ? 'active' : ''}
-                    // TODO:
-                    onClick={() => this.changeTab('Info')}
-                >
-                    i
+                <div className="flex-container flex-justify-center flex-align-center" style={{}}>
+                    <img
+                        src="/logo_96x96.png"
+                        style={{ height: 32, padding: 6, verticalAlign: 'middle' }}
+                        alt="SALCC Logo"
+                    />
+                    South Atlantic Conservation Blueprint 2.2
                 </div>
 
                 <GooglePlacesSearch
@@ -198,8 +188,8 @@ class App extends Component {
                         this.placeSearch = ref
                     }}
                     selected={place}
-                    onFocus={() => this.changeTab(null)}
-                    onSelect={this.handlePlaceSelect}
+                    onFocus={handleResetTab}
+                    onSelect={setPlace}
                 />
             </header>
         )
@@ -222,8 +212,7 @@ class App extends Component {
     }
 
     render() {
-        const { place } = this.state
-        const { selectedUnit } = this.props
+        const { place, setPlace, selectedUnit } = this.props
 
         return (
             <div className="App">
@@ -232,7 +221,7 @@ class App extends Component {
                     selectedUnit={selectedUnit}
                     onSelectUnit={this.handleUnitSelect}
                     onDeselectUnit={this.handleUnitDeselect}
-                    onSetLocation={this.handlePlaceSelect}
+                    onSetLocation={setPlace}
                     onClick={this.handleMapClick}
                 />
 
@@ -257,22 +246,25 @@ App.propTypes = {
     isPending: PropTypes.bool.isRequired,
     hasError: PropTypes.bool.isRequired,
     data: UnitDataPropType,
-    browser: PropTypes.object.isRequired, // responsive browser state
+    isMobile: PropTypes.bool.isRequired, // responsive browser state
+    place: PlacePropType,
 
     setTab: PropTypes.func.isRequired,
     deselectUnit: PropTypes.func.isRequired,
-    selectUnit: PropTypes.func.isRequired
+    selectUnit: PropTypes.func.isRequired,
+    setPlace: PropTypes.func.isRequired
 }
 
 App.defaultProps = {
     activeTab: null,
     selectedUnit: null,
-    data: null
+    data: null,
+    place: null
 }
 
 const mapStateToProps = (state) => {
     const { app, browser } = state
-    return { ...app, browser }
+    return { ...app, isMobile: browser.lessThan.small }
 }
 
 export default connect(

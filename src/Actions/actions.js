@@ -55,3 +55,9 @@ export const DESELECT_UNIT = 'DESELECT_UNIT'
 export function deselectUnit() {
     return { type: DESELECT_UNIT }
 }
+
+export const SET_PLACE = 'SET_PLACE'
+export const setPlace = place => ({
+    type: SET_PLACE,
+    place
+})
