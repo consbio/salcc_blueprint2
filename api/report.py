@@ -44,7 +44,7 @@ def create_report(id, path):
 
                 elif scope == 'table':
                     r.text = ""
-                    create_table(doc, item)
+                    create_table(doc, item, p)
 
         # if '{{ECOSYSTEMS}}' in p.text:
         #     # Remove '{{ECOSYSTEMS}}'placeholder and add the report content above empty p.text
@@ -115,7 +115,6 @@ def generate_report_context(id):
         context_json = json.loads(json_file.read())
 
     acres = context_json['acres']
-    print('acres: ', acres)
 
     context = {}
 
@@ -295,12 +294,10 @@ def generate_report_context(id):
 
     context['table']['protection'] = protection
 
-    print('table: ', context['table'])
-
     return context
 
 
-def create_table(doc, data):
+def create_table(doc, data, para):
     """
     Builds table at end of doc
 
@@ -310,8 +307,9 @@ def create_table(doc, data):
     data: dict
         table data; 'data' contains a list of column names ('col_names') and a list of rows ('rows'),
         where each row is a list of values for each column
+    para: paragraph object
+        Where the table needs to be moved
     """
-    # print('table data:', data)
     # TODO: create table style in template.docx
     styles = doc.styles
     ncols = len(data['col_names'])
@@ -325,14 +323,11 @@ def create_table(doc, data):
         cell.text = heading
 
     for datarow in data['rows']:
-        print('datarow: ', datarow)
         row = table.add_row()
         for index, datacell in enumerate(datarow):
             row.cells[index].text = str(datacell)
-            print('datacell: ', datacell)
 
-    # Ensure any following tables are separated from this one by inserting an empty paragraph
-    doc.add_paragraph('')
+    _move_table_after(table, para)
 
 
 def _move_p_after(p_move, p_destination):
@@ -440,6 +435,6 @@ def _resolve(scope, key, context):
 
 if __name__ == '__main__':
     id = 'I1'
-    # outpath = '/tmp/{0}.docx'.format(id)
-    outpath = 'tests/{0}.docx'.format(id)
+    outpath = '/tmp/{0}.docx'.format(id)
+    # outpath = 'tests/{0}.docx'.format(id)
     create_report(id, outpath)
