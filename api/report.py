@@ -8,7 +8,7 @@ from docx import Document
 
 
 # TODO: Create custom table style in template.docx
-# DOC_STYLE = 'SALCC'
+DOC_STYLE = 'SALCC_style'
 
 # Example placeholder: {{label:title}}
 PLACEHOLDER_REGEX = re.compile(r'{{(?P<scope>\w+):(?P<key>\w+)}}')
@@ -115,6 +115,7 @@ def generate_report_context(id):
         context_json = json.loads(json_file.read())
 
     acres = context_json['acres']
+    print('acres: ', acres)
 
     context = {}
 
@@ -133,7 +134,7 @@ def generate_report_context(id):
         # Find acreage
         percentage = context_json['blueprint'][index]
         if percentage is not 0:
-            acreage = int(acres*(100/percentage))
+            acreage = round(acres * (percentage / 100))
         else:
             acreage = 0
 
@@ -160,11 +161,12 @@ def generate_report_context(id):
         if 'percent' in context_json['ecosystems'][ecosys]:
             percentage = context_json['ecosystems'][ecosys]['percent']
             if percentage > 0:
-                acreage = int(acres * (100 / percentage))
+                acreage = round(acres * (percentage / 100))
             elif percentage is 0:
                 acreage = 0
         else:
             percentage = ''
+            acreage = ''
 
         eco_row.append(ecosystems_json[ecosys]['label'])
         eco_row.append(acreage)
@@ -241,7 +243,7 @@ def generate_report_context(id):
                 own_perc_sum += percentage
 
                 if percentage is not 0:
-                    acreage = int(acres * (100 / percentage))
+                    acreage = round(acres * (percentage / 100))
                 else:
                     acreage = 0
 
@@ -252,12 +254,11 @@ def generate_report_context(id):
 
     if own_perc_sum < 100:
         perc_remainder = 100 - own_perc_sum
-        acreage = int(acres * (100 / perc_remainder))
+        acreage = round(acres * (perc_remainder / 100))
         remainder_row = ['Not conserved', acreage, perc_remainder]
         owners['rows'].append(remainder_row)
 
     context['table']['ownership'] = owners
-    print('owners table: ', owners)
 
     # Protections table
 
@@ -276,7 +277,7 @@ def generate_report_context(id):
         pro_perc_sum += percentage
 
         if percentage is not 0:
-            acreage = int(acres * (100 / percentage))
+            acreage = round(acres * (percentage / 100))
         else:
             acreage = 0
 
@@ -288,11 +289,13 @@ def generate_report_context(id):
 
     if pro_perc_sum < 100:
         perc_remainder = 100 - pro_perc_sum
-        acreage = int(acres * (100 / perc_remainder))
+        acreage = round(acres * (perc_remainder / 100))
         remainder_row = ['Not conserved', acreage, perc_remainder]
         protection['rows'].append(remainder_row)
 
     context['table']['protection'] = protection
+
+    print('table: ', context['table'])
 
     return context
 
@@ -310,21 +313,23 @@ def create_table(doc, data):
     """
     # print('table data:', data)
     # TODO: create table style in template.docx
-    # styles = doc.styles
+    styles = doc.styles
     ncols = len(data['col_names'])
 
     # Create table with one row for column headings
     table = doc.add_table(rows=1, cols=ncols)
-    # table.style = styles[DOC_STYLE]
+    table.style = styles[DOC_STYLE]
 
     for index, heading in enumerate(data['col_names']):
         cell = table.cell(0, index)
         cell.text = heading
 
     for datarow in data['rows']:
+        print('datarow: ', datarow)
         row = table.add_row()
         for index, datacell in enumerate(datarow):
-            row.cells[index].value = datacell
+            row.cells[index].text = datacell
+            print('datacell: ', datacell)
 
     # Ensure any following tables are separated from this one by inserting an empty paragraph
     doc.add_paragraph('')
