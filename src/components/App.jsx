@@ -17,11 +17,14 @@ import { PlacePropType, UnitDataPropType } from '../CustomPropTypes'
 
 import * as actions from '../Actions/actions'
 
+
+const UNIT_TABS = ['Priorities', 'Indicators', 'Partners'] // TODO: 'Threats'
+
+
 class App extends Component {
     constructor(props) {
         super(props)
 
-        this.tabs = ['Priorities', 'Indicators', 'Partners'] // TODO: 'Threats'
         this.placeSearch = null
     }
 
@@ -46,7 +49,6 @@ class App extends Component {
 
     handleCloseButton = () => {
         this.props.deselectUnit()
-        // this.setState({ activeTab: null })
     }
 
     handleTryAgainClick = (event) => {
@@ -58,19 +60,6 @@ class App extends Component {
         if (this.placeSearch !== null) {
             this.placeSearch.blur()
         }
-    }
-
-    renderUnitName() {
-        if (this.props.selectedUnit === null) return null
-
-        const name = this.props.isPending ? 'Loading...' : this.props.data.name
-
-        return (
-            <div id="UnitName" className="flex-container flex-justify-center flex-align-center">
-                <h1>{name}</h1>
-                <ResetIcon id="CloseButton" onClick={this.handleCloseButton} />
-            </div>
-        )
     }
 
     renderTab(tab, index) {
@@ -136,7 +125,7 @@ class App extends Component {
 
         return (
             <footer className="flex-container flex-justify-center" style={{ opacity }}>
-                {this.tabs.map((tab, index) => this.renderTab(tab, index))}
+                {UNIT_TABS.map((tab, index) => this.renderTab(tab, index))}
             </footer>
         )
     }
@@ -174,7 +163,7 @@ class App extends Component {
 
         return (
             <header>
-                <div className="flex-container flex-justify-center flex-align-center" style={{}}>
+                <div className="flex-container flex-justify-center flex-align-center">
                     <img
                         src="/logo_96x96.png"
                         style={{ height: 32, padding: 6, verticalAlign: 'middle' }}
@@ -212,11 +201,24 @@ class App extends Component {
 
     render() {
         const {
-            place, setPlace, selectedUnit, isMobile
+            isPending, data, place, setPlace, selectedUnit, isMobile
         } = this.props
 
         return (
             <div className="App">
+                <header>
+                    <div className="flex-container flex-justify-center flex-align-center">
+                        <img
+                            src="/logo_96x96.png"
+                            alt="SALCC Logo"
+                        />
+                        <h3>
+                            {!isMobile && 'South Atlantic '}
+                            Conservation Blueprint 2.2
+                        </h3>
+                    </div>
+                </header>
+
                 <Map
                     place={place}
                     selectedUnit={selectedUnit}
@@ -227,11 +229,18 @@ class App extends Component {
                     onClick={this.handleMapClick}
                 />
 
-                {this.renderHeader()}
+                {/* {this.renderHeader()} */}
 
                 {/* <div id="BlankContent">Select a tab</div> */}
 
-                {this.renderUnitName()}
+                {selectedUnit && (
+                    <div id="UnitName" className="flex-container flex-justify-center flex-align-center">
+                        <h1>{isPending ? 'Loading...' : data.name}</h1>
+                        <ResetIcon id="CloseButton" onClick={this.handleCloseButton} />
+                    </div>
+                )}
+
+
                 {this.renderActiveTab()}
 
                 {this.renderFooter()}

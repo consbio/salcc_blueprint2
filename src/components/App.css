@@ -4,7 +4,7 @@ body {
     padding: 0;
     height: 100%;
     width: 100%;
-    font-family: sans-serif;
+    font-family: Verdana, Geneva, sans-serif;
     color: #333;
 }
 
@@ -27,13 +27,21 @@ header {
     display: flex;
     flex-direction: row;
     align-content: stretch;
-    background: #fafafa;
-    height: 39px;
-    border-bottom: 1px solid #ddd;
-    color: #aaa;
+    background: linear-gradient(to right, #2b723a, #009dd1);
+    box-shadow: 0 2px 6px #333;
+    height: 40px;
 }
 header .button {
     text-align: center;
+}
+header h3 {
+    color: #fff;
+    font-weight: 400;
+    text-shadow: 1px 1px 2px #333;
+}
+header img {
+    height: 32px;
+    margin: 0 6px;
 }
 
 footer {
@@ -156,7 +164,7 @@ footer {
     padding: 20px 10px;
     overflow-y: auto;
     overflow-x: hidden;
-    z-index: 4f001;
+    z-index: 4001;
 }
 
 #BlankContent {
