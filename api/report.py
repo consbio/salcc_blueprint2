@@ -40,10 +40,10 @@ def create_report(id, path):
                 #     # Clear out the placeholder
                 #     r.text = r.text.replace(match.group(), '')
                 #     r.add_picture()
-                #
-                # elif scope == 'table':
-                #     r.text = ""
-                #     create_table(doc, item)
+
+                elif scope == 'table':
+                    r.text = ""
+                    create_table(doc, item)
 
         # if '{{ECOSYSTEMS}}' in p.text:
         #     # Remove '{{ECOSYSTEMS}}'placeholder and add the report content above empty p.text
@@ -51,11 +51,13 @@ def create_report(id, path):
         #     # do things
 
         if '{{PARTNERS}}' in p.text:
-            # Remove '{{PARTNERS}}'placeholder and add the report content above empty p.text
+            # Remove '{{PARTNERS}}'placeholder and add the report content after empty p.text
             p.text = ''
 
+            # TODO: Find a better way to do this! Paras are appended at end of doc & have to be moved into place
             # Where to insert the next heading
             h_insert_point = p
+
             for category in context['partners']:
                 heading = doc.add_heading(context['partner_headers'][category], 2)
                 # Headings are created at the end of the doc and must be moved into place
@@ -63,6 +65,7 @@ def create_report(id, path):
 
                 # Where to insert the next partner name
                 p_insert_point = heading
+
                 for partner in context['partners'][category]:
                     part = doc.add_paragraph(style='List Bullet')
                     add_hyperlink(part, partner[1], partner[0])
@@ -82,6 +85,7 @@ def create_report(id, path):
                 county_name = doc.add_paragraph(style='List Bullet')
                 add_hyperlink(county_name, county['url'], county['name'])
                 _move_p_after(county_name, c_insert_point)
+                # Change insertion point so next county follows this one
                 c_insert_point = county_name
 
             # Delete the placeholder para
@@ -113,10 +117,25 @@ def generate_report_context(id):
 
     context['value'] = {'summary_unit_name': context_json['name']}
 
-    # Partner name and url separated by categories
+    # Owners
 
-    partner_headers_all = {'regional': 'Regional Conservation Plans', 'state': 'Statewide Conservation Plans',
-                           'marine': 'Marine Conservation Plans'}
+    owners = {
+        'col_names': ['Ownership', 'Acres', 'Percent of Area'],
+        'rows': []
+    }
+
+    for owner_data in context_json['owner']:
+        owner_row = []
+        for owner_details in owners_json:
+            if owner_data == owner_details:
+                # Create a row with the full name, a holding place for acres, and the percent of area
+                owner_row.append(owners_json[owner_data]['label'])
+                owner_row.append('')
+                owner_row.append(context_json['owner'][owner_data])
+        owners['rows'].append(owner_row)
+    context['owners'] = owners
+
+    # Partner name and url separated by categories
 
     partners_regional = []
     partners_state = []
@@ -170,35 +189,35 @@ def generate_report_context(id):
     return context
 
 
-# def create_table(doc, data):
-#     """
-#     Builds table at end of doc
-#
-#     Parameters
-#     ----------
-#     doc: docx.Document object
-#     data: dict
-#         table data; 'data' contains a list of column names ('col_names') and a list of rows ('rows'),
-#         where each row is a list of values for each column
-#     """
-#
-#     styles = doc.styles
-#     ncols = len(data['col_names'])
-#     # Create table with one row for column headings
-#     table = doc.add_table(rows=1, cols=ncols)
-#     table.style = styles[DOC_STYLE]
-#
-#     for index, heading in enumerate(data['col_names']):
-#         cell = table.cell(0, index)
-#         cell.text = heading
-#
-#     for datarow in data['rows']:
-#         row = table.add_row()
-#         for index, datacell in enumerate(datarow):
-#             row.cells[index].text = datacell
-#
-#     # Ensure any following tables are separated from this one by inserting an empty paragraph
-#     doc.add_paragraph('')
+def create_table(doc, data):
+    """
+    Builds table at end of doc
+
+    Parameters
+    ----------
+    doc: docx.Document object
+    data: dict
+        table data; 'data' contains a list of column names ('col_names') and a list of rows ('rows'),
+        where each row is a list of values for each column
+    """
+
+    # styles = doc.styles
+    ncols = len(data['col_names'])
+    # Create table with one row for column headings
+    table = doc.add_table(rows=1, cols=ncols)
+    # table.style = styles[DOC_STYLE]
+
+    for index, heading in enumerate(data['col_names']):
+        cell = table.cell(0, index)
+        cell.text = heading
+
+    for datarow in data['rows']:
+        row = table.add_row()
+        for index, datacell in enumerate(datarow):
+            row.cells[index].text = datacell
+
+    # Ensure any following tables are separated from this one by inserting an empty paragraph
+    doc.add_paragraph('')
 
 
 def _move_p_after(p_move, p_destination):
@@ -217,6 +236,24 @@ def _move_p_after(p_move, p_destination):
 
     """
     p_destination._p.addnext(p_move._p)
+
+
+def _move_table_after(table, paragraph):
+    """
+    Move the table after 'pararaph.'
+    Normally, tables are created at the end of the document.
+    This function allows you to move them to a different location in the document.
+    The paragraph passed in is not modified, it is just used as a reference point for inserting the table.
+
+    Parameters
+    ----------
+    table
+        table to be moved
+    paragraph
+        location where table will be moved
+
+    """
+    paragraph._p.addnext(table._tbl)
 
 
 def add_hyperlink(paragraph, url, text):
