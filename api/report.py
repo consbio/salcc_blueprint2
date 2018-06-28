@@ -49,6 +49,7 @@ def create_report(id, path):
         #     # Remove '{{ECOSYSTEMS}}'placeholder and add the report content above empty p.text
         #     p.text = ''
         #     # do things
+
         if '{{PARTNERS}}' in p.text:
             # Remove '{{PARTNERS}}'placeholder and add the report content above empty p.text
             p.text = ''
@@ -82,6 +83,9 @@ def create_report(id, path):
                 add_hyperlink(county_name, county['url'], county['name'])
                 _move_p_after(county_name, c_insert_point)
                 c_insert_point = county_name
+
+            # Delete the placeholder para
+            delete_paragraph(p)
 
     doc.save(path)
 
@@ -134,8 +138,6 @@ def generate_report_context(id):
             if plan['type'] not in partner_headers:
                 partner_headers['marine'] = 'Marine Conservation Plans'
 
-    print('partner_headers: ', partner_headers)
-
     context['partner_headers'] = partner_headers
 
     context['partners'] = {}
@@ -146,8 +148,6 @@ def generate_report_context(id):
         context['partners']['state'] = partners_state
     if partners_marine:
         context['partners']['marine'] = partners_marine
-
-    print('context partners: ', context['partners'])
 
     # Counties - name and url
 
@@ -251,6 +251,12 @@ def add_hyperlink(paragraph, url, text):
     paragraph._p.append(hyperlink)
 
     return hyperlink
+
+
+def delete_paragraph(paragraph):
+    p = paragraph._element
+    p.getparent().remove(p)
+    p._p = p._element = None
 
 
 def _resolve(scope, key, context):
