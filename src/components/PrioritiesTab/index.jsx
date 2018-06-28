@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import LabeledPercentBar from './Charts/LabeledPercentBar'
-import PRIORITIES from '../config/priorities.json'
-import PLANS from '../config/plans.json'
+import LabeledPercentBar from '../Charts/LabeledPercentBar'
+import PRIORITIES from '../../config/priorities.json'
+import PLANS from '../../config/plans.json'
 
 // sort priorities from highest to lowest
 const SORTED_PRIORITIES = [5, 4, 3, 2, 1, 0]

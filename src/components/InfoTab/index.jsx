@@ -1,6 +1,6 @@
 import React from 'react'
 
-import PRIORITIES from '../config/priorities.json'
+import PRIORITIES from '../../config/priorities.json'
 
 const InfoTab = () => {
     const sortedPriorities = [4, 3, 2, 1] // 0 deliberately omitted

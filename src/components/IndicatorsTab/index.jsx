@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import SwipeableViews from 'react-swipeable-views'
 
 import Ecosystem from './Ecosystem'
-import { EcosystemPropType } from '../CustomPropTypes'
+import { EcosystemPropType } from '../../CustomPropTypes'
 
 class IndicatorsTab extends Component {
     state = {

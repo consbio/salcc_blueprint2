@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import WhiskerPlot from './Charts/WhiskerPlot'
+import WhiskerPlot from '../Charts/WhiskerPlot'
 
 const Indicator = ({
     label, mean, domain, onClick

@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import LabeledPercentBar from './Charts/LabeledPercentBar'
-import GAP from '../config/protection.json'
-import OWNERSHIP from '../config/owners.json'
+import LTALink from './LTALink'
+import LabeledPercentBar from '../Charts/LabeledPercentBar'
+import GAP from '../../config/protection.json'
+import OWNERSHIP from '../../config/owners.json'
 
 const NOT_CONSERVED = {
     color: '#AAA',
@@ -22,14 +23,6 @@ function sortDescendingPercent(a, b) {
 }
 
 const renderBar = item => <LabeledPercentBar {...item} height={6} />
-
-const renderLTALink = (fips, countyName) => (
-    <li key={fips}>
-        <a href={`http://findalandtrust.org/counties/${fips}`} target="_blank" rel="noopener noreferrer">
-            {countyName}
-        </a>
-    </li>
-)
 
 const renderOwnership = (owner) => {
     let ownership = []
@@ -137,7 +130,11 @@ const PartnersTab = ({
             {counties && (
                 <section>
                     <h3>Land Trusts By County</h3>
-                    <ul>{Object.entries(counties).map(pair => renderLTALink(pair[0], pair[1]))}</ul>
+                    <ul>
+                        {Object.entries(counties).map(([fips, countyName]) => (
+                            <LTALink key={fips} fips={fips} countyName={countyName} />
+                        ))}
+                    </ul>
                 </section>
             )}
         </div>

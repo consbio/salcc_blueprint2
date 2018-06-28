@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import LabeledPercentBar from './Charts/LabeledPercentBar'
+import LabeledPercentBar from '../Charts/LabeledPercentBar'
 
 const IndicatorDetails = ({
     label, description, valueLabels, percent, ecosystemLabel, ecosystemIcon, onBackClick
