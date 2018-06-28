@@ -32,6 +32,7 @@ def create_report(id, path):
                 scope, key = match.groups()
 
                 item = _resolve(scope, key, context)
+
                 if isinstance(item, str):
                     # match.group() has the original text to replace
                     r.text = r.text.replace(match.group(), item)
@@ -116,8 +117,29 @@ def generate_report_context(id):
     context = {}
 
     context['value'] = {'summary_unit_name': context_json['name']}
+    context['table'] = {}
 
-    # Owners
+    # Priorities table
+
+    priorities = {
+        'col_names': ['Priority Category', 'Acres', 'Percent of Area'],
+        'rows': []
+    }
+
+    index = 0
+    while index < 6:
+        priority_row = []
+        priority_row.append(priorities_json[str(index)]['label'])
+        priority_row.append('')
+        priority_row.append(context_json['blueprint'][index])
+        # Insert at beginning, because data is stored in reverse order that it must be displayed
+        priorities['rows'].insert(0, priority_row)
+        index += 1
+
+    context['table']['priorities'] = priorities
+    # print('look here:', context['table']['priorities'])
+
+    # Ownership table
 
     owners = {
         'col_names': ['Ownership', 'Acres', 'Percent of Area'],
@@ -133,7 +155,7 @@ def generate_report_context(id):
                 owner_row.append('')
                 owner_row.append(context_json['owner'][owner_data])
         owners['rows'].append(owner_row)
-    context['owners'] = owners
+    context['table']['ownership'] = owners
 
     # Partner name and url separated by categories
 
@@ -182,10 +204,7 @@ def generate_report_context(id):
 
     context['counties'] = counties
 
-    # # TODO: build tables
-    context['table'] = {'priorities': [], 'ecosystems': [], 'ownership': [], 'protection': []}
-
-    # print(context)
+    print(context)
     return context
 
 
@@ -200,9 +219,11 @@ def create_table(doc, data):
         table data; 'data' contains a list of column names ('col_names') and a list of rows ('rows'),
         where each row is a list of values for each column
     """
-
+    print('table data:', data)
+    # TODO: create table style in template.docx
     # styles = doc.styles
     ncols = len(data['col_names'])
+
     # Create table with one row for column headings
     table = doc.add_table(rows=1, cols=ncols)
     # table.style = styles[DOC_STYLE]
