@@ -114,6 +114,8 @@ def generate_report_context(id):
     with open(os.path.join('../public/data/{0}.json'.format(id))) as json_file:
         context_json = json.loads(json_file.read())
 
+    acres = context_json['acres']
+
     context = {}
 
     context['value'] = {'summary_unit_name': context_json['name']}
@@ -128,16 +130,22 @@ def generate_report_context(id):
 
     index = 0
     while index < 6:
+        # Find acreage
+        percentage = context_json['blueprint'][index]
+        if percentage is not 0:
+            acreage = int(acres*(100/percentage))
+        else:
+            acreage = 0
+
         priority_row = []
         priority_row.append(priorities_json[str(index)]['label'])
-        priority_row.append('')
-        priority_row.append(context_json['blueprint'][index])
+        priority_row.append(acreage)
+        priority_row.append(percentage)
         # Insert at beginning, because data is stored in reverse order that it must be displayed
         priorities['rows'].insert(0, priority_row)
         index += 1
 
     context['table']['priorities'] = priorities
-    # print('look here:', context['table']['priorities'])
 
     # Ownership table
 
@@ -150,14 +158,49 @@ def generate_report_context(id):
         owner_row = []
         for owner_details in owners_json:
             if owner_data == owner_details:
-                # Create a row with the full name, a holding place for acres, and the percent of area
+                # Find acreage
+                percentage = context_json['owner'][owner_data]
+                if percentage is not 0:
+                    acreage = int(acres * (100 / percentage))
+                else:
+                    acreage = 0
+
                 owner_row.append(owners_json[owner_data]['label'])
-                owner_row.append('')
-                owner_row.append(context_json['owner'][owner_data])
+                owner_row.append(acreage)
+                owner_row.append(percentage)
         owners['rows'].append(owner_row)
+
     context['table']['ownership'] = owners
 
-    # Partner name and url separated by categories
+    # Ecosystem table
+
+    ecosystems_table = {
+        'col_names': ['Ecosystems', 'Acres', 'Percent of Area'],
+        'rows': []
+    }
+
+    for ecosys in context_json['ecosystems']:
+        eco_row = []
+
+        if 'percent' in context_json['ecosystems'][ecosys]:
+            percentage = context_json['ecosystems'][ecosys]['percent']
+            if percentage > 0:
+                acreage = int(acres * (100 / percentage))
+            elif percentage is 0:
+                acreage = 0
+        else:
+            percentage = ''
+
+        eco_row.append(ecosystems_json[ecosys]['label'])
+        eco_row.append(acreage)
+        eco_row.append(percentage)
+        ecosystems_table['rows'].append(eco_row)
+
+    context['table']['ecosystems'] = ecosystems_table
+
+    # TODO: Indicators
+
+    # Partners list - name and url separated by categories
 
     partners_regional = []
     partners_state = []
@@ -190,7 +233,7 @@ def generate_report_context(id):
     if partners_marine:
         context['partners']['marine'] = partners_marine
 
-    # Counties - name and url
+    # Counties list - name and url
 
     counties = []
 
@@ -204,7 +247,6 @@ def generate_report_context(id):
 
     context['counties'] = counties
 
-    print(context)
     return context
 
 
@@ -219,7 +261,7 @@ def create_table(doc, data):
         table data; 'data' contains a list of column names ('col_names') and a list of rows ('rows'),
         where each row is a list of values for each column
     """
-    print('table data:', data)
+    # print('table data:', data)
     # TODO: create table style in template.docx
     # styles = doc.styles
     ncols = len(data['col_names'])
@@ -235,7 +277,7 @@ def create_table(doc, data):
     for datarow in data['rows']:
         row = table.add_row()
         for index, datacell in enumerate(datarow):
-            row.cells[index].text = datacell
+            row.cells[index].value = datacell
 
     # Ensure any following tables are separated from this one by inserting an empty paragraph
     doc.add_paragraph('')
@@ -345,7 +387,7 @@ def _resolve(scope, key, context):
 
 
 if __name__ == '__main__':
-    id = 'I2'
+    id = 'I1'
     # outpath = '/tmp/{0}.docx'.format(id)
     outpath = 'tests/{0}.docx'.format(id)
     create_report(id, outpath)
