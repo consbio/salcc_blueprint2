@@ -55,7 +55,7 @@ def create_report(id, path):
             # Where to insert the next heading
             h_insert_point = p
             for category in context['partners']:
-                heading = doc.add_heading(context['partner_headers'][category], 3)
+                heading = doc.add_heading(context['partner_headers'][category], 2)
                 # Headings are created at the end of the doc and must be moved into place
                 _move_p_after(heading, h_insert_point)
 
@@ -63,8 +63,7 @@ def create_report(id, path):
                 p_insert_point = heading
                 for partner in context['partners'][category]:
                     part = doc.add_paragraph(
-                        # partner[0], style='List Bullet'
-                        partner[0]
+                        partner[0], style='List Bullet'
                     )
                     # Paragraphs are created at the end of the doc and must be moved into place
                     _move_p_after(part, p_insert_point)
@@ -72,6 +71,18 @@ def create_report(id, path):
 
                 # Next heading created will be moved below the last partner in the preceding list
                 h_insert_point = part
+
+            # Counties
+            county_header = doc.add_heading('Land Trusts (by county)', 2)
+            c_insert_point = p_insert_point
+            _move_p_after(county_header, c_insert_point)
+            c_insert_point = county_header
+            for county in context['counties']:
+                county_name = doc.add_paragraph(
+                    county['name'], style='List Bullet'
+                )
+                _move_p_after(county_name, c_insert_point)
+                c_insert_point = county_name
 
     doc.save(path)
 
