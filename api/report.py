@@ -229,12 +229,17 @@ def generate_report_context(id):
         'rows': []
     }
 
+    own_perc_sum = 0
+
     for owner_data in context_json['owner']:
         owner_row = []
         for owner_details in owners_json:
             if owner_data == owner_details:
+
                 # Find acreage
                 percentage = context_json['owner'][owner_data]
+                own_perc_sum += percentage
+
                 if percentage is not 0:
                     acreage = int(acres * (100 / percentage))
                 else:
@@ -245,7 +250,14 @@ def generate_report_context(id):
                 owner_row.append(percentage)
         owners['rows'].append(owner_row)
 
+    if own_perc_sum < 100:
+        perc_remainder = 100 - own_perc_sum
+        acreage = int(acres * (100 / perc_remainder))
+        remainder_row = ['Not conserved', acreage, perc_remainder]
+        owners['rows'].append(remainder_row)
+
     context['table']['ownership'] = owners
+    print('owners table: ', owners)
 
     # Protections table
 
@@ -254,14 +266,14 @@ def generate_report_context(id):
         'rows': []
     }
 
-    perc_sum = 0
+    pro_perc_sum = 0
 
     for pro in context_json['gap']:
         pro_row = []
 
         # Find acreage
         percentage = context_json['gap'][pro]
-        perc_sum += percentage
+        pro_perc_sum += percentage
 
         if percentage is not 0:
             acreage = int(acres * (100 / percentage))
@@ -274,8 +286,8 @@ def generate_report_context(id):
 
         protection['rows'].append(pro_row)
 
-    if perc_sum < 100:
-        perc_remainder = 100-perc_sum
+    if pro_perc_sum < 100:
+        perc_remainder = 100 - pro_perc_sum
         acreage = int(acres * (100 / perc_remainder))
         remainder_row = ['Not conserved', acreage, perc_remainder]
         protection['rows'].append(remainder_row)
