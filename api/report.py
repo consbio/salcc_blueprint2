@@ -328,7 +328,7 @@ def create_table(doc, data):
         print('datarow: ', datarow)
         row = table.add_row()
         for index, datacell in enumerate(datarow):
-            row.cells[index].text = datacell
+            row.cells[index].text = str(datacell)
             print('datacell: ', datacell)
 
     # Ensure any following tables are separated from this one by inserting an empty paragraph
