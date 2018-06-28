@@ -24,27 +24,51 @@ header {
     left: 0;
     right: 0;
     top: 0;
-    display: flex;
+    /* display: flex;
     flex-direction: row;
-    align-content: stretch;
-    background: linear-gradient(to right, #2b723a, #009dd1);
+    align-content: stretch; */
+    /* background: linear-gradient(to right, #2b723a, #009dd1); */
+    background: #0892d0;
     box-shadow: 0 2px 6px #333;
     height: 40px;
+    padding: 0 8px;
 }
-header .button {
+/* header .button {
     text-align: center;
-}
-header h3 {
+} */
+header h1 {
+    padding: 0;
+    margin: 4px 0;
+    font-size: 16px;
+    font-weight: normal;
     color: #fff;
-    font-weight: 400;
+    flex: 1;
     text-shadow: 1px 1px 2px #333;
 }
 header img {
     height: 32px;
-    margin: 0 6px;
+    margin-right: 8px;
 }
 
+nav.tabs {
+    /* opacity: 0; */
+    text-align: center;
+    /* align-content: stretch; */
+    /* transition: opacity 0.25s ease 0.1s; */
+}
+
+/* only shown for mobile version */
 footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 47px;
+    background: #fafafa;
+    border-top: 1px solid #ddd;
+}
+
+/* footer {
     opacity: 0;
     height: 47px;
     background: #fafafa;
@@ -56,7 +80,15 @@ footer {
     border-top: 1px solid #ddd;
     align-content: stretch;
     transition: opacity 0.25s ease 0.1s;
-}
+} */
+/* .is-mobile footer {
+    top: 80px;
+    width: 490px;
+    position: absolute;
+    border-bottom: 1px solid #ddd;
+    z-index: 5005;
+    box-shadow: 0 0px 6px #555;
+} */
 
 header,
 footer {
@@ -126,7 +158,7 @@ footer {
 .tab svg {
     fill: #aaa;
 }
-.tab.indicators svg {
+.tab-indicators svg {
     transform: rotate(90deg);
 }
 .tab.active {
@@ -157,21 +189,52 @@ footer {
     display: flex;
     flex-direction: column;
     position: absolute;
-    right: 0px;
-    left: 0px;
-    bottom: 48px;
-    top: 40px;
+    top: 129px;
+    width: 470px;
+    bottom: 0px;
+    /* box-shadow: 0 6px 6px #555; */
     padding: 20px 10px;
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 4001;
 }
+.is-mobile #Content {
+    right: 0px;
+    left: 0px;
+    bottom: 48px;
+    top: 40px;
+    width: auto;
+}
 
-#BlankContent {
+#ContentOverlay {
+    position: absolute;
+    right: 0px;
+    left: 0px;
+    bottom: 48px;
+    top: 40px;
+    padding: 20px 10px;
+    background: #fff;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 4001;
+}
+
+/* #BlankContent {
     position: absolute;
     right: 0px;
     left: 0px;
 }
+.is-mobile #BlankContent {
+    top: 121px;
+    width: 470px;
+    bottom: 0px;
+    background: #fff;
+    color: #aaa;
+    padding: 20px 10px;
+    align-items: center;
+    text-align: center;
+    z-index: 5000;
+} */
 
 #UnitName h1 {
     padding: 0;
@@ -180,6 +243,12 @@ footer {
     font-weight: normal;
     color: #fff;
     flex: 1;
+}
+.is-mobile #UnitName {
+    top: 40px;
+    width: 490px;
+    bottom: 0px;
+    box-shadow: 0 2px 2px #555;
 }
 
 #InfoButton {
@@ -200,7 +269,6 @@ footer {
 }
 
 #CloseButton {
-    margin-right: 8px;
     fill: #fff;
     fill-opacity: 0.75;
     width: 24px;
@@ -233,6 +301,9 @@ footer {
     line-height: 1.4;
     font-size: 14px;
 }
+.is-mobile #Content p {
+    line-height: 1.6;
+}
 #Content ul {
     margin: 0;
     padding-left: 18px;
@@ -248,11 +319,11 @@ footer {
     min-width: 30px;
     text-align: right;
 }
-#Content.tabs-top {
+/* #Content.tabs-top {
     top: 40px;
     bottom: 0px;
-}
-
+    z-index: 5020;
+} */
 #Content section + section {
     margin-top: 3rem;
 }
@@ -325,9 +396,12 @@ footer {
     position: absolute;
     top: 40px;
     bottom: 0;
-    left: 0;
+    left: 470px;
     right: 0;
     z-index: 1;
+}
+.is-mobile #MapContainer {
+    left: 0;
 }
 
 #Map {
@@ -525,50 +599,4 @@ footer {
     min-width: 40px;
     padding: 1px 4px;
     opacity: 0.75;
-}
-
-/* Viewport dependent rendering */
-@media screen and (min-width: 768px) {
-    footer {
-        top: 80px;
-        width: 490px;
-        position: absolute;
-        border-bottom: 1px solid #ddd;
-        z-index: 5005;
-        box-shadow: 0 0px 6px #555;
-    }
-
-    #Content {
-        top: 129px;
-        width: 470px;
-        bottom: 0px;
-        box-shadow: 0 6px 6px #555;
-    }
-
-    #Content.tabs-top {
-        z-index: 5020;
-    }
-
-    #MapContainer {
-        left: 470px;
-    }
-
-    #UnitName {
-        top: 40px;
-        width: 490px;
-        bottom: 0px;
-        box-shadow: 0 2px 2px #555;
-    }
-
-    #BlankContent {
-        top: 121px;
-        width: 470px;
-        bottom: 0px;
-        background: #fff;
-        color: #aaa;
-        padding: 20px 10px;
-        align-items: center;
-        text-align: center;
-        z-index: 5000;
-    }
 }

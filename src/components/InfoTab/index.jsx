@@ -23,8 +23,9 @@ const InfoTab = () => {
     }
 
     return (
-        <div id="Content" className="tabs-top flex-container-column">
+        <div id="Content" className="flex-container-column">
             <section>
+                <h3>Welcome to the South Atlantic Conservation Blueprint Simple Viewer</h3>
                 <p>
                     The Conservation Blueprint is a living spatial plan to conserve natural and cultural resources for
                     future generations. It identifies priority areas for shared conservation action. Blueprint 2.2 is
@@ -138,7 +139,8 @@ const InfoTab = () => {
 
                 <h4>Icons:</h4>
                 <p>
-                    Priorities, Indicators, and Partners icons made by{' '}
+                    {/* Priorities, Indicators, and Partners icons made by{' '} */}
+                    Navigation icons made by{' '}
                     <a href="https://www.flaticon.com/authors/those-icons" target="_blank" rel="noopener noreferrer">
                         Those Icons
                     </a>{' '}

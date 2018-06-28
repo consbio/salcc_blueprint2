@@ -4,22 +4,20 @@ import { connect } from 'react-redux'
 
 import './App.css'
 import Map from './Map'
-import GooglePlacesSearch from './GooglePlacesSearch/GooglePlacesSearch'
-import ResetIcon from './icons/ResetIcon'
+// import GooglePlacesSearch from './GooglePlacesSearch/GooglePlacesSearch'
 
 import PrioritiesTab from './PrioritiesTab'
 import IndicatorsTab from './IndicatorsTab'
 // import ThreatsTab from './ThreatsTab';
 import PartnersTab from './PartnersTab'
 import InfoTab from './InfoTab'
-import TabIcons from './icons/TabIcons'
+import Header from './Header'
+// import Tabs from './Tabs'
+import Sidebar from './Sidebar'
+import ContentOverlay from './ContentOverlay'
 import { PlacePropType, UnitDataPropType } from '../CustomPropTypes'
 
 import * as actions from '../Actions/actions'
-
-
-const UNIT_TABS = ['Priorities', 'Indicators', 'Partners'] // TODO: 'Threats'
-
 
 class App extends Component {
     constructor(props) {
@@ -28,15 +26,15 @@ class App extends Component {
         this.placeSearch = null
     }
 
-    handleSetTab = (tab) => {
-        const { activeTab, setTab, isMobile } = this.props
-        // toggle current tab
-        if (isMobile && activeTab === tab) {
-            setTab(null)
-        } else {
-            setTab(tab)
-        }
-    }
+    // handleSetTab = (tab) => {
+    //     const { activeTab, setTab, isMobile } = this.props
+    //     // toggle current tab
+    //     if (isMobile && activeTab === tab) {
+    //         setTab(null)
+    //     } else {
+    //         setTab(tab)
+    //     }
+    // }
 
     handleUnitSelect = (id) => {
         console.log('Select map unit: ', id) /* eslint-disable-line no-console */
@@ -62,20 +60,20 @@ class App extends Component {
         }
     }
 
-    renderTab(tab, index) {
-        const { activeTab } = this.props
-        const isActive = activeTab === tab ? 'active' : ''
-        const isIndicatorsTab = tab === 'Indicators' ? 'indicators' : ''
-        const className = `tab ${isActive} ${isIndicatorsTab}`
-        const handleClick = () => this.handleSetTab(tab)
+    // renderTab(tab, index) {
+    //     const { activeTab } = this.props
+    //     const isActive = activeTab === tab ? 'active' : ''
+    //     const isIndicatorsTab = tab === 'Indicators' ? 'indicators' : ''
+    //     const className = `tab ${isActive} ${isIndicatorsTab}`
+    //     const handleClick = () => this.handleSetTab(tab)
 
-        return (
-            <div key={index} className={className} onClick={handleClick}>
-                <TabIcons icon={tab} height={24} />
-                <label>{tab}</label>
-            </div>
-        )
-    }
+    //     return (
+    //         <div key={index} className={className} onClick={handleClick}>
+    //             <TabIcons icon={tab} height={24} />
+    //             <label>{tab}</label>
+    //         </div>
+    //     )
+    // }
 
     renderActiveTab() {
         const {
@@ -115,73 +113,73 @@ class App extends Component {
         return null
     }
 
-    renderFooter() {
-        const { activeTab, selectedUnit, isPending } = this.props
+    // renderFooter() {
+    //     const { activeTab, selectedUnit, isPending } = this.props
 
-        if (activeTab === 'Info') return null
+    //     if (activeTab === 'Info') return null
 
-        // Animate opacity property
-        const opacity = selectedUnit === null || isPending ? 0 : 1
+    //     // Animate opacity property
+    //     const opacity = selectedUnit === null || isPending ? 0 : 1
 
-        return (
-            <footer className="flex-container flex-justify-center" style={{ opacity }}>
-                {UNIT_TABS.map((tab, index) => this.renderTab(tab, index))}
-            </footer>
-        )
-    }
+    //     return (
+    //         <footer className="flex-container flex-justify-center" style={{ opacity }}>
+    //             {UNIT_TABS.map((tab, index) => this.renderTab(tab, index))}
+    //         </footer>
+    //     )
+    // }
 
-    renderHeader() {
-        const {
-            activeTab, isMobile, place, setPlace, setTab
-        } = this.props
+    // renderHeader() {
+    //     const {
+    //         activeTab, isMobile, place, setPlace, setTab
+    //     } = this.props
 
-        if (isMobile) {
-            const handleInfoClick = () => this.handleSetTab('Info')
+    //     if (isMobile) {
+    //         const handleInfoClick = () => this.handleSetTab('Info')
 
-            // hide current tab so that we can show the point on the map
-            const handleSetPlace = (newPlace) => {
-                setTab(null)
-                setPlace(newPlace)
-            }
+    //         // hide current tab so that we can show the point on the map
+    //         const handleSetPlace = (newPlace) => {
+    //             setTab(null)
+    //             setPlace(newPlace)
+    //         }
 
-            return (
-                <header>
-                    <div id="InfoButton" className={activeTab === 'Info' ? 'active' : ''} onClick={handleInfoClick}>
-                        i
-                    </div>
+    //         return (
+    //             <header>
+    //                 <div id="InfoButton" className={activeTab === 'Info' ? 'active' : ''} onClick={handleInfoClick}>
+    //                     i
+    //                 </div>
 
-                    <GooglePlacesSearch
-                        ref={(ref) => {
-                            this.placeSearch = ref
-                        }}
-                        selected={place}
-                        onSelect={handleSetPlace}
-                    />
-                </header>
-            )
-        }
+    //                 <GooglePlacesSearch
+    //                     ref={(ref) => {
+    //                         this.placeSearch = ref
+    //                     }}
+    //                     selected={place}
+    //                     onSelect={handleSetPlace}
+    //                 />
+    //             </header>
+    //         )
+    //     }
 
-        return (
-            <header>
-                <div className="flex-container flex-justify-center flex-align-center">
-                    <img
-                        src="/logo_96x96.png"
-                        style={{ height: 32, padding: 6, verticalAlign: 'middle' }}
-                        alt="SALCC Logo"
-                    />
-                    South Atlantic Conservation Blueprint 2.2
-                </div>
+    //     return (
+    //         <header>
+    //             <div className="flex-container flex-justify-center flex-align-center">
+    //                 <img
+    //                     src="/logo_96x96.png"
+    //                     style={{ height: 32, padding: 6, verticalAlign: 'middle' }}
+    //                     alt="SALCC Logo"
+    //                 />
+    //                 South Atlantic Conservation Blueprint 2.2
+    //             </div>
 
-                <GooglePlacesSearch
-                    ref={(ref) => {
-                        this.placeSearch = ref
-                    }}
-                    selected={place}
-                    onSelect={setPlace}
-                />
-            </header>
-        )
-    }
+    //             <GooglePlacesSearch
+    //                 ref={(ref) => {
+    //                     this.placeSearch = ref
+    //                 }}
+    //                 selected={place}
+    //                 onSelect={setPlace}
+    //             />
+    //         </header>
+    //     )
+    // }
 
     renderError() {
         if (!this.props.hasError) return null
@@ -201,23 +199,24 @@ class App extends Component {
 
     render() {
         const {
-            isPending, data, place, setPlace, selectedUnit, isMobile
+            // activeTab, setTab,
+            data,
+            place,
+            setPlace,
+            selectedUnit,
+            isMobile
         } = this.props
 
+        const hasSelectedUnit = selectedUnit !== null
+
         return (
-            <div className="App">
-                <header>
-                    <div className="flex-container flex-justify-center flex-align-center">
-                        <img
-                            src="/logo_96x96.png"
-                            alt="SALCC Logo"
-                        />
-                        <h3>
-                            {!isMobile && 'South Atlantic '}
-                            Conservation Blueprint 2.2
-                        </h3>
-                    </div>
-                </header>
+            <div className={isMobile ? 'is-mobile' : null}>
+                <Header
+                    isMobile={isMobile}
+                    hasSelectedUnit={hasSelectedUnit}
+                    unitName={data && data.name ? data.name : 'Loading...'}
+                    onClose={this.handleCloseButton}
+                />
 
                 <Map
                     place={place}
@@ -233,17 +232,30 @@ class App extends Component {
 
                 {/* <div id="BlankContent">Select a tab</div> */}
 
-                {selectedUnit && (
+                {/* {selectedUnit && (
                     <div id="UnitName" className="flex-container flex-justify-center flex-align-center">
                         <h1>{isPending ? 'Loading...' : data.name}</h1>
                         <ResetIcon id="CloseButton" onClick={this.handleCloseButton} />
                     </div>
+                )} */}
+
+                {/* {this.renderActiveTab()} */}
+
+                {isMobile ? (
+                    <ContentOverlay />
+                ) : (
+                    // <footer>
+                    //     <Tabs
+                    //         hasSelectedUnit={hasSelectedUnit}
+                    //         activeTab={activeTab}
+                    //         setTab={setTab}
+                    //         toggleTabs={isMobile}
+                    //     />
+                    // </footer>
+                    <Sidebar />
                 )}
 
-
-                {this.renderActiveTab()}
-
-                {this.renderFooter()}
+                {/* {this.renderFooter()} */}
 
                 {this.renderError()}
             </div>
@@ -260,7 +272,7 @@ App.propTypes = {
     isMobile: PropTypes.bool.isRequired, // responsive browser state
     place: PlacePropType,
 
-    setTab: PropTypes.func.isRequired,
+    // setTab: PropTypes.func.isRequired,
     deselectUnit: PropTypes.func.isRequired,
     selectUnit: PropTypes.func.isRequired,
     setPlace: PropTypes.func.isRequired
