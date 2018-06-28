@@ -211,13 +211,16 @@ class App extends Component {
     }
 
     render() {
-        const { place, setPlace, selectedUnit } = this.props
+        const {
+            place, setPlace, selectedUnit, isMobile
+        } = this.props
 
         return (
             <div className="App">
                 <Map
                     place={place}
                     selectedUnit={selectedUnit}
+                    allowDeselect={isMobile}
                     onSelectUnit={this.handleUnitSelect}
                     onDeselectUnit={this.handleUnitDeselect}
                     onSetLocation={setPlace}

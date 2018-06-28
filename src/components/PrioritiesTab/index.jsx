@@ -30,12 +30,9 @@ const renderPlan = (plan) => {
 }
 
 const PrioritiesTab = ({ blueprint, justification, plans }) => {
-    console.log('priorites tab')
     const regionalPlans = plans.filter(p => PLANS[p].type === 'regional')
     const statePlans = plans.filter(p => PLANS[p].type === 'state')
     const marinePlans = plans.filter(p => PLANS[p].type === 'marine')
-
-    console.log('before return')
 
     return (
         <div id="Content" className="flex-container-column">

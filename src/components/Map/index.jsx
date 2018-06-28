@@ -194,20 +194,26 @@ class Map extends Component {
     }
 
     _handleSelect(id) {
-        if (this.state.selectedUnit !== null) {
-            this._unhighlightUnit(this.state.selectedUnit)
+        const { selectedUnit } = this.state
+        const { allowDeselect, onSelectUnit, onDeselectUnit } = this.props
 
-            // Selecting the same unit again deselects it
-            if (id === this.state.selectedUnit) {
-                this.setState({ selectedUnit: null })
-                this.props.onDeselectUnit()
+        if (selectedUnit !== null) {
+            if (id === selectedUnit) {
+                if (allowDeselect) {
+                    // Selecting the same unit again deselects it
+                    this.setState({ selectedUnit: null })
+                    this._unhighlightUnit(selectedUnit)
+                    onDeselectUnit()
+                }
                 return
             }
+
+            this._unhighlightUnit(selectedUnit)
         }
 
         this._highlightUnit(id)
         this.setState({ selectedUnit: id })
-        this.props.onSelectUnit(id)
+        onSelectUnit(id)
     }
 
     _highlightUnit = (id) => {
@@ -249,22 +255,19 @@ class Map extends Component {
 }
 
 Map.propTypes = {
-    // TODO: place is expected to be:
-    // {
-    //     label: 'Place name',
-    //     location: {lat: 44.1, lng: -123.2}
-    // }
     place: PlacePropType,
     selectedUnit: PropTypes.string,
     onSelectUnit: PropTypes.func,
     onDeselectUnit: PropTypes.func,
     onSetLocation: PropTypes.func,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    allowDeselect: PropTypes.bool
 }
 
 Map.defaultProps = {
     place: null,
     selectedUnit: null,
+    allowDeselect: false,
     onSelectUnit: (id) => {
         console.log('Selected map unit: ', id) /* eslint-disable-line no-console */
     },
