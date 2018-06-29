@@ -4,10 +4,9 @@ import json
 import docx
 
 from docx import Document
-# from docx.shared import Inches
 
 
-# TODO: Create custom table style in template.docx
+# TODO: Improve custom table style in template.docx
 DOC_STYLE = 'SALCC_style'
 
 # Example placeholder: {{label:title}}
@@ -46,10 +45,10 @@ def create_report(id, path):
                     r.text = ""
                     create_table(doc, item, p)
 
-        # if '{{ECOSYSTEMS}}' in p.text:
-        #     # Remove '{{ECOSYSTEMS}}'placeholder and add the report content above empty p.text
-        #     p.text = ''
-        #     # do things
+        if '{{INDICATORS}}' in p.text:
+            # Remove '{{INDICATORS}}'placeholder and add the report content above empty p.text
+            p.text = ''
+            # do things
 
         if '{{PARTNERS}}' in p.text:
             # Remove '{{PARTNERS}}'placeholder and add the report content after empty p.text
@@ -175,6 +174,47 @@ def generate_report_context(id):
     context['table']['ecosystems'] = ecosystems_table
 
     # TODO: Indicators
+
+    for zone in context_json['ecosystems']:
+        print('zone: ', zone)
+        zone_details = ecosystems_json[zone]
+
+        indicator_data = {
+            'value': {
+                'indicator_name': '',
+                'indicator_description': '',
+                'ecosystem_name': '',
+                'ecosystem_percent': 0
+            },
+            'table': {
+                'col_names': ['Indicator Values', 'Area', 'Percent of Area'],
+                'rows': []
+            }
+        }
+        # Template also references {{value:summary_unit_name}}
+
+        for indicator in zone_details['indicators']:
+            print('indicator: ', indicator)
+            indicator_data['value']['indicator_name'] = ecosystems_json[zone]['indicators'][indicator]['label']
+            indicator_data['value']['indicator_description'] = ecosystems_json[zone]['indicators'][indicator]['description']
+            indicator_data['value']['ecosystem_name'] = ecosystems_json[zone]['label']
+
+            index = 0
+            table_row = []
+            if 'indicators' in context_json['ecosystems'][zone]:
+                for val_label in ecosystems_json[zone]['indicators'][indicator]['valueLabels']:
+                    print('val_label: ', ecosystems_json[zone]['indicators'][indicator]['valueLabels'][val_label])
+                    # table_row.append(ecosystems_json[zone]['indicators'][indicator]['valueLabels'][val_label])
+                    print('percent: ', context_json['ecosystems'][zone]['indicators'][indicator]['percent'][index])
+                    index += 1
+
+            #     table_row.append(ecosystems_json[zone]['indicators'][indicator]['valueLabels'][str(index)])
+            #     table_row.append(context_json['ecosystems'][zone]['indicators'][indicator]['percent'][index])
+            #     print('table row: ', table_row)
+            #
+            # indicator_data['table']['rows'].append(table_row)
+            # print('indicator data: ', indicator_data)
+
 
     # Partners list - name and url separated by categories
 
@@ -310,7 +350,8 @@ def create_table(doc, data, para):
     para: paragraph object
         Where the table needs to be moved
     """
-    # TODO: create table style in template.docx
+    # TODO: ensure tables don't run over a page break
+
     styles = doc.styles
     ncols = len(data['col_names'])
 
