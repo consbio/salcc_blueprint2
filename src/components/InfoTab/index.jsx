@@ -36,18 +36,6 @@ const InfoTab = () => {
                     collaborative development of the Blueprint.
                 </p>
                 <p>
-                    <b>You can help improve the Blueprint</b>
-                    <br />
-                    Give us your feedback:
-                    <br />
-                    email <a href="mailto:southatlanticlcc@gmail.com">southatlanticlcc@gmail.com</a>
-                    <br />
-                    <br />
-                    or call Hilary Morris (Blueprint User Support):
-                    <br />
-                    <a href="tel:19197070252">(919) 707-0252</a>
-                </p>
-                <p>
                     This <b>Simple Viewer</b> summarizes the Blueprint priorities and supporting information within
                     subwatersheds and marine lease blocks.
                     <br />
@@ -79,6 +67,20 @@ const InfoTab = () => {
                     <br />
                     <br />
                     Tap or click on an indicator to see more details.
+                </p>
+            </section>
+
+            <section>
+                <h3>You can help improve the Blueprint</h3>
+                <p>
+                    Give us your feedback:
+                    <br />
+                    email <a href="mailto:southatlanticlcc@gmail.com">southatlanticlcc@gmail.com</a>
+                    {/* <br />
+                    <br />
+                    or call Hilary Morris (Blueprint User Support):
+                    <br />
+                    <a href="tel:19197070252">(919) 707-0252</a> */}
                 </p>
             </section>
 

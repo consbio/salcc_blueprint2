@@ -5,48 +5,12 @@ import { connect } from 'react-redux'
 import Tabs, { getTab, getUnitTab } from './Tabs'
 import * as actions from '../Actions/actions'
 
-// renderActiveTab() {
-//     const {
-//         data, isPending, selectedUnit, activeTab, isMobile
-//     } = this.props
-
-//     if (isPending) return null
-
-//     if (activeTab === 'Info') return <InfoTab />
-
-//     if (data === null) {
-//         if (isMobile) return null
-
-//         // if there is no data, show the InfoTab if wide enough
-//         if (selectedUnit === null) {
-//             return <InfoTab />
-//         }
-//     }
-
-//     const {
-//         ecosystems, blueprint, justification, plans, gap, owner, counties
-//     } = data
-
-//     const isMarine = selectedUnit.indexOf('M') === 0
-
-//     // if the previous state is the same tab, then close the tab
-//     switch (activeTab) {
-//         case 'Priorities':
-//             return <PrioritiesTab blueprint={blueprint} justification={justification} plans={plans} />
-//         case 'Indicators':
-//             return <IndicatorsTab ecosystems={ecosystems} />
-//         // case 'Threats':
-//         //     return <ThreatsTab  {...this.props}/>;
-//         case 'Partners':
-//             return <PartnersTab counties={counties} gap={gap} owner={owner} isMarine={isMarine} />
-//     }
-//     return null
-// }
-
+/**
+ * Component that renders the active tab content in mobile viewport
+ */
 const ContentOverlay = ({
-    activeTab, selectedUnit, isDataLoaded, setTab
+    activeTab, hasSelectedUnit, isDataLoaded, setTab
 }) => {
-    const hasSelectedUnit = selectedUnit !== null
     let tab = null
     if (hasSelectedUnit) {
         if (isDataLoaded) {
@@ -73,27 +37,26 @@ const ContentOverlay = ({
 
 ContentOverlay.propTypes = {
     setTab: PropTypes.func.isRequired,
-    activeTab: PropTypes.string,
-    selectedUnit: PropTypes.string,
-    isDataLoaded: PropTypes.bool.isRequired
+    hasSelectedUnit: PropTypes.bool.isRequired,
+    isDataLoaded: PropTypes.bool.isRequired,
+
+    activeTab: PropTypes.string
 }
 
 ContentOverlay.defaultProps = {
-    activeTab: null,
-    selectedUnit: null
+    activeTab: null
 }
 
-const mapStateToProps = ({ app }) => {
-    const {
+const mapStateToProps = ({
+    app: {
         activeTab, selectedUnit, isDataLoaded, setTab
-    } = app
-    return {
-        activeTab,
-        selectedUnit,
-        isDataLoaded,
-        setTab
     }
-}
+}) => ({
+    activeTab,
+    hasSelectedUnit: selectedUnit !== null,
+    isDataLoaded,
+    setTab
+})
 
 export default connect(
     mapStateToProps,

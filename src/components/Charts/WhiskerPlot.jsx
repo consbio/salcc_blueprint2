@@ -45,7 +45,7 @@ class WhiskerPlot extends ResponsiveWidthComponent {
                             x2={x.range()[1]}
                             y1={midY}
                             y2={midY}
-                            stroke="#0892d0"
+                            stroke="#CCC"
                         />
                         <polygon points={poly} fill={color} />
                         <text x="0" y={textY} textAnchor="begin" fill="#AAA" fontSize={12}>

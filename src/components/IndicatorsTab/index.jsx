@@ -110,7 +110,7 @@ class IndicatorsTab extends Component {
             const { indicators, percent } = this.props.ecosystems[ecosystemID]
 
             return (
-                <div id="Content" className="flex-grow">
+                <div id="Content" className="flex-container-column">
                     <Ecosystem
                         key={ecosystemID}
                         index={0}

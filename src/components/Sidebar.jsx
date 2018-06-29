@@ -2,39 +2,58 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import Tabs from './Tabs'
-// import { UnitDataPropType } from '../CustomPropTypes'
+import InfoTab from './InfoTab'
+import Tabs, { getTab, getUnitTab } from './Tabs'
 import * as actions from '../Actions/actions'
 
-const Sidebar = ({ activeTab, selectedUnit, setTab }) => {
-    const hasSelectedUnit = selectedUnit !== null
+const Sidebar = ({
+    activeTab, hasSelectedUnit, isDataLoaded, setTab
+}) => {
+    let tab = null
+    if (hasSelectedUnit) {
+        if (isDataLoaded) {
+            tab = getUnitTab(activeTab)
+        } // TODO: else show loading spinner on delay?
+    } else {
+        tab = getTab(activeTab)
+    }
+
     return (
         <div id="Sidebar">
-            <Tabs hasSelectedUnit={hasSelectedUnit} activeTab={activeTab} setTab={setTab} />
+            {hasSelectedUnit ? (
+                <React.Fragment>
+                    <Tabs hasSelectedUnit={hasSelectedUnit} activeTab={activeTab} setTab={setTab} />
+                    {activeTab && <div className="flex-container-column">{tab}</div>}
+                </React.Fragment>
+            ) : (
+                <InfoTab />
+            )}
         </div>
     )
 }
 
 Sidebar.propTypes = {
+    hasSelectedUnit: PropTypes.bool.isRequired,
+    isDataLoaded: PropTypes.bool.isRequired,
     setTab: PropTypes.func.isRequired,
 
-    activeTab: PropTypes.string,
-    selectedUnit: PropTypes.string
-    // isPending: PropTypes.bool.isRequired,
-    // hasError: PropTypes.bool.isRequired,
-    // data: UnitDataPropType
+    activeTab: PropTypes.string
 }
 
 Sidebar.defaultProps = {
-    activeTab: null,
-    selectedUnit: null
-    // data: null
+    activeTab: null
 }
 
-const mapStateToProps = (state) => {
-    const { app } = state
-    return { ...app }
-}
+const mapStateToProps = ({
+    app: {
+        activeTab, selectedUnit, isDataLoaded, setTab
+    }
+}) => ({
+    activeTab,
+    hasSelectedUnit: selectedUnit !== null,
+    isDataLoaded,
+    setTab
+})
 
 export default connect(
     mapStateToProps,
