@@ -225,7 +225,7 @@ footer {
     left: 0px;
     bottom: 48px;
     top: 40px;
-    padding: 20px 10px 0;
+    padding: 20px 20px 0;
     background: #fff;
     overflow-y: auto;
     overflow-x: hidden;
@@ -325,16 +325,13 @@ footer {
 }
 
 #Ecosystems {
-    margin: 0 -10px;
-}
-#Sidebar #Ecosystems {
     margin: 0 -20px;
 }
 #EcosystemsNav {
     background: rgba(204, 204, 199, 0.2);
     padding: 0.5em 0 0.25em;
     align-items: center;
-    margin: 0 -10px;
+    margin: 0 -20px;
 }
 #EcosystemsNav img {
     height: 24px;
@@ -354,12 +351,12 @@ footer {
 .ecosystem-header {
     background: #eef7fc;
     height: 70px;
-    padding: 0 10px;
+    padding: 0 20px;
 
     border-bottom: 1px solid #bae0f2;
 }
 #ContentOverlay .ecosystem-header {
-    margin: -20px -10px 0; /* expand to full width of container */
+    margin: -20px -20px 0; /* expand to full width of container */
 }
 #Sidebar .ecosystem-header {
     padding: 0 20px;
@@ -396,7 +393,7 @@ footer {
     box-sizing: border-box;
 }
 #ContentOverlay .indicator {
-    padding: 1rem 10px;
+    /* padding: 1rem 10px; */
 }
 #Sidebar .indicator:hover {
     background: #f5fbfd;
@@ -496,7 +493,7 @@ footer {
 #IndicatorDetails {
     flex: 1;
     overflow-y: auto;
-    margin: 0 -10px;
+    margin: 0 -20px;
     padding: 20px 10px;
 }
 #IndicatorDetails .chart-labeledpercentbar {
@@ -521,7 +518,7 @@ footer {
 
 .gplaces-search {
     padding: 10px;
-    margin: 0 -10px;
+    margin: 0 -20px;
 }
 
 .gplaces-search-input-container {
