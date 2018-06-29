@@ -83,31 +83,18 @@ class IndicatorsTab extends Component {
         )
     }
 
-    renderEcosystems(ecosystemIDs) {
-        const { ecosystems } = this.props
-        return ecosystemIDs.map((ecosystemID, index) => {
-            const { indicators, percent } = ecosystems[ecosystemID]
-            return (
-                <Ecosystem
-                    key={ecosystemID}
-                    index={index}
-                    ecosystemID={ecosystemID}
-                    icon={this.getIcon(ecosystemID)}
-                    indicators={indicators}
-                    percent={percent}
-                    onSelectIndicator={i => this.handleSelectIndicator(ecosystemID, i)}
-                    onDeselectIndicator={this.handleDeselectIndicator}
-                />
-            )
-        })
-    }
+    // renderEcosystems(ecosystemIDs) {
+    //     const { ecosystems } = this.props
+    //     return )
+    // }
 
     render() {
         // if there is an ecosystem selected, only show that
-        const { ecosystemID, indicator, index } = this.state
+        const { ecosystemID, indicator } = this.state
+        const { ecosystems, isMobile } = this.props
 
         if (ecosystemID !== null) {
-            const { indicators, percent } = this.props.ecosystems[ecosystemID]
+            const { indicators, percent } = ecosystems[ecosystemID]
 
             return (
                 <div id="Content" className="flex-container-column">
@@ -127,40 +114,80 @@ class IndicatorsTab extends Component {
         }
 
         // sort ecosystems by decreasing area, so that cross-system indicators are always on the right
-        let ecosystems = Object.entries(this.props.ecosystems) // => [[ecosystemID, ecosystemData]...]
-        ecosystems = ecosystems.filter(d => d[1].indicators) // only keep the ecosystems that have indicators
-        ecosystems.sort(this.sortEcosystems)
+        // only keep those that have indicators
+        const ecosystemIDs = Object.entries(ecosystems)
+            .filter(d => d[1].indicators)
+            .sort(this.sortEcosystems)
+            .map(e => e[0])
 
-        const ecosystemIDs = ecosystems.map(e => e[0])
+        if (isMobile) {
+            const { index } = this.state
+            // determine current ecosytem by selected index if using swiper, otherwise it stays at first index
+            const currentEcosystemID = ecosystemIDs[index]
+            const { label } = ECOSYSTEMS[currentEcosystemID]
+            const { percent } = ecosystems[currentEcosystemID]
 
-        const currentEcosystemID = ecosystemIDs[index]
-        const { label } = ECOSYSTEMS[currentEcosystemID]
-        const { percent } = ecosystems[index]
-
-        return (
-            <div id="Content" className="flex-container-column">
-                <EcosystemHeader icon={this.getIcon(currentEcosystemID)} label={label} percent={percent} />
-
-                <div id="Ecosystems" className="flex-container-column flex-grow">
-                    <SwipeableViews index={this.state.index} onChangeIndex={this.handleChangeIndex}>
-                        {this.renderEcosystems(ecosystemIDs)}
-                    </SwipeableViews>
+            return (
+                <div id="Content" className="flex-container-column">
+                    <EcosystemHeader icon={this.getIcon(currentEcosystemID)} label={label} percent={percent} />
+                    <div id="Ecosystems" className="flex-container-column flex-grow">
+                        <SwipeableViews index={this.state.index} onChangeIndex={this.handleChangeIndex}>
+                            {ecosystemIDs.map((id, i) => {
+                                const { indicators } = ecosystems[id]
+                                return (
+                                    <Ecosystem
+                                        key={id}
+                                        index={i}
+                                        ecosystemID={id}
+                                        icon={this.getIcon(id)}
+                                        indicators={indicators}
+                                        percent={percent}
+                                        onSelectIndicator={selectedIndicator =>
+                                            this.handleSelectIndicator(id, selectedIndicator)
+                                        }
+                                        onDeselectIndicator={this.handleDeselectIndicator}
+                                    />
+                                )
+                            })}
+                        </SwipeableViews>
+                    </div>
+                    {this.renderNav(ecosystemIDs)}
                 </div>
-                {this.renderNav(ecosystemIDs)}
-            </div>
-        )
+            )
+        }
+
+        return ecosystemIDs.map((id, i) => {
+            const { indicators, percent } = ecosystems[id]
+            const { label } = ECOSYSTEMS[id]
+            return (
+                <div key={id}>
+                    <EcosystemHeader icon={this.getIcon(id)} label={label} percent={percent} />
+                    <Ecosystem
+                        index={i}
+                        ecosystemID={id}
+                        icon={this.getIcon(id)}
+                        indicators={indicators}
+                        percent={percent}
+                        onSelectIndicator={selectedIndicator => this.handleSelectIndicator(id, selectedIndicator)}
+                        onDeselectIndicator={this.handleDeselectIndicator}
+                    />
+                </div>
+            )
+        })
     }
 }
 
 IndicatorsTab.propTypes = {
-    ecosystems: PropTypes.objectOf(EcosystemPropType).isRequired
+    ecosystems: PropTypes.objectOf(EcosystemPropType).isRequired,
+    isMobile: PropTypes.bool.isRequired
 }
 
 const mapStateToProps = ({
     app: {
         data: { ecosystems }
-    }
-}) => ({ ecosystems })
+    },
+    browser: { isMobile }
+}) => ({ ecosystems, isMobile })
 
 export default connect(
     mapStateToProps,
