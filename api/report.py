@@ -36,11 +36,6 @@ def create_report(id, path):
                     # match.group() has the original text to replace
                     r.text = r.text.replace(match.group(), item)
 
-                # elif scope == 'image':
-                #     # Clear out the placeholder
-                #     r.text = r.text.replace(match.group(), '')
-                #     r.add_picture()
-
                 elif scope == 'table':
                     r.text = ""
                     create_table(doc, item, p)
@@ -49,6 +44,9 @@ def create_report(id, path):
             # Remove '{{INDICATORS}}'placeholder and add the report content above empty p.text
             p.text = ''
             # do things
+
+            # Delete the placeholder para
+            delete_paragraph(p)
 
         if '{{PARTNERS}}' in p.text:
             # Remove '{{PARTNERS}}'placeholder and add the report content after empty p.text
@@ -177,43 +175,64 @@ def generate_report_context(id):
 
     for zone in context_json['ecosystems']:
         print('zone: ', zone)
+
+        ecosystem_indicators = {
+            'ecosystem_name': '',
+            'ecosystem_percentage': '',
+            'indicators': []
+        }
+
+        
+
         zone_details = ecosystems_json[zone]
 
-        indicator_data = {
-            'value': {
-                'indicator_name': '',
-                'indicator_description': '',
-                'ecosystem_name': '',
-                'ecosystem_percent': 0
-            },
-            'table': {
-                'col_names': ['Indicator Values', 'Area', 'Percent of Area'],
-                'rows': []
-            }
-        }
-        # Template also references {{value:summary_unit_name}}
+        if 'percent' in context_json['ecosystems'][zone]:
+            print('indicator percentage: ', context_json['ecosystems'][zone]['percent'])
+
 
         for indicator in zone_details['indicators']:
-            print('indicator: ', indicator)
+            indicator_data = {
+                'value': {
+                    'indicator_name': '',
+                    'indicator_description': ''
+                },
+                'table': {
+                    'indicator_table': {
+                        'col_names': ['Indicator Values', 'Area', 'Percent of Area'],
+                        'rows': []
+                    }
+                }
+            }
+            # Template also references {{value:summary_unit_name}}
+
             indicator_data['value']['indicator_name'] = ecosystems_json[zone]['indicators'][indicator]['label']
             indicator_data['value']['indicator_description'] = ecosystems_json[zone]['indicators'][indicator]['description']
             indicator_data['value']['ecosystem_name'] = ecosystems_json[zone]['label']
 
             index = 0
-            table_row = []
+
             if 'indicators' in context_json['ecosystems'][zone]:
                 for val_label in ecosystems_json[zone]['indicators'][indicator]['valueLabels']:
-                    print('val_label: ', ecosystems_json[zone]['indicators'][indicator]['valueLabels'][val_label])
-                    # table_row.append(ecosystems_json[zone]['indicators'][indicator]['valueLabels'][val_label])
-                    print('percent: ', context_json['ecosystems'][zone]['indicators'][indicator]['percent'][index])
-                    index += 1
+                    table_row = []
 
-            #     table_row.append(ecosystems_json[zone]['indicators'][indicator]['valueLabels'][str(index)])
-            #     table_row.append(context_json['ecosystems'][zone]['indicators'][indicator]['percent'][index])
-            #     print('table row: ', table_row)
-            #
-            # indicator_data['table']['rows'].append(table_row)
-            # print('indicator data: ', indicator_data)
+                    # Find acreage
+                    percentage = context_json['ecosystems'][zone]['indicators'][indicator]['percent'][index]
+                    if percentage is not 0:
+                        acreage = round(acres * (percentage / 100))
+                    else:
+                        acreage = 0
+
+                    table_row.append(ecosystems_json[zone]['indicators'][indicator]['valueLabels'][val_label])
+                    table_row.append(acreage)
+                    table_row.append(percentage)
+                    index += 1
+                # print('table row: ', table_row)
+
+                indicator_data['table']['indicator_table']['rows'].append(table_row)
+
+             print('indicator data: ', indicator_data)
+            # ecosystems_indicators['indicators'].append(indicator_data)
+
 
 
     # Partners list - name and url separated by categories
