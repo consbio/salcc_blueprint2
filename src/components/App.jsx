@@ -49,58 +49,6 @@ class App extends Component {
         }
     }
 
-    // renderActiveTab() {
-    //     const {
-    //         data, isPending, selectedUnit, activeTab, isMobile
-    //     } = this.props
-
-    //     if (isPending) return null
-
-    //     if (activeTab === 'Info') return <InfoTab />
-
-    //     if (data === null) {
-    //         if (isMobile) return null
-
-    //         // if there is no data, show the InfoTab if wide enough
-    //         if (selectedUnit === null) {
-    //             return <InfoTab />
-    //         }
-    //     }
-
-    //     const {
-    //         ecosystems, blueprint, justification, plans, gap, owner, counties
-    //     } = data
-
-    //     const isMarine = selectedUnit.indexOf('M') === 0
-
-    //     // if the previous state is the same tab, then close the tab
-    //     switch (activeTab) {
-    //         case 'Priorities':
-    //             return <PrioritiesTab blueprint={blueprint} justification={justification} plans={plans} />
-    //         case 'Indicators':
-    //             return <IndicatorsTab ecosystems={ecosystems} />
-    //         // case 'Threats':
-    //         //     return <ThreatsTab  {...this.props}/>;
-    //         case 'Partners':
-    //             return <PartnersTab counties={counties} gap={gap} owner={owner} isMarine={isMarine} />
-    //     }
-    //     return null
-    // }
-
-    // renderFooter() {
-    //     const { activeTab, selectedUnit, isPending } = this.props
-
-    //     if (activeTab === 'Info') return null
-
-    //     // Animate opacity property
-    //     const opacity = selectedUnit === null || isPending ? 0 : 1
-
-    //     return (
-    //         <footer className="flex-container flex-justify-center" style={{ opacity }}>
-    //             {UNIT_TABS.map((tab, index) => this.renderTab(tab, index))}
-    //         </footer>
-    //     )
-    // }
 
     // renderHeader() {
     //     const {
@@ -177,10 +125,17 @@ class App extends Component {
         } = this.props
 
         return (
-            <div className={isMobile ? 'is-mobile' : null}>
+            <div className={isMobile ? 'is-mobile' : 'is-desktop'}>
                 <Header />
 
+                {isMobile ? (
+                    <ContentOverlay />
+                ) : (
+                    <Sidebar />
+                )}
+
                 <Map
+                    isMobile={isMobile}
                     place={place}
                     selectedUnit={selectedUnit}
                     allowDeselect={isMobile}
@@ -189,35 +144,6 @@ class App extends Component {
                     onSetLocation={setPlace}
                     onClick={this.handleMapClick}
                 />
-
-                {/* {this.renderHeader()} */}
-
-                {/* <div id="BlankContent">Select a tab</div> */}
-
-                {/* {selectedUnit && (
-                    <div id="UnitName" className="flex-container flex-justify-center flex-align-center">
-                        <h1>{isPending ? 'Loading...' : data.name}</h1>
-                        <ResetIcon id="CloseButton" onClick={this.handleCloseButton} />
-                    </div>
-                )} */}
-
-                {/* {this.renderActiveTab()} */}
-
-                {isMobile ? (
-                    <ContentOverlay />
-                ) : (
-                    // <footer>
-                    //     <Tabs
-                    //         hasSelectedUnit={hasSelectedUnit}
-                    //         activeTab={activeTab}
-                    //         setTab={setTab}
-                    //         toggleTabs={isMobile}
-                    //     />
-                    // </footer>
-                    <Sidebar />
-                )}
-
-                {/* {this.renderFooter()} */}
 
                 {this.renderError()}
             </div>

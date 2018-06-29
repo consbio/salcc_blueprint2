@@ -233,6 +233,11 @@ footer {
     z-index: 4001;
 }
 
+#ContentOverlay p {
+    line-height: 1.6;
+    font-size: 16px;
+}
+
 #Content {
     z-index: 4001;
     flex: 1;
@@ -298,10 +303,7 @@ footer {
     font-size: 14px;
     color: #666;
 }
-.is-mobile #Content p {
-    line-height: 1.6;
-    font-size: 16px;
-}
+
 #Content ul {
     margin: 0;
     padding-left: 18px;
@@ -375,9 +377,15 @@ footer {
 
 .indicator {
     margin: 16px 6px 0 6px;
-    background-color: #eee;
     padding: 6px 10px 10px 10px;
     border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+#Sidebar .indicator {
+    border-radius: 6px;
+}
+#Sidebar .indicator:hover {
+    background: rgba(204, 204, 199, 0.2);
 }
 .indicator h4 {
     color: #0892d0 !important;
@@ -395,12 +403,13 @@ footer {
     position: absolute;
     top: 40px;
     bottom: 0;
-    left: 470px;
+    left: 0;
     right: 0;
     z-index: 1;
 }
-.is-mobile #MapContainer {
-    left: 0;
+
+#Sidebar + #MapContainer {
+    left: 470px;
 }
 
 #Map {
@@ -553,11 +562,11 @@ footer {
 }
 
 /* Leaflet basemap overrides */
-.basemaps {
+.is-mobile .basemaps {
     padding: 0 !important;
     margin-top: 40px !important;
 }
-.basemap img {
+.is-mobile .basemap img {
     width: 40px !important;
     box-shadow: 1px 2px 4px #555 !important;
     border: none !important;
@@ -565,17 +574,20 @@ footer {
 
 /* Locate control */
 .leaflet-locate-control {
-    border: none !important;
-    box-shadow: 1px 2px 4px #555 !important;
-    border-radius: 40px !important;
     background: #fff;
-    margin-right: 12px !important;
 }
-
+.is-mobile .leaflet-locate-control {
+    box-shadow: 1px 2px 4px #555 !important;
+    margin-right: 12px !important;
+    border-radius: 40px !important;
+    border: none !important;
+}
 .leaflet-locate-control a {
     background: transparent no-repeat center center;
     /*src: https://design.google.com/icons/#ic_my_location*/
     background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDAwMDAwIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPiAgICA8cGF0aCBkPSJNMTIgOGMtMi4yMSAwLTQgMS43OS00IDRzMS43OSA0IDQgNCA0LTEuNzkgNC00LTEuNzktNC00LTR6bTguOTQgM2MtLjQ2LTQuMTctMy43Ny03LjQ4LTcuOTQtNy45NFYxaC0ydjIuMDZDNi44MyAzLjUyIDMuNTIgNi44MyAzLjA2IDExSDF2MmgyLjA2Yy40NiA0LjE3IDMuNzcgNy40OCA3Ljk0IDcuOTRWMjNoMnYtMi4wNmM0LjE3LS40NiA3LjQ4LTMuNzcgNy45NC03Ljk0SDIzdi0yaC0yLjA2ek0xMiAxOWMtMy44NyAwLTctMy4xMy03LTdzMy4xMy03IDctNyA3IDMuMTMgNyA3LTMuMTMgNy03IDd6Ii8+PC9zdmc+);
+}
+.is-mobile .leaflet-locate-control a {
     width: 40px !important;
     height: 40px !important;
     border-radius: 40px !important;

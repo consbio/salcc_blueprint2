@@ -6,11 +6,10 @@ import WhiskerPlot from '../Charts/WhiskerPlot'
 const Indicator = ({
     label, mean, domain, onClick
 }) => {
-    const bgColor = '#FFF' // 'rgba(204, 204, 199, 0.2)'
     const color = '#ff9500'
 
     return (
-        <section className="indicator" style={{ backgroundColor: bgColor }} onClick={onClick}>
+        <section className="indicator" onClick={onClick}>
             <h4>
                 {/* only if not mobile version */}
                 {/* <a href={`https://salcc.databasin.org/datasets/${datasetID}`} target="_blank" title="View this indicator in the Conservation Planning Atlas"> */}

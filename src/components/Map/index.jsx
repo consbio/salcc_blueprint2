@@ -8,8 +8,10 @@ import iconUrl from 'leaflet/dist/images/marker-icon.png'
 import shadowUrl from 'leaflet/dist/images/marker-shadow.png'
 import 'leaflet.vectorgrid'
 import 'leaflet-basemaps'
+import 'leaflet-zoombox'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-basemaps/L.Control.Basemaps.css'
+import 'leaflet-zoombox/L.Control.ZoomBox.css'
 
 import LocateControl from './LocateControl'
 import { PlacePropType } from '../../CustomPropTypes'
@@ -31,7 +33,7 @@ const config = {
         maxZoom: 15,
         zoomControl: false,
         scrollwheel: false,
-        attributionControl: false,
+        // attributionControl: false,
         zIndex: 1
     },
     basemaps: [
@@ -80,9 +82,11 @@ const config = {
 class Map extends Component {
     constructor(props) {
         super(props)
+
+        const { place, selectedUnit } = props
         this.state = {
-            place: this.props.place,
-            selectedUnit: this.props.selectedUnit,
+            place,
+            selectedUnit,
             zoom: config.mapParams.zoom
         }
 
@@ -94,11 +98,18 @@ class Map extends Component {
 
     componentDidMount() {
         const { place, selectedUnit } = this.state
+        const { isMobile, onSetLocation } = this.props
+        config.mapParams.attributionControl = !isMobile
         const map = L.map(this._mapNode, config.mapParams)
         this.map = map
 
         // for easier debugging
         window.map = map
+
+        if (!isMobile) {
+            L.control.zoom({ position: 'topright' }).addTo(map)
+            L.control.zoomBox({ position: 'topright' }).addTo(map)
+        }
 
         map.addLayer(config.blueprintLayer)
 
@@ -124,14 +135,14 @@ class Map extends Component {
             tileX: 4,
             tileY: 6,
             tileZ: 4,
-            position: 'topright'
+            position: isMobile ? 'topright' : 'bottomleft'
         })
         map.addControl(basemapsControl)
 
         this.locateControl = new LocateControl()
         // overriding functions here to bind to outer scope
         this.locateControl.onLocationFound = (lat, lng) => {
-            this.props.onSetLocation({
+            onSetLocation({
                 label: null,
                 location: { lat, lng }
             })
@@ -255,6 +266,7 @@ class Map extends Component {
 }
 
 Map.propTypes = {
+    isMobile: PropTypes.bool.isRequired,
     place: PlacePropType,
     selectedUnit: PropTypes.string,
     onSelectUnit: PropTypes.func,
