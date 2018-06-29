@@ -19,7 +19,6 @@
         "chart.js": "^1.1.1",
         "css-loader": "0.28.4",
         "d3-array": "^1.2.0",
-        "d3-scale": "1.0.6",
         "dotenv": "4.0.0",
         "es6-promise": "^4.1.1",
         "eslint": "^4.19.1",

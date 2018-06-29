@@ -392,9 +392,6 @@ footer {
     cursor: pointer;
     box-sizing: border-box;
 }
-#ContentOverlay .indicator {
-    /* padding: 1rem 10px; */
-}
 #Sidebar .indicator:hover {
     background: #f5fbfd;
 }

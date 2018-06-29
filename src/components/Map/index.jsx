@@ -1,7 +1,8 @@
 /* eslint-disable max-len, no-underscore-dangle */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { scaleLinear } from 'd3-scale'
+import { connect } from 'react-redux'
+
 import L from 'leaflet'
 import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png'
 import iconUrl from 'leaflet/dist/images/marker-icon.png'
@@ -13,6 +14,7 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet-basemaps/L.Control.Basemaps.css'
 import 'leaflet-zoombox/L.Control.ZoomBox.css'
 
+import * as actions from '../../Actions/actions'
 import LocateControl from './LocateControl'
 import { PlacePropType } from '../../CustomPropTypes'
 
@@ -79,6 +81,18 @@ const config = {
     }
 }
 
+const opacityScale = (zoom) => {
+    const minZoom = 3
+    const maxZoom = 13
+    const opacityRange = [0.5, 0.3] // go from 0.5 opacity at zoom 3 to 0.3 at zoom 13
+    if (zoom <= minZoom) return opacityRange[0]
+    if (zoom >= maxZoom) return opacityRange[1]
+
+    const p = (zoom - minZoom) / (maxZoom - minZoom) // proportion of way through zoom range
+    /* eslint-disable-next-line no-mixed-operators */
+    return p * (opacityRange[1] - opacityRange[0]) + opacityRange[0]
+}
+
 class Map extends Component {
     constructor(props) {
         super(props)
@@ -98,7 +112,7 @@ class Map extends Component {
 
     componentDidMount() {
         const { place, selectedUnit } = this.state
-        const { isMobile, onSetLocation } = this.props
+        const { isMobile, setPlace } = this.props
         config.mapParams.attributionControl = !isMobile
         const map = L.map(this._mapNode, config.mapParams)
         this.map = map
@@ -112,10 +126,6 @@ class Map extends Component {
         }
 
         map.addLayer(config.blueprintLayer)
-
-        const opacityScale = scaleLinear()
-            .domain([3, 13])
-            .range([0.5, 0.3])
         config.blueprintLayer.setOpacity(opacityScale(map.getZoom())) // do this on initial load too
 
         map.on('zoomend', () => {
@@ -142,7 +152,7 @@ class Map extends Component {
         this.locateControl = new LocateControl()
         // overriding functions here to bind to outer scope
         this.locateControl.onLocationFound = (lat, lng) => {
-            onSetLocation({
+            setPlace({
                 label: null,
                 location: { lat, lng }
             })
@@ -206,15 +216,17 @@ class Map extends Component {
 
     _handleSelect(id) {
         const { selectedUnit } = this.state
-        const { allowDeselect, onSelectUnit, onDeselectUnit } = this.props
+        const {
+            activeTab, isMobile, selectUnit, deselectUnit, setTab
+        } = this.props
 
         if (selectedUnit !== null) {
             if (id === selectedUnit) {
-                if (allowDeselect) {
+                if (isMobile) {
                     // Selecting the same unit again deselects it
                     this.setState({ selectedUnit: null })
                     this._unhighlightUnit(selectedUnit)
-                    onDeselectUnit()
+                    deselectUnit()
                 }
                 return
             }
@@ -224,7 +236,10 @@ class Map extends Component {
 
         this._highlightUnit(id)
         this.setState({ selectedUnit: id })
-        onSelectUnit(id)
+        selectUnit(id)
+        if (!isMobile && !activeTab) {
+            setTab('Priorities')
+        }
     }
 
     _highlightUnit = (id) => {
@@ -258,7 +273,6 @@ class Map extends Component {
                         this._mapNode = node
                     }}
                     id="Map"
-                    onClick={this.props.onClick}
                 />
             </div>
         )
@@ -267,29 +281,39 @@ class Map extends Component {
 
 Map.propTypes = {
     isMobile: PropTypes.bool.isRequired,
+    setPlace: PropTypes.func.isRequired,
+    selectUnit: PropTypes.func.isRequired,
+    deselectUnit: PropTypes.func.isRequired,
+    setTab: PropTypes.func.isRequired,
+
+    activeTab: PropTypes.string,
     place: PlacePropType,
-    selectedUnit: PropTypes.string,
-    onSelectUnit: PropTypes.func,
-    onDeselectUnit: PropTypes.func,
-    onSetLocation: PropTypes.func,
-    onClick: PropTypes.func,
-    allowDeselect: PropTypes.bool
+    selectedUnit: PropTypes.string
 }
 
 Map.defaultProps = {
+    activeTab: null,
     place: null,
-    selectedUnit: null,
-    allowDeselect: false,
-    onSelectUnit: (id) => {
-        console.log('Selected map unit: ', id) /* eslint-disable-line no-console */
-    },
-    onDeselectUnit: () => {
-        console.log('Deselected map unit') /* eslint-disable-line no-console */
-    },
-    onSetLocation: (place) => {
-        console.log('Set location using location services', place) /* eslint-disable-line no-console */
-    },
-    onClick: () => console.log('map onClick') /* eslint-disable-line no-console */
+    selectedUnit: null
 }
 
-export default Map
+const mapStateToProps = ({
+    app: {
+        activeTab, place, selectedUnit, selectUnit, deselectUnit, setPlace, setTab
+    },
+    browser: { isMobile }
+}) => ({
+    activeTab,
+    isMobile,
+    place,
+    selectedUnit,
+    selectUnit,
+    deselectUnit,
+    setPlace,
+    setTab
+})
+
+export default connect(
+    mapStateToProps,
+    actions
+)(Map)

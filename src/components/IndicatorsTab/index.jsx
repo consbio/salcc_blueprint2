@@ -158,6 +158,7 @@ class IndicatorsTab extends Component {
                     const { indicators, percent } = ecosystems[id]
                     return (
                         <Ecosystem
+                            key={id}
                             index={i}
                             ecosystemID={id}
                             showHeader
