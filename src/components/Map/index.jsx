@@ -26,7 +26,7 @@ const config = {
     mapParams: {
         center: [33.358, -80], // FIXME: [33.358, -78.593],
         // zoom: 5,
-        zoom: 12,
+        zoom: 10,
         minZoom: 3,
         maxZoom: 15,
         zoomControl: false,

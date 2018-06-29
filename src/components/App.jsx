@@ -21,7 +21,13 @@ class App extends Component {
 
     handleUnitSelect = (id) => {
         console.log('Select map unit: ', id) /* eslint-disable-line no-console */
-        this.props.selectUnit(id)
+        const {
+            isMobile, activeTab, selectUnit, setTab
+        } = this.props
+        if (!(isMobile || activeTab)) {
+            setTab('Priorities')
+        }
+        selectUnit(id)
     }
 
     handleUnitDeselect = () => {
@@ -220,21 +226,21 @@ class App extends Component {
 }
 
 App.propTypes = {
-    // activeTab: PropTypes.string,
+    activeTab: PropTypes.string,
     selectedUnit: PropTypes.string,
     // isPending: PropTypes.bool.isRequired,
     hasError: PropTypes.bool.isRequired,
     isMobile: PropTypes.bool.isRequired, // responsive browser state
     place: PlacePropType,
 
-    // setTab: PropTypes.func.isRequired,
+    setTab: PropTypes.func.isRequired,
     deselectUnit: PropTypes.func.isRequired,
     selectUnit: PropTypes.func.isRequired,
     setPlace: PropTypes.func.isRequired
 }
 
 App.defaultProps = {
-    // activeTab: null,
+    activeTab: null,
     selectedUnit: null,
     place: null
 }
