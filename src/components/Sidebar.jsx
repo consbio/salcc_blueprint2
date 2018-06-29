@@ -31,7 +31,7 @@ const Sidebar = ({
             {hasSelectedUnit ? (
                 <React.Fragment>
                     <div id="SidebarHeader">
-                        <div id="UnitName" className="flex-container flex-justify-center flex-align-center">
+                        <div id="SidebarHeaderInner" className="flex-container flex-justify-center flex-align-start">
                             <div className="flex-grow">
                                 <h3>{unitName}</h3>
                                 <div className="text-quiet text-smaller">

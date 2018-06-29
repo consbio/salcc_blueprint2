@@ -53,52 +53,6 @@ header img {
     text-align: center;
 }
 
-#Sidebar .tabs {
-    /* padding: 5px; */
-    margin: 0.5em -10px 0;
-    background: #fafafa;
-    /* border-top: 1px solid #aaa; */
-    /* border-left: none;
-    border-right: none; */
-    /* background: #fafafa; */
-    background: #eee;
-}
-
-#Sidebar .tab {
-    padding: 4px 0;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #ddd;
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid #aaa;
-}
-
-#Sidebar .tab.active {
-    /* background: #fafafa; */
-    /* background: #fafafa; */
-    background: #fff;
-    font-weight: bold;
-    border-bottom-color: transparent;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    border-top: 1px solid #ddd;
-}
-#Sidebar .tab label {
-    font-size: 14px;
-    display: inline;
-    margin-left: 4px;
-    color: #555;
-}
-#Sidebar .tab.active label {
-    color: #333;
-}
-#Sidebar .tab.active svg {
-    fill: #333;
-}
-
 /* only shown for mobile version */
 footer {
     position: absolute;
@@ -165,6 +119,9 @@ footer {
 .flex-align-end {
     align-items: flex-end;
 }
+.flex-align-start {
+    align-items: flex-start;
+}
 .flex-grow {
     flex-grow: 1;
 }
@@ -203,18 +160,63 @@ footer {
     border-right: 1px solid #aaa;
     overflow-y: auto;
     overflow-x: hidden;
-    /* padding: 10px 0; */
+    padding: 10px 0;
     z-index: 1;
     background: #fff;
     box-sizing: border-box;
 }
 
 #SidebarHeader {
-    padding: 4px 10px;
+    margin: 0 10px;
+}
+#SidebarHeader h3 {
+    margin: 0;
+}
+#SidebarHeaderInner {
+    margin: 4px 10px 14px;
+}
+
+#Sidebar .tabs {
+    margin: 0 -10px;
+    background: #fafafa;
+    background: #eee;
+}
+
+#SidebarHeader .tab {
+    padding: 4px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #ddd;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid #aaa;
+}
+
+#SidebarHeader .tab.active {
+    background: #fff;
+    font-weight: bold;
+    border-bottom-color: transparent;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+}
+#SidebarHeader .tab label {
+    font-size: 14px;
+    display: inline;
+    margin-left: 4px;
+    color: #555;
+}
+#SidebarHeader .tab.active label {
+    color: #333;
+}
+#SidebarHeader .tab.active svg {
+    fill: #333;
 }
 
 #SidebarContent {
-    padding: 10px;
+    padding: 20px;
     overflow-y: auto;
 }
 
@@ -234,10 +236,6 @@ footer {
 #Content {
     z-index: 4001;
     flex: 1;
-}
-
-#UnitName h3 {
-    margin: 0.5em 0 0;
 }
 
 #InfoButton {
