@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-// import EcosystemHeader from './EcosystemHeader'
+import EcosystemHeader from './EcosystemHeader'
 
 import IndicatorChart from './IndicatorChart'
 import IndicatorDetails from './IndicatorDetails'
@@ -12,7 +12,8 @@ const Ecosystem = ({
     ecosystemID,
     icon,
     selectedIndicator,
-    // percent,
+    showHeader,
+    percent,
     indicators,
     onSelectIndicator,
     onDeselectIndicator
@@ -32,16 +33,14 @@ const Ecosystem = ({
     }
 
     const indicatorsConfig = ecosystemConfig.indicators
-    const indicatorKeys = Object.keys(indicators || {}) // some ecosystems are present but don't have indicators
-    indicatorKeys.sort()
 
     // Merge constants with dynamic data
-    const mergedIndicators = indicatorKeys.map(indicator =>
+    const mergedIndicators = Object.keys(indicators || {}).sort().map(indicator =>
         Object.assign({ id: indicator }, indicatorsConfig[indicator], indicators[indicator]))
 
     return (
         <div className="ecosystem">
-            {/* <EcosystemHeader icon={icon} label={label} percent={percent} /> */}
+            {showHeader && <EcosystemHeader icon={icon} label={label} percent={percent} />}
 
             <div className="indicators-container">
                 {mergedIndicators.length > 0 ? (
@@ -65,6 +64,7 @@ Ecosystem.propTypes = {
     icon: PropTypes.string.isRequired,
 
     indicators: PropTypes.objectOf(IndicatorPropType),
+    showHeader: PropTypes.bool,
     percent: PropTypes.number,
     selectedIndicator: IndicatorPropType,
     onSelectIndicator: PropTypes.func,
@@ -75,6 +75,7 @@ Ecosystem.defaultProps = {
     percent: null, // some ecosystems don't have a percent
     selectedIndicator: null,
     indicators: null,
+    showHeader: true,
     /* eslint-disable-next-line no-console */
     onSelectIndicator: (ecosystem, indicator) => console.log('onSelectIndicator', ecosystem, indicator),
     onDeselectIndicator: () => console.log('onDeselectIndicator')

@@ -37,6 +37,11 @@ const IndicatorDetails = ({
                     ))}
                 </div>
             </div>
+            {/* TODO: if not mobile, show link to Data Basin */}
+            {/* only if not mobile version */}
+            {/* <a href={`https://salcc.databasin.org/datasets/${datasetID}`} target="_blank" title="View this indicator in the Conservation Planning Atlas"> */}
+            {/* {label} */}
+            {/* </a> */}
         </React.Fragment>
     )
 }

@@ -83,11 +83,6 @@ class IndicatorsTab extends Component {
         )
     }
 
-    // renderEcosystems(ecosystemIDs) {
-    //     const { ecosystems } = this.props
-    //     return )
-    // }
-
     render() {
         // if there is an ecosystem selected, only show that
         const { ecosystemID, indicator } = this.state
@@ -139,6 +134,7 @@ class IndicatorsTab extends Component {
                                         key={id}
                                         index={i}
                                         ecosystemID={id}
+                                        showHeader={false}
                                         icon={this.getIcon(id)}
                                         indicators={indicators}
                                         percent={percent}
@@ -156,24 +152,25 @@ class IndicatorsTab extends Component {
             )
         }
 
-        return ecosystemIDs.map((id, i) => {
-            const { indicators, percent } = ecosystems[id]
-            const { label } = ECOSYSTEMS[id]
-            return (
-                <div key={id}>
-                    <EcosystemHeader icon={this.getIcon(id)} label={label} percent={percent} />
-                    <Ecosystem
-                        index={i}
-                        ecosystemID={id}
-                        icon={this.getIcon(id)}
-                        indicators={indicators}
-                        percent={percent}
-                        onSelectIndicator={selectedIndicator => this.handleSelectIndicator(id, selectedIndicator)}
-                        onDeselectIndicator={this.handleDeselectIndicator}
-                    />
-                </div>
-            )
-        })
+        return (
+            <div id="Ecosystems">
+                {ecosystemIDs.map((id, i) => {
+                    const { indicators, percent } = ecosystems[id]
+                    return (
+                        <Ecosystem
+                            index={i}
+                            ecosystemID={id}
+                            showHeader
+                            icon={this.getIcon(id)}
+                            indicators={indicators}
+                            percent={percent}
+                            onSelectIndicator={selectedIndicator => this.handleSelectIndicator(id, selectedIndicator)}
+                            onDeselectIndicator={this.handleDeselectIndicator}
+                        />
+                    )
+                })}
+            </div>
+        )
     }
 }
 

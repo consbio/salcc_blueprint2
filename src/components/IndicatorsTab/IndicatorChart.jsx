@@ -1,24 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import WhiskerPlot from '../Charts/WhiskerPlot'
-
 const Indicator = ({
     label, mean, domain, onClick
 }) => {
-    const color = '#ff9500'
+    // const color = '#ff9500'
+    /* eslint-disable-next-line no-mixed-operators */
+    const percent = (100 * (mean - domain[0])) / (domain[1] - domain[0])
 
     return (
-        <section className="indicator" onClick={onClick}>
+        <div className="indicator" onClick={onClick}>
             <h4>
-                {/* only if not mobile version */}
-                {/* <a href={`https://salcc.databasin.org/datasets/${datasetID}`} target="_blank" title="View this indicator in the Conservation Planning Atlas"> */}
-                {/* {label} */}
-                {/* </a> */}
                 {label}
             </h4>
-            <WhiskerPlot value={mean} domain={domain} color={color} />
-        </section>
+            <div className="flex-container flex-align-center">
+                <label>Low</label>
+                <div className="domain">
+                    <div className="domain-line" />
+                    <div className="marker" style={{ left: `${percent}%` }} />
+                </div>
+                <label>High</label>
+            </div>
+        </div>
     )
 }
 

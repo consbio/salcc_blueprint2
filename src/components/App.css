@@ -160,14 +160,13 @@ footer {
     border-right: 1px solid #aaa;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 10px 0;
     z-index: 1;
     background: #fff;
     box-sizing: border-box;
 }
 
 #SidebarHeader {
-    margin: 0 10px;
+    margin: 10px 10px 0;
 }
 #SidebarHeader h3 {
     margin: 0;
@@ -316,8 +315,6 @@ footer {
     margin: 0;
     color: #aaa;
     font-size: 12px;
-    min-width: 36px;
-    text-align: right;
 }
 
 #Content section {
@@ -330,7 +327,9 @@ footer {
 #Ecosystems {
     margin: 0 -10px;
 }
-
+#Sidebar #Ecosystems {
+    margin: 0 -20px;
+}
 #EcosystemsNav {
     background: rgba(204, 204, 199, 0.2);
     padding: 0.5em 0 0.25em;
@@ -353,12 +352,29 @@ footer {
 }
 
 .ecosystem-header {
-    margin: -20px -10px 0;
-    /* padding: 20px 10px 10px; */
-    background: rgba(204, 204, 199, 0.2);
+    background: #eef7fc;
     height: 70px;
     padding: 0 10px;
+    /* border-top: 1px solid #bae0f2; */
+    border-bottom: 1px solid #bae0f2;
 }
+#ContentOverlay .ecosystem-header {
+    /* margin-top: -20px; */
+    margin: -20px -10px 0; /* expand to full width of container */
+}
+#Sidebar .ecosystem-header {
+    padding: 0 20px;
+}
+#Sidebar .ecosystem:first-child .ecosystem-header {
+    margin-top: -20px;
+}
+#Sidebar .ecosystem + .ecosystem {
+    margin-top: 2rem;
+}
+#Sidebar .ecosystem + .ecosystem .ecosystem-header {
+    border-top: 1px solid #bae0f2;
+}
+
 .ecosystem-header img {
     margin-right: 8px;
     height: 40px;
@@ -376,19 +392,44 @@ footer {
 }
 
 .indicator {
-    margin: 16px 6px 0 6px;
-    padding: 6px 10px 10px 10px;
-    border-bottom: 1px solid #eee;
+    padding: 1rem 20px;
     cursor: pointer;
+    box-sizing: border-box;
 }
-#Sidebar .indicator {
-    border-radius: 6px;
+#ContentOverlay .indicator {
+    padding: 1rem 10px;
 }
 #Sidebar .indicator:hover {
-    background: rgba(204, 204, 199, 0.2);
+    background: #f5fbfd;
 }
 .indicator h4 {
+    margin: 0;
     color: #0892d0 !important;
+}
+
+.indicator label {
+    font-size: smaller;
+    color: #aaa;
+}
+.indicator .domain {
+    position: relative;
+    margin: 16px 14px 0;
+    flex: 1;
+}
+.indicator .domain-line {
+    height: 2px;
+    background: #ddd;
+}
+.indicator .marker {
+    position: relative;
+    /* top: 0;
+    left: 0; */
+    margin-left: -10px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 16px solid #ff9500;
 }
 
 .no-indicators {
@@ -442,6 +483,10 @@ footer {
     margin: 4px 4px 20px 4px;
 }
 
+#Sidebar #IndicatorDetailsHeader {
+    margin: -20px -20px 0;
+    cursor: pointer;
+}
 #IndicatorDetailsHeader h3 {
     line-height: 1.2;
     font-size: 16px;
@@ -453,7 +498,7 @@ footer {
     flex: 1;
     overflow-y: auto;
     margin: 0 -10px;
-    padding: 0 10px 20px;
+    padding: 20px 10px;
 }
 #IndicatorDetails .chart-labeledpercentbar {
     font-size: 12px;
@@ -467,6 +512,9 @@ footer {
 
 .chart-labeledpercentbar {
     margin: 0 0 20px 0;
+}
+.chart-labeledpercentbar label {
+    min-width: 36px;
 }
 #Content h4 + .chart-labeledpercentbar {
     margin-top: 14px;
