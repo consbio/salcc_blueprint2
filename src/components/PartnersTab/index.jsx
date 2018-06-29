@@ -1,10 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
-import LTALink from './LTALink'
+import * as actions from '../../Actions/actions'
 import LabeledPercentBar from '../Charts/LabeledPercentBar'
 import GAP from '../../config/protection.json'
 import OWNERSHIP from '../../config/owners.json'
+
+import LTALink from './LTALink'
 
 const NOT_CONSERVED = {
     color: '#AAA',
@@ -155,4 +158,19 @@ PartnersTab.defaultProps = {
     isMarine: false
 }
 
-export default PartnersTab
+const mapStateToProps = ({
+    app: {
+        selectedUnit,
+        data: { counties, gap, owner }
+    }
+}) => ({
+    counties,
+    gap,
+    owner,
+    isMarine: selectedUnit.indexOf('M') === 0
+})
+
+export default connect(
+    mapStateToProps,
+    actions
+)(PartnersTab)

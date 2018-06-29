@@ -6,17 +6,10 @@ import './App.css'
 import Map from './Map'
 // import GooglePlacesSearch from './GooglePlacesSearch/GooglePlacesSearch'
 
-import PrioritiesTab from './PrioritiesTab'
-import IndicatorsTab from './IndicatorsTab'
-// import ThreatsTab from './ThreatsTab';
-import PartnersTab from './PartnersTab'
-import InfoTab from './InfoTab'
 import Header from './Header'
-// import Tabs from './Tabs'
 import Sidebar from './Sidebar'
 import ContentOverlay from './ContentOverlay'
-import { PlacePropType, UnitDataPropType } from '../CustomPropTypes'
-
+import { PlacePropType } from '../CustomPropTypes'
 import * as actions from '../Actions/actions'
 
 class App extends Component {
@@ -25,16 +18,6 @@ class App extends Component {
 
         this.placeSearch = null
     }
-
-    // handleSetTab = (tab) => {
-    //     const { activeTab, setTab, isMobile } = this.props
-    //     // toggle current tab
-    //     if (isMobile && activeTab === tab) {
-    //         setTab(null)
-    //     } else {
-    //         setTab(tab)
-    //     }
-    // }
 
     handleUnitSelect = (id) => {
         console.log('Select map unit: ', id) /* eslint-disable-line no-console */
@@ -60,58 +43,43 @@ class App extends Component {
         }
     }
 
-    // renderTab(tab, index) {
-    //     const { activeTab } = this.props
-    //     const isActive = activeTab === tab ? 'active' : ''
-    //     const isIndicatorsTab = tab === 'Indicators' ? 'indicators' : ''
-    //     const className = `tab ${isActive} ${isIndicatorsTab}`
-    //     const handleClick = () => this.handleSetTab(tab)
+    // renderActiveTab() {
+    //     const {
+    //         data, isPending, selectedUnit, activeTab, isMobile
+    //     } = this.props
 
-    //     return (
-    //         <div key={index} className={className} onClick={handleClick}>
-    //             <TabIcons icon={tab} height={24} />
-    //             <label>{tab}</label>
-    //         </div>
-    //     )
+    //     if (isPending) return null
+
+    //     if (activeTab === 'Info') return <InfoTab />
+
+    //     if (data === null) {
+    //         if (isMobile) return null
+
+    //         // if there is no data, show the InfoTab if wide enough
+    //         if (selectedUnit === null) {
+    //             return <InfoTab />
+    //         }
+    //     }
+
+    //     const {
+    //         ecosystems, blueprint, justification, plans, gap, owner, counties
+    //     } = data
+
+    //     const isMarine = selectedUnit.indexOf('M') === 0
+
+    //     // if the previous state is the same tab, then close the tab
+    //     switch (activeTab) {
+    //         case 'Priorities':
+    //             return <PrioritiesTab blueprint={blueprint} justification={justification} plans={plans} />
+    //         case 'Indicators':
+    //             return <IndicatorsTab ecosystems={ecosystems} />
+    //         // case 'Threats':
+    //         //     return <ThreatsTab  {...this.props}/>;
+    //         case 'Partners':
+    //             return <PartnersTab counties={counties} gap={gap} owner={owner} isMarine={isMarine} />
+    //     }
+    //     return null
     // }
-
-    renderActiveTab() {
-        const {
-            data, isPending, selectedUnit, activeTab, isMobile
-        } = this.props
-
-        if (isPending) return null
-
-        if (activeTab === 'Info') return <InfoTab />
-
-        if (data === null) {
-            if (isMobile) return null
-
-            // if there is no data, show the InfoTab if wide enough
-            if (selectedUnit === null) {
-                return <InfoTab />
-            }
-        }
-
-        const {
-            ecosystems, blueprint, justification, plans, gap, owner, counties
-        } = data
-
-        const isMarine = selectedUnit.indexOf('M') === 0
-
-        // if the previous state is the same tab, then close the tab
-        switch (activeTab) {
-            case 'Priorities':
-                return <PrioritiesTab blueprint={blueprint} justification={justification} plans={plans} />
-            case 'Indicators':
-                return <IndicatorsTab ecosystems={ecosystems} />
-            // case 'Threats':
-            //     return <ThreatsTab  {...this.props}/>;
-            case 'Partners':
-                return <PartnersTab counties={counties} gap={gap} owner={owner} isMarine={isMarine} />
-        }
-        return null
-    }
 
     // renderFooter() {
     //     const { activeTab, selectedUnit, isPending } = this.props
@@ -199,24 +167,12 @@ class App extends Component {
 
     render() {
         const {
-            // activeTab, setTab,
-            data,
-            place,
-            setPlace,
-            selectedUnit,
-            isMobile
+            place, setPlace, selectedUnit, isMobile
         } = this.props
-
-        const hasSelectedUnit = selectedUnit !== null
 
         return (
             <div className={isMobile ? 'is-mobile' : null}>
-                <Header
-                    isMobile={isMobile}
-                    hasSelectedUnit={hasSelectedUnit}
-                    unitName={data && data.name ? data.name : 'Loading...'}
-                    onClose={this.handleCloseButton}
-                />
+                <Header />
 
                 <Map
                     place={place}
@@ -264,11 +220,10 @@ class App extends Component {
 }
 
 App.propTypes = {
-    activeTab: PropTypes.string,
+    // activeTab: PropTypes.string,
     selectedUnit: PropTypes.string,
-    isPending: PropTypes.bool.isRequired,
+    // isPending: PropTypes.bool.isRequired,
     hasError: PropTypes.bool.isRequired,
-    data: UnitDataPropType,
     isMobile: PropTypes.bool.isRequired, // responsive browser state
     place: PlacePropType,
 
@@ -279,16 +234,12 @@ App.propTypes = {
 }
 
 App.defaultProps = {
-    activeTab: null,
+    // activeTab: null,
     selectedUnit: null,
-    data: null,
     place: null
 }
 
-const mapStateToProps = (state) => {
-    const { app, browser } = state
-    return { ...app, isMobile: browser.lessThan.small }
-}
+const mapStateToProps = ({ app, browser: { isMobile } }) => ({ ...app, isMobile })
 
 export default connect(
     mapStateToProps,

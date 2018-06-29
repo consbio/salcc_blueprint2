@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import SwipeableViews from 'react-swipeable-views'
+import { connect } from 'react-redux'
 
-import Ecosystem from './Ecosystem'
+import * as actions from '../../Actions/actions'
 import { EcosystemPropType } from '../../CustomPropTypes'
+import ECOSYSTEMS from '../../config/ecosystems.json'
+
+import EcosystemHeader from './EcosystemHeader'
+import Ecosystem from './Ecosystem'
 
 class IndicatorsTab extends Component {
     state = {
@@ -68,7 +73,6 @@ class IndicatorsTab extends Component {
                         <a key={ecosystem} href="#" onClick={onClick}>
                             <img
                                 src={this.getIcon(ecosystem)}
-                                height={20}
                                 alt=""
                                 className={this.state.index === index ? 'active' : ''}
                             />
@@ -100,26 +104,24 @@ class IndicatorsTab extends Component {
 
     render() {
         // if there is an ecosystem selected, only show that
-        const { ecosystemID, indicator } = this.state
+        const { ecosystemID, indicator, index } = this.state
 
         if (ecosystemID !== null) {
             const { indicators, percent } = this.props.ecosystems[ecosystemID]
 
             return (
-                <div id="Content">
-                    <div id="Ecosystems" className="flex-container-column">
-                        <Ecosystem
-                            key={ecosystemID}
-                            index={0}
-                            ecosystemID={ecosystemID}
-                            icon={this.getIcon(ecosystemID)}
-                            indicators={indicators}
-                            percent={percent}
-                            selectedIndicator={indicator}
-                            onSelectIndicator={i => this.handleSelectIndicator(ecosystemID, i)}
-                            onDeselectIndicator={this.handleDeselectIndicator}
-                        />
-                    </div>
+                <div id="Content" className="flex-grow">
+                    <Ecosystem
+                        key={ecosystemID}
+                        index={0}
+                        ecosystemID={ecosystemID}
+                        icon={this.getIcon(ecosystemID)}
+                        indicators={indicators}
+                        percent={percent}
+                        selectedIndicator={indicator}
+                        onSelectIndicator={i => this.handleSelectIndicator(ecosystemID, i)}
+                        onDeselectIndicator={this.handleDeselectIndicator}
+                    />
                 </div>
             )
         }
@@ -131,15 +133,20 @@ class IndicatorsTab extends Component {
 
         const ecosystemIDs = ecosystems.map(e => e[0])
 
+        const currentEcosystemID = ecosystemIDs[index]
+        const { label } = ECOSYSTEMS[currentEcosystemID]
+        const { percent } = ecosystems[index]
+
         return (
-            <div id="Content">
+            <div id="Content" className="flex-container-column">
+                <EcosystemHeader icon={this.getIcon(currentEcosystemID)} label={label} percent={percent} />
+
                 <div id="Ecosystems" className="flex-container-column">
                     <SwipeableViews index={this.state.index} onChangeIndex={this.handleChangeIndex}>
                         {this.renderEcosystems(ecosystemIDs)}
                     </SwipeableViews>
-
-                    {this.renderNav(ecosystemIDs)}
                 </div>
+                {this.renderNav(ecosystemIDs)}
             </div>
         )
     }
@@ -149,4 +156,13 @@ IndicatorsTab.propTypes = {
     ecosystems: PropTypes.objectOf(EcosystemPropType).isRequired
 }
 
-export default IndicatorsTab
+const mapStateToProps = ({
+    app: {
+        data: { ecosystems }
+    }
+}) => ({ ecosystems })
+
+export default connect(
+    mapStateToProps,
+    actions
+)(IndicatorsTab)

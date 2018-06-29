@@ -6,8 +6,8 @@ import WhiskerPlot from '../Charts/WhiskerPlot'
 const Indicator = ({
     label, mean, domain, onClick
 }) => {
-    const bgColor = 'rgba(204, 204, 199, 0.2)'
-    const color = '#777'
+    const bgColor = '#FFF' // 'rgba(204, 204, 199, 0.2)'
+    const color = '#ff9500'
 
     return (
         <section className="indicator" style={{ backgroundColor: bgColor }} onClick={onClick}>

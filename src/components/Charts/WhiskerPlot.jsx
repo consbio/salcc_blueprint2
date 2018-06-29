@@ -24,7 +24,7 @@ class WhiskerPlot extends ResponsiveWidthComponent {
             .range([margin.left, width - margin.left])
             .domain(domain)
         const xPos = x(value)
-        const yOffset = 4
+        const yOffset = 2
         const triangleHeight = midY - yOffset
         const triangleWidth = 8 // actually 1/2 of width
 
@@ -45,7 +45,7 @@ class WhiskerPlot extends ResponsiveWidthComponent {
                             x2={x.range()[1]}
                             y1={midY}
                             y2={midY}
-                            stroke="#777"
+                            stroke="#0892d0"
                         />
                         <polygon points={poly} fill={color} />
                         <text x="0" y={textY} textAnchor="begin" fill="#AAA" fontSize={12}>

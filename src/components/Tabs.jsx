@@ -1,10 +1,48 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import PrioritiesTab from './PrioritiesTab'
+import IndicatorsTab from './IndicatorsTab'
+import ThreatsTab from './ThreatsTab'
+import PartnersTab from './PartnersTab'
+import InfoTab from './InfoTab'
 import TabIcons from './icons/TabIcons'
 
-const TABS = ['Info', 'Find Location']
+const TABS = ['Info', 'Find Location'] // TODO: 'Map'
 const UNIT_TABS = ['Priorities', 'Indicators', 'Partners'] // TODO: 'Threats'
+
+/**
+ * Get a tab component based on it's ID
+ * @param {string} tab - ID of the tab
+ */
+export const getTab = (tab) => {
+    switch (tab) {
+        case 'Info':
+            return <InfoTab />
+        default:
+            return null
+    }
+}
+
+/**
+ * Get a tab component that requires unit data to be loaded first
+ * @param {string} tab - ID of the tab
+ */
+export const getUnitTab = (tab) => {
+    switch (tab) {
+        case 'Priorities':
+            return <PrioritiesTab />
+        case 'Indicators':
+            return <IndicatorsTab />
+        case 'Threats':
+            return <ThreatsTab />
+        case 'Partners':
+            return <PartnersTab />
+        default:
+            return null
+    }
+}
+
 
 const Tabs = ({
     activeTab, hasSelectedUnit, toggleTabs, setTab

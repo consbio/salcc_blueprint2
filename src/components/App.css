@@ -32,19 +32,25 @@ header {
     box-shadow: 0 2px 6px #333;
     height: 40px;
     padding: 0 8px;
+    line-height: 1;
 }
 /* header .button {
     text-align: center;
 } */
 header h1 {
     padding: 0;
-    margin: 4px 0;
-    font-size: 16px;
+    margin: 0;
+    font-size: 17px;
     font-weight: normal;
     color: #fff;
-    flex: 1;
-    text-shadow: 1px 1px 2px #333;
 }
+header h4 {
+    font-weight: normal;
+    font-size: 12px;
+    margin: 0;
+    color: #fff;
+}
+
 header img {
     height: 32px;
     margin-right: 8px;
@@ -145,6 +151,9 @@ footer {
 .flex-align-end {
     align-items: flex-end;
 }
+.flex-grow {
+    flex-grow: 1;
+}
 
 .tab {
     color: #aaa;
@@ -185,26 +194,27 @@ footer {
 }
 
 #Content {
-    background: #fff;
+    /* background: #fff;
     display: flex;
     flex-direction: column;
     position: absolute;
     top: 129px;
     width: 470px;
-    bottom: 0px;
+    bottom: 0px; */
     /* box-shadow: 0 6px 6px #555; */
-    padding: 20px 10px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    margin: 20px 10px 0 10px;
+    /* overflow-y: auto;
+    overflow-x: hidden; */
     z-index: 4001;
+    flex: 1;
 }
-.is-mobile #Content {
+/* .is-mobile #Content {
     right: 0px;
     left: 0px;
     bottom: 48px;
     top: 40px;
     width: auto;
-}
+} */
 
 #ContentOverlay {
     position: absolute;
@@ -212,7 +222,7 @@ footer {
     left: 0px;
     bottom: 48px;
     top: 40px;
-    padding: 20px 10px;
+    /* padding: 20px 10px; */
     background: #fff;
     overflow-y: auto;
     overflow-x: hidden;
@@ -316,7 +326,7 @@ footer {
     margin: 0;
     color: #aaa;
     font-size: 12px;
-    min-width: 30px;
+    min-width: 36px;
     text-align: right;
 }
 /* #Content.tabs-top {
@@ -329,37 +339,34 @@ footer {
 }
 
 #Ecosystems {
-    height: 100%;
-}
-#Ecosystems > div:first-child {
-    flex: 1;
-    height: 100%;
+    margin: 0 -10px;
 }
 
 #EcosystemsNav {
-    background: #fff;
-    flex: 0;
-    padding: 4px 0 10px;
+    background: rgba(204, 204, 199, 0.2);
+    padding: 0.5em 0 0.25em;
+    align-items: center;
+    margin: 0 -10px;
 }
 #EcosystemsNav img {
+    height: 24px;
     cursor: pointer;
-    padding: 0 4px;
+    margin: 0 4px;
     opacity: 0.4;
     filter: grayscale(50%);
+    background: #fff;
+    border-radius: 24px;
 }
 #EcosystemsNav img.active {
     opacity: 1;
     filter: grayscale(0);
-}
-
-.ecosystem {
-    min-height: 50vh;
-    padding-bottom: 10px;
+    height: 32px;
 }
 
 .ecosystem-header {
-    padding-bottom: 14px;
-    border-bottom: 1px solid #eee;
+    margin: -20px -10px 0;
+    padding: 0.75em 10px;
+    background: rgba(204, 204, 199, 0.2);
 }
 .ecosystem-header img {
     margin-right: 8px;
@@ -373,15 +380,18 @@ footer {
     flex: 1;
 }
 
-.react-swipeable-view-container {
-    height: 100%;
+.indicators-container section + section {
+    margin-top: 1rem !important;
 }
 
 .indicator {
     margin: 16px 6px 0 6px;
-    border-radius: 8px;
     background-color: #eee;
     padding: 6px 10px 10px 10px;
+    border-bottom: 1px solid #eee;
+}
+.indicator h4 {
+    color: #0892d0 !important;
 }
 
 .no-indicators {
@@ -442,8 +452,9 @@ footer {
 }
 
 .chart-whisker .domain {
-    stroke-width: 3;
+    stroke-width: 2;
     stroke-linecap: round;
+    opacity: 0.75;
 }
 
 .chart-labeledpercentbar {

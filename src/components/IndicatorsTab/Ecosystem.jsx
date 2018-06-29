@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import EcosystemHeader from './EcosystemHeader'
+// import EcosystemHeader from './EcosystemHeader'
 
 import IndicatorChart from './IndicatorChart'
 import IndicatorDetails from './IndicatorDetails'
@@ -12,7 +12,7 @@ const Ecosystem = ({
     ecosystemID,
     icon,
     selectedIndicator,
-    percent,
+    // percent,
     indicators,
     onSelectIndicator,
     onDeselectIndicator
@@ -41,19 +41,21 @@ const Ecosystem = ({
 
     return (
         <div className="ecosystem">
-            <EcosystemHeader icon={icon} label={label} percent={percent} />
+            {/* <EcosystemHeader icon={icon} label={label} percent={percent} /> */}
 
-            {mergedIndicators.length > 0 ? (
-                mergedIndicators.map(indicator => (
-                    <IndicatorChart
-                        key={indicator.id}
-                        {...indicator}
-                        onClick={() => onSelectIndicator(indicator)}
-                    />
-                ))
-            ) : (
-                <div className="no-indicators">Ecosystem does not have any indicators</div>
-            )}
+            <div className="indicators-container">
+                {mergedIndicators.length > 0 ? (
+                    mergedIndicators.map(indicator => (
+                        <IndicatorChart
+                            key={indicator.id}
+                            {...indicator}
+                            onClick={() => onSelectIndicator(indicator)}
+                        />
+                    ))
+                ) : (
+                    <div className="no-indicators">Ecosystem does not have any indicators</div>
+                )}
+            </div>
         </div>
     )
 }

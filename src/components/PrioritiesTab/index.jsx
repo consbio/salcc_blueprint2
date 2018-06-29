@@ -1,6 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+
 import LabeledPercentBar from '../Charts/LabeledPercentBar'
+import * as actions from '../../Actions/actions'
 import PRIORITIES from '../../config/priorities.json'
 import PLANS from '../../config/plans.json'
 
@@ -84,4 +87,13 @@ PrioritiesTab.defaultProps = {
     plans: []
 }
 
-export default PrioritiesTab
+const mapStateToProps = ({ app }) => {
+    const { data } = app
+    const { blueprint, justification, plans } = data
+    return { blueprint, justification, plans }
+}
+
+export default connect(
+    mapStateToProps,
+    actions
+)(PrioritiesTab)
