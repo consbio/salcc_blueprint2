@@ -141,7 +141,7 @@ class IndicatorsTab extends Component {
             <div id="Content" className="flex-container-column">
                 <EcosystemHeader icon={this.getIcon(currentEcosystemID)} label={label} percent={percent} />
 
-                <div id="Ecosystems" className="flex-container-column">
+                <div id="Ecosystems" className="flex-container-column flex-grow">
                     <SwipeableViews index={this.state.index} onChangeIndex={this.handleChangeIndex}>
                         {this.renderEcosystems(ecosystemIDs)}
                     </SwipeableViews>
