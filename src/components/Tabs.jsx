@@ -5,7 +5,9 @@ import PrioritiesTab from './PrioritiesTab'
 import IndicatorsTab from './IndicatorsTab'
 import ThreatsTab from './ThreatsTab'
 import PartnersTab from './PartnersTab'
+
 import InfoTab from './InfoTab'
+import FindLocationTab from './FindLocationTab'
 import TabIcons from './icons/TabIcons'
 
 const TABS = ['Info', 'Find Location'] // TODO: 'Map'
@@ -19,6 +21,8 @@ export const getTab = (tab) => {
     switch (tab) {
         case 'Info':
             return <InfoTab />
+        case 'Find Location':
+            return <FindLocationTab />
         default:
             return null
     }
@@ -42,7 +46,6 @@ export const getUnitTab = (tab) => {
             return null
     }
 }
-
 
 const Tabs = ({
     activeTab, hasSelectedUnit, toggleTabs, setTab

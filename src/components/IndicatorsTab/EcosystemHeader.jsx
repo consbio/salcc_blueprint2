@@ -7,7 +7,7 @@ const EcosystemHeader = ({ icon, label, percent }) => (
     <div className="ecosystem-header flex-container flex-justify-start flex-align-center">
         <img src={icon} alt="" />
         <h3>{label}</h3>
-        {percent && (
+        {percent > 0 && (
             <div className="text-quieter text-right text-small">
                 {formatPercent(percent)}%
                 <br />

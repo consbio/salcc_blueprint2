@@ -34,6 +34,13 @@ export const PlacePropType = PropTypes.shape({
     }).isRequired
 })
 
+export const PlacesPropType = PropTypes.arrayOf(
+    PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired
+    })
+)
+
 export default {
     EcosystemPropType,
     IndicatorPropType,

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 
 import './App.css'
 import Map from './Map'
-// import GooglePlacesSearch from './GooglePlacesSearch/GooglePlacesSearch'
 
 import Header from './Header'
 import Sidebar from './Sidebar'
@@ -49,60 +48,6 @@ class App extends Component {
         }
     }
 
-
-    // renderHeader() {
-    //     const {
-    //         activeTab, isMobile, place, setPlace, setTab
-    //     } = this.props
-
-    //     if (isMobile) {
-    //         const handleInfoClick = () => this.handleSetTab('Info')
-
-    //         // hide current tab so that we can show the point on the map
-    //         const handleSetPlace = (newPlace) => {
-    //             setTab(null)
-    //             setPlace(newPlace)
-    //         }
-
-    //         return (
-    //             <header>
-    //                 <div id="InfoButton" className={activeTab === 'Info' ? 'active' : ''} onClick={handleInfoClick}>
-    //                     i
-    //                 </div>
-
-    //                 <GooglePlacesSearch
-    //                     ref={(ref) => {
-    //                         this.placeSearch = ref
-    //                     }}
-    //                     selected={place}
-    //                     onSelect={handleSetPlace}
-    //                 />
-    //             </header>
-    //         )
-    //     }
-
-    //     return (
-    //         <header>
-    //             <div className="flex-container flex-justify-center flex-align-center">
-    //                 <img
-    //                     src="/logo_96x96.png"
-    //                     style={{ height: 32, padding: 6, verticalAlign: 'middle' }}
-    //                     alt="SALCC Logo"
-    //                 />
-    //                 South Atlantic Conservation Blueprint 2.2
-    //             </div>
-
-    //             <GooglePlacesSearch
-    //                 ref={(ref) => {
-    //                     this.placeSearch = ref
-    //                 }}
-    //                 selected={place}
-    //                 onSelect={setPlace}
-    //             />
-    //         </header>
-    //     )
-    // }
-
     renderError() {
         if (!this.props.hasError) return null
 
@@ -128,11 +73,7 @@ class App extends Component {
             <div className={isMobile ? 'is-mobile' : 'is-desktop'}>
                 <Header />
 
-                {isMobile ? (
-                    <ContentOverlay />
-                ) : (
-                    <Sidebar />
-                )}
+                {isMobile ? <ContentOverlay /> : <Sidebar />}
 
                 <Map
                     isMobile={isMobile}
@@ -154,7 +95,6 @@ class App extends Component {
 App.propTypes = {
     activeTab: PropTypes.string,
     selectedUnit: PropTypes.string,
-    // isPending: PropTypes.bool.isRequired,
     hasError: PropTypes.bool.isRequired,
     isMobile: PropTypes.bool.isRequired, // responsive browser state
     place: PlacePropType,

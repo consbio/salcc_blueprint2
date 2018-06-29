@@ -61,3 +61,9 @@ export const setPlace = place => ({
     type: SET_PLACE,
     place
 })
+
+export const SET_PLACES = 'SET_PLACES'
+export const setPlaces = places => ({
+    type: SET_PLACES,
+    places
+})
