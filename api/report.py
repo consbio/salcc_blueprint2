@@ -171,24 +171,22 @@ def generate_report_context(id):
 
     context['table']['ecosystems'] = ecosystems_table
 
-    # TODO: Indicators
+    # Indicators
+
+    context['ecosystem_indicators'] = []
 
     for zone in context_json['ecosystems']:
         print('zone: ', zone)
 
         ecosystem_indicators = {
-            'ecosystem_name': '',
-            'ecosystem_percentage': '',
+            'ecosystem_name': ecosystems_json[zone]['label'],
             'indicators': []
         }
 
-        
+        if 'percent' in context_json['ecosystems'][zone]:
+            ecosystem_indicators['ecosystem_percentage'] = context_json['ecosystems'][zone]['percent']
 
         zone_details = ecosystems_json[zone]
-
-        if 'percent' in context_json['ecosystems'][zone]:
-            print('indicator percentage: ', context_json['ecosystems'][zone]['percent'])
-
 
         for indicator in zone_details['indicators']:
             indicator_data = {
@@ -203,14 +201,11 @@ def generate_report_context(id):
                     }
                 }
             }
-            # Template also references {{value:summary_unit_name}}
 
             indicator_data['value']['indicator_name'] = ecosystems_json[zone]['indicators'][indicator]['label']
             indicator_data['value']['indicator_description'] = ecosystems_json[zone]['indicators'][indicator]['description']
-            indicator_data['value']['ecosystem_name'] = ecosystems_json[zone]['label']
 
             index = 0
-
             if 'indicators' in context_json['ecosystems'][zone]:
                 for val_label in ecosystems_json[zone]['indicators'][indicator]['valueLabels']:
                     table_row = []
@@ -226,14 +221,13 @@ def generate_report_context(id):
                     table_row.append(acreage)
                     table_row.append(percentage)
                     index += 1
-                # print('table row: ', table_row)
+                    # print('table row: ', table_row)
 
-                indicator_data['table']['indicator_table']['rows'].append(table_row)
+                    indicator_data['table']['indicator_table']['rows'].append(table_row)
 
-             print('indicator data: ', indicator_data)
-            # ecosystems_indicators['indicators'].append(indicator_data)
+            ecosystem_indicators['indicators'].append(indicator_data)
 
-
+        context['ecosystem_indicators'].append(ecosystem_indicators)
 
     # Partners list - name and url separated by categories
 
@@ -353,6 +347,7 @@ def generate_report_context(id):
 
     context['table']['protection'] = protection
 
+    print('context: ', context)
     return context
 
 
