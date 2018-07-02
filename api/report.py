@@ -42,12 +42,12 @@ def create_report(id, path):
 
         if '{{INDICATORS}}' in p.text:
             # Remove '{{INDICATORS}}'placeholder and add the report content above empty p.text
+            # Because we're not using replace(match.group()) here, everything must be moved into place
             p.text = ''
 
             zone_insertion_point = p
 
             for zone in context['ecosystem_indicators']:
-                # print('zone: ', zone)
                 if 'ecosystem_percentage' in zone:
                     heading = zone['ecosystem_name'] + ': ' + str(zone['ecosystem_percentage']) + "% of area"
                     eco_h = doc.add_heading(heading, 1)
@@ -59,33 +59,38 @@ def create_report(id, path):
 
                 indicator_insertion_point = eco_h
 
-                for indicator in zone['indicators']:
+                if zone['indicators']:
+                    for indicator in zone['indicators']:
 
-                    indicator_boilerplate = 'The average value of the indicator in the {0}, compared to the South ' \
-                                            'Atlantic average. The South Atlantic average is the average of ' \
-                                            'all HUC12 averages in the South Atlantic region.'.format(
-                                             context['value']['summary_unit_name'])
-                    indicator_boilerplate2 = 'The area of {0} values as they occur within the {1} ecosystem in the ' \
-                                             '{2}. Indicator ratings for condition have not yet been set for this ' \
-                                             'indicator.'.format(indicator['value']['indicator_name'],
-                                                                 zone['ecosystem_name'],
-                                                                 context['value']['summary_unit_name'])
+                        indicator_boilerplate = 'The average value of the indicator in the {0}, compared to the South ' \
+                                                'Atlantic average. The South Atlantic average is the average of ' \
+                                                'all HUC12 averages in the South Atlantic region.'.format(
+                                                 context['value']['summary_unit_name'])
+                        indicator_boilerplate2 = 'The area of {0} values as they occur within the {1} ecosystem in the ' \
+                                                 '{2}. Indicator ratings for condition have not yet been set for this ' \
+                                                 'indicator.'.format(indicator['value']['indicator_name'],
+                                                                     zone['ecosystem_name'],
+                                                                     context['value']['summary_unit_name'])
 
-                    ind_h = doc.add_heading(indicator['value']['indicator_name'], 4)
-                    _move_p_after(ind_h, indicator_insertion_point)
-                    ind_descrip = doc.add_paragraph(indicator['value']['indicator_description'])
-                    _move_p_after(ind_descrip, ind_h)
+                        ind_h = doc.add_heading(indicator['value']['indicator_name'], 4)
+                        _move_p_after(ind_h, indicator_insertion_point)
+                        ind_descrip = doc.add_paragraph(indicator['value']['indicator_description'])
+                        _move_p_after(ind_descrip, ind_h)
 
-                    boiler1 = doc.add_paragraph(indicator_boilerplate)
-                    _move_p_after(boiler1, ind_descrip)
-                    boiler2 = doc.add_paragraph(indicator_boilerplate2)
-                    _move_p_after(boiler2, boiler1)
+                        boiler1 = doc.add_paragraph(indicator_boilerplate)
+                        _move_p_after(boiler1, ind_descrip)
+                        boiler2 = doc.add_paragraph(indicator_boilerplate2)
+                        _move_p_after(boiler2, boiler1)
 
-                    table_end = create_table(doc, zone['indicators'][0]['table']['indicator_table'], boiler2)
+                        section_end = create_table(doc, zone['indicators'][0]['table']['indicator_table'], boiler2)
 
-                    indicator_insertion_point = table_end
+                        indicator_insertion_point = section_end
 
-            zone_insertion_point = table_end
+                    zone_insertion_point = section_end
+                else:
+                    temp_text = doc.add_paragraph('(No indicators for this ecosystem.)')
+                    _move_p_after(temp_text, eco_h)
+                    zone_insertion_point = temp_text
 
             # Delete the placeholder para
             delete_paragraph(p)
@@ -227,45 +232,44 @@ def generate_report_context(id):
         if 'percent' in context_json['ecosystems'][zone]:
             ecosystem_indicators['ecosystem_percentage'] = context_json['ecosystems'][zone]['percent']
 
-        zone_details = ecosystems_json[zone]
-
-        for indicator in zone_details['indicators']:
-            indicator_data = {
-                'value': {
-                    'indicator_name': '',
-                    'indicator_description': ''
-                },
-                'table': {
-                    'indicator_table': {
-                        'col_names': ['Indicator Values', 'Area', 'Percent of Area'],
-                        'rows': []
+        if 'indicators' in context_json['ecosystems'][zone]:
+            for indicator in context_json['ecosystems'][zone]['indicators']:
+                indicator_data = {
+                    'value': {
+                        'indicator_name': '',
+                        'indicator_description': ''
+                    },
+                    'table': {
+                        'indicator_table': {
+                            'col_names': ['Indicator Values', 'Area', 'Percent of Area'],
+                            'rows': []
+                        }
                     }
                 }
-            }
 
-            indicator_data['value']['indicator_name'] = ecosystems_json[zone]['indicators'][indicator]['label']
-            indicator_data['value']['indicator_description'] = ecosystems_json[zone]['indicators'][indicator]['description']
+                indicator_data['value']['indicator_name'] = ecosystems_json[zone]['indicators'][indicator]['label']
+                indicator_data['value']['indicator_description'] = ecosystems_json[zone]['indicators'][indicator]['description']
 
-            index = 0
-            if 'indicators' in context_json['ecosystems'][zone]:
-                for val_label in ecosystems_json[zone]['indicators'][indicator]['valueLabels']:
-                    table_row = []
+                index = 0
+                if 'indicators' in context_json['ecosystems'][zone]:
+                    for val_label in ecosystems_json[zone]['indicators'][indicator]['valueLabels']:
+                        table_row = []
 
-                    # Find acreage
-                    percentage = context_json['ecosystems'][zone]['indicators'][indicator]['percent'][index]
-                    if percentage is not 0:
-                        acreage = round(acres * (percentage / 100))
-                    else:
-                        acreage = 0
+                        # Find acreage
+                        percentage = context_json['ecosystems'][zone]['indicators'][indicator]['percent'][index]
+                        if percentage is not 0:
+                            acreage = round(acres * (percentage / 100))
+                        else:
+                            acreage = 0
 
-                    table_row.append(ecosystems_json[zone]['indicators'][indicator]['valueLabels'][val_label])
-                    table_row.append(acreage)
-                    table_row.append(percentage)
-                    index += 1
+                        table_row.append(ecosystems_json[zone]['indicators'][indicator]['valueLabels'][val_label])
+                        table_row.append(acreage)
+                        table_row.append(percentage)
+                        index += 1
 
-                    indicator_data['table']['indicator_table']['rows'].append(table_row)
+                        indicator_data['table']['indicator_table']['rows'].append(table_row)
 
-            ecosystem_indicators['indicators'].append(indicator_data)
+                ecosystem_indicators['indicators'].append(indicator_data)
 
         context['ecosystem_indicators'].append(ecosystem_indicators)
 
@@ -424,6 +428,8 @@ def create_table(doc, data, para):
     _move_table_after(table, para)
 
     end_buffer = doc.add_paragraph('')
+    _move_p_after_t(table, end_buffer)
+
     return end_buffer
 
 
@@ -461,6 +467,10 @@ def _move_table_after(table, paragraph):
 
     """
     paragraph._p.addnext(table._tbl)
+
+
+def _move_p_after_t(table, para):
+    table._tbl.addnext(para._p)
 
 
 def add_hyperlink(paragraph, url, text):
