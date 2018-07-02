@@ -43,7 +43,49 @@ def create_report(id, path):
         if '{{INDICATORS}}' in p.text:
             # Remove '{{INDICATORS}}'placeholder and add the report content above empty p.text
             p.text = ''
-            # do things
+
+            zone_insertion_point = p
+
+            for zone in context['ecosystem_indicators']:
+                # print('zone: ', zone)
+                if 'ecosystem_percentage' in zone:
+                    heading = zone['ecosystem_name'] + ': ' + str(zone['ecosystem_percentage']) + "% of area"
+                    eco_h = doc.add_heading(heading, 1)
+                    _move_p_after(eco_h, zone_insertion_point)
+                else:
+                    heading = zone['ecosystem_name']
+                    eco_h = doc.add_heading(heading, 1)
+                    _move_p_after(eco_h, zone_insertion_point)
+
+                indicator_insertion_point = eco_h
+
+                for indicator in zone['indicators']:
+
+                    indicator_boilerplate = 'The average value of the indicator in the {0}, compared to the South ' \
+                                            'Atlantic average. The South Atlantic average is the average of ' \
+                                            'all HUC12 averages in the South Atlantic region.'.format(
+                                             context['value']['summary_unit_name'])
+                    indicator_boilerplate2 = 'The area of {0} values as they occur within the {1} ecosystem in the ' \
+                                             '{2}. Indicator ratings for condition have not yet been set for this ' \
+                                             'indicator.'.format(indicator['value']['indicator_name'],
+                                                                 zone['ecosystem_name'],
+                                                                 context['value']['summary_unit_name'])
+
+                    ind_h = doc.add_heading(indicator['value']['indicator_name'], 4)
+                    _move_p_after(ind_h, indicator_insertion_point)
+                    ind_descrip = doc.add_paragraph(indicator['value']['indicator_description'])
+                    _move_p_after(ind_descrip, ind_h)
+
+                    boiler1 = doc.add_paragraph(indicator_boilerplate)
+                    _move_p_after(boiler1, ind_descrip)
+                    boiler2 = doc.add_paragraph(indicator_boilerplate2)
+                    _move_p_after(boiler2, boiler1)
+
+                    table_end = create_table(doc, zone['indicators'][0]['table']['indicator_table'], boiler2)
+
+                    indicator_insertion_point = table_end
+
+            zone_insertion_point = table_end
 
             # Delete the placeholder para
             delete_paragraph(p)
@@ -176,7 +218,6 @@ def generate_report_context(id):
     context['ecosystem_indicators'] = []
 
     for zone in context_json['ecosystems']:
-        print('zone: ', zone)
 
         ecosystem_indicators = {
             'ecosystem_name': ecosystems_json[zone]['label'],
@@ -221,7 +262,6 @@ def generate_report_context(id):
                     table_row.append(acreage)
                     table_row.append(percentage)
                     index += 1
-                    # print('table row: ', table_row)
 
                     indicator_data['table']['indicator_table']['rows'].append(table_row)
 
@@ -347,7 +387,6 @@ def generate_report_context(id):
 
     context['table']['protection'] = protection
 
-    print('context: ', context)
     return context
 
 
@@ -383,6 +422,9 @@ def create_table(doc, data, para):
             row.cells[index].text = str(datacell)
 
     _move_table_after(table, para)
+
+    end_buffer = doc.add_paragraph('')
+    return end_buffer
 
 
 def _move_p_after(p_move, p_destination):
@@ -490,6 +532,6 @@ def _resolve(scope, key, context):
 
 if __name__ == '__main__':
     id = 'I1'
-    outpath = '/tmp/{0}.docx'.format(id)
-    # outpath = 'tests/{0}.docx'.format(id)
+    # outpath = '/tmp/{0}.docx'.format(id)
+    outpath = 'tests/{0}.docx'.format(id)
     create_report(id, outpath)
