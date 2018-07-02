@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <title>South Atlantic LCC Blueprint 2.2 Simple Viewer</title>
     <meta charset="utf-8">
@@ -10,10 +11,12 @@
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyC-cJyko65Q5A8yg1r39ezek_Aj0hUVNGs"></script>
 
     <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
         ga('create', 'UA-38720072-1', 'auto');
         ga('send', 'pageview');
@@ -35,23 +38,24 @@
             justify-content: center;
         }
 
-        @-webkit-keyframes spin{
-            0%{
-                -webkit-transform:rotate(0deg) scale(1);
-                transform:rotate(0deg) scale(1);
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg) scale(1);
+                transform: rotate(0deg) scale(1);
                 background-color: #EEE;
             }
             50% {
                 -webkit-transform: rotate(180deg) scale(0.5);
-                transform:  rotate(180deg) scale(0.5);
+                transform: rotate(180deg) scale(0.5);
                 background-color: red;
             }
-            100%{
-                -webkit-transform:rotate(359deg) scale(1);
-                transform:rotate(359deg) scale(1);
+            100% {
+                -webkit-transform: rotate(359deg) scale(1);
+                transform: rotate(359deg) scale(1);
                 background-color: #EEE;
             }
         }
+
         @keyframes spin {
             0% {
                 -webkit-transform: rotate(0deg) scale(1);
@@ -59,8 +63,8 @@
                 background-color: #EEE;
             }
             50% {
-                -webkit-transform:  rotate(180deg) scale(0.5);
-                transform:  rotate(180deg) scale(0.5);
+                -webkit-transform: rotate(180deg) scale(0.5);
+                transform: rotate(180deg) scale(0.5);
                 background-color: #009DD1;
             }
             100% {
@@ -69,6 +73,7 @@
                 background-color: #EEE;
             }
         }
+
         .spinner {
             /* dimensions and background size MUST be on element */
             background: #EEE no-repeat center center;
@@ -79,6 +84,7 @@
         }
     </style>
 </head>
+
 <body>
     <noscript>
         You need to enable JavaScript to run this app.
@@ -89,27 +95,6 @@
             <div class="spinner" style="width: 100px;height:100px;background-size:100px;"></div>
         </div>
     </div>
-
-
-
-    <!-- SVG patterns for threats tab
-    <svg height="40" width="40" xmlns="http://www.w3.org/2000/svg" version="1.1">
-        <defs>
-            <pattern id="dots-6" patternUnits="userSpaceOnUse" width="40" height="40">
-                <image xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGMAAABiCAMAAABzuZ0CAAAAgVBMVEUAAAAARkYAM1AAM1cAOFIAOFYAOFsAOlsAPVIAPVUAPVgDPVgMPVgAOVUAOVoFOVMAOFQAOFoKOFgAN1EAN1QCN08CN1QCN1YCN1kFN1MFN1YKMlkKN1kAN1MHM1cON1ceG0IAOE4AOFQAOFYFOFYAExoAExsAExwAEx4IChkAAAAX8TVOAAAAKnRSTlMACyMjOzs7VFRUVFRUbGxshYWFnZ2dnZ2dnZ2dnbW1tbXOzs7O9vb29vavmgfaAAAA9ElEQVR42u3Zxw7CMBAE0A2mhd57C535/w/kkkgbSxaWggOImeNa9jt511EE4UODRkBDVBRr1z1WIl0PYdj1WgnGuAQDNGjQ8DImBY2roy7KgM9RJ+is1ErfhX9ifjw4B2nQoGElQZaplyGBertwDtKgQePNRhLI2CsDyyqAIdb3WrOTP6oJHOcAziPks0AWC78hzWDFGUWDxhcZRiSSGHELEuXXpSKmV28Mxdg7pZFGrHo9Tb5fGb6vaNCg8X9G5DLcueJ1Yuhs1V6nceAcpPGj/+52he7gzHUHL4F6yYY9kQaNvzK6ZX/jwMto+2zhjKIRLk8Ia2JdIF1ZKwAAAABJRU5ErkJggg==
-    " x="0" y="0" width="40" height="40"></image>
-            </pattern>
-        </defs>
-    </svg>
-
-    <svg height="220" width="320" xmlns="http://www.w3.org/2000/svg" version="1.1">
-        <defs>
-            <pattern id="landprofile" patternUnits="userSpaceOnUse" width="320" height="220">
-                <image xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAVwAAACCCAMAAAA9i4D1AAAAbFBMVEUAAAAXFxcaGhobGxsaGhoZGRkYGBgYGBgWFhYVFRUAAAABAQECAQECAgIDAwMEBAQFBAQFBQUGBQUGBgYHBgYHBwcICAgJCQkKCgoLCwsMDAwNDQ0ODg4PDw8QEBARERESEhITExMUFBQVFRVDsJ8UAAAACnRSTlMACztUbIWdtc7maFdM9gAAAbNJREFUeAHt201u0wAUAGF+SEzHJCH8kBASU9P73xGJVRdQleJRUTTfCaxZ2e89v7g6SZIkSZIkSZIkSZIkoQTF1Qim/cgvS8fNcbeB4irWgBI3gBI3r+azFTeAEzc7rLiZRilujkBx1bZC3NwixQ3gxM1pW1wNFNdCcTWH4mrO2+JqoLiSaVdczWeKa+G+4ha3uBkoruZjcTXcV9ziFjcvKa5mV1zLHorrAIqrOEBxHUBxFSdw4gZQ4uYCTtwAStzM4MTNCE7crECKmzVW3AxYcXODFTd3WHHzAytuZqy4ucWKm+9YcTNhxc0FK27OWHHzDStuTlhx8xUvbm2tuDlixc0BK26+YMXNHkFfZHiaIYiaeoma0y6guFiKe8FS3A2W4qIpLpbivsZS3AOW4vKMaiuqrah7ugcUF01xKa5mLK7mSHEtK4qrobgaiquhuBqKq9kX92neAJyEVW5xV495PIq7wLvrZam2xV3zG+MCbYs78EfzP7Ut7sDDNk+9QijuWx5j+Pt/F4p7g6S4Wtri3nGl2iKKSmvG/fR8PmxxFNdLW9z378blFVdU3OL+34pb3J8UuuKdxMiMPAAAAABJRU5ErkJggg==
-    " x="0" y="0" width="320" height="220"></image>
-            </pattern>
-        </defs>
-    </svg>
-    -->
 </body>
+
 </html>

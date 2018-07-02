@@ -1,41 +1,50 @@
-/* eslint-disable max-len */
+/* eslint-disable max-len, no-underscore-dangle */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { scaleLinear } from 'd3-scale'
+import { connect } from 'react-redux'
+
 import L from 'leaflet'
 import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png'
 import iconUrl from 'leaflet/dist/images/marker-icon.png'
 import shadowUrl from 'leaflet/dist/images/marker-shadow.png'
 import 'leaflet.vectorgrid'
 import 'leaflet-basemaps'
+import 'leaflet-zoombox'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-basemaps/L.Control.Basemaps.css'
+import 'leaflet-zoombox/L.Control.ZoomBox.css'
+
+import * as actions from '../../Actions/actions'
+import LocateControl from './LocateControl'
+import { PlacePropType } from '../../CustomPropTypes'
+
+const MAPBOX_TOKEN = 'pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ'
 
 // Make leaflet icons work properly from webpack / react context
-/* eslint-disable no-underscore-dangle */
+
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({ iconRetinaUrl, iconUrl, shadowUrl })
 
 // Map configurationParameters
 const config = {
     mapParams: {
-        center: [33.358, -78.593], // [33.358, -80]
+        center: [33.358, -80], // FIXME: [33.358, -78.593],
         // zoom: 5,
-        zoom: 13,
+        zoom: 10,
         minZoom: 3,
         maxZoom: 15,
         zoomControl: false,
         scrollwheel: false,
-        attributionControl: false,
+        // attributionControl: false,
         zIndex: 1
     },
     basemaps: [
         L.tileLayer(
-            'https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ',
+            `https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`,
             {}
         ),
         L.tileLayer(
-            'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ',
+            `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`,
             {
                 opacity: 0.6
             }
@@ -72,50 +81,26 @@ const config = {
     }
 }
 
-const LocateControlClass = L.Control.extend({
-    options: {
-        position: 'topright',
-        maxZoom: 10
-    },
+const opacityScale = (zoom) => {
+    const minZoom = 3
+    const maxZoom = 13
+    const opacityRange = [0.5, 0.3] // go from 0.5 opacity at zoom 3 to 0.3 at zoom 13
+    if (zoom <= minZoom) return opacityRange[0]
+    if (zoom >= maxZoom) return opacityRange[1]
 
-    // Connection point
-    /* eslint-disable no-unused-vars */
-    onLocationFound: (lat, lng) => {},
-
-    onAdd(map) {
-        this._map = map
-        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-locate-control')
-        L.DomEvent.disableClickPropagation(container)
-
-        const link = L.DomUtil.create('a', '', container)
-        link.href = '#'
-
-        L.DomEvent.on(link, 'click', L.DomEvent.stopPropagation)
-            .on(link, 'click', L.DomEvent.preventDefault)
-            .on(link, 'click', () => {
-                this._map.locate({ setView: true, maxZoom: this.options.maxZoom })
-            })
-            .on(link, 'dblclick', L.DomEvent.stopPropagation)
-
-        map.on('locationfound', (e) => {
-            this.onLocationFound(e.latlng.lat, e.latlng.lng)
-        })
-
-        map.on('locationerror', () => {
-            /* eslint-disable-next-line no-alert */
-            alert('Unable to determine location.  Make sure your settings allow location services.')
-        })
-
-        return container
-    }
-})
+    const p = (zoom - minZoom) / (maxZoom - minZoom) // proportion of way through zoom range
+    /* eslint-disable-next-line no-mixed-operators */
+    return p * (opacityRange[1] - opacityRange[0]) + opacityRange[0]
+}
 
 class Map extends Component {
     constructor(props) {
         super(props)
+
+        const { place, selectedUnit } = props
         this.state = {
-            place: this.props.place,
-            selectedUnit: this.props.selectedUnit,
+            place,
+            selectedUnit,
             zoom: config.mapParams.zoom
         }
 
@@ -127,14 +112,20 @@ class Map extends Component {
 
     componentDidMount() {
         const { place, selectedUnit } = this.state
+        const { isMobile, setPlace } = this.props
+        config.mapParams.attributionControl = !isMobile
         const map = L.map(this._mapNode, config.mapParams)
         this.map = map
 
-        map.addLayer(config.blueprintLayer)
+        // for easier debugging
+        window.map = map
 
-        const opacityScale = scaleLinear()
-            .domain([3, 13])
-            .range([0.5, 0.3])
+        if (!isMobile) {
+            L.control.zoom({ position: 'topright' }).addTo(map)
+            L.control.zoomBox({ position: 'topright' }).addTo(map)
+        }
+
+        map.addLayer(config.blueprintLayer)
         config.blueprintLayer.setOpacity(opacityScale(map.getZoom())) // do this on initial load too
 
         map.on('zoomend', () => {
@@ -154,14 +145,14 @@ class Map extends Component {
             tileX: 4,
             tileY: 6,
             tileZ: 4,
-            position: 'topright'
+            position: isMobile ? 'topright' : 'bottomleft'
         })
         map.addControl(basemapsControl)
 
-        this.locateControl = new LocateControlClass()
+        this.locateControl = new LocateControl()
         // overriding functions here to bind to outer scope
         this.locateControl.onLocationFound = (lat, lng) => {
-            this.props.onSetLocation({
+            setPlace({
                 label: null,
                 location: { lat, lng }
             })
@@ -224,20 +215,31 @@ class Map extends Component {
     }
 
     _handleSelect(id) {
-        if (this.state.selectedUnit !== null) {
-            this._unhighlightUnit(this.state.selectedUnit)
+        const { selectedUnit } = this.state
+        const {
+            activeTab, isMobile, selectUnit, deselectUnit, setTab
+        } = this.props
 
-            // Selecting the same unit again deselects it
-            if (id === this.state.selectedUnit) {
-                this.setState({ selectedUnit: null })
-                this.props.onDeselectUnit()
+        if (selectedUnit !== null) {
+            if (id === selectedUnit) {
+                if (isMobile) {
+                    // Selecting the same unit again deselects it
+                    this.setState({ selectedUnit: null })
+                    this._unhighlightUnit(selectedUnit)
+                    deselectUnit()
+                }
                 return
             }
+
+            this._unhighlightUnit(selectedUnit)
         }
 
         this._highlightUnit(id)
         this.setState({ selectedUnit: id })
-        this.props.onSelectUnit(id)
+        selectUnit(id)
+        if (!isMobile && !activeTab) {
+            setTab('Priorities')
+        }
     }
 
     _highlightUnit = (id) => {
@@ -271,7 +273,6 @@ class Map extends Component {
                         this._mapNode = node
                     }}
                     id="Map"
-                    onClick={this.props.onClick}
                 />
             </div>
         )
@@ -279,38 +280,40 @@ class Map extends Component {
 }
 
 Map.propTypes = {
-    // TODO: place is expected to be:
-    // {
-    //     label: 'Place name',
-    //     location: {lat: 44.1, lng: -123.2}
-    // }
-    place: PropTypes.shape({
-        label: PropTypes.string.isRequired,
-        location: PropTypes.shape({
-            lat: PropTypes.number.isRequired,
-            lng: PropTypes.number.isRequired
-        }).isRequired
-    }),
-    selectedUnit: PropTypes.string,
-    onSelectUnit: PropTypes.func,
-    onDeselectUnit: PropTypes.func,
-    onSetLocation: PropTypes.func,
-    onClick: PropTypes.func
+    isMobile: PropTypes.bool.isRequired,
+    setPlace: PropTypes.func.isRequired,
+    selectUnit: PropTypes.func.isRequired,
+    deselectUnit: PropTypes.func.isRequired,
+    setTab: PropTypes.func.isRequired,
+
+    activeTab: PropTypes.string,
+    place: PlacePropType,
+    selectedUnit: PropTypes.string
 }
 
 Map.defaultProps = {
+    activeTab: null,
     place: null,
-    selectedUnit: null,
-    onSelectUnit: (id) => {
-        console.log('Selected map unit: ', id) /* eslint-disable-line no-console */
-    },
-    onDeselectUnit: () => {
-        console.log('Deselected map unit') /* eslint-disable-line no-console */
-    },
-    onSetLocation: (place) => {
-        console.log('Set location using location services', place) /* eslint-disable-line no-console */
-    },
-    onClick: () => console.log('map onClick') /* eslint-disable-line no-console */
+    selectedUnit: null
 }
 
-export default Map
+const mapStateToProps = ({
+    app: {
+        activeTab, place, selectedUnit, selectUnit, deselectUnit, setPlace, setTab
+    },
+    browser: { isMobile }
+}) => ({
+    activeTab,
+    isMobile,
+    place,
+    selectedUnit,
+    selectUnit,
+    deselectUnit,
+    setPlace,
+    setTab
+})
+
+export default connect(
+    mapStateToProps,
+    actions
+)(Map)
