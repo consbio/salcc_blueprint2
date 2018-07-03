@@ -4,6 +4,7 @@ import json
 import docx
 
 from docx import Document
+from docx.shared import Cm, Inches
 
 
 # TODO: Improve custom table style in template.docx
@@ -50,11 +51,11 @@ def create_report(id, path):
             for zone in context['ecosystem_indicators']:
                 if 'ecosystem_percentage' in zone:
                     heading = zone['ecosystem_name'] + ': ' + str(zone['ecosystem_percentage']) + "% of area"
-                    eco_h = doc.add_heading(heading, 1)
+                    eco_h = doc.add_paragraph(heading, style='Heading13')
                     _move_p_after(eco_h, zone_insertion_point)
                 else:
                     heading = zone['ecosystem_name']
-                    eco_h = doc.add_heading(heading, 1)
+                    eco_h = doc.add_paragraph(heading, style='Heading13')
                     _move_p_after(eco_h, zone_insertion_point)
 
                 indicator_insertion_point = eco_h
@@ -72,7 +73,7 @@ def create_report(id, path):
                                                                      zone['ecosystem_name'],
                                                                      context['value']['summary_unit_name'])
 
-                        ind_h = doc.add_heading(indicator['value']['indicator_name'], 4)
+                        ind_h = doc.add_paragraph(indicator['value']['indicator_name'], style='Heading11')
                         _move_p_after(ind_h, indicator_insertion_point)
                         ind_descrip = doc.add_paragraph(indicator['value']['indicator_description'])
                         _move_p_after(ind_descrip, ind_h)
@@ -104,7 +105,7 @@ def create_report(id, path):
             h_insert_point = p
 
             for category in context['partners']:
-                heading = doc.add_heading(context['partner_headers'][category], 2)
+                heading = doc.add_paragraph(context['partner_headers'][category], style='Heading10')
                 # Headings are created at the end of the doc and must be moved into place
                 _move_p_after(heading, h_insert_point)
 
@@ -122,7 +123,7 @@ def create_report(id, path):
                 h_insert_point = part
 
             # Counties
-            county_header = doc.add_heading('Land Trusts (by county)', 2)
+            county_header = doc.add_paragraph('Land Trusts (by county)', style='Heading10')
             c_insert_point = p_insert_point
             _move_p_after(county_header, c_insert_point)
             c_insert_point = county_header
@@ -411,6 +412,7 @@ def create_table(doc, data, para):
 
     styles = doc.styles
     ncols = len(data['col_names'])
+    nrows = len(data['rows'])
 
     # Create table with one row for column headings
     table = doc.add_table(rows=1, cols=ncols)
@@ -425,12 +427,21 @@ def create_table(doc, data, para):
         for index, datacell in enumerate(datarow):
             row.cells[index].text = str(datacell)
 
+    set_col_widths(table)
+
     _move_table_after(table, para)
 
     end_buffer = doc.add_paragraph('')
     _move_p_after_t(table, end_buffer)
 
     return end_buffer
+
+
+def set_col_widths(table):
+    widths = (Cm(9), Cm(4), Cm(4))
+    for row in table.rows:
+        for idx, width in enumerate(widths):
+            row.cells[idx].width = width
 
 
 def _move_p_after(p_move, p_destination):
@@ -541,7 +552,7 @@ def _resolve(scope, key, context):
 
 
 if __name__ == '__main__':
-    id = 'I1'
+    id = 'I2'
     # outpath = '/tmp/{0}.docx'.format(id)
     outpath = 'tests/{0}.docx'.format(id)
     create_report(id, outpath)
