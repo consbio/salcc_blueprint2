@@ -4,7 +4,7 @@ import json
 import docx
 
 from docx import Document
-from docx.shared import Cm, Inches
+from docx.shared import Cm
 
 
 # TODO: Improve custom table style in template.docx
@@ -114,6 +114,7 @@ def create_report(id, path):
 
                 for partner in context['partners'][category]:
                     part = doc.add_paragraph(style='List Bullet')
+                    # part = doc.add_paragraph(style='BulletHyperlink')
                     add_hyperlink(part, partner[1], partner[0])
                     # Paragraphs are created at the end of the doc and must be moved into place
                     _move_p_after(part, p_insert_point)
@@ -446,10 +447,7 @@ def set_col_widths(table):
 
 def _move_p_after(p_move, p_destination):
     """
-    Move the table after 'pararaph.'
-    Normally, tables are created at the end of the document.
-    This function allows you to move them to a different location in the document.
-    The paragraph passed in is not modified, it is just used as a reference point for inserting the table.
+    Move one paragraph after another
 
     Parameters
     ----------
@@ -464,7 +462,7 @@ def _move_p_after(p_move, p_destination):
 
 def _move_table_after(table, paragraph):
     """
-    Move the table after 'pararaph.'
+    Move the table after 'paragraph.'
     Normally, tables are created at the end of the document.
     This function allows you to move them to a different location in the document.
     The paragraph passed in is not modified, it is just used as a reference point for inserting the table.
@@ -481,6 +479,9 @@ def _move_table_after(table, paragraph):
 
 
 def _move_p_after_t(table, para):
+    """
+    Move a paragraph after a table
+    """
     table._tbl.addnext(para._p)
 
 
