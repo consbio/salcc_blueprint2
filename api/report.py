@@ -103,6 +103,7 @@ def create_report(id, path):
             # TODO: Find a better way to do this! Paras are appended at end of doc & have to be moved into place
             # Where to insert the next heading
             h_insert_point = p
+            p_insert_point = h_insert_point
 
             for category in context['partners']:
                 heading = doc.add_paragraph(context['partner_headers'][category], style='Heading10')
@@ -124,16 +125,17 @@ def create_report(id, path):
                 h_insert_point = part
 
             # Counties
-            county_header = doc.add_paragraph('Land Trusts (by county)', style='Heading10')
-            c_insert_point = p_insert_point
-            _move_p_after(county_header, c_insert_point)
-            c_insert_point = county_header
-            for county in context['counties']:
-                county_name = doc.add_paragraph(style='List Bullet')
-                add_hyperlink(county_name, county['url'], county['name'])
-                _move_p_after(county_name, c_insert_point)
-                # Change insertion point so next county follows this one
-                c_insert_point = county_name
+            if 'counties' in context:
+                county_header = doc.add_paragraph('Land Trusts (by county)', style='Heading10')
+                c_insert_point = p_insert_point
+                _move_p_after(county_header, c_insert_point)
+                c_insert_point = county_header
+                for county in context['counties']:
+                    county_name = doc.add_paragraph(style='List Bullet')
+                    add_hyperlink(county_name, county['url'], county['name'])
+                    _move_p_after(county_name, c_insert_point)
+                    # Change insertion point so next county follows this one
+                    c_insert_point = county_name
 
             # Delete the placeholder para
             delete_paragraph(p)
@@ -174,23 +176,26 @@ def generate_report_context(id):
         'rows': []
     }
 
-    index = 0
-    while index < 6:
-        # Find acreage
-        percentage = context_json['blueprint'][index]
-        if percentage is not 0:
-            acreage = round(acres * (percentage / 100))
-        else:
-            acreage = 0
+    if context_json['blueprint']:
+        index = 0
+        while index < 6:
+            # Find acreage
+            percentage = context_json['blueprint'][index]
+            if percentage is not 0:
+                acreage = round(acres * (percentage / 100))
+            else:
+                acreage = 0
+            priority_row = []
+            priority_row.append(priorities_json[str(index)]['label'])
+            priority_row.append(acreage)
+            priority_row.append(percentage)
+            # Insert at beginning, because data is stored in reverse order that it must be displayed
+            priorities['rows'].insert(0, priority_row)
+            index += 1
 
-        priority_row = []
-        priority_row.append(priorities_json[str(index)]['label'])
-        priority_row.append(acreage)
-        priority_row.append(percentage)
-        # Insert at beginning, because data is stored in reverse order that it must be displayed
-        priorities['rows'].insert(0, priority_row)
-        index += 1
-
+    else:
+        none_found = ['None provided for this dataset', '', '']
+        priorities['rows'].append(none_found)
     context['table']['priorities'] = priorities
 
     # Ecosystem table
@@ -312,51 +317,58 @@ def generate_report_context(id):
 
     counties = []
 
-    for index, (key, value) in enumerate(context_json['counties'].items()):
-        # key is FIPS and value is county with state
-        county_data = {
-            'name': value,
-            'url': 'http://findalandtrust.org/counties/{0}'.format(key)
-        }
-        counties.append(county_data)
-
-    context['counties'] = counties
+    if 'counties' in context_json:
+        for index, (key, value) in enumerate(context_json['counties'].items()):
+            # key is FIPS and value is county with state
+            county_data = {
+                'name': value,
+                'url': 'http://findalandtrust.org/counties/{0}'.format(key)
+            }
+            counties.append(county_data)
+            context['counties'] = counties
 
     # Ownership table
 
-    owners = {
-        'col_names': ['Ownership', 'Acres', 'Percent of Area'],
-        'rows': []
-    }
+    if 'owner' in context_json:
+        owners = {
+            'col_names': ['Ownership', 'Acres', 'Percent of Area'],
+            'rows': []
+        }
 
-    own_perc_sum = 0
+        own_perc_sum = 0
 
-    for owner_data in context_json['owner']:
-        owner_row = []
-        for owner_details in owners_json:
-            if owner_data == owner_details:
+        for owner_data in context_json['owner']:
+            owner_row = []
+            for owner_details in owners_json:
+                if owner_data == owner_details:
 
-                # Find acreage
-                percentage = context_json['owner'][owner_data]
-                own_perc_sum += percentage
+                    # Find acreage
+                    percentage = context_json['owner'][owner_data]
+                    own_perc_sum += percentage
 
-                if percentage is not 0:
-                    acreage = round(acres * (percentage / 100))
-                else:
-                    acreage = 0
+                    if percentage is not 0:
+                        acreage = round(acres * (percentage / 100))
+                    else:
+                        acreage = 0
 
-                owner_row.append(owners_json[owner_data]['label'])
-                owner_row.append(acreage)
-                owner_row.append(percentage)
-        owners['rows'].append(owner_row)
+                    owner_row.append(owners_json[owner_data]['label'])
+                    owner_row.append(acreage)
+                    owner_row.append(percentage)
+            owners['rows'].append(owner_row)
 
-    if own_perc_sum < 100:
-        perc_remainder = 100 - own_perc_sum
-        acreage = round(acres * (perc_remainder / 100))
-        remainder_row = ['Not conserved', acreage, perc_remainder]
-        owners['rows'].append(remainder_row)
+        if own_perc_sum < 100:
+            perc_remainder = 100 - own_perc_sum
+            acreage = round(acres * (perc_remainder / 100))
+            remainder_row = ['Not conserved', acreage, perc_remainder]
+            owners['rows'].append(remainder_row)
 
-    context['table']['ownership'] = owners
+        context['table']['ownership'] = owners
+    else:
+        owners = {
+            'col_names': ['Ownership', 'Acres', 'Percent of Area'],
+            'rows': [['None provided for this dataset', '', '']]
+        }
+        context['table']['ownership'] = owners
 
     # Protections table
 
@@ -367,31 +379,36 @@ def generate_report_context(id):
 
     pro_perc_sum = 0
 
-    for pro in context_json['gap']:
-        pro_row = []
+    if 'gap' in context_json:
+        for pro in context_json['gap']:
+            pro_row = []
 
-        # Find acreage
-        percentage = context_json['gap'][pro]
-        pro_perc_sum += percentage
+            # Find acreage
+            percentage = context_json['gap'][pro]
+            pro_perc_sum += percentage
 
-        if percentage is not 0:
-            acreage = round(acres * (percentage / 100))
-        else:
-            acreage = 0
+            if percentage is not 0:
+                acreage = round(acres * (percentage / 100))
+            else:
+                acreage = 0
 
-        pro_row.append(protection_json[pro]['label'])
-        pro_row.append(acreage)
-        pro_row.append(percentage)
+            pro_row.append(protection_json[pro]['label'])
+            pro_row.append(acreage)
+            pro_row.append(percentage)
 
-        protection['rows'].append(pro_row)
+            protection['rows'].append(pro_row)
 
-    if pro_perc_sum < 100:
-        perc_remainder = 100 - pro_perc_sum
-        acreage = round(acres * (perc_remainder / 100))
-        remainder_row = ['Not conserved', acreage, perc_remainder]
-        protection['rows'].append(remainder_row)
+        if pro_perc_sum < 100:
+            perc_remainder = 100 - pro_perc_sum
+            acreage = round(acres * (perc_remainder / 100))
+            remainder_row = ['Not conserved', acreage, perc_remainder]
+            protection['rows'].append(remainder_row)
 
-    context['table']['protection'] = protection
+        context['table']['protection'] = protection
+    else:
+        none_found = ['None provided for this dataset', '', '']
+        protection['rows'].append(none_found)
+        context['table']['protection'] = protection
 
     return context
 
@@ -553,7 +570,7 @@ def _resolve(scope, key, context):
 
 
 if __name__ == '__main__':
-    id = 'I2'
+    id = 'I1641'
     # outpath = '/tmp/{0}.docx'.format(id)
     outpath = 'tests/{0}.docx'.format(id)
     create_report(id, outpath)
