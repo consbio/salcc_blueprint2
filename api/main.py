@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file, send_from_directory
 
 from report import create_report
 
@@ -14,10 +14,11 @@ def main():
 def get_report():
     data_id = request.form['data_id']
     path = 'tests/{0}.docx'.format(data_id)
+    doc_name = '{0}.docx'.format(data_id)
 
-    create_report(data_id, path)
+    report = create_report(data_id, path)
 
-    return render_template('success.html')
+    return send_from_directory('tests', doc_name, as_attachment=True)
 
 
 if __name__ == '__main__':

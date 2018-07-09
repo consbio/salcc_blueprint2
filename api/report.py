@@ -140,7 +140,9 @@ def create_report(id, path):
             # Delete the placeholder para
             delete_paragraph(p)
 
-    doc.save(path)
+    report = doc.save(path)
+
+    return report
 
 
 def generate_report_context(id):
@@ -570,7 +572,7 @@ def _resolve(scope, key, context):
 
 
 if __name__ == '__main__':
-    id = 'I1641'
+    id = 'I1'
     # outpath = '/tmp/{0}.docx'.format(id)
     outpath = 'tests/{0}.docx'.format(id)
     create_report(id, outpath)
