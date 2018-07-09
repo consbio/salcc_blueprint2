@@ -17,10 +17,18 @@ PLACEHOLDER_REGEX = re.compile(r'{{(?P<scope>\w+):(?P<key>\w+)}}')
 def create_report(id, path):
     """
         Creates reports for analyses in docx format.
+
+    Parameters
+    ----------
+    id: string id of a dataset
+    path: string location where docx to be saved
+
+    Returns
+    -------
+    report: docx file
+
     """
     doc = Document('template.docx')
-
-    # path = '/root/api/tests/report.docx'
 
     context = generate_report_context(id)
 
@@ -148,6 +156,15 @@ def create_report(id, path):
 def generate_report_context(id):
     """
         Retrieve data from Analysis and related objects
+
+    Parameters
+    ----------
+    id: string id of a dataset
+
+    Returns
+    -------
+    context: dict of data in report structure
+
     """
 
     with open(os.path.join('../src/config/ecosystems.json')) as e_json_file:
@@ -427,6 +444,12 @@ def create_table(doc, data, para):
         where each row is a list of values for each column
     para: paragraph object
         Where the table needs to be moved
+
+    Returns
+    -------
+    end_buffer
+        location that the last item was added to the document
+
     """
     # TODO: ensure tables don't run over a page break
 
@@ -458,6 +481,14 @@ def create_table(doc, data, para):
 
 
 def set_col_widths(table):
+    """
+    Set widths for standard table columns
+
+    Parameters
+    ----------
+    table: table object
+
+    """
     widths = (Cm(9), Cm(4), Cm(4))
     for row in table.rows:
         for idx, width in enumerate(widths):
@@ -500,6 +531,14 @@ def _move_table_after(table, paragraph):
 def _move_p_after_t(table, para):
     """
     Move a paragraph after a table
+
+    Parameters
+    ----------
+    table
+        table to be moved
+    para: paragraph object
+        location where table will be moved
+
     """
     table._tbl.addnext(para._p)
 
@@ -508,10 +547,16 @@ def add_hyperlink(paragraph, url, text):
     """
     A function that places a hyperlink within a paragraph object.
 
-    :param paragraph: The paragraph we are adding the hyperlink to.
-    :param url: A string containing the required url
-    :param text: The text displayed for the url
-    :return: The hyperlink object
+    Parameters
+    ----------
+    paragraph: The paragraph we are adding the hyperlink to.
+    url: A string containing the required url
+    text: The text displayed for the url
+
+    Returns
+    -------
+    hyperlink: hyperlink object
+
     """
 
     # This gets access to the document.xml.rels file and gets a new relation id value
