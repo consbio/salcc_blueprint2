@@ -62,23 +62,20 @@ const Ecosystem = ({
 Ecosystem.propTypes = {
     ecosystemID: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
+    onSelectIndicator: PropTypes.func.isRequired,
+    onDeselectIndicator: PropTypes.func.isRequired,
 
     indicators: PropTypes.objectOf(IndicatorPropType),
     showHeader: PropTypes.bool,
     percent: PropTypes.number,
-    selectedIndicator: IndicatorPropType,
-    onSelectIndicator: PropTypes.func,
-    onDeselectIndicator: PropTypes.func
+    selectedIndicator: IndicatorPropType
 }
 
 Ecosystem.defaultProps = {
     percent: null, // some ecosystems don't have a percent
     selectedIndicator: null,
     indicators: null,
-    showHeader: true,
-    /* eslint-disable-next-line no-console */
-    onSelectIndicator: (ecosystem, indicator) => console.log('onSelectIndicator', ecosystem, indicator),
-    onDeselectIndicator: () => console.log('onDeselectIndicator')
+    showHeader: true
 }
 
 export default Ecosystem
