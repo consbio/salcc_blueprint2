@@ -45,8 +45,13 @@ def create_report(id, path):
                     # match.group() has the original text to replace
                     r.text = r.text.replace(match.group(), item)
 
+                    if scope == 'table':
+                        # Make "No info available" text more eye-catching
+                        font = r.font
+                        font.italic = True
+
                 elif scope == 'table':
-                    r.text = ""
+                    r.text = ''
                     create_table(doc, item, p)
 
         if '{{INDICATORS}}' in p.text:
@@ -211,10 +216,8 @@ def generate_report_context(id):
             # Insert at beginning, because data is stored in reverse order that it must be displayed
             priorities['rows'].insert(0, priority_row)
             index += 1
-
     else:
-        none_found = ['None provided for this dataset', '', '']
-        priorities['rows'].append(none_found)
+        priorities = 'No information available'
     context['table']['priorities'] = priorities
 
     # Ecosystem table
@@ -383,11 +386,7 @@ def generate_report_context(id):
 
         context['table']['ownership'] = owners
     else:
-        owners = {
-            'col_names': ['Ownership', 'Acres', 'Percent of Area'],
-            'rows': [['None provided for this dataset', '', '']]
-        }
-        context['table']['ownership'] = owners
+        context['table']['ownership'] = 'No information available'
 
     # Protections table
 
@@ -425,9 +424,7 @@ def generate_report_context(id):
 
         context['table']['protection'] = protection
     else:
-        none_found = ['None provided for this dataset', '', '']
-        protection['rows'].append(none_found)
-        context['table']['protection'] = protection
+        context['table']['protection'] = 'No information available'
 
     return context
 
