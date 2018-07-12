@@ -1,6 +1,6 @@
 import os
 import tempfile
-from flask import Flask, render_template, request, send_from_directory, send_file, redirect
+from flask import Flask, render_template, request, send_file, redirect
 
 from report import create_report
 

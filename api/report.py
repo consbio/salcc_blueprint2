@@ -2,9 +2,12 @@ import re
 import os
 import json
 import docx
+import numbers
 
 from docx import Document
 from docx.shared import Cm
+
+CONFIG_DIR = '../src/config'
 
 
 # TODO: Improve custom table style in template.docx
@@ -174,16 +177,10 @@ def generate_report_context(id):
 
     """
 
-    with open(os.path.join('../src/config/ecosystems.json')) as e_json_file:
-        ecosystems_json = json.loads(e_json_file.read())
-    with open(os.path.join('../src/config/owners.json')) as o_json_file:
-        owners_json = json.loads(o_json_file.read())
-    with open(os.path.join('../src/config/plans.json')) as pl_json_file:
-        plans_json = json.loads(pl_json_file.read())
-    with open(os.path.join('../src/config/priorities.json')) as pri_json_file:
-        priorities_json = json.loads(pri_json_file.read())
-    with open(os.path.join('../src/config/protection.json')) as pro_json_file:
-        protection_json = json.loads(pro_json_file.read())
+    config = {}
+    for entry in ('ecosystems', 'owners', 'plans', 'priorities', 'protection'):
+        with open('{0}/{1}.json'.format(CONFIG_DIR, entry)) as infile:
+            config[entry] = json.loads(infile.read())
 
     with open(os.path.join(DATA_DIR, '{0}.json'.format(id))) as json_file:
         context_json = json.loads(json_file.read())
@@ -199,25 +196,13 @@ def generate_report_context(id):
 
     priorities = {
         'col_names': ['Priority Category', 'Acres', 'Percent of Area'],
-        'rows': []
     }
 
-    if context_json['blueprint']:
-        index = 0
-        while index < 6:
-            # Find acreage
-            percentage = context_json['blueprint'][index]
-            acreage = round(acres * (percentage / 100))
+    priorities['rows'] = [
+        (config['priorities'][str(i)]['label'], round(acres * percentage / 100), str(percentage) + '%')
+        for i, percentage in enumerate(context_json.get('blueprint'))
+    ]
 
-            priority_row = []
-            priority_row.append(priorities_json[str(index)]['label'])
-            priority_row.append(acreage)
-            priority_row.append(str(percentage) + '%')
-            # Insert at beginning, because data is stored in reverse order that it must be displayed
-            priorities['rows'].insert(0, priority_row)
-            index += 1
-    else:
-        priorities = 'No information available'
     context['table']['priorities'] = priorities
 
     # Ecosystem table
@@ -240,9 +225,12 @@ def generate_report_context(id):
             percentage = ''
             acreage = ''
 
-        eco_row.append(ecosystems_json[ecosystem]['label'])
+        eco_row.append(config['ecosystems'][ecosystem]['label'])
         eco_row.append(acreage)
-        eco_row.append(str(percentage) + '%')
+
+        if isinstance(percentage, numbers.Number):
+            eco_row.append(str(percentage) + '%')
+
         ecosystems_table['rows'].append(eco_row)
 
     context['table']['ecosystems'] = ecosystems_table
@@ -254,7 +242,7 @@ def generate_report_context(id):
     for zone in context_json['ecosystems']:
 
         ecosystem_indicators = {
-            'ecosystem_name': ecosystems_json[zone]['label'],
+            'ecosystem_name': config['ecosystems'][zone]['label'],
             'indicators': []
         }
 
@@ -265,8 +253,8 @@ def generate_report_context(id):
             for indicator in context_json['ecosystems'][zone]['indicators']:
                 indicator_data = {
                     'value': {
-                        'indicator_name': ecosystems_json[zone]['indicators'][indicator]['label'],
-                        'indicator_description': ecosystems_json[zone]['indicators'][indicator]['description']
+                        'indicator_name': config['ecosystems'][zone]['indicators'][indicator]['label'],
+                        'indicator_description': config['ecosystems'][zone]['indicators'][indicator]['description']
                     },
                     'table': {
                         'indicator_table': {
@@ -277,7 +265,7 @@ def generate_report_context(id):
                 }
 
                 if 'indicators' in context_json['ecosystems'][zone]:
-                    for index, val_label in enumerate(ecosystems_json[zone]['indicators'][indicator]['valueLabels']):
+                    for index, val_label in enumerate(config['ecosystems'][zone]['indicators'][indicator]['valueLabels']):
                         table_row = []
 
                         # Find acreage
@@ -287,9 +275,11 @@ def generate_report_context(id):
                         else:
                             acreage = 0
 
-                        table_row.append(ecosystems_json[zone]['indicators'][indicator]['valueLabels'][val_label])
+                        table_row.append(config['ecosystems'][zone]['indicators'][indicator]['valueLabels'][val_label])
                         table_row.append(acreage)
-                        table_row.append(str(percentage) + '%')
+
+                        if isinstance(percentage, numbers.Number):
+                            table_row.append(str(percentage) + '%')
 
                         indicator_data['table']['indicator_table']['rows'].append(table_row)
 
@@ -305,7 +295,7 @@ def generate_report_context(id):
     partner_headers = {}
 
     for plan_key in context_json['plans']:
-        plan = plans_json[plan_key]
+        plan = config['plans'][plan_key]
         if plan['type'] == 'regional':
             partners_regional.append([plan['label'], plan['url']])
             if plan['type'] not in partner_headers:
@@ -356,7 +346,7 @@ def generate_report_context(id):
 
         for owner_data in context_json['owner']:
             owner_row = []
-            for owner_details in owners_json:
+            for owner_details in config['owners']:
                 if owner_data == owner_details:
 
                     # Find acreage
@@ -368,9 +358,11 @@ def generate_report_context(id):
                     else:
                         acreage = 0
 
-                    owner_row.append(owners_json[owner_data]['label'])
+                    owner_row.append(config['owners'][owner_data]['label'])
                     owner_row.append(acreage)
-                    owner_row.append(str(percentage) + '%')
+
+                    if isinstance(percentage, numbers.Number):
+                        owner_row.append(str(percentage) + '%')
             owners['rows'].append(owner_row)
 
         if own_perc_sum < 100:
@@ -405,7 +397,7 @@ def generate_report_context(id):
             else:
                 acreage = 0
 
-            pro_row.append(protection_json[pro]['label'])
+            pro_row.append(config['protection'][pro]['label'])
             pro_row.append(acreage)
             pro_row.append(str(percentage) + '%')
 
@@ -610,6 +602,5 @@ def _resolve(scope, key, context):
 
 if __name__ == '__main__':
     id = 'I1'
-    # outpath = '/tmp/{0}.docx'.format(id)
-    outpath = 'tests/{0}.docx'.format(id)
+    outpath = '/tmp/{0}.docx'.format(id)
     create_report(id, outpath)
