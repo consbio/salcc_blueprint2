@@ -8,7 +8,8 @@ import PRIORITIES from '../../config/priorities.json'
 import PLANS from '../../config/plans.json'
 
 // sort priorities from highest to lowest
-const SORTED_PRIORITIES = [5, 4, 3, 2, 1, 0]
+const INLAND_PRIORITIES = [5, 4, 3, 2, 1, 0]
+const MARINE_PRIORITIES = [5, 4, 3, 2, 0]
 
 const renderPriority = (priority, percent) => {
     const { label, color } = PRIORITIES[priority]
@@ -32,17 +33,20 @@ const renderPlan = (plan) => {
     return <li key={plan}>{label}</li>
 }
 
-const PrioritiesTab = ({ blueprint, justification, plans }) => {
+const PrioritiesTab = ({
+    blueprint, justification, plans, isMarine
+}) => {
     const regionalPlans = plans.filter(p => PLANS[p].type === 'regional')
     const statePlans = plans.filter(p => PLANS[p].type === 'state')
     const marinePlans = plans.filter(p => PLANS[p].type === 'marine')
+    const priorities = isMarine ? MARINE_PRIORITIES : INLAND_PRIORITIES
 
     return (
         <div id="Content" className="flex-container-column">
             <section>
                 <h3>Blueprint 2.2 Priority</h3>
                 <h4>for shared conservation action</h4>
-                {SORTED_PRIORITIES.map(p => renderPriority(p, blueprint[p]))}
+                {priorities.map(p => renderPriority(p, blueprint[p]))}
             </section>
 
             {justification && (
@@ -79,7 +83,8 @@ const PrioritiesTab = ({ blueprint, justification, plans }) => {
 PrioritiesTab.propTypes = {
     blueprint: PropTypes.arrayOf(PropTypes.number).isRequired,
     justification: PropTypes.string,
-    plans: PropTypes.arrayOf(PropTypes.string)
+    plans: PropTypes.arrayOf(PropTypes.string),
+    isMarine: PropTypes.bool.isRequired
 }
 
 PrioritiesTab.defaultProps = {
@@ -88,9 +93,14 @@ PrioritiesTab.defaultProps = {
 }
 
 const mapStateToProps = ({ app }) => {
-    const { data } = app
+    const { data, selectedUnit } = app
     const { blueprint, justification, plans } = data
-    return { blueprint, justification, plans }
+    return {
+        blueprint,
+        justification,
+        plans,
+        isMarine: selectedUnit.indexOf('M') === 0
+    }
 }
 
 export default connect(
