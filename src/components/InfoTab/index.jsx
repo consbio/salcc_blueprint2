@@ -1,8 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import PRIORITIES from '../../config/priorities.json'
 
-const InfoTab = () => {
+const InfoTab = ({ isMobile }) => {
     const sortedPriorities = [4, 3, 2, 1] // 0 deliberately omitted
 
     const renderPriority = (priority) => {
@@ -52,7 +54,12 @@ const InfoTab = () => {
 
             <section>
                 <h3>How To Use This Viewer</h3>
-                <p>
+                {isMobile ? (
+                    <p>TODO: Mobile specific instructions go here!</p>
+                ) : (
+                    <p>TODO: Desktop specific instructions go here!</p>
+                )}
+                {/* <p>
                     Once you have zoomed in far enough, the map will show boundaries of areas that you can select for
                     more information. Tap or click on an area to show details. Clear the selected area by tapping or
                     clicking that area again, or tap the close button in the upper right.
@@ -67,7 +74,7 @@ const InfoTab = () => {
                     <br />
                     <br />
                     Tap or click on an indicator to see more details.
-                </p>
+                </p> */}
             </section>
 
             <section>
@@ -166,4 +173,9 @@ const InfoTab = () => {
     )
 }
 
-export default InfoTab
+InfoTab.propTypes = {
+    isMobile: PropTypes.bool.isRequired
+}
+const mapStateToProps = ({ browser: { isMobile } }) => ({ isMobile })
+
+export default connect(mapStateToProps)(InfoTab)
