@@ -212,7 +212,7 @@ def generate_report_context(id):
             priority_row = []
             priority_row.append(priorities_json[str(index)]['label'])
             priority_row.append(acreage)
-            priority_row.append(percentage)
+            priority_row.append(str(percentage) + '%')
             # Insert at beginning, because data is stored in reverse order that it must be displayed
             priorities['rows'].insert(0, priority_row)
             index += 1
@@ -242,7 +242,7 @@ def generate_report_context(id):
 
         eco_row.append(ecosystems_json[ecosystem]['label'])
         eco_row.append(acreage)
-        eco_row.append(percentage)
+        eco_row.append(str(percentage) + '%')
         ecosystems_table['rows'].append(eco_row)
 
     context['table']['ecosystems'] = ecosystems_table
@@ -289,7 +289,7 @@ def generate_report_context(id):
 
                         table_row.append(ecosystems_json[zone]['indicators'][indicator]['valueLabels'][val_label])
                         table_row.append(acreage)
-                        table_row.append(percentage)
+                        table_row.append(str(percentage) + '%')
 
                         indicator_data['table']['indicator_table']['rows'].append(table_row)
 
@@ -370,13 +370,13 @@ def generate_report_context(id):
 
                     owner_row.append(owners_json[owner_data]['label'])
                     owner_row.append(acreage)
-                    owner_row.append(percentage)
+                    owner_row.append(str(percentage) + '%')
             owners['rows'].append(owner_row)
 
         if own_perc_sum < 100:
             perc_remainder = 100 - own_perc_sum
             acreage = round(acres * (perc_remainder / 100))
-            remainder_row = ['Not conserved', acreage, perc_remainder]
+            remainder_row = ['Not conserved', acreage, str(perc_remainder) + '%']
             owners['rows'].append(remainder_row)
 
         context['table']['ownership'] = owners
@@ -407,14 +407,14 @@ def generate_report_context(id):
 
             pro_row.append(protection_json[pro]['label'])
             pro_row.append(acreage)
-            pro_row.append(percentage)
+            pro_row.append(str(percentage) + '%')
 
             protection['rows'].append(pro_row)
 
         if pro_perc_sum < 100:
             perc_remainder = 100 - pro_perc_sum
             acreage = round(acres * (perc_remainder / 100))
-            remainder_row = ['Not conserved', acreage, perc_remainder]
+            remainder_row = ['Not conserved', acreage, str(perc_remainder) + '%']
             protection['rows'].append(remainder_row)
 
         context['table']['protection'] = protection
