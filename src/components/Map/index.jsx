@@ -11,10 +11,12 @@ import 'leaflet.vectorgrid'
 import 'leaflet-basemaps'
 import 'leaflet-zoombox'
 import 'leaflet-geonames'
+import 'leaflet-html-legend'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-basemaps/L.Control.Basemaps.css'
 import 'leaflet-zoombox/L.Control.ZoomBox.css'
 import 'leaflet-geonames/L.Control.Geonames.css'
+import 'leaflet-html-legend/dist/L.Control.HtmlLegend.css'
 
 import * as actions from '../../Actions/actions'
 import LocateControl from './LocateControl'
@@ -30,8 +32,8 @@ L.Icon.Default.mergeOptions({ iconRetinaUrl, iconUrl, shadowUrl })
 // Map configurationParameters
 const config = {
     mapParams: {
-        center: [33.358, -78.593],  // for testing: [33.358, -80]
-        zoom: 5,  // for testing: 10
+        center: [33.358, -78.593], // for testing: [33.358, -80]
+        zoom: 5, // for testing: 10
         minZoom: 3,
         maxZoom: 15,
         zoomControl: false,
@@ -127,17 +129,57 @@ class Map extends Component {
 
             // add geonames search when in desktop view
             // it is a known issue that this uses a different API than google placenames search in mobile
-            L.control.geonames({
-                position: 'topright',
-                username: 'databasin.cbi',
-                maxresults: 10,
-                bbox: {
-                    west: -86,
-                    east: -71,
-                    north: 38,
-                    south: 29
-                }
-            }).addTo(map)
+            L.control
+                .geonames({
+                    position: 'topright',
+                    username: 'databasin.cbi',
+                    maxresults: 10,
+                    bbox: {
+                        west: -86,
+                        east: -71,
+                        north: 38,
+                        south: 29
+                    }
+                })
+                .addTo(map)
+
+            L.control
+                .htmllegend({
+                    position: 'bottomright',
+                    legends: [
+                        {
+                            name: 'Blueprint 2.2 Priority',
+                            elements: [
+                                {
+                                    label: 'Highest priority',
+                                    html: '',
+                                    style: { 'background-color': '#49006a' }
+                                },
+                                {
+                                    label: 'High priority',
+                                    html: '',
+                                    style: { 'background-color': '#c51b8a' }
+                                },
+                                {
+                                    label: 'Medium priority',
+                                    html: '',
+                                    style: { 'background-color': '#fbb4b9' }
+                                },
+                                {
+                                    label: 'Corridors',
+                                    html: '',
+                                    style: { 'background-color': '#686868' }
+                                },
+                                {
+                                    label: 'Inland waterbodies',
+                                    html: '',
+                                    style: { 'background-color': '#004DA8' }
+                                }
+                            ]
+                        }
+                    ]
+                })
+                .addTo(map)
         }
 
         map.addLayer(config.blueprintLayer)

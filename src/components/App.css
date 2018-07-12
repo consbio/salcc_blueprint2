@@ -667,3 +667,20 @@ footer {
     padding: 1px 4px;
     opacity: 0.75;
 }
+
+/* leaflet legend */
+.leaflet-html-legend {
+    width: auto !important;
+}
+.leaflet-html-legend h4,
+.leaflet-html-legend label {
+    font-size: 1.2em !important;
+}
+.leaflet-html-legend .symbol {
+    width: 20px !important;
+    height: 14px !important;
+    border-radius: 3px !important;
+}
+.leaflet-html-legend .legend-row + .legend-row {
+    margin-top: 6px;
+}

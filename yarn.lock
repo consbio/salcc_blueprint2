@@ -4002,6 +4002,10 @@ leaflet-geonames@^0.4.5:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/leaflet-geonames/-/leaflet-geonames-0.4.5.tgz#13a8c5d6d16f62772cbfe54670b8b67dfeb29e92"
 
+leaflet-html-legend@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/leaflet-html-legend/-/leaflet-html-legend-0.3.2.tgz#b7cf5c8f6d84d137cb3fc66794ac56a1ba83c07d"
+
 leaflet-zoombox@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/leaflet-zoombox/-/leaflet-zoombox-0.5.1.tgz#84a50abf10a354aed5e0661eadbdda8927f1512f"
