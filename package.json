@@ -52,6 +52,7 @@
         "react-dev-utils": "^3.0.2",
         "react-dom": "^16.4.1",
         "react-error-overlay": "^1.0.9",
+        "react-ga": "^2.5.3",
         "react-redux": "^5.0.7",
         "react-swipeable-views": "^0.12.14",
         "redux": "^3.7.2",
