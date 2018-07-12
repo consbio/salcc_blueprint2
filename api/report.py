@@ -10,6 +10,8 @@ from docx.shared import Cm
 # TODO: Improve custom table style in template.docx
 DOC_STYLE = 'SALCC_style'
 
+DATA_DIR = '../public/data'
+
 # Example placeholder: {{label:title}}
 PLACEHOLDER_REGEX = re.compile(r'{{(?P<scope>\w+):(?P<key>\w+)}}')
 
@@ -183,7 +185,7 @@ def generate_report_context(id):
     with open(os.path.join('../src/config/protection.json')) as pro_json_file:
         protection_json = json.loads(pro_json_file.read())
 
-    with open(os.path.join('../public/data/{0}.json'.format(id))) as json_file:
+    with open(os.path.join(DATA_DIR, '{0}.json'.format(id))) as json_file:
         context_json = json.loads(json_file.read())
 
     acres = context_json['acres']
@@ -205,10 +207,8 @@ def generate_report_context(id):
         while index < 6:
             # Find acreage
             percentage = context_json['blueprint'][index]
-            if percentage is not 0:
-                acreage = round(acres * (percentage / 100))
-            else:
-                acreage = 0
+            acreage = round(acres * (percentage / 100))
+
             priority_row = []
             priority_row.append(priorities_json[str(index)]['label'])
             priority_row.append(acreage)
@@ -227,11 +227,11 @@ def generate_report_context(id):
         'rows': []
     }
 
-    for ecosys in context_json['ecosystems']:
+    for ecosystem in context_json['ecosystems']:
         eco_row = []
 
-        if 'percent' in context_json['ecosystems'][ecosys]:
-            percentage = context_json['ecosystems'][ecosys]['percent']
+        if 'percent' in context_json['ecosystems'][ecosystem]:
+            percentage = context_json['ecosystems'][ecosystem]['percent']
             if percentage > 0:
                 acreage = round(acres * (percentage / 100))
             elif percentage is 0:
@@ -240,7 +240,7 @@ def generate_report_context(id):
             percentage = ''
             acreage = ''
 
-        eco_row.append(ecosystems_json[ecosys]['label'])
+        eco_row.append(ecosystems_json[ecosystem]['label'])
         eco_row.append(acreage)
         eco_row.append(percentage)
         ecosystems_table['rows'].append(eco_row)
@@ -265,8 +265,8 @@ def generate_report_context(id):
             for indicator in context_json['ecosystems'][zone]['indicators']:
                 indicator_data = {
                     'value': {
-                        'indicator_name': '',
-                        'indicator_description': ''
+                        'indicator_name': ecosystems_json[zone]['indicators'][indicator]['label'],
+                        'indicator_description': ecosystems_json[zone]['indicators'][indicator]['description']
                     },
                     'table': {
                         'indicator_table': {
@@ -276,12 +276,8 @@ def generate_report_context(id):
                     }
                 }
 
-                indicator_data['value']['indicator_name'] = ecosystems_json[zone]['indicators'][indicator]['label']
-                indicator_data['value']['indicator_description'] = ecosystems_json[zone]['indicators'][indicator]['description']
-
-                index = 0
                 if 'indicators' in context_json['ecosystems'][zone]:
-                    for val_label in ecosystems_json[zone]['indicators'][indicator]['valueLabels']:
+                    for index, val_label in enumerate(ecosystems_json[zone]['indicators'][indicator]['valueLabels']):
                         table_row = []
 
                         # Find acreage
@@ -294,7 +290,6 @@ def generate_report_context(id):
                         table_row.append(ecosystems_json[zone]['indicators'][indicator]['valueLabels'][val_label])
                         table_row.append(acreage)
                         table_row.append(percentage)
-                        index += 1
 
                         indicator_data['table']['indicator_table']['rows'].append(table_row)
 
