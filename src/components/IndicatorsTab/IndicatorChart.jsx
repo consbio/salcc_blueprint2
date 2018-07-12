@@ -4,20 +4,21 @@ import PropTypes from 'prop-types'
 const Indicator = ({
     label, mean, domain, onClick
 }) => {
-    // const color = '#ff9500'
     /* eslint-disable-next-line no-mixed-operators */
     const percent = (100 * (mean - domain[0])) / (domain[1] - domain[0])
 
     return (
         <div className="indicator" onClick={onClick}>
-            <h4>
-                {label}
-            </h4>
+            <h4>{label}</h4>
             <div className="flex-container flex-align-center">
                 <label>Low</label>
                 <div className="domain">
                     <div className="domain-line" />
+                    <div className="marker-line" style={{ left: `${percent}%` }} />
                     <div className="marker" style={{ left: `${percent}%` }} />
+                    <div className="marker-label" style={{ left: `${percent}%` }}>
+                        avg
+                    </div>
                 </div>
                 <label>High</label>
             </div>

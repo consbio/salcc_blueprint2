@@ -388,7 +388,7 @@ footer {
 }
 
 .indicator {
-    padding: 1rem 20px;
+    padding: 1rem 20px 2rem;
     cursor: pointer;
     box-sizing: border-box;
 }
@@ -396,7 +396,7 @@ footer {
     background: #f5fbfd;
 }
 .indicator h4 {
-    margin: 0;
+    margin: 0 0 1em 0 !important;
     color: #0892d0 !important;
 }
 
@@ -406,7 +406,8 @@ footer {
 }
 .indicator .domain {
     position: relative;
-    margin: 16px 14px 0;
+    /* margin: 16px 14px 0; */
+    margin: 4px 14px 0;
     flex: 1;
 }
 .indicator .domain-line {
@@ -414,15 +415,57 @@ footer {
     background: #ddd;
 }
 .indicator .marker {
+    position: absolute;
+    margin-left: -12px;
+    width: 24px;
+    height: 16px;
+    border-radius: 18px;
+    background: #666;
+    top: -6px;
+}
+
+/* .indicator .marker {
     position: relative;
-    /* top: 0;
-    left: 0; */
     margin-left: -10px;
     width: 0;
     height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-bottom: 16px solid #ff9500;
+    border-bottom: 16px solid #666;
+} */
+
+/* .indicator .marker-label {
+    position: relative;
+    top: -4px;
+    background: #666;
+    color: #fff;
+    margin-left: -14px;
+    width: 24px;
+    font-size: 10px;
+    vertical-align: top;
+    border-radius: 6px;
+    text-align: center;
+    padding: 2px;
+} */
+.indicator .marker-label {
+    position: absolute;
+    top: 18px;
+    /* background: #666; */
+    /* color: #fff; */
+    margin-left: -12px;
+    /* width: 24px; */
+    font-size: 10px;
+    vertical-align: top;
+    border-radius: 6px;
+    text-align: center;
+    padding: 2px;
+}
+.indicator .marker-line {
+    position: absolute;
+    top: -18px;
+    height: 40px;
+    width: 1px;
+    border-left: 1px dashed #666;
 }
 
 .no-indicators {
