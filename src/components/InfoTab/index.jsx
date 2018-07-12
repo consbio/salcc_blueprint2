@@ -15,7 +15,7 @@ const InfoTab = () => {
                 <div className="priorityColorPatch" style={{ backgroundColor: color, color: textColor }}>
                     <b>{label}</b>
                     <br />
-                    <span className="text-small">{area} of SALCC</span>
+                    <span className="text-small">{area} of South Atlantic</span>
                 </div>
                 <p>{description}</p>
             </div>
@@ -76,11 +76,11 @@ const InfoTab = () => {
                     Give us your feedback:
                     <br />
                     email <a href="mailto:southatlanticlcc@gmail.com">southatlanticlcc@gmail.com</a>
-                    {/* <br />
+                    <br />
                     <br />
                     or call Hilary Morris (Blueprint User Support):
                     <br />
-                    <a href="tel:19197070252">(919) 707-0252</a> */}
+                    <a href="tel:19197070252">(919) 707-0252</a>
                 </p>
             </section>
 
@@ -106,18 +106,18 @@ const InfoTab = () => {
                         <img
                             src="/logo_96x96.png"
                             style={{ height: 32, padding: 6, verticalAlign: 'middle' }}
-                            alt="SALCC Logo"
+                            alt="South Atlantic Logo"
                         />
                         <div className="inline-middle" style={{ width: 250 }}>
-                            <a href="" target="_blank" rel="noopener noreferrer">
-                                South Atlantic Landscape Conservation Cooperative
+                            <a href="http://www.southatlanticlcc.org/" target="_blank" rel="noopener noreferrer">
+                                South Atlantic Conservation Blueprint
                             </a>
                         </div>
                     </div>
                 </div>
 
                 <h4>Citation:</h4>
-                <p>South Atlantic Landscape Conservation Cooperative. 2017. The Conservation Blueprint Version 2.2.</p>
+                <p>The South Atlantic Conservation Blueprint Version 2.2.</p>
 
                 <h4>Land ownership and conservation status:</h4>
                 <p>Secured Lands Database from TNC Eastern Division - 2015 Edition.</p>

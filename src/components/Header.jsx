@@ -24,7 +24,7 @@ const Header = ({
                 </React.Fragment>
             ) : (
                 <React.Fragment>
-                    <img src="/logo_96x96.png" alt="SALCC Logo" />
+                    <img src="/logo_96x96.png" alt="South Atlantic Logo" />
                     <div className="flex-grow">
                         {isMobile && <h4>South Atlantic</h4>}
                         <h1>{`${!isMobile ? 'South Atlantic ' : ''}Conservation Blueprint 2.2`}</h1>
