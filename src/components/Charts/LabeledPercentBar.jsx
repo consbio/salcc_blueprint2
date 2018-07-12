@@ -5,7 +5,7 @@ import PercentBar from './PercentBar'
 import { formatPercent } from '../../utils'
 
 const LabeledPercentBar = (props) => {
-    const { label, percent } = props
+    const { label, description, percent } = props
     const percentLabel = formatPercent(percent)
 
     return (
@@ -18,7 +18,7 @@ const LabeledPercentBar = (props) => {
                     alignItems: 'flex-end'
                 }}
             >
-                <div>{label}</div>
+                <div title={description}>{label}</div>
                 <label>{percentLabel}%</label>
             </div>
             <PercentBar {...props} />
@@ -28,7 +28,12 @@ const LabeledPercentBar = (props) => {
 
 LabeledPercentBar.propTypes = {
     label: PropTypes.string.isRequired,
-    percent: PropTypes.number.isRequired
+    percent: PropTypes.number.isRequired,
+    description: PropTypes.string
+}
+
+LabeledPercentBar.defaultProps = {
+    description: null
 }
 
 export default LabeledPercentBar
