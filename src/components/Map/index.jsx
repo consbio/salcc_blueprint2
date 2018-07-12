@@ -81,6 +81,13 @@ const config = {
         fillOpacity: 0.3,
         fill: true,
         weight: 3
+    },
+    hoverStyle: {
+        color: '#0892D0',
+        fillColor: '#0892D0',
+        fillOpacity: 0.7,
+        fill: true,
+        weight: 2
     }
 }
 
@@ -194,6 +201,20 @@ class Map extends Component {
         config.unitLayer.on('click', (f) => {
             this._handleSelect(f.layer.properties.ID)
         })
+
+        if (!isMobile) {
+            config.unitLayer.on('mouseover', (f) => {
+                const id = f.layer.properties.ID
+                if (id === null || id === this.state.selectedUnit) return
+                config.unitLayer.setFeatureStyle(id, config.hoverStyle)
+            })
+                .on('mouseout', (f) => {
+                    const id = f.layer.properties.ID
+                    if (id === null || id === this.state.selectedUnit) return
+                    // config.unitLayer.setFeatureStyle(id, config.visibleStyle)
+                    this._unhighlightUnit(id)
+                })
+        }
 
         map.addLayer(config.unitLayer)
 
