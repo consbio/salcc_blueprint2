@@ -63,6 +63,20 @@ footer {
     background: #fafafa;
     border-top: 1px solid #ddd;
 }
+@keyframes pulse-color {
+    0% {
+        background-color: #bae0f2;
+    }
+    100% {
+        background-color: #fafafa;
+    }
+}
+footer.has-selected-unit {
+    background: #fafafa;
+    animation-name: pulse-color;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+}
 
 header,
 footer {
@@ -453,7 +467,9 @@ footer {
 }
 
 .indicator-chart-heading {
-    min-width: 4em;
+    min-width: 3.5em;
+    font-size: 0.8em;
+    font-weight: bold;
     flex: 0;
 }
 

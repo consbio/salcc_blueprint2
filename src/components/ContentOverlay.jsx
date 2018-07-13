@@ -28,7 +28,7 @@ const ContentOverlay = ({
                 </div>
             )}
 
-            <footer>
+            <footer className={hasSelectedUnit ? 'has-selected-unit' : ''}>
                 <Tabs hasSelectedUnit={hasSelectedUnit} activeTab={activeTab} setTab={setTab} isMobile />
             </footer>
         </React.Fragment>
