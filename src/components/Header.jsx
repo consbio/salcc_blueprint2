@@ -11,7 +11,7 @@ const Header = ({
     const showUnit = isMobile && hasSelectedUnit
 
     const handleDeselectUnit = () => {
-        setTab(null)
+        setTab('Map')
         deselectUnit()
     }
 

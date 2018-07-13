@@ -65,7 +65,7 @@ const mainReducer = (state = initialState, action) => {
             })
 
         case SET_PLACE:
-            return updateObject(state, { place: action.place, activeTab: null })
+            return updateObject(state, { place: action.place, activeTab: 'Map' })
 
         case SET_PLACES:
             return updateObject(state, { places: action.places })

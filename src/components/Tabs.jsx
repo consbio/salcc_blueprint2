@@ -1,19 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import InfoTab from './InfoTab'
+import FindLocationTab from './FindLocationTab'
+import ContactTab from './ContactTab'
 import PrioritiesTab from './PrioritiesTab'
 import IndicatorsTab from './IndicatorsTab'
 import ThreatsTab from './ThreatsTab'
 import PartnersTab from './PartnersTab'
 
-import InfoTab from './InfoTab'
-import FindLocationTab from './FindLocationTab'
 import FilledInfoIcon from './icons/baseline-info-24px.svg'
 import OutlineInfoIcon from './icons/outline-info-24px.svg'
 import FilledPinIcon from './icons/baseline-pin_drop-24px.svg'
 import OutlinePinIcon from './icons/outline-pin_drop-24px.svg'
 import FilledMapIcon from './icons/baseline-map-24px.svg'
 import OutlineMapIcon from './icons/outline-map-24px.svg'
+import FilledContactIcon from './icons/baseline-email-24px.svg'
+import OutlineContactIcon from './icons/outline-email-24px.svg'
 import FilledIndicatorsIcon from './icons/baseline-bar_chart-24px.svg'
 import OutlineIndicatorsIcon from './icons/outline-bar_chart-24px.svg'
 import FilledPrioritiesIcon from './icons/baseline-stars-24px.svg'
@@ -27,7 +30,7 @@ import OutlinePartnersIcon from './icons/outline-people-24px.svg'
 import FilledThreatsIcon from './icons/baseline-report-24px.svg'
 import OutlineThreatsIcon from './icons/outline-report-24px.svg'
 
-const TABS = ['Info', 'Map', 'Find Location'] // TODO: 'Map'
+const TABS = ['Info', 'Map', 'Find Location', 'Contact']
 const UNIT_TABS = ['Map', 'Priorities', 'Indicators', 'Threats', 'Partners']
 
 const ICONS = {
@@ -38,6 +41,10 @@ const ICONS = {
     'Find Location': {
         default: OutlinePinIcon,
         active: FilledPinIcon
+    },
+    Contact: {
+        default: OutlineContactIcon,
+        active: FilledContactIcon
     },
     Map: {
         default: OutlineMapIcon,
@@ -71,6 +78,8 @@ export const getTab = (tab) => {
             return <InfoTab />
         case 'Find Location':
             return <FindLocationTab />
+        case 'Contact':
+            return <ContactTab />
         default:
             return null
     }
@@ -96,20 +105,13 @@ export const getUnitTab = (tab) => {
 }
 
 const Tabs = ({
-    activeTab, hasSelectedUnit, toggleTabs, setTab, isMobile
+    activeTab, hasSelectedUnit, setTab, isMobile
 }) => {
     let tabs = hasSelectedUnit ? UNIT_TABS : TABS
+
+    // don't show the map tab on desktop
     if (!isMobile) {
         tabs = tabs.filter(t => t !== 'Map')
-    }
-
-    const handleSetTab = (tab) => {
-        // toggle current tab
-        if (activeTab === tab && toggleTabs) {
-            setTab(null)
-        } else {
-            setTab(tab)
-        }
     }
 
     return (
@@ -117,7 +119,7 @@ const Tabs = ({
             {tabs.map((tab) => {
                 const isActive = activeTab === tab ? 'active' : ''
                 const className = `tab ${isActive} tab-${tab.toLowerCase().replace(/ /g, '')}`
-                const handleClick = () => handleSetTab(tab)
+                const handleClick = () => setTab(tab)
                 const Icon = ICONS[tab] ? ICONS[tab][isActive ? 'active' : 'default'] : FilledInfoIcon
 
                 return (
@@ -136,13 +138,11 @@ Tabs.propTypes = {
     setTab: PropTypes.func.isRequired,
     isMobile: PropTypes.bool.isRequired,
 
-    activeTab: PropTypes.string,
-    toggleTabs: PropTypes.bool
+    activeTab: PropTypes.string
 }
 
 Tabs.defaultProps = {
-    activeTab: null,
-    toggleTabs: false
+    activeTab: null
 }
 
 export default Tabs

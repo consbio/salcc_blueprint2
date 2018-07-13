@@ -414,46 +414,10 @@ footer {
     height: 2px;
     background: #ddd;
 }
-.indicator .marker {
-    position: absolute;
-    margin-left: -12px;
-    width: 24px;
-    height: 16px;
-    border-radius: 18px;
-    background: #666;
-    top: -6px;
-}
-
-/* .indicator .marker {
-    position: relative;
-    margin-left: -10px;
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 16px solid #666;
-} */
-
-/* .indicator .marker-label {
-    position: relative;
-    top: -4px;
-    background: #666;
-    color: #fff;
-    margin-left: -14px;
-    width: 24px;
-    font-size: 10px;
-    vertical-align: top;
-    border-radius: 6px;
-    text-align: center;
-    padding: 2px;
-} */
 .indicator .marker-label {
     position: absolute;
-    top: 18px;
-    /* background: #666; */
-    /* color: #fff; */
-    margin-left: -12px;
-    /* width: 24px; */
+    top: 12px;
+    margin-left: -1em;
     font-size: 10px;
     vertical-align: top;
     border-radius: 6px;
@@ -462,8 +426,8 @@ footer {
 }
 .indicator .marker-line {
     position: absolute;
-    top: -18px;
-    height: 40px;
+    top: -12px;
+    height: 24px;
     width: 1px;
     border-left: 1px dashed #666;
 }

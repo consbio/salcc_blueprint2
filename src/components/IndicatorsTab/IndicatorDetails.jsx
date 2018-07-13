@@ -55,16 +55,7 @@ const IndicatorDetails = ({
                 <div>
                     {hasGoodThreshold ? (
                         <div>
-                            {/* <LabeledPercentBar
-                                className="text-quiet"
-                                key="total-good-percent"
-                                label="Total amount of summary unit that is in good condition"
-                                percent={totalGoodPercent}
-                                height={6}
-                            /> */}
-
                             <div className="indicator-detail-charts">
-                                {/* <h4>Indicator values:</h4> */}
                                 {goodPercents.map(entry => (
                                     <LabeledPercentBar className="text-quiet" key={entry.value} {...entry} height={6} />
                                 ))}

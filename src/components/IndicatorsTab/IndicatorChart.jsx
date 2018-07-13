@@ -15,8 +15,7 @@ const Indicator = ({
                 <div className="domain">
                     <div className="domain-line" />
                     <div className="marker-line" style={{ left: `${percent}%` }} />
-                    <div className="marker" style={{ left: `${percent}%` }} />
-                    <div className="marker-label" style={{ left: `${percent}%` }}>
+                    <div className="marker-label text-quiet" style={{ left: `${percent}%` }}>
                         avg
                     </div>
                 </div>

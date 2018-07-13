@@ -220,9 +220,9 @@ class Map extends Component {
 
         const basemapsControl = L.control.basemaps({
             basemaps: config.basemaps,
-            tileX: 35,
-            tileY: 51,
-            tileZ: 7,
+            tileX: 4,
+            tileY: 6,
+            tileZ: 4,
             position: isMobile ? 'topright' : 'bottomleft'
         })
         map.addControl(basemapsControl)
@@ -315,7 +315,7 @@ class Map extends Component {
         this._highlightUnit(id)
         this.setState({ selectedUnit: id })
         selectUnit(id)
-        if (!isMobile && !activeTab) {
+        if (!isMobile && activeTab === 'Map') {
             setTab('Priorities')
         }
     }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import InfoTab from './InfoTab'
-import Tabs, { getTab, getUnitTab } from './Tabs'
+import Tabs, { getUnitTab } from './Tabs'
 import ResetIcon from './icons/ResetIcon'
 import * as actions from '../Actions/actions'
 
@@ -13,7 +13,6 @@ const Sidebar = ({
     hasSelectedUnit,
     isDataLoaded,
     acres,
-    // basin, srcID,
     deselectUnit,
     setTab
 }) => {
@@ -22,8 +21,6 @@ const Sidebar = ({
         if (isDataLoaded) {
             tab = getUnitTab(activeTab)
         } // TODO: else show loading spinner on delay?
-    } else {
-        tab = getTab(activeTab)
     }
 
     return (
@@ -37,18 +34,17 @@ const Sidebar = ({
                                 <div className="text-quiet text-smaller">
                                     {acres && <div>{acres.toLocaleString()} acres</div>}
                                     <a href="">download report</a>
-                                    {/* {basin && (
-                                    <div>
-                                        <b>{basin} Basin</b>
-                                    </div>
-                                )}
-                                {srcID && <div>{srcID}</div>} */}
                                 </div>
                             </div>
                             <ResetIcon id="CloseButton" onClick={deselectUnit} />
                         </div>
 
-                        <Tabs hasSelectedUnit={hasSelectedUnit} activeTab={activeTab} setTab={setTab} isMobile={false} />
+                        <Tabs
+                            hasSelectedUnit={hasSelectedUnit}
+                            activeTab={activeTab}
+                            setTab={setTab}
+                            isMobile={false}
+                        />
                     </div>
                     {activeTab && (
                         <div id="SidebarContent" className="flex-container-column">
@@ -74,15 +70,11 @@ Sidebar.propTypes = {
     setTab: PropTypes.func.isRequired,
 
     activeTab: PropTypes.string,
-    // basin: PropTypes.string,
-    // srcID: PropTypes.string,
     acres: PropTypes.number
 }
 
 Sidebar.defaultProps = {
     activeTab: null,
-    // basin: null,
-    // srcID: null,
     acres: null
 }
 
@@ -95,8 +87,6 @@ const mapStateToProps = ({
     isDataLoaded,
     hasSelectedUnit: selectedUnit !== null,
     unitName: isDataLoaded && data.name ? data.name : 'Loading...',
-    // srcID: isDataLoaded ? data.srcID : null,
-    // basin: isDataLoaded ? data.basin : null,
     acres: isDataLoaded ? data.acres : null
 })
 

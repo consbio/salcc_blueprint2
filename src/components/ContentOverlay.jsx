@@ -22,7 +22,7 @@ const ContentOverlay = ({
 
     return (
         <React.Fragment>
-            {activeTab && (
+            {activeTab && activeTab !== 'Map' && (
                 <div id="ContentOverlay" className="flex-container-column">
                     {tab}
                 </div>
