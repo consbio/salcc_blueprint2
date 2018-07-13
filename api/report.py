@@ -67,7 +67,7 @@ def create_report(id, path):
             zone_insertion_point = p
 
             for zone in context['ecosystem_indicators']:
-                if 'ecosystem_percentage' in zone:
+                if 'ecosystem_percentage' in zone and zone['ecosystem_percentage'] is not '':
                     heading = zone['ecosystem_name'] + ': ' + str(zone['ecosystem_percentage']) + "% of area"
                     eco_h = doc.add_paragraph(heading, style='Heading13')
                     _move_p_after(eco_h, zone_insertion_point)
@@ -183,13 +183,13 @@ def generate_report_context(id):
             config[entry] = json.loads(infile.read())
 
     with open(os.path.join(DATA_DIR, '{0}.json'.format(id))) as json_file:
-        context_json = json.loads(json_file.read())
+        data = json.loads(json_file.read())
 
-    acres = context_json['acres']
+    total_acres = data['acres']
 
     context = {}
 
-    context['value'] = {'summary_unit_name': context_json['name']}
+    context['value'] = {'summary_unit_name': data['name']}
     context['table'] = {}
 
     # Priorities table
@@ -199,9 +199,10 @@ def generate_report_context(id):
     }
 
     priorities['rows'] = [
-        (config['priorities'][str(i)]['label'], round(acres * percentage / 100), str(percentage) + '%')
-        for i, percentage in enumerate(context_json.get('blueprint'))
+        (config['priorities'][str(i)]['label'], round(total_acres * percentage / 100), str(percentage) + '%')
+        for i, percentage in enumerate(data.get('blueprint'))
     ]
+    priorities['rows'].reverse()
 
     context['table']['priorities'] = priorities
 
@@ -212,15 +213,12 @@ def generate_report_context(id):
         'rows': []
     }
 
-    for ecosystem in context_json['ecosystems']:
+    for ecosystem in data['ecosystems']:
         eco_row = []
 
-        if 'percent' in context_json['ecosystems'][ecosystem]:
-            percentage = context_json['ecosystems'][ecosystem]['percent']
-            if percentage > 0:
-                acreage = round(acres * (percentage / 100))
-            elif percentage is 0:
-                acreage = 0
+        if 'percent' in data['ecosystems'][ecosystem]:
+            percentage = data['ecosystems'][ecosystem]['percent']
+            acreage = percent_to_acres(percentage, total_acres)
         else:
             percentage = ''
             acreage = ''
@@ -239,51 +237,48 @@ def generate_report_context(id):
 
     context['ecosystem_indicators'] = []
 
-    for zone in context_json['ecosystems']:
+    for ecosystem in data['ecosystems']:
+        ecosystem_data = data['ecosystems'][ecosystem]
+        ecosystem_config = config['ecosystems'][ecosystem]
 
         ecosystem_indicators = {
-            'ecosystem_name': config['ecosystems'][zone]['label'],
+            'ecosystem_name': config['ecosystems'][ecosystem]['label'],
             'indicators': []
         }
 
-        if 'percent' in context_json['ecosystems'][zone]:
-            ecosystem_indicators['ecosystem_percentage'] = context_json['ecosystems'][zone]['percent']
+        ecosystem_indicators['ecosystem_percentage'] = ecosystem_data.get('percent', '')
 
-        if 'indicators' in context_json['ecosystems'][zone]:
-            for indicator in context_json['ecosystems'][zone]['indicators']:
-                indicator_data = {
-                    'value': {
-                        'indicator_name': config['ecosystems'][zone]['indicators'][indicator]['label'],
-                        'indicator_description': config['ecosystems'][zone]['indicators'][indicator]['description']
-                    },
-                    'table': {
-                        'indicator_table': {
-                            'col_names': ['Indicator Values', 'Area', 'Percent of Area'],
-                            'rows': []
-                        }
+        for indicator in ecosystem_data.get('indicators', []):
+            indicator_data = {
+                'value': {
+                    'indicator_name': ecosystem_config['indicators'][indicator]['label'],
+                    'indicator_description': ecosystem_config['indicators'][indicator]['description']
+                },
+                'table': {
+                    'indicator_table': {
+                        'col_names': ['Indicator Values', 'Area', 'Percent of Area'],
+                        'rows': []
                     }
                 }
+            }
 
-                if 'indicators' in context_json['ecosystems'][zone]:
-                    for index, val_label in enumerate(config['ecosystems'][zone]['indicators'][indicator]['valueLabels']):
-                        table_row = []
+            if 'indicators' in ecosystem_data:
+                for index, val_label in enumerate(ecosystem_config['indicators'][indicator]['valueLabels']):
+                    table_row = []
 
-                        # Find acreage
-                        percentage = context_json['ecosystems'][zone]['indicators'][indicator]['percent'][index]
-                        if percentage is not 0:
-                            acreage = round(acres * (percentage / 100))
-                        else:
-                            acreage = 0
+                    # Find acreage
+                    percentage = ecosystem_data['indicators'][indicator]['percent'][index]
+                    acreage = percent_to_acres(percentage, total_acres)
 
-                        table_row.append(config['ecosystems'][zone]['indicators'][indicator]['valueLabels'][val_label])
-                        table_row.append(acreage)
+                    table_row.append(ecosystem_config['indicators'][indicator]['valueLabels'][val_label])
+                    table_row.append(acreage)
 
-                        if isinstance(percentage, numbers.Number):
-                            table_row.append(str(percentage) + '%')
+                    if isinstance(percentage, numbers.Number):
+                        table_row.append(str(percentage) + '%')
 
-                        indicator_data['table']['indicator_table']['rows'].append(table_row)
+                    indicator_data['table']['indicator_table']['rows'].append(table_row)
 
-                ecosystem_indicators['indicators'].append(indicator_data)
+            ecosystem_indicators['indicators'].append(indicator_data)
 
         context['ecosystem_indicators'].append(ecosystem_indicators)
 
@@ -294,7 +289,7 @@ def generate_report_context(id):
     partners_marine = []
     partner_headers = {}
 
-    for plan_key in context_json['plans']:
+    for plan_key in data['plans']:
         plan = config['plans'][plan_key]
         if plan['type'] == 'regional':
             partners_regional.append([plan['label'], plan['url']])
@@ -324,8 +319,8 @@ def generate_report_context(id):
 
     counties = []
 
-    if 'counties' in context_json:
-        for index, (key, value) in enumerate(context_json['counties'].items()):
+    if 'counties' in data:
+        for index, (key, value) in enumerate(data['counties'].items()):
             # key is FIPS and value is county with state
             county_data = {
                 'name': value,
@@ -336,7 +331,7 @@ def generate_report_context(id):
 
     # Ownership table
 
-    if 'owner' in context_json:
+    if 'owner' in data:
         owners = {
             'col_names': ['Ownership', 'Acres', 'Percent of Area'],
             'rows': []
@@ -344,19 +339,15 @@ def generate_report_context(id):
 
         own_perc_sum = 0
 
-        for owner_data in context_json['owner']:
+        for owner_data in data['owner']:
             owner_row = []
             for owner_details in config['owners']:
                 if owner_data == owner_details:
 
                     # Find acreage
-                    percentage = context_json['owner'][owner_data]
+                    percentage = data['owner'][owner_data]
                     own_perc_sum += percentage
-
-                    if percentage is not 0:
-                        acreage = round(acres * (percentage / 100))
-                    else:
-                        acreage = 0
+                    acreage = percent_to_acres(percentage, total_acres)
 
                     owner_row.append(config['owners'][owner_data]['label'])
                     owner_row.append(acreage)
@@ -367,7 +358,7 @@ def generate_report_context(id):
 
         if own_perc_sum < 100:
             perc_remainder = 100 - own_perc_sum
-            acreage = round(acres * (perc_remainder / 100))
+            acreage = percent_to_acres(perc_remainder, total_acres)
             remainder_row = ['Not conserved', acreage, str(perc_remainder) + '%']
             owners['rows'].append(remainder_row)
 
@@ -384,18 +375,14 @@ def generate_report_context(id):
 
     pro_perc_sum = 0
 
-    if 'gap' in context_json:
-        for pro in context_json['gap']:
+    if 'gap' in data:
+        for pro in data['gap']:
             pro_row = []
 
             # Find acreage
-            percentage = context_json['gap'][pro]
+            percentage = data['gap'][pro]
             pro_perc_sum += percentage
-
-            if percentage is not 0:
-                acreage = round(acres * (percentage / 100))
-            else:
-                acreage = 0
+            acreage = percent_to_acres(percentage, total_acres)
 
             pro_row.append(config['protection'][pro]['label'])
             pro_row.append(acreage)
@@ -405,7 +392,7 @@ def generate_report_context(id):
 
         if pro_perc_sum < 100:
             perc_remainder = 100 - pro_perc_sum
-            acreage = round(acres * (perc_remainder / 100))
+            acreage = percent_to_acres(perc_remainder, total_acres)
             remainder_row = ['Not conserved', acreage, str(perc_remainder) + '%']
             protection['rows'].append(remainder_row)
 
@@ -414,6 +401,10 @@ def generate_report_context(id):
         context['table']['protection'] = 'No information available'
 
     return context
+
+
+def percent_to_acres(percentage, total_acres):
+    return round(total_acres * (percentage / 100))
 
 
 def create_table(doc, data, para):
