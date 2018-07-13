@@ -220,9 +220,9 @@ class Map extends Component {
 
         const basemapsControl = L.control.basemaps({
             basemaps: config.basemaps,
-            tileX: 0,
-            tileY: 0,
-            tileZ: 0,
+            tileX: 35,
+            tileY: 51,
+            tileZ: 7,
             position: isMobile ? 'topright' : 'bottomleft'
         })
         map.addControl(basemapsControl)

@@ -35,6 +35,7 @@
                     "1": "Less vulnerable with nearby jetties/groins",
                     "2": "(high) Less vulnerable without nearby jetties/groins"
                 },
+                "goodThreshold": 2,
                 "categoricalValues": [0, 3],
                 "domain": [0, 2],
                 "datasetID": "e9603ae3c1e545edaff95dc14231f428"
@@ -57,6 +58,7 @@
                     "5":
                         "(high) Good condition for index (water quality, sediment quality, and benthic community condition)"
                 },
+                "goodThreshold": 4,
                 "categoricalValues": [1, 6],
                 "categories": {
                     "1": "<2",
@@ -128,6 +130,7 @@
                     "2": "Potential for additional presence of prothonotary warbler",
                     "3": "(high) Potential for additional presence of Swainson's warbler"
                 },
+                "goodThreshold": 1,
                 "categoricalValues": [0, 4],
                 "domain": [0, 3],
                 "datasetID": "ecf2d74a50cc47fa99ae6ef42d838866"
@@ -159,6 +162,7 @@
                     "2": "Potential for presence of least bittern, Northern pintail, and Northern shoveler",
                     "3": "(high) Potential for additional presence of king rail"
                 },
+                "goodThreshold": 2,
                 "categoricalValues": [1, 4],
                 "categories": {
                     "1": "Less than 5 ha",
@@ -228,6 +232,7 @@
                     "3":
                         "(high) Potential for presence of all 3 bird index species (Bachman's sparrow, bobwhite quail, and red-cockaded woodpecker)"
                 },
+                "goodThreshold": 1,
                 "categoricalValues": [0, 4],
                 "domain": [0, 3],
                 "datasetID": "68f3ce917278453a82afcd280b5ec84b"
@@ -240,6 +245,7 @@
                     "0": "(low) Not recently burned or not open canopy",
                     "1": "(high) Recently burned and open canopy"
                 },
+                "goodThreshold": 1,
                 "categoricalValues": [0, 2],
                 "domain": [0, 1],
                 "datasetID": "ea13b5d4f83d4e27bc8bfc8878a85b2c"
@@ -261,6 +267,7 @@
                     "3": "Potential for additional presence of Acadian flycatcher or Kentucky warbler",
                     "4": "(high) Potential for additional presence of Swainson's warbler"
                 },
+                "goodThreshold": 3,
                 "categoricalValues": [0, 5],
                 "domain": [0, 4],
                 "datasetID": "9a98b3bf45fc4d2aa0833a171b56533a"
@@ -345,6 +352,7 @@
                     "2": "Hardbottom less likely to be stressed by human activities",
                     "3": "(high) Hardbottom likely to be in best condition due to additional protections"
                 },
+                "goodThreshold": 2,
                 "categoricalValues": [0, 4],
                 "domain": [0, 3],
                 "datasetID": "cbb923b746fc435b93d079f9261fa7c2"
@@ -370,6 +378,7 @@
                     "4":
                         "(high) Greater than 95% of catchment permeable, likely high water quality and supporting most sensitive aquatic species"
                 },
+                "goodThreshold": 4,
                 "categories": {
                     "1": "<70%",
                     "2": "70-90%",
@@ -431,6 +440,7 @@
                     "0": "(low) High road density (\u22651.5 km/sq km)",
                     "1": "(high) Low road density (<1.5 km/sq km) "
                 },
+                "goodThreshold": 1,
                 "categoricalValues": [0, 2],
                 "domain": [0, 1],
                 "datasetID": "61856f9901d74185a34c08e857380395"
@@ -444,6 +454,7 @@
                     "1": "Historic place with nearby high-urban buffer",
                     "2": "(high) Historic place with nearby low-urban buffer"
                 },
+                "goodThreshold": 2,
                 "categoricalValues": [0, 3],
                 "domain": [0, 2],
                 "datasetID": "037ecaa254ff48f88969fc1db467d917"

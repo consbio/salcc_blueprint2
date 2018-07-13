@@ -101,6 +101,7 @@ class IndicatorsTab extends Component {
                         indicators={indicators}
                         percent={percent}
                         selectedIndicator={indicator}
+                        isMobile={isMobile}
                         onSelectIndicator={i => this.handleSelectIndicator(ecosystemID, i)}
                         onDeselectIndicator={this.handleDeselectIndicator}
                     />
@@ -138,6 +139,7 @@ class IndicatorsTab extends Component {
                                         icon={this.getIcon(id)}
                                         indicators={indicators}
                                         percent={percent}
+                                        isMobile={isMobile}
                                         onSelectIndicator={selectedIndicator =>
                                             this.handleSelectIndicator(id, selectedIndicator)
                                         }
@@ -165,6 +167,7 @@ class IndicatorsTab extends Component {
                             icon={this.getIcon(id)}
                             indicators={indicators}
                             percent={percent}
+                            isMobile={isMobile}
                             onSelectIndicator={selectedIndicator => this.handleSelectIndicator(id, selectedIndicator)}
                             onDeselectIndicator={this.handleDeselectIndicator}
                         />

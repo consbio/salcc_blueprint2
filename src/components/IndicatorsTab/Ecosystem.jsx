@@ -15,6 +15,7 @@ const Ecosystem = ({
     showHeader,
     percent,
     indicators,
+    isMobile,
     onSelectIndicator,
     onDeselectIndicator
 }) => {
@@ -27,6 +28,7 @@ const Ecosystem = ({
                 ecosystemLabel={label}
                 ecosystemIcon={icon}
                 {...selectedIndicator}
+                isMobile={isMobile}
                 onBackClick={onDeselectIndicator}
             />
         )
@@ -62,6 +64,7 @@ const Ecosystem = ({
 Ecosystem.propTypes = {
     ecosystemID: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
+    isMobile: PropTypes.bool.isRequired,
     onSelectIndicator: PropTypes.func.isRequired,
     onDeselectIndicator: PropTypes.func.isRequired,
 
