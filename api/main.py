@@ -2,12 +2,18 @@ import os
 import tempfile
 from flask import Flask, render_template, request, send_file, redirect
 
-from report import create_report
+from report import create_report, config_jsons
 
 app = Flask(__name__)
 # app = Flask(__name__, static_folder='static')
 
 BP_VERSION = '2.2'
+
+
+@app.before_first_request
+def run_on_start():
+    config_jsons()
+    return
 
 
 @app.route('/', methods=['POST'])

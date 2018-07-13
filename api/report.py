@@ -9,6 +9,7 @@ from docx.shared import Cm
 
 CONFIG_DIR = '../src/config'
 
+CONFIG = {}
 
 # TODO: Improve custom table style in template.docx
 DOC_STYLE = 'SALCC_style'
@@ -19,13 +20,19 @@ DATA_DIR = '../public/data'
 PLACEHOLDER_REGEX = re.compile(r'{{(?P<scope>\w+):(?P<key>\w+)}}')
 
 
-def create_report(id, path):
+def config_jsons():
+    for entry in ('ecosystems', 'owners', 'plans', 'priorities', 'protection'):
+        with open('{0}/{1}.json'.format(CONFIG_DIR, entry)) as infile:
+            CONFIG[entry] = json.loads(infile.read())
+
+
+def create_report(data_id, path):
     """
         Creates reports for analyses in docx format.
 
     Parameters
     ----------
-    id: string id of a dataset
+    data_id: string id of a dataset
     path: string location where docx to be saved
 
     Returns
@@ -35,7 +42,7 @@ def create_report(id, path):
     """
     doc = Document('template.docx')
 
-    context = generate_report_context(id)
+    context = generate_report_context(data_id)
 
     for p in doc.paragraphs:
         # Assumption: placeholders are always completely contained within a run
@@ -163,13 +170,13 @@ def create_report(id, path):
     return report
 
 
-def generate_report_context(id):
+def generate_report_context(data_id):
     """
         Retrieve data from Analysis and related objects
 
     Parameters
     ----------
-    id: string id of a dataset
+    data_id: string id of a dataset
 
     Returns
     -------
@@ -177,12 +184,7 @@ def generate_report_context(id):
 
     """
 
-    config = {}
-    for entry in ('ecosystems', 'owners', 'plans', 'priorities', 'protection'):
-        with open('{0}/{1}.json'.format(CONFIG_DIR, entry)) as infile:
-            config[entry] = json.loads(infile.read())
-
-    with open(os.path.join(DATA_DIR, '{0}.json'.format(id))) as json_file:
+    with open(os.path.join(DATA_DIR, '{0}.json'.format(data_id))) as json_file:
         data = json.loads(json_file.read())
 
     total_acres = data['acres']
@@ -199,7 +201,7 @@ def generate_report_context(id):
     }
 
     priorities['rows'] = [
-        (config['priorities'][str(i)]['label'], round(total_acres * percentage / 100), str(percentage) + '%')
+        (CONFIG['priorities'][str(i)]['label'], round(total_acres * percentage / 100), str(percentage) + '%')
         for i, percentage in enumerate(data.get('blueprint'))
     ]
     priorities['rows'].reverse()
@@ -223,7 +225,7 @@ def generate_report_context(id):
             percentage = ''
             acreage = ''
 
-        eco_row.append(config['ecosystems'][ecosystem]['label'])
+        eco_row.append(CONFIG['ecosystems'][ecosystem]['label'])
         eco_row.append(acreage)
 
         if isinstance(percentage, numbers.Number):
@@ -239,10 +241,10 @@ def generate_report_context(id):
 
     for ecosystem in data['ecosystems']:
         ecosystem_data = data['ecosystems'][ecosystem]
-        ecosystem_config = config['ecosystems'][ecosystem]
+        ecosystem_config = CONFIG['ecosystems'][ecosystem]
 
         ecosystem_indicators = {
-            'ecosystem_name': config['ecosystems'][ecosystem]['label'],
+            'ecosystem_name': CONFIG['ecosystems'][ecosystem]['label'],
             'indicators': []
         }
 
@@ -290,7 +292,7 @@ def generate_report_context(id):
     partner_headers = {}
 
     for plan_key in data['plans']:
-        plan = config['plans'][plan_key]
+        plan = CONFIG['plans'][plan_key]
         if plan['type'] == 'regional':
             partners_regional.append([plan['label'], plan['url']])
             if plan['type'] not in partner_headers:
@@ -341,7 +343,7 @@ def generate_report_context(id):
 
         for owner_data in data['owner']:
             owner_row = []
-            for owner_details in config['owners']:
+            for owner_details in CONFIG['owners']:
                 if owner_data == owner_details:
 
                     # Find acreage
@@ -349,7 +351,7 @@ def generate_report_context(id):
                     own_perc_sum += percentage
                     acreage = percent_to_acres(percentage, total_acres)
 
-                    owner_row.append(config['owners'][owner_data]['label'])
+                    owner_row.append(CONFIG['owners'][owner_data]['label'])
                     owner_row.append(acreage)
 
                     if isinstance(percentage, numbers.Number):
@@ -384,7 +386,7 @@ def generate_report_context(id):
             pro_perc_sum += percentage
             acreage = percent_to_acres(percentage, total_acres)
 
-            pro_row.append(config['protection'][pro]['label'])
+            pro_row.append(CONFIG['protection'][pro]['label'])
             pro_row.append(acreage)
             pro_row.append(str(percentage) + '%')
 
