@@ -138,9 +138,9 @@ footer {
 .tab svg {
     fill: #aaa;
 }
-.tab-indicators svg {
+/* .tab-indicators svg {
     transform: rotate(90deg);
-}
+} */
 .tab.active {
     color: #0892d0;
 }

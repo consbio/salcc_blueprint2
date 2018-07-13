@@ -145,29 +145,6 @@ const InfoTab = ({ isMobile }) => {
                     <br />
                     <span className="text-small text-quiet">(note: applies to the basemap, not the Blueprint)</span>
                 </p>
-
-                <h4>Icons:</h4>
-                <p>
-                    {/* Priorities, Indicators, and Partners icons made by{' '} */}
-                    Navigation icons made by{' '}
-                    <a href="https://www.flaticon.com/authors/those-icons" target="_blank" rel="noopener noreferrer">
-                        Those Icons
-                    </a>{' '}
-                    <a
-                        href="http://creativecommons.org/licenses/by/3.0/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title="Creative Commons BY 3.0"
-                    >
-                        CC 3.0 BY
-                    </a>{' '}
-                    <span className="text-small text-quiet">
-                        (from{' '}
-                        <a href="https://www.flaticon.com/" target="_blank" rel="noopener noreferrer" title="Flaticon">
-                            www.flaticon.com
-                        </a>)
-                    </span>
-                </p>
             </section>
         </div>
     )
