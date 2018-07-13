@@ -130,7 +130,7 @@ module.exports = {
             // "file" loader makes sure those assets end up in the `build` folder.
             // When you `import` an asset, you get its filename.
             {
-                exclude: [/\.html$/, /\.(js|jsx)$/, /\.css$/, /\.json$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+                exclude: [/\.html$/, /\.(js|jsx)$/, /\.css$/, /\.json$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
                 loader: require.resolve('file-loader'),
                 options: {
                     name: 'static/media/[name].[hash:8].[ext]'
@@ -154,6 +154,20 @@ module.exports = {
                 options: {
                     compact: true
                 }
+            },
+            {
+                test: /\.svg$/,
+                use: [
+                    {
+                        loader: 'babel-loader'
+                    },
+                    {
+                        loader: 'react-svg-loader',
+                        options: {
+                            jsx: true // true outputs JSX tags
+                        }
+                    }
+                ]
             },
             // The notation here is somewhat confusing.
             // "postcss" loader applies autoprefixer to our CSS.
