@@ -452,6 +452,11 @@ footer {
     margin: 4px 0 3px;
 }
 
+.indicator-chart-heading {
+    min-width: 4em;
+    flex: 0;
+}
+
 .indicator-dataset-link {
     margin-top: 4rem !important;
 }
@@ -528,6 +533,7 @@ footer {
 }
 #IndicatorDetails .chart-labeledpercentbar {
     font-size: 12px;
+    width: 100%;
 }
 
 .chart-whisker .domain {

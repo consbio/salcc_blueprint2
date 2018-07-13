@@ -56,8 +56,16 @@ const IndicatorDetails = ({
                     {hasGoodThreshold ? (
                         <div>
                             <div className="indicator-detail-charts">
-                                {goodPercents.map(entry => (
-                                    <LabeledPercentBar className="text-quiet" key={entry.value} {...entry} height={6} />
+                                {goodPercents.map((entry, i) => (
+                                    <div className="flex-container">
+                                        <div className="indicator-chart-heading">{i === 0 ? 'High:' : ''}</div>
+                                        <LabeledPercentBar
+                                            className="text-quiet"
+                                            key={entry.value}
+                                            {...entry}
+                                            height={6}
+                                        />
+                                    </div>
                                 ))}
 
                                 <div className="indicator-good-condition-divider">
@@ -70,16 +78,43 @@ const IndicatorDetails = ({
                                     </div>
                                 </div>
 
-                                {notGoodPercents.map(entry => (
-                                    <LabeledPercentBar className="text-quiet" key={entry.value} {...entry} height={6} />
+                                {notGoodPercents.map((entry, i) => (
+                                    <div className="flex-container">
+                                        <div className="indicator-chart-heading">
+                                            {i === notGoodPercents.length - 1 ? 'Low:' : ''}
+                                        </div>
+                                        <LabeledPercentBar
+                                            className="text-quiet"
+                                            key={entry.value}
+                                            {...entry}
+                                            height={6}
+                                        />
+                                    </div>
                                 ))}
                             </div>
                         </div>
                     ) : (
                         <div className="indicator-detail-charts">
-                            {percents.map(entry => (
-                                <LabeledPercentBar className="text-quiet" key={entry.value} {...entry} height={6} />
-                            ))}
+                            {percents.map((entry, i) => {
+                                let heading = ''
+                                if (i === 0) {
+                                    heading = 'High:'
+                                } else if (i === percents.length - 1) {
+                                    heading = 'Low:'
+                                }
+
+                                return (
+                                    <div className="flex-container">
+                                        <div className="indicator-chart-heading">{heading}</div>
+                                        <LabeledPercentBar
+                                            className="text-quiet"
+                                            key={entry.value}
+                                            {...entry}
+                                            height={6}
+                                        />
+                                    </div>
+                                )
+                            })}
                         </div>
                     )}
                 </div>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import * as actions from '../Actions/actions'
-import ResetIcon from './icons/ResetIcon'
+import ResetIcon from './icons/outline-cancel-24px.svg'
 
 const Header = ({
     isMobile, hasSelectedUnit, unitName, deselectUnit, setTab

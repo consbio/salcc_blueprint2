@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import InfoTab from './InfoTab'
 import Tabs, { getUnitTab } from './Tabs'
-import ResetIcon from './icons/ResetIcon'
+import ResetIcon from './icons/outline-cancel-24px.svg'
 import * as actions from '../Actions/actions'
 
 const Sidebar = ({
