@@ -7,9 +7,6 @@ import numbers
 from docx import Document
 from docx.shared import Cm
 
-CONFIG_DIR = '../src/config'
-
-CONFIG = {}
 
 # TODO: Improve custom table style in template.docx
 DOC_STYLE = 'SALCC_style'
@@ -20,20 +17,15 @@ DATA_DIR = '../public/data'
 PLACEHOLDER_REGEX = re.compile(r'{{(?P<scope>\w+):(?P<key>\w+)}}')
 
 
-def config_jsons():
-    for entry in ('ecosystems', 'owners', 'plans', 'priorities', 'protection'):
-        with open('{0}/{1}.json'.format(CONFIG_DIR, entry)) as infile:
-            CONFIG[entry] = json.loads(infile.read())
-
-
-def create_report(data_id, path):
+def create_report(unit_id, path, config):
     """
-        Creates reports for analyses in docx format.
+        Creates report for summary unit in docx format.
 
     Parameters
     ----------
-    data_id: string id of a dataset
+    unit_id: string id of a summary unit
     path: string location where docx to be saved
+    config: dict of json data from src/config
 
     Returns
     -------
@@ -42,7 +34,7 @@ def create_report(data_id, path):
     """
     doc = Document('template.docx')
 
-    context = generate_report_context(data_id)
+    context = generate_report_context(unit_id, config)
 
     for p in doc.paragraphs:
         # Assumption: placeholders are always completely contained within a run
@@ -71,22 +63,22 @@ def create_report(data_id, path):
             # Because we're not using replace(match.group()) here, everything must be moved into place
             p.text = ''
 
-            zone_insertion_point = p
+            ecosystem_insertion_point = p
 
-            for zone in context['ecosystem_indicators']:
-                if 'ecosystem_percentage' in zone and zone['ecosystem_percentage'] is not '':
-                    heading = zone['ecosystem_name'] + ': ' + str(zone['ecosystem_percentage']) + "% of area"
+            for ecosystem in context['ecosystem_indicators']:
+                if 'ecosystem_percentage' in ecosystem and ecosystem['ecosystem_percentage'] is not '':
+                    heading = ecosystem['ecosystem_name'] + ': ' + str(ecosystem['ecosystem_percentage']) + "% of area"
                     eco_h = doc.add_paragraph(heading, style='Heading13')
-                    _move_p_after(eco_h, zone_insertion_point)
+                    _move_p_after(eco_h, ecosystem_insertion_point)
                 else:
-                    heading = zone['ecosystem_name']
+                    heading = ecosystem['ecosystem_name']
                     eco_h = doc.add_paragraph(heading, style='Heading13')
-                    _move_p_after(eco_h, zone_insertion_point)
+                    _move_p_after(eco_h, ecosystem_insertion_point)
 
                 indicator_insertion_point = eco_h
 
-                if zone['indicators']:
-                    for indicator in zone['indicators']:
+                if ecosystem['indicators']:
+                    for indicator in ecosystem['indicators']:
 
                         indicator_boilerplate = 'The average value of the indicator in the {0}, compared to the South ' \
                                                 'Atlantic average. The South Atlantic average is the average of ' \
@@ -95,7 +87,7 @@ def create_report(data_id, path):
                         indicator_boilerplate2 = 'The area of {0} values as they occur within the {1} ecosystem in the ' \
                                                  '{2}. Indicator ratings for condition have not yet been set for this ' \
                                                  'indicator.'.format(indicator['value']['indicator_name'],
-                                                                     zone['ecosystem_name'],
+                                                                     ecosystem['ecosystem_name'],
                                                                      context['value']['summary_unit_name'])
 
                         ind_h = doc.add_paragraph(indicator['value']['indicator_name'], style='Heading11')
@@ -108,15 +100,15 @@ def create_report(data_id, path):
                         boiler2 = doc.add_paragraph(indicator_boilerplate2)
                         _move_p_after(boiler2, boiler1)
 
-                        section_end = create_table(doc, zone['indicators'][0]['table']['indicator_table'], boiler2)
+                        section_end = create_table(doc, ecosystem['indicators'][0]['table']['indicator_table'], boiler2)
 
                         indicator_insertion_point = section_end
 
-                    zone_insertion_point = section_end
+                    ecosystem_insertion_point = section_end
                 else:
                     temp_text = doc.add_paragraph('(No indicators for this ecosystem.)')
                     _move_p_after(temp_text, eco_h)
-                    zone_insertion_point = temp_text
+                    ecosystem_insertion_point = temp_text
 
             # Delete the placeholder para
             delete_paragraph(p)
@@ -170,13 +162,14 @@ def create_report(data_id, path):
     return report
 
 
-def generate_report_context(data_id):
+def generate_report_context(unit_id, config):
     """
-        Retrieve data from Analysis and related objects
+        Create json of data points required for report
 
     Parameters
     ----------
-    data_id: string id of a dataset
+    unit_id: string id of a summary unit
+    config: dict of json data from src/config
 
     Returns
     -------
@@ -184,7 +177,7 @@ def generate_report_context(data_id):
 
     """
 
-    with open(os.path.join(DATA_DIR, '{0}.json'.format(data_id))) as json_file:
+    with open(os.path.join(DATA_DIR, '{0}.json'.format(unit_id))) as json_file:
         data = json.loads(json_file.read())
 
     total_acres = data['acres']
@@ -201,7 +194,7 @@ def generate_report_context(data_id):
     }
 
     priorities['rows'] = [
-        (CONFIG['priorities'][str(i)]['label'], round(total_acres * percentage / 100), str(percentage) + '%')
+        (config['priorities'][str(i)]['label'], percent_to_acres(percentage, total_acres), str(percentage) + '%')
         for i, percentage in enumerate(data.get('blueprint'))
     ]
     priorities['rows'].reverse()
@@ -218,20 +211,16 @@ def generate_report_context(data_id):
     for ecosystem in data['ecosystems']:
         eco_row = []
 
-        if 'percent' in data['ecosystems'][ecosystem]:
-            percentage = data['ecosystems'][ecosystem]['percent']
-            acreage = percent_to_acres(percentage, total_acres)
-        else:
-            percentage = ''
-            acreage = ''
+        ecosystems = data.get('ecosystems', [])  # make sure we always have a list
+        ecosystems_with_area = [(e, ecosystems[e]['percent']) for e in ecosystems if 'percent' in ecosystems[e]]
+        # filter the list to those with percents, and make a new list of tuples of ecosystem ID and percent
+        ecosystems_with_area = sorted(ecosystems_with_area, key=lambda x: x[1],
+                                      reverse=True)  # sort by percent, from largest percent to smallest
 
-        eco_row.append(CONFIG['ecosystems'][ecosystem]['label'])
-        eco_row.append(acreage)
-
-        if isinstance(percentage, numbers.Number):
-            eco_row.append(str(percentage) + '%')
-
-        ecosystems_table['rows'].append(eco_row)
+        ecosystems_table['rows'] = [
+            (config['ecosystems'][e]['label'], percent_to_acres(percent, total_acres), percent)
+            for e, percent in ecosystems_with_area
+        ]
 
     context['table']['ecosystems'] = ecosystems_table
 
@@ -241,10 +230,10 @@ def generate_report_context(data_id):
 
     for ecosystem in data['ecosystems']:
         ecosystem_data = data['ecosystems'][ecosystem]
-        ecosystem_config = CONFIG['ecosystems'][ecosystem]
+        ecosystem_config = config['ecosystems'][ecosystem]
 
         ecosystem_indicators = {
-            'ecosystem_name': CONFIG['ecosystems'][ecosystem]['label'],
+            'ecosystem_name': config['ecosystems'][ecosystem]['label'],
             'indicators': []
         }
 
@@ -292,7 +281,7 @@ def generate_report_context(data_id):
     partner_headers = {}
 
     for plan_key in data['plans']:
-        plan = CONFIG['plans'][plan_key]
+        plan = config['plans'][plan_key]
         if plan['type'] == 'regional':
             partners_regional.append([plan['label'], plan['url']])
             if plan['type'] not in partner_headers:
@@ -343,7 +332,7 @@ def generate_report_context(data_id):
 
         for owner_data in data['owner']:
             owner_row = []
-            for owner_details in CONFIG['owners']:
+            for owner_details in config['owners']:
                 if owner_data == owner_details:
 
                     # Find acreage
@@ -351,7 +340,7 @@ def generate_report_context(data_id):
                     own_perc_sum += percentage
                     acreage = percent_to_acres(percentage, total_acres)
 
-                    owner_row.append(CONFIG['owners'][owner_data]['label'])
+                    owner_row.append(config['owners'][owner_data]['label'])
                     owner_row.append(acreage)
 
                     if isinstance(percentage, numbers.Number):
@@ -386,7 +375,7 @@ def generate_report_context(data_id):
             pro_perc_sum += percentage
             acreage = percent_to_acres(percentage, total_acres)
 
-            pro_row.append(CONFIG['protection'][pro]['label'])
+            pro_row.append(config['protection'][pro]['label'])
             pro_row.append(acreage)
             pro_row.append(str(percentage) + '%')
 
