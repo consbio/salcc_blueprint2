@@ -48,7 +48,7 @@ const Sidebar = ({
                             <ResetIcon id="CloseButton" onClick={deselectUnit} />
                         </div>
 
-                        <Tabs hasSelectedUnit={hasSelectedUnit} activeTab={activeTab} setTab={setTab} />
+                        <Tabs hasSelectedUnit={hasSelectedUnit} activeTab={activeTab} setTab={setTab} isMobile={false} />
                     </div>
                     {activeTab && (
                         <div id="SidebarContent" className="flex-container-column">

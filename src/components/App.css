@@ -132,7 +132,7 @@ footer {
     flex-grow: 1;
     cursor: pointer;
     text-align: center;
-    /* width: 86px; */
+    width: 86px;
     padding-top: 4px;
 }
 .tab svg {

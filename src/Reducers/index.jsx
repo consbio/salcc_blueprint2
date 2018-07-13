@@ -17,7 +17,7 @@ const initialState = {
     // Application state
     isPending: false,
     hasError: false,
-    activeTab: null,
+    activeTab: 'Map',
     place: null, // selected location from search
     places: [], // other places returned from search
 

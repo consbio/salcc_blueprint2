@@ -8,7 +8,6 @@ import PartnersTab from './PartnersTab'
 
 import InfoTab from './InfoTab'
 import FindLocationTab from './FindLocationTab'
-// import TabIcons from './icons/TabIcons'
 import FilledInfoIcon from './icons/baseline-info-24px.svg'
 import OutlineInfoIcon from './icons/outline-info-24px.svg'
 import FilledPinIcon from './icons/baseline-pin_drop-24px.svg'
@@ -25,9 +24,11 @@ import OutlinePrioritiesIcon from './icons/outline-stars-24px.svg'
 // import OutlinePrioritiesIcon from './icons/outline-verified_user-24px.svg'
 import FilledPartnersIcon from './icons/baseline-people-24px.svg'
 import OutlinePartnersIcon from './icons/outline-people-24px.svg'
+import FilledThreatsIcon from './icons/baseline-report-24px.svg'
+import OutlineThreatsIcon from './icons/outline-report-24px.svg'
 
-const TABS = ['Info', 'Find Location'] // TODO: 'Map'
-const UNIT_TABS = ['Priorities', 'Indicators', 'Partners'] // TODO: 'Threats'
+const TABS = ['Info', 'Map', 'Find Location'] // TODO: 'Map'
+const UNIT_TABS = ['Map', 'Priorities', 'Indicators', 'Threats', 'Partners']
 
 const ICONS = {
     Info: {
@@ -53,6 +54,10 @@ const ICONS = {
     Priorities: {
         default: OutlinePrioritiesIcon,
         active: FilledPrioritiesIcon
+    },
+    Threats: {
+        default: OutlineThreatsIcon,
+        active: FilledThreatsIcon
     }
 }
 
@@ -91,9 +96,12 @@ export const getUnitTab = (tab) => {
 }
 
 const Tabs = ({
-    activeTab, hasSelectedUnit, toggleTabs, setTab
+    activeTab, hasSelectedUnit, toggleTabs, setTab, isMobile
 }) => {
-    const tabs = hasSelectedUnit ? UNIT_TABS : TABS
+    let tabs = hasSelectedUnit ? UNIT_TABS : TABS
+    if (!isMobile) {
+        tabs = tabs.filter(t => t !== 'Map')
+    }
 
     const handleSetTab = (tab) => {
         // toggle current tab
@@ -114,7 +122,6 @@ const Tabs = ({
 
                 return (
                     <div key={tab} className={className} onClick={handleClick}>
-                        {/* <TabIcons icon={tab} height={24} /> */}
                         <Icon />
                         <label>{tab}</label>
                     </div>
@@ -127,6 +134,7 @@ const Tabs = ({
 Tabs.propTypes = {
     hasSelectedUnit: PropTypes.bool.isRequired,
     setTab: PropTypes.func.isRequired,
+    isMobile: PropTypes.bool.isRequired,
 
     activeTab: PropTypes.string,
     toggleTabs: PropTypes.bool
