@@ -2,7 +2,6 @@ import re
 import os
 import json
 import docx
-import numbers
 
 from docx import Document
 from docx.shared import Cm
@@ -218,7 +217,7 @@ def generate_report_context(unit_id, config):
                                       reverse=True)  # sort by percent, from largest percent to smallest
 
         ecosystems_table['rows'] = [
-            (config['ecosystems'][e]['label'], percent_to_acres(percent, total_acres), percent)
+            (config['ecosystems'][e]['label'], percent_to_acres(percent, total_acres), str(percent) + '%')
             for e, percent in ecosystems_with_area
         ]
 
@@ -233,17 +232,18 @@ def generate_report_context(unit_id, config):
         ecosystem_config = config['ecosystems'][ecosystem]
 
         ecosystem_indicators = {
-            'ecosystem_name': config['ecosystems'][ecosystem]['label'],
-            'indicators': []
+            'ecosystem_name': ecosystem_config['label'],
+            'indicators': [],
+            'ecosystem_percentage': ecosystem_data.get('percent', '')
         }
 
-        ecosystem_indicators['ecosystem_percentage'] = ecosystem_data.get('percent', '')
-
         for indicator in ecosystem_data.get('indicators', []):
-            indicator_data = {
+            indicator_config = ecosystem_config['indicators'][indicator]
+            indicator_data = ecosystem_data['indicators'][indicator]
+            indicator_context = {
                 'value': {
-                    'indicator_name': ecosystem_config['indicators'][indicator]['label'],
-                    'indicator_description': ecosystem_config['indicators'][indicator]['description']
+                    'indicator_name': indicator_config['label'],
+                    'indicator_description': indicator_config['description']
                 },
                 'table': {
                     'indicator_table': {
@@ -253,23 +253,13 @@ def generate_report_context(unit_id, config):
                 }
             }
 
-            if 'indicators' in ecosystem_data:
-                for index, val_label in enumerate(ecosystem_config['indicators'][indicator]['valueLabels']):
-                    table_row = []
+            indicator_values = list(zip(indicator_config['valueLabels'], indicator_data['percent']))
+            indicator_context['table']['indicator_table']['rows'] = [
+                (indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres), str(percent) + '%')
+                for label, percent in indicator_values
+            ]
 
-                    # Find acreage
-                    percentage = ecosystem_data['indicators'][indicator]['percent'][index]
-                    acreage = percent_to_acres(percentage, total_acres)
-
-                    table_row.append(ecosystem_config['indicators'][indicator]['valueLabels'][val_label])
-                    table_row.append(acreage)
-
-                    if isinstance(percentage, numbers.Number):
-                        table_row.append(str(percentage) + '%')
-
-                    indicator_data['table']['indicator_table']['rows'].append(table_row)
-
-            ecosystem_indicators['indicators'].append(indicator_data)
+            ecosystem_indicators['indicators'].append(indicator_context)
 
         context['ecosystem_indicators'].append(ecosystem_indicators)
 
@@ -342,9 +332,7 @@ def generate_report_context(unit_id, config):
 
                     owner_row.append(config['owners'][owner_data]['label'])
                     owner_row.append(acreage)
-
-                    if isinstance(percentage, numbers.Number):
-                        owner_row.append(str(percentage) + '%')
+                    owner_row.append(str(percentage) + '%')
             owners['rows'].append(owner_row)
 
         if own_perc_sum < 100:
