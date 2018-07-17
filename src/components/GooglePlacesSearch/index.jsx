@@ -131,14 +131,12 @@ class GooglePlacesSearch extends React.Component {
     }
 
     handleResultClick(result) {
-        console.log('handleResultClicked', result)
         this._getResultLocation(result)
     }
 
     render() {
         const { value, isPending } = this.state
         const { places: results } = this.props
-        console.log('render google search', value, results)
         return (
             <div className="gplaces-search flex-container-column">
                 <Input

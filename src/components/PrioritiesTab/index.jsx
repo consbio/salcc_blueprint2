@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import PieChart from 'react-minimal-pie-chart'
 
 import { formatPercent } from '../../utils'
-import * as actions from '../../Actions/actions'
 import PRIORITIES from '../../config/priorities.json'
 import PLANS from '../../config/plans.json'
 
@@ -43,8 +42,6 @@ const PrioritiesTab = ({
         }))
         .filter(p => p.value > 0)
 
-    console.log(blueprint, chartData)
-
     return (
         <div id="Content" className="flex-container-column">
             <section>
@@ -54,7 +51,7 @@ const PrioritiesTab = ({
                     <PieChart data={chartData} style={{ width: 200 }} />
                     <div className="chart-pie-legend">
                         {chartData.map(priority => (
-                            <div className="chart-pie-legend-row flex-container flex-align-center">
+                            <div key={priority.label} className="chart-pie-legend-row flex-container flex-align-center">
                                 <div className="chart-pie-legend-patch" style={{ backgroundColor: priority.color }} />
                                 <div className="chart-pie-legend-label text-smaller">
                                     {priority.label}
@@ -116,11 +113,8 @@ const mapStateToProps = ({ app }) => {
         blueprint,
         justification,
         plans,
-        isMarine: selectedUnit.indexOf('M') === 0
+        isMarine: !!(selectedUnit && selectedUnit.indexOf('M') === 0)
     }
 }
 
-export default connect(
-    mapStateToProps,
-    actions
-)(PrioritiesTab)
+export default connect(mapStateToProps)(PrioritiesTab)

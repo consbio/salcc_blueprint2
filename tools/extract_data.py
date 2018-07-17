@@ -60,7 +60,7 @@ marine_indicator_tables = [
 urbanization_years = [2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100]
 urbanization_filename = 'TabArea_0_serap_urb{year}_IsNull0.csv'
 slr_filename = 'TabArea_slra_alb30m_IsNull0.csv'
-slr_levels = ['1', '1_5', '2', '2_5', '3', '3_5', '4', '4_5', '5',
+slr_levels = ['0_5', '1', '1_5', '2', '2_5', '3', '3_5', '4', '4_5', '5',
               '5_5', '6', '6_5', '7', '7_5', '8', '8_5', '9', '9_5', '10']
 
 indicator_avg = defaultdict(list)
@@ -237,8 +237,7 @@ for year in urbanization_years:
         # bug PercentUrb is actually proportion not percent
         inland_urbanization[huc].append(int(round(100.0 * row['PercentUrb'])))
 
-
-# TODO: extract SLR and calculate percent
+# Extract sea level rise in 0.5 foot increments from 0.5 to 10 feet
 print('reading SLR')
 inland_slr = defaultdict(list)
 df = pd.read_csv(os.path.join(src_dir, slr_filename), dtype={'HUC12': str})
@@ -278,6 +277,14 @@ for index, row in df.iterrows():
         if ecosystem:
             ecosystems_obj[ecosystemID] = ecosystem
 
+    slr = inland_slr.get(huc, None)
+    if slr is None or max(slr) == 0:
+        slr = None
+
+    urbanization = inland_urbanization.get(huc, None)
+    if urbanization is None or max(urbanization) == 0:
+        urbanization = None
+
     props = {
         'SRCID': huc,
         'name': row['HU_12_NAME'],
@@ -288,8 +295,8 @@ for index, row in df.iterrows():
         'plans': huc_plans.get(huc, []),
         'counties': huc_counties.get(huc, {}),
         'ecosystems': ecosystems_obj,
-        'slr': inland_slr.get(huc, []),
-        'urban': inland_urbanization.get(huc, [])
+        'slr': slr,
+        'urban': urbanization
     }
 
     if huc in ownership_data:
