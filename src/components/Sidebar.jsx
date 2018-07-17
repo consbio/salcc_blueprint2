@@ -8,13 +8,7 @@ import ResetIcon from './icons/outline-cancel-24px.svg'
 import * as actions from '../Actions/actions'
 
 const Sidebar = ({
-    activeTab,
-    unitName,
-    hasSelectedUnit,
-    isDataLoaded,
-    acres,
-    deselectUnit,
-    setTab
+    activeTab, unitName, hasSelectedUnit, isDataLoaded, isMarine, acres, deselectUnit, setTab
 }) => {
     let tab = null
     if (hasSelectedUnit) {
@@ -44,6 +38,7 @@ const Sidebar = ({
                             activeTab={activeTab}
                             setTab={setTab}
                             isMobile={false}
+                            isMarine={isMarine}
                         />
                     </div>
                     {activeTab && (
@@ -65,6 +60,7 @@ Sidebar.propTypes = {
     unitName: PropTypes.string.isRequired,
     hasSelectedUnit: PropTypes.bool.isRequired,
     isDataLoaded: PropTypes.bool.isRequired,
+    isMarine: PropTypes.bool.isRequired,
 
     deselectUnit: PropTypes.func.isRequired,
     setTab: PropTypes.func.isRequired,
@@ -86,6 +82,7 @@ const mapStateToProps = ({
     activeTab,
     isDataLoaded,
     hasSelectedUnit: selectedUnit !== null,
+    isMarine: !!(selectedUnit && selectedUnit.indexOf('M') === 0),
     unitName: isDataLoaded && data.name ? data.name : 'Loading...',
     acres: isDataLoaded ? data.acres : null
 })

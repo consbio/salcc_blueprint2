@@ -55,6 +55,7 @@
         "react-ga": "^2.5.3",
         "react-minimal-pie-chart": "^3.0.2",
         "react-redux": "^5.0.7",
+        "react-svg-line-chart": "^2.0.1",
         "react-svg-loader": "^2.1.0",
         "react-swipeable-views": "^0.12.14",
         "redux": "^3.7.2",

@@ -5,7 +5,6 @@ Run this after export_tables.py
 """
 
 
-
 import os
 from collections import defaultdict
 import json
@@ -13,8 +12,11 @@ import numpy as np
 import pandas as pd
 
 
-src_dir = '../source_data'
-out_dir = '../public/data'
+src_dir = './source_data'
+out_dir = './public/data'
+
+if not os.path.exists(out_dir):
+    os.makedirs(out_dir)
 
 
 def to_titlecase(text):
@@ -55,6 +57,11 @@ marine_indicator_tables = [
     'TabArea_Marine_Mammals_V_2_1_BinnedClip',
 ]
 
+urbanization_years = [2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100]
+urbanization_filename = 'TabArea_0_serap_urb{year}_IsNull0.csv'
+slr_filename = 'TabArea_slra_alb30m_IsNull0.csv'
+slr_levels = ['0_5', '1', '1_5', '2', '2_5', '3', '3_5', '4', '4_5', '5',
+              '5_5', '6', '6_5', '7', '7_5', '8', '8_5', '9', '9_5', '10']
 
 indicator_avg = defaultdict(list)
 indicator_area = defaultdict(list)
@@ -62,7 +69,7 @@ indicator_area = defaultdict(list)
 
 ################ INLAND ######################
 
-## Extract counties by watershed.
+# Extract counties by watershed.
 print('Reading states')
 fips_state = dict()
 df = pd.read_csv(os.path.join(src_dir, 'tl_2015_us_state.csv'))
@@ -72,16 +79,20 @@ for index, row in df.iterrows():
 print('Reading counties')
 # Intersection was run by hand in ArcGIS, output inland_counties
 huc_counties = defaultdict(dict)
-df = pd.read_csv(os.path.join(src_dir, 'inland_counties.csv'), dtype={'HUC12': str})
+df = pd.read_csv(os.path.join(src_dir, 'inland_counties.csv'),
+                 dtype={'HUC12': str})
 for index, row in df.iterrows():
     fips = '{0}{1:0>3}'.format(row['STATEFP'], row['COUNTYFP'])
-    huc_counties[row['HUC12']][fips] =  '{0}, {1}'.format(row['NAMELSAD'], fips_state[row['STATEFP']])
+    huc_counties[row['HUC12']][fips] = '{0}, {1}'.format(
+        row['NAMELSAD'], fips_state[row['STATEFP']])
 
 
 # Extract ownership by HUC
 print('Reading ownership')
-ownership_data = defaultdict(lambda: defaultdict(lambda: defaultdict(float)))  # [huc]['owner' or 'gap'][key] = area
-df = pd.read_csv(os.path.join(src_dir, 'TabArea_TNCExternalSecuredAreas2015Div_FeeOrgtype.csv'), dtype={'HUC12': str})
+# [huc]['owner' or 'gap'][key] = area
+ownership_data = defaultdict(lambda: defaultdict(lambda: defaultdict(float)))
+df = pd.read_csv(os.path.join(
+    src_dir, 'TabArea_TNCExternalSecuredAreas2015Div_FeeOrgtype.csv'), dtype={'HUC12': str})
 for index, row in df.iterrows():
     huc = row['HUC12']
     for field in ['FED', 'LOC', 'PFP', 'PLO', 'STP', 'TNC', 'TRB', 'UNK']:
@@ -91,43 +102,53 @@ for index, row in df.iterrows():
 
 
 print('Reading protection')
-df = pd.read_csv(os.path.join(src_dir, 'TabArea_TNCExternalSecuredAreas2015Div_GapStatus.csv'), dtype={'HUC12': str})
+df = pd.read_csv(os.path.join(
+    src_dir, 'TabArea_TNCExternalSecuredAreas2015Div_GapStatus.csv'), dtype={'HUC12': str})
 for index, row in df.iterrows():
     huc = row['HUC12']
     for field in ['GAP_S_1', 'GAP_S_2', 'GAP_S_3', 'GAP_S_39', 'GAP_S_4', 'GAP_S_9']:
         acres = row[field] * 0.000247105  # sq m to acres
         if acres >= 10:
-            ownership_data[huc]['gap'][int(field.replace('GAP_S_', ''))] += acres
+            ownership_data[huc]['gap'][int(
+                field.replace('GAP_S_', ''))] += acres
 
 
 # Extract ecosystems by HUC
 print('Reading ecosystems')
 ecosystems = defaultdict(lambda: defaultdict(float))
-df = pd.read_csv(os.path.join(src_dir, 'TabArea_EcosystemMask_20160229_Blueprint_2_1_AnalysisArea_EcosystemName.csv'), dtype={'HUC12': str})
-fields = [str(x) for x in df.columns if 'ESTUARIES__' not in x and x not in ('geometry', 'HUC12', 'SumForAllEcosystems')]
-ecosystemIDs = {'Landscapes', 'Waterscapes', 'FreshwaterAquatic'}  # Add cross-system ecosystems
+df = pd.read_csv(os.path.join(
+    src_dir, 'TabArea_EcosystemMask_20160229_Blueprint_2_1_AnalysisArea_EcosystemName.csv'), dtype={'HUC12': str})
+fields = [str(x) for x in df.columns if 'ESTUARIES__' not in x and x not in (
+    'geometry', 'HUC12', 'SumForAllEcosystems')]
+ecosystemIDs = {'Landscapes', 'Waterscapes',
+                'FreshwaterAquatic'}  # Add cross-system ecosystems
 for index, row in df.iterrows():
-    total_area = sum(row[f] for f in fields) #row['SumAreaForAllEcosystems']
+    total_area = sum(row[f] for f in fields)  # row['SumAreaForAllEcosystems']
     if total_area > 0:
         for field in fields:
             if row[field] > 0:
-                name = to_titlecase(field.replace('EstuariesCombined', 'Estuarine'))  #For purposes of ecosystems and indicators, it is Estuarine
+                # For purposes of ecosystems and indicators, it is Estuarine
+                name = to_titlecase(field.replace(
+                    'EstuariesCombined', 'Estuarine'))
                 ecosystemIDs.add(name)
-                ecosystems[row['HUC12']][name] = round(100.0 * row[field] / total_area, 1) or 0
+                ecosystems[row['HUC12']][name] = round(
+                    100.0 * row[field] / total_area, 1) or 0
 
 # print('Ecoystems:\n', ecosystemIDs)
 
 
-
 # Extract plans and justification by HUC
 print('Reading plans')
-inland_plan_fields = ['PARCA', 'TNC', 'EPA', 'ACJV', 'NBCI', 'Alabama', 'Florida', 'NorthCarolina', 'Virginia', 'Georgia']
+inland_plan_fields = ['PARCA', 'TNC', 'EPA', 'ACJV', 'NBCI',
+                      'Alabama', 'Florida', 'NorthCarolina', 'Virginia', 'Georgia']
 huc_plans = dict()
 justification = dict()
-df = pd.read_csv(os.path.join(src_dir, 'JustifiationCleanUp2017_InlandBlueprint_1_0_07Sept2014.csv'), dtype={'HUC12': str})
+df = pd.read_csv(os.path.join(
+    src_dir, 'JustifiationCleanUp2017_InlandBlueprint_1_0_07Sept2014.csv'), dtype={'HUC12': str})
 for index, row in df.iterrows():
     huc = row['HUC12']
-    huc_plans[huc] = [field for field in inland_plan_fields if field in df.columns and row[field].strip()]
+    huc_plans[huc] = [
+        field for field in inland_plan_fields if field in df.columns and row[field].strip()]
     value = str(row['Justification'])
     if value != 'nan':
         justification[huc] = value
@@ -135,68 +156,102 @@ for index, row in df.iterrows():
 
 # Extract inland indicators by HUC
 print('Reading indicators')
-inland_indicators = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))  # HUC:ecosystem:indicator
+inland_indicators = defaultdict(lambda: defaultdict(
+    lambda: defaultdict(list)))  # HUC:ecosystem:indicator
 for table in inland_indicator_tables:
     print('Reading: {0}'.format(table))
-    df = pd.read_csv(os.path.join(src_dir, '{0}.csv'.format(table)), dtype={'HUC12': str})
+    df = pd.read_csv(os.path.join(
+        src_dir, '{0}.csv'.format(table)), dtype={'HUC12': str})
     fields = [x for x in df.columns if x.startswith('VALUE_')]
 
     # Fix the name to match the standard
-    indicator = table.replace('TabArea_', '').replace('_V_2_1', '').replace('_SimpleViewer', '').replace('_V_2_0', '').replace('_V_2_2', '').replace('_BinnedClip', '').replace('_NoDataTo0_ClipToEcosystemMaskClip', '').replace('Clip', '').replace('Water_', 'Water').replace('EstuarineMarsh', 'Estuarine').replace('Hardwoods', 'Hardwood')
+    indicator = table.replace('TabArea_', '').replace('_V_2_1', '').replace('_SimpleViewer', '').replace('_V_2_0', '').replace('_V_2_2', '').replace('_BinnedClip', '').replace(
+        '_NoDataTo0_ClipToEcosystemMaskClip', '').replace('Clip', '').replace('Water_', 'Water').replace('EstuarineMarsh', 'Estuarine').replace('Hardwoods', 'Hardwood')
     print('==>{}'.format(indicator))
 
     ecosystem, indicator = indicator.split('_')
     if not ecosystem in ecosystemIDs:
-        raise ValueError(ecosystem + ' not in ecosystem list, indicator: {0}'.format(indicator))
+        raise ValueError(
+            ecosystem + ' not in ecosystem list, indicator: {0}'.format(indicator))
 
     for index, row in df.iterrows():
         total_area = sum([row[f] for f in fields])
-        inland_indicators[row['HUC12']][ecosystem][indicator] = [round(100.0 * row[f] / total_area, 1) or 0 for f in fields] # values are in percent
+        inland_indicators[row['HUC12']][ecosystem][indicator] = [round(
+            100.0 * row[f] / total_area, 1) or 0 for f in fields]  # values are in percent
 
 
-inland_indicator_stats = defaultdict(lambda: defaultdict(lambda: defaultdict(float)))  # HUC:ecosystem:indicator, values are [min, mean, max]
+inland_indicator_stats = defaultdict(lambda: defaultdict(lambda: defaultdict(
+    float)))  # HUC:ecosystem:indicator, values are [min, mean, max]
 for table in inland_indicator_tables:
-    table = table.replace('TabArea_', 'Zstat_').replace('_SimpleViewer', '').replace('_BinnedClip', 'Clip')
+    table = table.replace('TabArea_', 'Zstat_').replace(
+        '_SimpleViewer', '').replace('_BinnedClip', 'Clip')
     print('Reading: {0}'.format(table))
-    df = pd.read_csv(os.path.join(src_dir, '{0}.csv'.format(table)), dtype={'HUC12': str})
+    df = pd.read_csv(os.path.join(
+        src_dir, '{0}.csv'.format(table)), dtype={'HUC12': str})
     fields = [x for x in df.columns if x.startswith('VALUE_')]
-    indicator = table.replace('Zstat_', '').replace('_V_2_1', '').replace('_SimpleViewer', '').replace('_V_2_0', '').replace('_V_2_2', '').replace('_NoDataTo0_ClipToEcosystemMaskClip', '').replace('Clip', '').replace('Water_', 'Water').replace('EstuarineMarsh', 'Estuarine').replace('Hardwoods', 'Hardwood')
+    indicator = table.replace('Zstat_', '').replace('_V_2_1', '').replace('_SimpleViewer', '').replace('_V_2_0', '').replace('_V_2_2', '').replace(
+        '_NoDataTo0_ClipToEcosystemMaskClip', '').replace('Clip', '').replace('Water_', 'Water').replace('EstuarineMarsh', 'Estuarine').replace('Hardwoods', 'Hardwood')
     print('==>{}'.format(indicator))
-    ecosystem,indicator = indicator.split('_')
+    ecosystem, indicator = indicator.split('_')
     if not ecosystem in ecosystemIDs:
-        raise ValueError(ecosystem + ' not in ecosystem list, indicator: {0}'.format(indicator))
+        raise ValueError(
+            ecosystem + ' not in ecosystem list, indicator: {0}'.format(indicator))
 
     for index, row in df.iterrows():
         unitMean = row['MEAN']
         if not np.isnan(unitMean):
             unitMin = row['MIN']
             unitMax = row['MAX']
-            inland_indicator_stats[row['HUC12']][ecosystem][indicator] = [round(unitMin, 4) or 0, round(unitMean, 4) or 0, round(unitMax, 4) or 0]
+            inland_indicator_stats[row['HUC12']][ecosystem][indicator] = [
+                round(unitMin, 4) or 0, round(unitMean, 4) or 0, round(unitMax, 4) or 0]
             indicator_avg[indicator].append(unitMean)
             indicator_area[indicator].append(row['COUNT'])  # Pixel count
 
 
-
-## Extract Blueprint tab area
+# Extract Blueprint tab area
 print('Reading blueprint')
 inland_blueprint = defaultdict(list)
-df = pd.read_csv(os.path.join(src_dir, 'TabArea_Blueprint_2_2_Descript_huc12.csv'), dtype={'HUC12': str})
-fields = ['NOT_A_PRIORITY_FOR_SHARED_ACTION', 'INLAND_WATERBODIES', 'CORRIDORS', 'MEDIUM_PRIORITY', 'HIGH_PRIORITY', 'HIGHEST_PRIORITY']
+df = pd.read_csv(os.path.join(
+    src_dir, 'TabArea_Blueprint_2_2_Descript_huc12.csv'), dtype={'HUC12': str})
+fields = ['NOT_A_PRIORITY_FOR_SHARED_ACTION', 'INLAND_WATERBODIES',
+          'CORRIDORS', 'MEDIUM_PRIORITY', 'HIGH_PRIORITY', 'HIGHEST_PRIORITY']
 for index, row in df.iterrows():
     total_area = sum(row[f] for f in fields)
     if total_area / 40000.0 < 5:
         continue  # Only keep units with > 5 pixels
 
     huc = row['HUC12']
-    inland_blueprint[huc] = [int(round(100.0 * row[f] / total_area)) for f in fields]  # values are in percents
+    inland_blueprint[huc] = [int(round(100.0 * row[f] / total_area))
+                             for f in fields]  # values are in percents
 
 
+# Extract urbanization
+# we only need HUC12 and PercentUrb
+print('reading urbanization')
+inland_urbanization = defaultdict(list)
+for year in urbanization_years:
+    df = pd.read_csv(os.path.join(
+        src_dir, urbanization_filename.format(year=year)), dtype={'HUC12': str})
+    for index, row in df.iterrows():
+        huc = row['HUC12']
+        # bug PercentUrb is actually proportion not percent
+        inland_urbanization[huc].append(int(round(100.0 * row['PercentUrb'])))
+
+# Extract sea level rise in 0.5 foot increments from 0.5 to 10 feet
+print('reading SLR')
+inland_slr = defaultdict(list)
+df = pd.read_csv(os.path.join(src_dir, slr_filename), dtype={'HUC12': str})
+# level is each 1/2 foot increase in SLR
+for index, row in df.iterrows():
+    huc = row['HUC12']
+    total_area = row['PixelArea30m']
+    inland_slr[huc] = [int(round(100.0 * row['MigrationSpace_{}'.format(level)] / total_area))
+                       for level in slr_levels]  # values are in percents
 
 
-## Write each feature as JSON
-
-
+# Write each feature as JSON
 # inland_v2.csv is outdated, but since the watershed geometries were based on it, use it to join ID to HUC
+
 df = pd.read_csv(os.path.join(src_dir, 'inland_v2.csv'), dtype={'HUC12': str})
 for index, row in df.iterrows():
     huc = row['HUC12']
@@ -222,6 +277,14 @@ for index, row in df.iterrows():
         if ecosystem:
             ecosystems_obj[ecosystemID] = ecosystem
 
+    slr = inland_slr.get(huc, None)
+    if slr is None or max(slr) == 0:
+        slr = None
+
+    urbanization = inland_urbanization.get(huc, None)
+    if urbanization is None or max(urbanization) == 0:
+        urbanization = None
+
     props = {
         'SRCID': huc,
         'name': row['HU_12_NAME'],
@@ -231,12 +294,16 @@ for index, row in df.iterrows():
         'acres': int(round(acres, 0)),
         'plans': huc_plans.get(huc, []),
         'counties': huc_counties.get(huc, {}),
-        'ecosystems': ecosystems_obj
+        'ecosystems': ecosystems_obj,
+        'slr': slr,
+        'urban': urbanization
     }
 
     if huc in ownership_data:
-        props['owner'] = {k: round(100.0 * v / acres, 1) for k, v in ownership_data[huc]['owner'].items()}
-        props['gap'] = {k: round(100.0 * v / acres, 1) for k, v in ownership_data[huc]['gap'].items()}
+        props['owner'] = {k: round(100.0 * v / acres, 1)
+                          for k, v in ownership_data[huc]['owner'].items()}
+        props['gap'] = {k: round(100.0 * v / acres, 1)
+                        for k, v in ownership_data[huc]['gap'].items()}
 
     with open(os.path.join(out_dir, '{0}.json'.format(ID)), 'w') as outfile:
         outfile.write(json.dumps(props))
@@ -249,16 +316,18 @@ print('reading marine block IDs')
 marine_ids = dict()  # Unique => PROT_NUMBE-BLOCK_NUMB
 df = pd.read_csv(os.path.join(src_dir, 'SALCCMarineLeaseBlocks.csv'))
 for index, row in df.iterrows():
-    marine_ids[row['Unique']] = '{0}-{1}'.format(row['PROT_NUMBE'].strip(), row['BLOCK_NUMB'])
+    marine_ids[row['Unique']
+               ] = '{0}-{1}'.format(row['PROT_NUMBE'].strip(), row['BLOCK_NUMB'])
 
 
-## Extract marine indicators by block
+# Extract marine indicators by block
 marine_indicators = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 for table in marine_indicator_tables:
     print('Reading: {0}'.format(table))
     df = pd.read_csv(os.path.join(src_dir, '{0}.csv'.format(table)))
     fields = [x for x in df.columns if x.startswith('VALUE_')]
-    indicator = table.replace('TabArea_', '').replace('Zstat_', '').replace('SALCCMarineLeaseBlocks_TabArea_', '').replace('_V_2_1', '').replace('_SimpleViewer', '').replace('_V_2_0', '').replace('_V_2_2', '').replace('Clip', '').replace('_Binned', '')
+    indicator = table.replace('TabArea_', '').replace('Zstat_', '').replace('SALCCMarineLeaseBlocks_TabArea_', '').replace(
+        '_V_2_1', '').replace('_SimpleViewer', '').replace('_V_2_0', '').replace('_V_2_2', '').replace('Clip', '').replace('_Binned', '')
     print('==>{}'.format(indicator))
     ecosystem, indicator = indicator.split('_')
     for index, row in df.iterrows():
@@ -268,13 +337,16 @@ for table in marine_indicator_tables:
             marine_indicators[unit][ecosystem][indicator] = [round(100.0 * row[f] / total_area, 1) or 0 for f in
                                                              fields]  # values are in percent
 
-marine_indicator_stats = defaultdict(lambda: defaultdict(lambda: defaultdict(float)))  #values are [min, mean, max]
+marine_indicator_stats = defaultdict(lambda: defaultdict(
+    lambda: defaultdict(float)))  # values are [min, mean, max]
 for table in marine_indicator_tables:
-    table = table.replace('TabArea_', 'Zstat_').replace('_SimpleViewer', '').replace('_BinnedClip', 'Clip')
+    table = table.replace('TabArea_', 'Zstat_').replace(
+        '_SimpleViewer', '').replace('_BinnedClip', 'Clip')
     print('Reading: {0}'.format(table))
     df = pd.read_csv(os.path.join(src_dir, '{0}.csv'.format(table)))
     fields = [x for x in df.columns if x.startswith('VALUE_')]
-    indicator = table.replace('TabArea_', '').replace('Zstat_', '').replace('SALCCMarineLeaseBlocks_Zstat_', '').replace('_V_2_1', '').replace('_V_2_0', '').replace('_V_2_2', '').replace('Clip', '').replace('_Binned', '')
+    indicator = table.replace('TabArea_', '').replace('Zstat_', '').replace('SALCCMarineLeaseBlocks_Zstat_', '').replace(
+        '_V_2_1', '').replace('_V_2_0', '').replace('_V_2_2', '').replace('Clip', '').replace('_Binned', '')
     print('==>{}'.format(indicator))
     ecosystem, indicator = indicator.split('_')
     for index, row in df.iterrows():
@@ -289,23 +361,28 @@ for table in marine_indicator_tables:
             indicator_area[indicator].append(row['COUNT'])  # Pixel count
 
 
-## Extract Blueprint tab area
+# Extract Blueprint tab area
 marine_blueprint = defaultdict(list)
-df = pd.read_csv(os.path.join(src_dir, 'TabArea_Blueprint_2_2_Descript_MarineLeaseBlocks.csv'))
-fields = ['NOT_A_PRIORITY_FOR_SHARED_ACTION', 'CORRIDORS', 'MEDIUM_PRIORITY', 'HIGH_PRIORITY', 'HIGHEST_PRIORITY']
+df = pd.read_csv(os.path.join(
+    src_dir, 'TabArea_Blueprint_2_2_Descript_MarineLeaseBlocks.csv'))
+fields = ['NOT_A_PRIORITY_FOR_SHARED_ACTION', 'CORRIDORS',
+          'MEDIUM_PRIORITY', 'HIGH_PRIORITY', 'HIGHEST_PRIORITY']
 for index, row in df.iterrows():
     total_area = sum(row[f] for f in fields)
     unit = marine_ids[row['UNIQUE']]
-    data = [int(round(100.0 * row[f] / total_area)) for f in fields]  # values are in percents
-    data.insert(1, 0)  # insert placeholder for inland waterbodies in position 1
+    data = [int(round(100.0 * row[f] / total_area))
+            for f in fields]  # values are in percents
+    # insert placeholder for inland waterbodies in position 1
+    data.insert(1, 0)
     marine_blueprint[unit] = data
 
 
-marine_plan_fields = ['ViewSheds', 'ImportantBirdAreas', 'SnapperHAPC', 'SAFMC_HAPC_wDeepwater_Coral', 'ShelfBreak', 'RightWhale', 'NC_Capes']
+marine_plan_fields = ['ViewSheds', 'ImportantBirdAreas', 'SnapperHAPC',
+                      'SAFMC_HAPC_wDeepwater_Coral', 'ShelfBreak', 'RightWhale', 'NC_Capes']
 
 
 print('Writing output marine features')
-## Write each feature as JSON
+# Write each feature as JSON
 # marine_v2.csv is outdated, but matches the features in the map service.  Use to join JOIN_ID to unit
 df = pd.read_csv(os.path.join(src_dir, 'marine_v2.csv'))
 for index, row in df.iterrows():
@@ -314,7 +391,7 @@ for index, row in df.iterrows():
 
     ecosystems_obj = {}
     for ecosystemID in ['Marine']:
-        ecosystem = {'percent': 100} # Hardcoded percent
+        ecosystem = {'percent': 100}  # Hardcoded percent
         if unit in marine_indicators:
             ecosystem['indicators'] = defaultdict(dict)
             for indicator in marine_indicators[unit][ecosystemID]:
@@ -328,7 +405,6 @@ for index, row in df.iterrows():
 
         ecosystems_obj[ecosystemID] = ecosystem
 
-
     props = {
         'name': '{0}: Block {1}'.format(row.PROT_NUMBE, row.BLOCK_NUMB),
         'blueprint': marine_blueprint[unit],
@@ -339,4 +415,3 @@ for index, row in df.iterrows():
 
     with open(os.path.join(out_dir, '{0}.json'.format(ID)), 'w') as outfile:
         outfile.write(json.dumps(props))
-

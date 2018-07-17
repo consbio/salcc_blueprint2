@@ -27,6 +27,8 @@ import FilledThreatsIcon from './icons/baseline-report-24px.svg'
 import OutlineThreatsIcon from './icons/outline-report-24px.svg'
 
 const TABS = ['Info', 'Map', 'Find Location', 'Contact']
+
+// threats and partners do not apply for marine units
 const UNIT_TABS = ['Map', 'Priorities', 'Indicators', 'Threats', 'Partners']
 
 const ICONS = {
@@ -101,12 +103,17 @@ export const getUnitTab = (tab) => {
 }
 
 const Tabs = ({
-    activeTab, hasSelectedUnit, setTab, isMobile
+    activeTab, hasSelectedUnit, setTab, isMobile, isMarine
 }) => {
     let tabs = hasSelectedUnit ? UNIT_TABS : TABS
 
-    // don't show the map tab on desktop
-    if (!isMobile) {
+    if (isMobile) {
+        // don't show the Threats and Partners tabs for marine units
+        if (hasSelectedUnit && isMarine) {
+            tabs = tabs.slice(tabs, tabs.length - 2)
+        }
+    } else {
+        // don't show the map tab on desktop
         tabs = tabs.filter(t => t !== 'Map')
     }
 
@@ -133,6 +140,7 @@ Tabs.propTypes = {
     hasSelectedUnit: PropTypes.bool.isRequired,
     setTab: PropTypes.func.isRequired,
     isMobile: PropTypes.bool.isRequired,
+    isMarine: PropTypes.bool.isRequired,
 
     activeTab: PropTypes.string
 }

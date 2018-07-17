@@ -585,6 +585,23 @@ footer {
     margin-top: 14px;
 }
 
+.chart-line {
+    position: relative;
+    margin-top: 1em;
+}
+.chart-line svg {
+    position: relative;
+    width: 400px;
+    left: 1.5em;
+    margin-bottom: 1em;
+}
+.chart-line-y-axis-label {
+    position: absolute;
+    left: -5em;
+    top: 6em;
+    transform: rotate(-90deg);
+}
+
 .gplaces-search {
     padding: 10px;
     margin: 0 -20px;

@@ -192,5 +192,39 @@
             }
         }
     },
-    "acres": 91204 // size of the summary unit, in acres
+    "acres": 91204, // size of the summary unit, in acres.
+    "slr": [
+        // percent of summary unit inundated by sea level rise based on 1/2 foot increments from 0.5 to 10 ft.  Null if watershed is not impacted by sea level rise.  Not applicable for marine units.
+        10,
+        10,
+        12,
+        12,
+        14,
+        14,
+        15,
+        15,
+        16,
+        16,
+        17,
+        17,
+        17,
+        17,
+        17,
+        17,
+        18,
+        18,
+        18
+    ],
+    "urban": [
+        // percent of summary unit affected by urbanization by decade from 2020 to 2100.  Null if watershed is not affected by urbanization.  Not applicable for marine units.
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        3,
+        3,
+        3
+    ]
 }

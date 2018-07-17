@@ -9,7 +9,7 @@ import * as actions from '../Actions/actions'
  * Component that renders the active tab content in mobile viewport
  */
 const ContentOverlay = ({
-    activeTab, hasSelectedUnit, isDataLoaded, setTab
+    activeTab, hasSelectedUnit, isDataLoaded, isMarine, setTab
 }) => {
     let tab = null
     if (hasSelectedUnit) {
@@ -22,14 +22,21 @@ const ContentOverlay = ({
 
     return (
         <React.Fragment>
-            {activeTab && activeTab !== 'Map' && (
+            {activeTab &&
+                activeTab !== 'Map' && (
                 <div id="ContentOverlay" className="flex-container-column">
                     {tab}
                 </div>
             )}
 
             <footer className={hasSelectedUnit ? 'has-selected-unit' : ''}>
-                <Tabs hasSelectedUnit={hasSelectedUnit} activeTab={activeTab} setTab={setTab} isMobile />
+                <Tabs
+                    hasSelectedUnit={hasSelectedUnit}
+                    activeTab={activeTab}
+                    setTab={setTab}
+                    isMarine={isMarine}
+                    isMobile
+                />
             </footer>
         </React.Fragment>
     )
@@ -39,6 +46,7 @@ ContentOverlay.propTypes = {
     setTab: PropTypes.func.isRequired,
     hasSelectedUnit: PropTypes.bool.isRequired,
     isDataLoaded: PropTypes.bool.isRequired,
+    isMarine: PropTypes.bool.isRequired,
 
     activeTab: PropTypes.string
 }
@@ -55,6 +63,7 @@ const mapStateToProps = ({
     activeTab,
     hasSelectedUnit: selectedUnit !== null,
     isDataLoaded,
+    isMarine: selectedUnit && selectedUnit.indexOf('M') === 0,
     setTab
 })
 
