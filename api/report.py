@@ -78,14 +78,13 @@ def create_report(unit_id, path, config):
 
                 if ecosystem['indicators']:
                     for indicator in ecosystem['indicators']:
-
-                        indicator_boilerplate = 'The average value of the indicator in the {0}, compared to the South ' \
-                                                'Atlantic average. The South Atlantic average is the average of ' \
-                                                'all HUC12 averages in the South Atlantic region.'.format(
-                                                 context['value']['summary_unit_name'])
+                        # TODO: reevaluate this boilerplate
+                        # indicator_boilerplate = 'The average value of the indicator in the {0}, compared to the South ' \
+                        #                         'Atlantic average. The South Atlantic average is the average of ' \
+                        #                         'all HUC12 averages in the South Atlantic region.'.format(
+                        #                          context['value']['summary_unit_name'])
                         indicator_boilerplate2 = 'The area of {0} values as they occur within the {1} ecosystem in the ' \
-                                                 '{2}. Indicator ratings for condition have not yet been set for this ' \
-                                                 'indicator.'.format(indicator['value']['indicator_name'],
+                                                 '{2}.'.format(indicator['value']['indicator_name'],
                                                                      ecosystem['ecosystem_name'],
                                                                      context['value']['summary_unit_name'])
 
@@ -94,10 +93,12 @@ def create_report(unit_id, path, config):
                         ind_descrip = doc.add_paragraph(indicator['value']['indicator_description'])
                         _move_p_after(ind_descrip, ind_h)
 
-                        boiler1 = doc.add_paragraph(indicator_boilerplate)
-                        _move_p_after(boiler1, ind_descrip)
+                        # TODO: change after boilerplate reevaluated
+                        # boiler1 = doc.add_paragraph(indicator_boilerplate)
+                        # _move_p_after(boiler1, ind_descrip)
                         boiler2 = doc.add_paragraph(indicator_boilerplate2)
-                        _move_p_after(boiler2, boiler1)
+                        # _move_p_after(boiler2, boiler1)
+                        _move_p_after(boiler2, ind_descrip)
 
                         section_end = create_table(doc, ecosystem['indicators'][0]['table']['indicator_table'], boiler2)
 
@@ -131,7 +132,6 @@ def create_report(unit_id, path, config):
 
                 for partner in context['partners'][category]:
                     part = doc.add_paragraph(style='List Bullet')
-                    # part = doc.add_paragraph(style='BulletHyperlink')
                     add_hyperlink(part, partner[1], partner[0])
                     # Paragraphs are created at the end of the doc and must be moved into place
                     _move_p_after(part, p_insert_point)
@@ -188,9 +188,7 @@ def generate_report_context(unit_id, config):
 
     # Priorities table
 
-    priorities = {
-        'col_names': ['Priority Category', 'Acres', 'Percent of Area'],
-    }
+    priorities = dict(col_names=['Priority Category', 'Acres', 'Percent of Area'])
 
     priorities['rows'] = [
         (config['priorities'][str(i)]['label'], percent_to_acres(percentage, total_acres), str(percentage) + '%')
@@ -202,30 +200,24 @@ def generate_report_context(unit_id, config):
 
     # Ecosystem table
 
-    ecosystems_table = {
-        'col_names': ['Ecosystems', 'Acres', 'Percent of Area'],
-        'rows': []
-    }
+    ecosystems_table = dict(colnames=['Ecosystems', 'Acres', 'Percent of Area'])
 
-    for ecosystem in data['ecosystems']:
-        eco_row = []
+    ecosystems = data.get('ecosystems', [])  # make sure we always have a list
+    ecosystems_with_area = [(e, ecosystems[e]['percent']) for e in ecosystems if 'percent' in ecosystems[e]]
+    # filter the list to those with percents, and make a new list of tuples of ecosystem ID and percent
+    ecosystems_with_area = sorted(ecosystems_with_area, key=lambda x: x[1],
+                                  reverse=True)  # sort by percent, from largest percent to smallest
 
-        ecosystems = data.get('ecosystems', [])  # make sure we always have a list
-        ecosystems_with_area = [(e, ecosystems[e]['percent']) for e in ecosystems if 'percent' in ecosystems[e]]
-        # filter the list to those with percents, and make a new list of tuples of ecosystem ID and percent
-        ecosystems_with_area = sorted(ecosystems_with_area, key=lambda x: x[1],
-                                      reverse=True)  # sort by percent, from largest percent to smallest
-
-        ecosystems_table['rows'] = [
-            (config['ecosystems'][e]['label'], percent_to_acres(percent, total_acres), str(percent) + '%')
-            for e, percent in ecosystems_with_area
-        ]
+    ecosystems_table['rows'] = [
+        (config['ecosystems'][e]['label'], percent_to_acres(percent, total_acres), str(percent) + '%')
+        for e, percent in ecosystems_with_area
+    ]
 
     context['table']['ecosystems'] = ecosystems_table
 
     # Indicators
 
-    context['ecosystem_indicators'] = []
+    ecosystem_indicators_unsorted = []
 
     for ecosystem in data['ecosystems']:
         ecosystem_data = data['ecosystems'][ecosystem]
@@ -261,85 +253,50 @@ def generate_report_context(unit_id, config):
 
             ecosystem_indicators['indicators'].append(indicator_context)
 
-        context['ecosystem_indicators'].append(ecosystem_indicators)
+        ecosystem_indicators_unsorted.append(ecosystem_indicators)
+
+        # Sort by percent
+        context['ecosystem_indicators'] = sorted(ecosystem_indicators_unsorted, key=lambda k: k['ecosystem_percentage'],
+                                                 reverse=True)
 
     # Partners list - name and url separated by categories
 
-    partners_regional = []
-    partners_state = []
-    partners_marine = []
-    partner_headers = {}
+    context['partner_headers'] = {
+        'regional': 'Regional Conservation Plans',
+        'state': 'Statewide Conservation Plans',
+        'marine': 'Marine Conservation Plans'
+    }
 
+    context['partners'] = defaultdict(list)
     for plan_key in data['plans']:
         plan = config['plans'][plan_key]
-        if plan['type'] == 'regional':
-            partners_regional.append([plan['label'], plan['url']])
-            if plan['type'] not in partner_headers:
-                partner_headers['regional'] = 'Regional Conservation Plans'
-        elif plan['type'] == 'state':
-            partners_state.append([plan['label'], plan['url']])
-            if plan['type'] not in partner_headers:
-                partner_headers['state'] = 'Statewide Conservation Plans'
-        elif plan['type'] == 'marine':
-            partners_marine.append([plan['label'], plan['url']])
-            if plan['type'] not in partner_headers:
-                partner_headers['marine'] = 'Marine Conservation Plans'
-
-    context['partner_headers'] = partner_headers
-
-    context['partners'] = {}
-
-    if partners_regional:
-        context['partners']['regional'] = partners_regional
-    if partners_state:
-        context['partners']['state'] = partners_state
-    if partners_marine:
-        context['partners']['marine'] = partners_marine
+        label = plan['label']
+        url = plan.get('url', '')
+        context['partners'][plan['type']].append(label, url)
 
     # Counties list - name and url
 
-    counties = []
-
-    if 'counties' in data:
-        for index, (key, value) in enumerate(data['counties'].items()):
-            # key is FIPS and value is county with state
-            county_data = {
-                'name': value,
-                'url': 'http://findalandtrust.org/counties/{0}'.format(key)
-            }
-            counties.append(county_data)
-            context['counties'] = counties
+    context['counties'] = [
+        {'name': value, 'url': 'http://findalandtrust.org/counties/{0}'.format(key)}
+        for key, value in data['counties'].items()
+    ]  # key is FIPS and value is county with state
 
     # Ownership table
 
     if 'owner' in data:
-        owners = {
-            'col_names': ['Ownership', 'Acres', 'Percent of Area'],
-            'rows': []
-        }
+        owners = dict(col_names=['Ownership', 'Acres', 'Percent of Area'])
 
-        own_perc_sum = 0
+        owners['rows'] = [
+            [config['owners'][key]['label'], percent_to_acres(percent, total_acres), str(percent) + '%']
+            for key, percent in data['owner'].items()
+        ]
 
-        for owner_data in data['owner']:
-            owner_row = []
-            for owner_details in config['owners']:
-                if owner_data == owner_details:
-
-                    # Find acreage
-                    percentage = data['owner'][owner_data]
-                    own_perc_sum += percentage
-                    acreage = percent_to_acres(percentage, total_acres)
-
-                    owner_row.append(config['owners'][owner_data]['label'])
-                    owner_row.append(acreage)
-                    owner_row.append(str(percentage) + '%')
-            owners['rows'].append(owner_row)
+        own_perc_sum = sum(data['owner'].values())
 
         if own_perc_sum < 100:
             perc_remainder = 100 - own_perc_sum
-            acreage = percent_to_acres(perc_remainder, total_acres)
-            remainder_row = ['Not conserved', acreage, str(perc_remainder) + '%']
-            owners['rows'].append(remainder_row)
+            owners['rows'].append(['Not conserved', percent_to_acres(perc_remainder, total_acres),
+                                   str(perc_remainder) + '%'])
 
         context['table']['ownership'] = owners
     else:
@@ -347,33 +304,20 @@ def generate_report_context(unit_id, config):
 
     # Protections table
 
-    protection = {
-        'col_names': ['Land Protection Status', 'Acres', 'Percent of Area'],
-        'rows': []
-    }
+    protection = dict(col_names=['Land Protection Status', 'Acres', 'Percent of Area'])
 
     pro_perc_sum = 0
 
     if 'gap' in data:
-        for pro in data['gap']:
-            pro_row = []
-
-            # Find acreage
-            percentage = data['gap'][pro]
-            pro_perc_sum += percentage
-            acreage = percent_to_acres(percentage, total_acres)
-
-            pro_row.append(config['protection'][pro]['label'])
-            pro_row.append(acreage)
-            pro_row.append(str(percentage) + '%')
-
-            protection['rows'].append(pro_row)
+        protection['rows'] = [
+            [config['protection'][key]['label'], percent_to_acres(percent, total_acres), str(percent) + '%']
+            for key, percent in data['gap']
+        ]
 
         if pro_perc_sum < 100:
             perc_remainder = 100 - pro_perc_sum
-            acreage = percent_to_acres(perc_remainder, total_acres)
-            remainder_row = ['Not conserved', acreage, str(perc_remainder) + '%']
-            protection['rows'].append(remainder_row)
+            protection['rows'].append(['Not conserved', percent_to_acres(perc_remainder, total_acres),
+                                       str(perc_remainder) + '%'])
 
         context['table']['protection'] = protection
     else:
