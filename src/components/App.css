@@ -591,9 +591,9 @@ footer {
 }
 .chart-line svg {
     position: relative;
-    width: 400px;
     left: 1.5em;
     margin-bottom: 1em;
+    margin-right: 20px;
 }
 .chart-line-y-axis-label {
     position: absolute;

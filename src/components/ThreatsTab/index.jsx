@@ -26,7 +26,7 @@ const ThreatsTab = ({ isMarine, urban, slr }) => {
                             pointsColor="#004da8"
                             pointsStrokeWidth={0}
                             labelsStepX={1}
-                            viewBoxWidth={600}
+                            viewBoxWidth={500}
                             labelsFormatX={x => x || ''}
                             data={slr.map((y, i) => ({ x: SLR_LEVELS[i], y }))}
                         />
@@ -54,8 +54,8 @@ const ThreatsTab = ({ isMarine, urban, slr }) => {
                             pathColor="#D90000"
                             pointsColor="#D90000"
                             pointsStrokeWidth={0}
-                            labelsStepX={10}
-                            viewBoxWidth={600}
+                            labelsStepX={20}
+                            viewBoxWidth={500}
                             labelsFormatX={x => x || ''}
                             data={urban.map((y, i) => ({ x: URBANIZATION_LEVELS[i], y }))}
                         />
