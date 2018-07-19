@@ -252,6 +252,7 @@ footer {
 #SidebarContent {
     padding: 20px 20px 0;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #ContentOverlay {
@@ -618,6 +619,7 @@ footer {
     left: 1.5em;
     margin-bottom: 1em;
     margin-right: 30px;
+    max-width: 384px;
 }
 .chart-line-y-axis-label {
     position: absolute;
