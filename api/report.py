@@ -66,16 +66,15 @@ def create_report(unit_id, path, config):
 
             for ecosystem in context['ecosystem_indicators']:
                 name = ecosystem['ecosystem_name']
-                if 'ecosystem_percentage' in ecosystem:
-                    percent = ecosystem['ecosystem_percentage']
-                    if percent is 0:
-                        heading = name + ': ' + '<0.1% of area'
-                        eco_h = doc.add_paragraph(heading, style='Heading13')
-                        _move_p_after(eco_h, ecosystem_insertion_point)
-                    elif percent is not '':
-                        heading = name + ': ' + str(percent) + '% of area'
-                        eco_h = doc.add_paragraph(heading, style='Heading13')
-                        _move_p_after(eco_h, ecosystem_insertion_point)
+                percent = ecosystem['ecosystem_percentage']
+                if percent is 0:
+                    heading = name + ': ' + '<0.1% of area'
+                    eco_h = doc.add_paragraph(heading, style='Heading13')
+                    _move_p_after(eco_h, ecosystem_insertion_point)
+                elif percent is not '':
+                    heading = name + ': ' + str(percent) + '% of area'
+                    eco_h = doc.add_paragraph(heading, style='Heading13')
+                    _move_p_after(eco_h, ecosystem_insertion_point)
                 else:
                     heading = name
                     eco_h = doc.add_paragraph(heading, style='Heading13')
@@ -237,7 +236,6 @@ def generate_report_context(unit_id, config):
     ecosystems_without_percent = sorted(ecosystems_without_percent, key=lambda x: x[0])  # sort ascending label
 
     ecosystems = ecosystems_with_percent + ecosystems_without_percent
-    print('ecosystems:', ecosystems)
 
     for ecosystem in ecosystems:
         key = ecosystem[0]
