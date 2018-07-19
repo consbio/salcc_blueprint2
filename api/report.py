@@ -138,7 +138,7 @@ def create_report(unit_id, path, config):
                 p_insert_point = heading
 
                 for partner in context['partners'][category]:
-                    part = doc.add_paragraph(style='List Bullet')
+                    part = doc.add_paragraph(style='HyperlinkList')
                     add_hyperlink(part, partner[1], partner[0])
                     # Paragraphs are created at the end of the doc and must be moved into place
                     _move_p_after(part, p_insert_point)
