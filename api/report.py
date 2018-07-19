@@ -231,8 +231,9 @@ def generate_report_context(unit_id, config):
     ecosystems = ecosystems_with_percent + ecosystems_without_percent
 
     for ecosystem in ecosystems:
-        ecosystem_data = data['ecosystems'][ecosystem]
-        ecosystem_config = config['ecosystems'][ecosystem]
+        key = ecosystem[0]
+        ecosystem_data = data['ecosystems'][key]
+        ecosystem_config = config['ecosystems'][key]
 
         ecosystem_indicators = {
             'ecosystem_name': ecosystem_config['label'],
@@ -264,11 +265,7 @@ def generate_report_context(unit_id, config):
 
             ecosystem_indicators['indicators'].append(indicator_context)
 
-        ecosystem_indicators_unsorted.append(ecosystem_indicators)
-
-        # Sort by percent
-        economic_indicators_sorted = sorted(ecosystem_indicators_unsorted, key=lambda k: k['ecosystem_percentage'])
-        context['ecosystem_indicators'] = economic_indicators_sorted[::-1]
+        context['ecosystem_indicators'].append(ecosystem_indicators)
 
     # Partners list - name and url separated by categories
 
