@@ -130,7 +130,7 @@ def create_report(unit_id, path, config):
             p_insert_point = h_insert_point
 
             for category in context['partners']:
-                heading = doc.add_paragraph(context['partner_headers'][category], style='Heading10')
+                heading = doc.add_paragraph(context['partner_headers'][category], style='Heading14')
                 # Headings are created at the end of the doc and must be moved into place
                 _move_p_after(heading, h_insert_point)
 
@@ -149,12 +149,12 @@ def create_report(unit_id, path, config):
 
             # Counties
             if 'counties' in context:
-                county_header = doc.add_paragraph('Land Trusts (by county)', style='Heading10')
+                county_header = doc.add_paragraph('Land Trusts (by county)', style='Heading14')
                 c_insert_point = p_insert_point
                 _move_p_after(county_header, c_insert_point)
                 c_insert_point = county_header
                 for county in context['counties']:
-                    county_name = doc.add_paragraph(style='List Bullet')
+                    county_name = doc.add_paragraph(style='HyperlinkList')
                     add_hyperlink(county_name, county['url'], county['name'])
                     _move_p_after(county_name, c_insert_point)
                     # Change insertion point so next county follows this one
@@ -237,6 +237,7 @@ def generate_report_context(unit_id, config):
     ecosystems_without_percent = sorted(ecosystems_without_percent, key=lambda x: x[0])  # sort ascending label
 
     ecosystems = ecosystems_with_percent + ecosystems_without_percent
+    print('ecosystems:', ecosystems)
 
     for ecosystem in ecosystems:
         key = ecosystem[0]
