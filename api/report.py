@@ -65,24 +65,26 @@ def create_report(unit_id, path, config):
             ecosystem_insertion_point = p
 
             for ecosystem in context['ecosystem_indicators']:
-                name = ecosystem['ecosystem_name']
-                percent = ecosystem['ecosystem_percentage']
-                if percent is 0:
-                    heading = name + ': ' + '<0.1% of area'
-                    eco_h = doc.add_paragraph(heading, style='Heading13')
-                    _move_p_after(eco_h, ecosystem_insertion_point)
-                elif percent is not '':
-                    heading = name + ': ' + str(percent) + '% of area'
-                    eco_h = doc.add_paragraph(heading, style='Heading13')
-                    _move_p_after(eco_h, ecosystem_insertion_point)
-                else:
-                    heading = name
-                    eco_h = doc.add_paragraph(heading, style='Heading13')
-                    _move_p_after(eco_h, ecosystem_insertion_point)
-
-                indicator_insertion_point = eco_h
 
                 if ecosystem['indicators']:
+
+                    name = ecosystem['ecosystem_name']
+                    percent = ecosystem['ecosystem_percentage']
+                    if percent is 0:
+                        heading = name + ': ' + '<0.1% of area'
+                        eco_h = doc.add_paragraph(heading, style='Heading13')
+                        _move_p_after(eco_h, ecosystem_insertion_point)
+                    elif percent is not '':
+                        heading = name + ': ' + str(percent) + '% of area'
+                        eco_h = doc.add_paragraph(heading, style='Heading13')
+                        _move_p_after(eco_h, ecosystem_insertion_point)
+                    else:
+                        heading = name
+                        eco_h = doc.add_paragraph(heading, style='Heading13')
+                        _move_p_after(eco_h, ecosystem_insertion_point)
+
+                    indicator_insertion_point = eco_h
+
                     for indicator in ecosystem['indicators']:
                         # TODO: reevaluate this boilerplate
                         # indicator_boilerplate = 'The average value of the indicator in the {0}, compared to the South ' \
@@ -111,10 +113,6 @@ def create_report(unit_id, path, config):
                         indicator_insertion_point = section_end
 
                     ecosystem_insertion_point = section_end
-                else:
-                    temp_text = doc.add_paragraph('(No indicators for this ecosystem.)')
-                    _move_p_after(temp_text, eco_h)
-                    ecosystem_insertion_point = temp_text
 
             # Delete the placeholder para
             delete_paragraph(p)
