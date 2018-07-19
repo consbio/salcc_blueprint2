@@ -65,12 +65,19 @@ def create_report(unit_id, path, config):
             ecosystem_insertion_point = p
 
             for ecosystem in context['ecosystem_indicators']:
-                if 'ecosystem_percentage' in ecosystem and ecosystem['ecosystem_percentage'] is not '':
-                    heading = ecosystem['ecosystem_name'] + ': ' + str(ecosystem['ecosystem_percentage']) + "% of area"
-                    eco_h = doc.add_paragraph(heading, style='Heading13')
-                    _move_p_after(eco_h, ecosystem_insertion_point)
+                name = ecosystem['ecosystem_name']
+                if 'ecosystem_percentage' in ecosystem:
+                    percent = ecosystem['ecosystem_percentage']
+                    if percent is 0:
+                        heading = name + ': ' + '<0.1% of area'
+                        eco_h = doc.add_paragraph(heading, style='Heading13')
+                        _move_p_after(eco_h, ecosystem_insertion_point)
+                    elif percent is not '':
+                        heading = name + ': ' + str(percent) + '% of area'
+                        eco_h = doc.add_paragraph(heading, style='Heading13')
+                        _move_p_after(eco_h, ecosystem_insertion_point)
                 else:
-                    heading = ecosystem['ecosystem_name']
+                    heading = name
                     eco_h = doc.add_paragraph(heading, style='Heading13')
                     _move_p_after(eco_h, ecosystem_insertion_point)
 
@@ -188,20 +195,21 @@ def generate_report_context(unit_id, config):
 
     # Priorities table
 
-    priorities = dict(col_names=['Priority Category', 'Acres', 'Percent of Area'])
+    if data['blueprint']:
+        priorities = dict(col_names=['Priority Category', 'Acres', 'Percent of Area'])
 
-    priorities['rows'] = [
-        (config['priorities'][str(i)]['label'], percent_to_acres(percentage, total_acres), str(percentage) + '%')
-        for i, percentage in enumerate(data.get('blueprint'))
-    ]
-    priorities['rows'].reverse()
-
-    context['table']['priorities'] = priorities
+        priorities['rows'] = [
+            (config['priorities'][str(i)]['label'], percent_to_acres(percentage, total_acres), str(percentage) + '%')
+            for i, percentage in enumerate(data.get('blueprint'))
+        ]
+        priorities['rows'].reverse()
+        context['table']['priorities'] = priorities
+    else:
+        context['table']['priorities'] = 'No priority information available'
 
     # Ecosystem table
 
     ecosystems_table = dict(col_names=['Ecosystems', 'Acres', 'Percent of Area'])
-
     ecosystems = data.get('ecosystems', [])  # make sure we always have a list
 
     ecosystems_with_area = [(e, ecosystems[e]['percent']) for e in ecosystems if 'percent' in ecosystems[e]]
@@ -220,12 +228,12 @@ def generate_report_context(unit_id, config):
 
     context['ecosystem_indicators'] = []
 
-    ecosystems_ind = [(key, data['ecosystems'][key].get('percent', None)) for key in data['ecosystems']]
+    ind_ecosystems = [(key, data['ecosystems'][key].get('percent', None)) for key in data['ecosystems']]
 
-    ecosystems_with_percent = [e for e in ecosystems_ind if e[1] is not None]
+    ecosystems_with_percent = [e for e in ind_ecosystems if e[1] is not None]
     ecosystems_with_percent = sorted(ecosystems_with_percent, key=lambda x: x[1], reverse=True)  # sort descending percent
 
-    ecosystems_without_percent = [e for e in ecosystems_ind if e[1] is None]
+    ecosystems_without_percent = [e for e in ind_ecosystems if e[1] is None]
     ecosystems_without_percent = sorted(ecosystems_without_percent, key=lambda x: x[0])  # sort ascending label
 
     ecosystems = ecosystems_with_percent + ecosystems_without_percent
