@@ -317,13 +317,13 @@ def generate_report_context(unit_id, config):
 
     protection = dict(col_names=['Land Protection Status', 'Acres', 'Percent of Area'])
 
-    pro_perc_sum = 0
-
     if 'gap' in data:
         protection['rows'] = [
             [config['protection'][key]['label'], percent_to_acres(percent, total_acres), str(percent) + '%']
             for key, percent in data['gap'].items()
         ]
+
+        pro_perc_sum = sum(data['gap'].values())
 
         if pro_perc_sum < 100:
             perc_remainder = 100 - pro_perc_sum
