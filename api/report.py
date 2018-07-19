@@ -181,7 +181,7 @@ def generate_report_context(unit_id, config):
 
     total_acres = data['acres']
 
-    context = {}
+    context = dict()
 
     context['value'] = {'summary_unit_name': data['name']}
     context['table'] = {}
@@ -203,6 +203,7 @@ def generate_report_context(unit_id, config):
     ecosystems_table = dict(colnames=['Ecosystems', 'Acres', 'Percent of Area'])
 
     ecosystems = data.get('ecosystems', [])  # make sure we always have a list
+
     ecosystems_with_area = [(e, ecosystems[e]['percent']) for e in ecosystems if 'percent' in ecosystems[e]]
     # filter the list to those with percents, and make a new list of tuples of ecosystem ID and percent
     ecosystems_with_area = sorted(ecosystems_with_area, key=lambda x: x[1],
@@ -217,9 +218,19 @@ def generate_report_context(unit_id, config):
 
     # Indicators
 
-    ecosystem_indicators_unsorted = []
+    context['ecosystem_indicators'] = []
 
-    for ecosystem in data['ecosystems']:
+    ecosystems_ind = [(key, data['ecosystems'][key].get('percent', None)) for key in data['ecosystems']]
+
+    ecosystems_with_percent = [e for e in ecosystems_ind if e[1] is not None]
+    ecosystems_with_percent = sorted(ecosystems_with_percent, key=lambda x: x[1], reverse=True)  # sort descending percent
+
+    ecosystems_without_percent = [e for e in ecosystems_ind if e[1] is None]
+    ecosystems_without_percent = sorted(ecosystems_without_percent, key=lambda x: x[0])  # sort ascending label
+
+    ecosystems = ecosystems_with_percent + ecosystems_without_percent
+
+    for ecosystem in ecosystems:
         ecosystem_data = data['ecosystems'][ecosystem]
         ecosystem_config = config['ecosystems'][ecosystem]
 
@@ -256,8 +267,8 @@ def generate_report_context(unit_id, config):
         ecosystem_indicators_unsorted.append(ecosystem_indicators)
 
         # Sort by percent
-        context['ecosystem_indicators'] = sorted(ecosystem_indicators_unsorted, key=lambda k: k['ecosystem_percentage'],
-                                                 reverse=True)
+        economic_indicators_sorted = sorted(ecosystem_indicators_unsorted, key=lambda k: k['ecosystem_percentage'])
+        context['ecosystem_indicators'] = economic_indicators_sorted[::-1]
 
     # Partners list - name and url separated by categories
 
