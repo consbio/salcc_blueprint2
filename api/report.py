@@ -3,6 +3,7 @@ import os
 import json
 import docx
 
+from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
 
@@ -49,9 +50,8 @@ def create_report(unit_id, path, config):
                     r.text = r.text.replace(match.group(), item)
 
                     if scope == 'table':
-                        # Make "No info available" text more eye-catching
-                        font = r.font
-                        font.italic = True
+                        # TODO: make "No info available" text more eye-catching
+                        r.font.italic = True
 
                 elif scope == 'table':
                     r.text = ''
@@ -200,7 +200,7 @@ def generate_report_context(unit_id, config):
 
     # Ecosystem table
 
-    ecosystems_table = dict(colnames=['Ecosystems', 'Acres', 'Percent of Area'])
+    ecosystems_table = dict(col_names=['Ecosystems', 'Acres', 'Percent of Area'])
 
     ecosystems = data.get('ecosystems', [])  # make sure we always have a list
 
@@ -241,6 +241,8 @@ def generate_report_context(unit_id, config):
             'ecosystem_percentage': ecosystem_data.get('percent', '')
         }
 
+        # Indicator tables
+
         for indicator in ecosystem_data.get('indicators', []):
             indicator_config = ecosystem_config['indicators'][indicator]
             indicator_data = ecosystem_data['indicators'][indicator]
@@ -258,6 +260,7 @@ def generate_report_context(unit_id, config):
             }
 
             indicator_values = list(zip(indicator_config['valueLabels'], indicator_data['percent']))
+            indicator_values.reverse()  # Reverse order so highest priorities at top of table
             indicator_context['table']['indicator_table']['rows'] = [
                 (indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres), str(percent) + '%')
                 for label, percent in indicator_values
@@ -280,7 +283,7 @@ def generate_report_context(unit_id, config):
         plan = config['plans'][plan_key]
         label = plan['label']
         url = plan.get('url', '')
-        context['partners'][plan['type']].append(label, url)
+        context['partners'][plan['type']].append((label, url))
 
     # Counties list - name and url
 
@@ -319,7 +322,7 @@ def generate_report_context(unit_id, config):
     if 'gap' in data:
         protection['rows'] = [
             [config['protection'][key]['label'], percent_to_acres(percent, total_acres), str(percent) + '%']
-            for key, percent in data['gap']
+            for key, percent in data['gap'].items()
         ]
 
         if pro_perc_sum < 100:
@@ -361,7 +364,6 @@ def create_table(doc, data, para):
 
     styles = doc.styles
     ncols = len(data['col_names'])
-    nrows = len(data['rows'])
 
     # Create table with one row for column headings
     table = doc.add_table(rows=1, cols=ncols)
