@@ -38,7 +38,7 @@ inland_indicator_tables = [
     'TabArea_FreshwaterMarsh_Birds_V_2_1_BinnedClip',
     'TabArea_FreshwaterMarsh_Extent_V_2_2_NoDataTo0_ClipToEcosystemMaskClip',
     'TabArea_Landscapes_LowRoadDensityPatches_V_2_1Clip',
-    'TabArea_Landscapes_LowUrbanHistoric_V_2_1Clip',
+    'TabArea_Landscapes_LowUrbanHistoric_V_2_1_SOTClip',
     'TabArea_Landscapes_ResilientBiodiversityHotspots_V_2_2Clip',
     'TabArea_MaritimeForest_Extent_V_2_0_NoDataTo0_ClipToEcosystemMaskClip',
     'TabArea_PineAndPrairie_Amphibians_V_2_1Clip',
@@ -87,6 +87,15 @@ for index, row in df.iterrows():
         row['NAMELSAD'], fips_state[row['STATEFP']])
 
 
+# Extract bounds
+print('Reading bounds')
+inland_bounds = dict()
+df = pd.read_csv(os.path.join(
+    src_dir, 'huc12rng_ga0_SALCC_HUC12Names.csv'), dtype={'HUC12': str})
+for index, row in df.iterrows():
+    inland_bounds[row['HUC12']] = [float(x) for x in row['bounds'].split(',')]
+
+
 # Extract ownership by HUC
 print('Reading ownership')
 # [huc]['owner' or 'gap'][key] = area
@@ -131,8 +140,8 @@ for index, row in df.iterrows():
                 name = to_titlecase(field.replace(
                     'EstuariesCombined', 'Estuarine'))
                 ecosystemIDs.add(name)
-                ecosystems[row['HUC12']][name] = round(
-                    100.0 * row[field] / total_area, 1) or 0
+                ecosystems[row['HUC12']][name] = int(round(
+                    100.0 * row[field] / total_area, 0)) or 0
 
 # print('Ecoystems:\n', ecosystemIDs)
 
@@ -166,7 +175,7 @@ for table in inland_indicator_tables:
 
     # Fix the name to match the standard
     indicator = table.replace('TabArea_', '').replace('_V_2_1', '').replace('_SimpleViewer', '').replace('_V_2_0', '').replace('_V_2_2', '').replace('_BinnedClip', '').replace(
-        '_NoDataTo0_ClipToEcosystemMaskClip', '').replace('Clip', '').replace('Water_', 'Water').replace('EstuarineMarsh', 'Estuarine').replace('Hardwoods', 'Hardwood')
+        '_NoDataTo0_ClipToEcosystemMaskClip', '').replace('_SOTClip', '').replace('Clip', '').replace('Water_', 'Water').replace('EstuarineMarsh', 'Estuarine').replace('Hardwoods', 'Hardwood')
     print('==>{}'.format(indicator))
 
     ecosystem, indicator = indicator.split('_')
@@ -190,7 +199,7 @@ for table in inland_indicator_tables:
         src_dir, '{0}.csv'.format(table)), dtype={'HUC12': str})
     fields = [x for x in df.columns if x.startswith('VALUE_')]
     indicator = table.replace('Zstat_', '').replace('_V_2_1', '').replace('_SimpleViewer', '').replace('_V_2_0', '').replace('_V_2_2', '').replace(
-        '_NoDataTo0_ClipToEcosystemMaskClip', '').replace('Clip', '').replace('Water_', 'Water').replace('EstuarineMarsh', 'Estuarine').replace('Hardwoods', 'Hardwood')
+        '_NoDataTo0_ClipToEcosystemMaskClip', '').replace('_SOTClip', '').replace('Clip', '').replace('Water_', 'Water').replace('EstuarineMarsh', 'Estuarine').replace('Hardwoods', 'Hardwood')
     print('==>{}'.format(indicator))
     ecosystem, indicator = indicator.split('_')
     if not ecosystem in ecosystemIDs:
@@ -275,7 +284,12 @@ for index, row in df.iterrows():
                     'max': unitMax
                 }
         if ecosystem:
-            ecosystems_obj[ecosystemID] = ecosystem
+            if 'percent' in ecosystem:
+                # only keep ecosystems that are >=1% of the area
+                if ecosystem['percent'] >= 1:
+                    ecosystems_obj[ecosystemID] = ecosystem
+            else:
+                ecosystems_obj[ecosystemID] = ecosystem
 
     slr = inland_slr.get(huc, None)
     if slr is None or max(slr) == 0:
@@ -296,7 +310,8 @@ for index, row in df.iterrows():
         'counties': huc_counties.get(huc, {}),
         'ecosystems': ecosystems_obj,
         'slr': slr,
-        'urban': urbanization
+        'urban': urbanization,
+        'bounds': inland_bounds[huc]
     }
 
     if huc in ownership_data:
@@ -314,10 +329,12 @@ for index, row in df.iterrows():
 # Extract marine block IDs
 print('reading marine block IDs')
 marine_ids = dict()  # Unique => PROT_NUMBE-BLOCK_NUMB
+marine_bounds = dict()  # PROT_NUMBE-BLOCK_NUMB => bounds
 df = pd.read_csv(os.path.join(src_dir, 'SALCCMarineLeaseBlocks.csv'))
 for index, row in df.iterrows():
-    marine_ids[row['Unique']
-               ] = '{0}-{1}'.format(row['PROT_NUMBE'].strip(), row['BLOCK_NUMB'])
+    id = '{0}-{1}'.format(row['PROT_NUMBE'].strip(), row['BLOCK_NUMB'])
+    marine_ids[row['Unique']] = id
+    marine_bounds[id] = [float(x) for x in row['bounds'].split(',')]
 
 
 # Extract marine indicators by block
@@ -410,7 +427,8 @@ for index, row in df.iterrows():
         'blueprint': marine_blueprint[unit],
         'acres': int(round(0.000247105 * row['Shape_Area'], 0)),
         'plans': [field for field in marine_plan_fields if str(row[field]) != 'nan' and row[field].strip()],
-        'ecosystems': ecosystems_obj
+        'ecosystems': ecosystems_obj,
+        'bounds': marine_bounds[unit]
     }
 
     with open(os.path.join(out_dir, '{0}.json'.format(ID)), 'w') as outfile:

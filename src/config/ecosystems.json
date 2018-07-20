@@ -528,13 +528,12 @@
                 "reportCaption":
                     "The area of low-urban historic landscapes indicator values as they occur within the historic landscapes in this subwatershed. This indicator is scored by calculating the area rated in good condition (indicator value of 2) divided by total area of historic landscapes (indicator values of 1 or 2).",
                 "valueLabels": {
-                    "0": "Not in the National Register of Historic Places",
-                    "1": "Historic place with nearby high-urban buffer",
-                    "2": "Historic place with nearby low-urban buffer"
+                    "0": "Historic place with nearby high-urban buffer",
+                    "1": "Historic place with nearby low-urban buffer"
                 },
-                "goodThreshold": 2,
-                "categoricalValues": [0, 3],
-                "domain": [0, 2],
+                "goodThreshold": 1,
+                "categoricalValues": [0, 2],
+                "domain": [0, 1],
                 "datasetID": "037ecaa254ff48f88969fc1db467d917"
             },
             "ResilientBiodiversityHotspots": {

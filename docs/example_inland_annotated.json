@@ -62,7 +62,7 @@
                     "percent": [0, 100]
                 }
             },
-            "percent": 0.1 // percent of this ecosystem within the summary unit
+            "percent": 0.1 // percent of this ecosystem within the summary unit (note: percents are now rounded to nearest percent)
         },
         "Estuarine": {
             "indicators": {
@@ -133,11 +133,14 @@
         "Landscapes": {
             "indicators": {
                 "LowUrbanHistoric": {
+                    "percent": [
+                      100.0,
+                      0
+                    ],
                     "min": 0,
-                    "mean": 0.0003,
-                    "max": 1,
-                    "percent": [100, 0, 0]
-                },
+                    "mean": 0,
+                    "max": 0
+                  },
                 "ResilientBiodiversityHotspots": {
                     "min": 0,
                     "mean": 4.2213,
@@ -226,5 +229,12 @@
         3,
         3,
         3
+    ],
+    "bounds": [
+        // bounds of unit: west, south, east, north
+        -83.145,
+        29.05,
+        -82.964,
+        29.323
     ]
 }
