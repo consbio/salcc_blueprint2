@@ -94,7 +94,7 @@ def create_report(unit_id, path, config):
                         # boiler1 = p.insert_paragraph_before(indicator_boilerplate)
                         boiler2 = p.insert_paragraph_before(indicator_boilerplate2)
 
-                        create_table(doc, ecosystem['indicators'][0]['table']['indicator_table'], boiler2)
+                        create_table(doc, indicator['table']['indicator_table'], boiler2)
 
             # Delete the placeholder para
             delete_paragraph(p)
