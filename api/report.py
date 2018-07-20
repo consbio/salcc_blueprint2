@@ -59,10 +59,7 @@ def create_report(unit_id, path, config):
 
         if '{{INDICATORS}}' in p.text:
             # Remove '{{INDICATORS}}'placeholder and add the report content above empty p.text
-            # Because we're not using replace(match.group()) here, everything must be moved into place
             p.text = ''
-
-            ecosystem_insertion_point = p
 
             for ecosystem in context['ecosystem_indicators']:
 
@@ -72,18 +69,13 @@ def create_report(unit_id, path, config):
                     percent = ecosystem['ecosystem_percentage']
                     if percent is 0:
                         heading = name + ': ' + '<0.1% of area'
-                        eco_h = doc.add_paragraph(heading, style='Heading13')
-                        _move_p_after(eco_h, ecosystem_insertion_point)
+                        p.insert_paragraph_before(heading, style='Heading13')
                     elif percent is not '':
                         heading = name + ': ' + str(percent) + '% of area'
-                        eco_h = doc.add_paragraph(heading, style='Heading13')
-                        _move_p_after(eco_h, ecosystem_insertion_point)
+                        p.insert_paragraph_before(heading, style='Heading13')
                     else:
                         heading = name
-                        eco_h = doc.add_paragraph(heading, style='Heading13')
-                        _move_p_after(eco_h, ecosystem_insertion_point)
-
-                    indicator_insertion_point = eco_h
+                        p.insert_paragraph_before(heading, style='Heading13')
 
                     for indicator in ecosystem['indicators']:
                         # TODO: reevaluate this boilerplate
@@ -95,24 +87,14 @@ def create_report(unit_id, path, config):
                                                  '{2}.'.format(indicator['value']['indicator_name'],
                                                                      ecosystem['ecosystem_name'],
                                                                      context['value']['summary_unit_name'])
-
-                        ind_h = doc.add_paragraph(indicator['value']['indicator_name'], style='Heading11')
-                        _move_p_after(ind_h, indicator_insertion_point)
-                        ind_descrip = doc.add_paragraph(indicator['value']['indicator_description'])
-                        _move_p_after(ind_descrip, ind_h)
+                        p.insert_paragraph_before(indicator['value']['indicator_name'], style='Heading11')
+                        p.insert_paragraph_before(indicator['value']['indicator_description'])
 
                         # TODO: change after boilerplate reevaluated
-                        # boiler1 = doc.add_paragraph(indicator_boilerplate)
-                        # _move_p_after(boiler1, ind_descrip)
-                        boiler2 = doc.add_paragraph(indicator_boilerplate2)
-                        # _move_p_after(boiler2, boiler1)
-                        _move_p_after(boiler2, ind_descrip)
+                        # boiler1 = p.insert_paragraph_before(indicator_boilerplate)
+                        boiler2 = p.insert_paragraph_before(indicator_boilerplate2)
 
-                        section_end = create_table(doc, ecosystem['indicators'][0]['table']['indicator_table'], boiler2)
-
-                        indicator_insertion_point = section_end
-
-                    ecosystem_insertion_point = section_end
+                        create_table(doc, ecosystem['indicators'][0]['table']['indicator_table'], boiler2)
 
             # Delete the placeholder para
             delete_paragraph(p)
@@ -121,41 +103,19 @@ def create_report(unit_id, path, config):
             # Remove '{{PARTNERS}}'placeholder and add the report content after empty p.text
             p.text = ''
 
-            # TODO: Find a better way to do this! Paras are appended at end of doc & have to be moved into place
-            # Where to insert the next heading
-            h_insert_point = p
-            p_insert_point = h_insert_point
-
             for category in context['partners']:
-                heading = doc.add_paragraph(context['partner_headers'][category], style='Heading14')
-                # Headings are created at the end of the doc and must be moved into place
-                _move_p_after(heading, h_insert_point)
-
-                # Where to insert the next partner name
-                p_insert_point = heading
+                p.insert_paragraph_before(context['partner_headers'][category], style='Heading14')
 
                 for partner in context['partners'][category]:
-                    part = doc.add_paragraph(style='HyperlinkList')
+                    part = p.insert_paragraph_before(style='HyperlinkList')
                     add_hyperlink(part, partner[1], partner[0])
-                    # Paragraphs are created at the end of the doc and must be moved into place
-                    _move_p_after(part, p_insert_point)
-                    p_insert_point = part
-
-                # Next heading created will be moved below the last partner in the preceding list
-                h_insert_point = part
 
             # Counties
             if 'counties' in context:
-                county_header = doc.add_paragraph('Land Trusts (by county)', style='Heading14')
-                c_insert_point = p_insert_point
-                _move_p_after(county_header, c_insert_point)
-                c_insert_point = county_header
+                p.insert_paragraph_before('Land Trusts (by county)', style='Heading14')
                 for county in context['counties']:
-                    county_name = doc.add_paragraph(style='HyperlinkList')
+                    county_name = p.insert_paragraph_before(style='HyperlinkList')
                     add_hyperlink(county_name, county['url'], county['name'])
-                    _move_p_after(county_name, c_insert_point)
-                    # Change insertion point so next county follows this one
-                    c_insert_point = county_name
 
             # Delete the placeholder para
             delete_paragraph(p)
