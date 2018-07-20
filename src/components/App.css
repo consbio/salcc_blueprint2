@@ -495,8 +495,9 @@ footer {
     flex: 0;
 }
 
+.indicator-details-caption,
 .indicator-dataset-link {
-    margin-top: 4rem !important;
+    margin-top: 2em !important;
 }
 
 #MapContainer {

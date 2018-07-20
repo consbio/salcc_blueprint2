@@ -7,6 +7,7 @@ import { formatPercent } from '../../utils'
 const IndicatorDetails = ({
     label,
     description,
+    caption,
     valueLabels,
     percent,
     ecosystemIcon,
@@ -57,11 +58,10 @@ const IndicatorDetails = ({
                         <div>
                             <div className="indicator-detail-charts">
                                 {goodPercents.map((entry, i) => (
-                                    <div className="flex-container">
+                                    <div className="flex-container" key={entry.value}>
                                         <div className="indicator-chart-heading">{i === 0 ? 'High:' : ''}</div>
                                         <LabeledPercentBar
                                             className="text-quiet"
-                                            key={entry.value}
                                             {...entry}
                                             height={6}
                                         />
@@ -79,13 +79,12 @@ const IndicatorDetails = ({
                                 </div>
 
                                 {notGoodPercents.map((entry, i) => (
-                                    <div className="flex-container">
+                                    <div className="flex-container" key={entry.value}>
                                         <div className="indicator-chart-heading">
                                             {i === notGoodPercents.length - 1 ? 'Low:' : ''}
                                         </div>
                                         <LabeledPercentBar
                                             className="text-quiet"
-                                            key={entry.value}
                                             {...entry}
                                             height={6}
                                         />
@@ -104,11 +103,10 @@ const IndicatorDetails = ({
                                 }
 
                                 return (
-                                    <div className="flex-container">
+                                    <div className="flex-container" key={entry.value}>
                                         <div className="indicator-chart-heading">{heading}</div>
                                         <LabeledPercentBar
                                             className="text-quiet"
-                                            key={entry.value}
                                             {...entry}
                                             height={6}
                                         />
@@ -118,6 +116,13 @@ const IndicatorDetails = ({
                         </div>
                     )}
                 </div>
+
+                {caption && (
+                    <p className="text-small text-quiet indicator-details-caption">
+                        {caption}
+                    </p>
+                )}
+
                 {!isMobile &&
                     datasetID && (
                     <p className="indicator-dataset-link">
@@ -146,11 +151,13 @@ IndicatorDetails.propTypes = {
     onBackClick: PropTypes.func.isRequired,
 
     datasetID: PropTypes.string,
+    caption: PropTypes.string,
     goodThreshold: PropTypes.number // values >= goodThreshold are considered in "good" condition
 }
 
 IndicatorDetails.defaultProps = {
     datasetID: null,
+    caption: null,
     goodThreshold: null
 }
 
