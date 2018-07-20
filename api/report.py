@@ -264,16 +264,49 @@ def generate_report_context(unit_id, config):
                 }
             }
 
+            has_threshold = indicator_config.get('goodThreshold', None)
+
             indicator_values = list(zip(indicator_config['valueLabels'], indicator_data['percent']))
             indicator_values.reverse()  # Reverse order so highest priorities at top of table
-            indicator_context['table']['indicator_table']['rows'] = [
-                (indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres), str(percent) + '%')
-                for label, percent in indicator_values
-            ]
+
+            if has_threshold:
+                # Find threshold position in indicator values so total will be added after
+                threshold_position = 0
+                for tup in indicator_values:
+                    if str(has_threshold) in tup:
+                        threshold_position = indicator_values.index(tup)
+
+                total_good_percent = 0
+                total_bad_percent = 0
+                rows = []
+
+                for label, percent in indicator_values:
+                    if int(label) >= has_threshold:
+                        total_good_percent += percent
+                        rows.append([indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres), str(percent) + '%'])
+                    if int(label) < has_threshold:
+                        total_bad_percent += percent
+                        rows.append([indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres), str(percent) + '%'])
+
+                good_total_row = ['Total in good condition', percent_to_acres(total_good_percent, total_acres), str(total_good_percent) + '%']
+                bad_total_row = ['Total not in good condition', percent_to_acres(total_bad_percent, total_acres), str(total_bad_percent) + '%']
+
+                rows.insert(int(threshold_position)+1, good_total_row)
+                rows.append(bad_total_row)
+
+                indicator_context['table']['indicator_table']['rows'] = rows
+
+            else:
+                indicator_context['table']['indicator_table']['rows'] = [
+                    [indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres), str(percent) + '%']
+                    for label, percent in indicator_values
+                ]
 
             ecosystem_indicators['indicators'].append(indicator_context)
+        print('end of indicator for loop:', ecosystem_indicators['indicators'])  # This looks right
 
         context['ecosystem_indicators'].append(ecosystem_indicators)
+    print('end of ecosystem for loop:', context['ecosystem_indicators'])  # This looks right
 
     # Partners list - name and url separated by categories
 
