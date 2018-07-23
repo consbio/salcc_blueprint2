@@ -83,18 +83,15 @@ def create_report(unit_id, path, config):
                         #                         'Atlantic average. The South Atlantic average is the average of ' \
                         #                         'all HUC12 averages in the South Atlantic region.'.format(
                         #                          context['value']['summary_unit_name'])
-                        indicator_boilerplate2 = 'The area of {0} values as they occur within the {1} ecosystem in the ' \
-                                                 '{2}.'.format(indicator['value']['indicator_name'],
-                                                                     ecosystem['ecosystem_name'],
-                                                                     context['value']['summary_unit_name'])
+
                         p.insert_paragraph_before(indicator['value']['indicator_name'], style='Heading11')
                         p.insert_paragraph_before(indicator['value']['indicator_description'])
 
                         # TODO: change after boilerplate reevaluated
-                        # boiler1 = p.insert_paragraph_before(indicator_boilerplate)
-                        boiler2 = p.insert_paragraph_before(indicator_boilerplate2)
+                        # boilerplate = p.insert_paragraph_before(indicator_boilerplate)
+                        caption = p.insert_paragraph_before(indicator['value']['indicator_caption'])
 
-                        create_table(doc, ecosystem['indicators'][0]['table']['indicator_table'], boiler2)
+                        create_table(doc, ecosystem['indicators'][0]['table']['indicator_table'], caption)
 
             # Delete the placeholder para
             delete_paragraph(p)
@@ -214,7 +211,8 @@ def generate_report_context(unit_id, config):
             indicator_context = {
                 'value': {
                     'indicator_name': indicator_config['label'],
-                    'indicator_description': indicator_config['description']
+                    'indicator_description': indicator_config['description'],
+                    'indicator_caption': indicator_config['reportCaption']
                 },
                 'table': {
                     'indicator_table': {
