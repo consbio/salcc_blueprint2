@@ -237,22 +237,27 @@ def generate_report_context(unit_id, config):
                         threshold_position = indicator_values.index(tup)
 
                 total_good_percent = 0
-                total_bad_percent = 0
+                total_not_good_percent = 0
                 rows = []
 
                 for label, percent in indicator_values:
                     if int(label) >= has_threshold:
                         total_good_percent += percent
-                        rows.append([indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres), str(percent) + '%'])
+                        rows.append([indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres),
+                                     str(percent) + '%'])
                     if int(label) < has_threshold:
-                        total_bad_percent += percent
-                        rows.append([indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres), str(percent) + '%'])
+                        total_not_good_percent += percent
+                        rows.append([indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres),
+                                     str(percent) + '%'])
 
-                good_total_row = ['Total in good condition', percent_to_acres(total_good_percent, total_acres), str(total_good_percent) + '%']
-                bad_total_row = ['Total not in good condition', percent_to_acres(total_bad_percent, total_acres), str(total_bad_percent) + '%']
+                good_total_row = ['Total in good condition', percent_to_acres(total_good_percent, total_acres),
+                                  str(total_good_percent) + '%']
+                not_good_total_row = ['Total not in good condition', percent_to_acres(total_not_good_percent,
+                                      total_acres), str(total_not_good_percent) + '%']
 
+                # Insert total_good row at threshold and total_not_good at table end
                 rows.insert(int(threshold_position)+1, good_total_row)
-                rows.append(bad_total_row)
+                rows.append(not_good_total_row)
 
                 indicator_context['table']['indicator_table']['rows'] = rows
 
@@ -371,13 +376,16 @@ def create_table(doc, data, para):
 
     for datarow in data['rows']:
         row = table.add_row()
-        italictype = False
+        condition_style = False
+
         for index, datacell in enumerate(datarow):
             row.cells[index].text = str(datacell)
             if str(datacell) == 'Total in good condition' or str(datacell) == 'Total not in good condition':
-                italictype = True
-            if italictype is True:
-                row.cells[index].paragraphs[0].runs[0].font.italic = True
+                condition_style = True
+            if condition_style is True:
+                # A new shade must be generated for each cell
+                new_shade = shade_generator()
+                row.cells[index]._tc.get_or_add_tcPr().append(new_shade)
 
     set_col_widths(table)
 
@@ -387,6 +395,10 @@ def create_table(doc, data, para):
     _move_p_after_t(table, end_buffer)
 
     return end_buffer
+
+
+def shade_generator():
+    return docx.oxml.parse_xml(r'<w:shd {} w:fill="cacdd1"/>'.format(docx.oxml.ns.nsdecls('w')))
 
 
 def set_col_widths(table):
