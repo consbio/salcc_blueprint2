@@ -251,9 +251,9 @@ def generate_report_context(unit_id, config):
                                      str(percent) + '%'])
 
                 good_total_row = ['Total in good condition', percent_to_acres(total_good_percent, total_acres),
-                                  str(total_good_percent) + '%']
+                                  str(round(total_good_percent, 1)) + '%']
                 not_good_total_row = ['Total not in good condition', percent_to_acres(total_not_good_percent,
-                                      total_acres), str(total_not_good_percent) + '%']
+                                      total_acres), str(round(total_not_good_percent, 1)) + '%']
 
                 # Insert total_good row at threshold and total_not_good at table end
                 rows.insert(int(threshold_position)+1, good_total_row)
@@ -306,7 +306,7 @@ def generate_report_context(unit_id, config):
         own_perc_sum = sum(data['owner'].values())
 
         if own_perc_sum < 100:
-            perc_remainder = 100 - own_perc_sum
+            perc_remainder = round(100 - own_perc_sum, 1)
             owners['rows'].append(['Not conserved', percent_to_acres(perc_remainder, total_acres),
                                    str(perc_remainder) + '%'])
 
@@ -327,7 +327,7 @@ def generate_report_context(unit_id, config):
         pro_perc_sum = sum(data['gap'].values())
 
         if pro_perc_sum < 100:
-            perc_remainder = 100 - pro_perc_sum
+            perc_remainder = round(100 - pro_perc_sum, 1)
             protection['rows'].append(['Not conserved', percent_to_acres(perc_remainder, total_acres),
                                        str(perc_remainder) + '%'])
 
