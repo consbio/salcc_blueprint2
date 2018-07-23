@@ -384,7 +384,8 @@ def create_table(doc, data, para):
                 condition_style = True
             if condition_style is True:
                 # A new shade must be generated for each cell
-                new_shade = shade_generator()
+                color = "cacdd1"
+                new_shade = shade_generator(color)
                 row.cells[index]._tc.get_or_add_tcPr().append(new_shade)
 
     set_col_widths(table)
@@ -397,8 +398,8 @@ def create_table(doc, data, para):
     return end_buffer
 
 
-def shade_generator():
-    return docx.oxml.parse_xml(r'<w:shd {} w:fill="cacdd1"/>'.format(docx.oxml.ns.nsdecls('w')))
+def shade_generator(color):
+    return docx.oxml.parse_xml(r'<w:shd {0} w:fill="{1}"/>'.format(docx.oxml.ns.nsdecls('w'), color))
 
 
 def set_col_widths(table):
