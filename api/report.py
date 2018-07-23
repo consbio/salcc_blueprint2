@@ -78,19 +78,11 @@ def create_report(unit_id, path, config):
                         p.insert_paragraph_before(heading, style='Heading13')
 
                     for indicator in ecosystem['indicators']:
-                        # TODO: reevaluate this boilerplate
-                        # indicator_boilerplate = 'The average value of the indicator in the {0}, compared to the South ' \
-                        #                         'Atlantic average. The South Atlantic average is the average of ' \
-                        #                         'all HUC12 averages in the South Atlantic region.'.format(
-                        #                          context['value']['summary_unit_name'])
-
                         p.insert_paragraph_before(indicator['value']['indicator_name'], style='Heading11')
                         p.insert_paragraph_before(indicator['value']['indicator_description'])
 
-                        # TODO: change after boilerplate reevaluated
-                        # boilerplate = p.insert_paragraph_before(indicator_boilerplate)
                         caption = p.insert_paragraph_before(indicator['value']['indicator_caption'])
-
+                        
                         create_table(doc, ecosystem['indicators'][0]['table']['indicator_table'], caption)
 
             # Delete the placeholder para
