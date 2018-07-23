@@ -67,10 +67,7 @@ def create_report(unit_id, path, config):
 
                     name = ecosystem['ecosystem_name']
                     percent = ecosystem['ecosystem_percentage']
-                    if percent is 0:
-                        heading = name + ': ' + '<0.1% of area'
-                        p.insert_paragraph_before(heading, style='Heading13')
-                    elif percent is not '':
+                    if percent is not '':
                         heading = name + ': ' + str(percent) + '% of area'
                         p.insert_paragraph_before(heading, style='Heading13')
                     else:
