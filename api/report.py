@@ -263,10 +263,8 @@ def generate_report_context(unit_id, config):
                 ]
 
             ecosystem_indicators['indicators'].append(indicator_context)
-        print('end of indicator for loop:', ecosystem_indicators['indicators'])  # This looks right
 
         context['ecosystem_indicators'].append(ecosystem_indicators)
-    print('end of ecosystem for loop:', context['ecosystem_indicators'])  # This looks right
 
     # Partners list - name and url separated by categories
 
@@ -373,8 +371,13 @@ def create_table(doc, data, para):
 
     for datarow in data['rows']:
         row = table.add_row()
+        italictype = False
         for index, datacell in enumerate(datarow):
             row.cells[index].text = str(datacell)
+            if str(datacell) == 'Total in good condition' or str(datacell) == 'Total not in good condition':
+                italictype = True
+            if italictype is True:
+                row.cells[index].paragraphs[0].runs[0].font.italic = True
 
     set_col_widths(table)
 
