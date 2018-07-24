@@ -5,41 +5,41 @@ const ContactTab = () => (
         <section>
             <h3>Feedback</h3>
             <p>
-                You can help improve the Blueprint. Please give us your feedback:
+                The Blueprint and indicators are regularly revised based on input from people like you. Have a
+                suggestion on how to improve the priorities? Let us know! We also welcome feedback on how to improve the
+                Simple Viewer interface. South Atlantic staff will read and respond to your comments&mdash;we promise.
                 <br />
                 <br />
                 <b>email</b>{' '}
                 <a
-                    href="mailto:southatlanticlcc@gmail.com?subject=South Atlantic Blueprint Feedback (Simple Viewer)"
+                    href="mailto:hilary_morris@fws.gov?subject=South Atlantic Blueprint Feedback (Simple Viewer)"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    southatlanticlcc@gmail.com
+                    hilary_morris@fws.gov
                 </a>
+                <br />
+                <b>call</b> <a href="tel:19197070252">(919) 707-0252</a>
             </p>
         </section>
         <section>
             <h3>Contact Staff</h3>
             <p>
-                Do you have questions about the Blueprint? Do you need support from South Atlantic staff to help
-                interpret and apply the Blueprint for your project?
-                <br />
-                <br />
-                South Atlantic staff are here to help!
+                Do you have a question about the Blueprint? Would you like help using the Blueprint to support a
+                proposal or inform a decision? South Atlantic staff are here to support you! We really mean it. It is
+                what we do!
                 <br />
                 <br />
                 <b>email</b>{' '}
                 <a
-                    href="mailto:southatlanticlcc@gmail.com?subject=South Atlantic Blueprint Support (Simple Viewer)"
+                    href="mailto:hilary_morris@fws.gov?subject=South Atlantic Blueprint Support (Simple Viewer)"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    southatlanticlcc@gmail.com
+                    hilary_morris@fws.gov
                 </a>
                 <br />
-                <br />
-                <b>call</b> Hilary Morris: <a href="tel:19197070252">(919) 707-0252</a>
-                <div className="text-quieter text-small">(Blueprint User Support)</div>
+                <b>call</b> <a href="tel:19197070252">(919) 707-0252</a>
             </p>
         </section>
     </div>
