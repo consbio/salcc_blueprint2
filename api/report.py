@@ -2,6 +2,9 @@ import re
 import os
 import json
 import docx
+import matplotlib
+import matplotlib.pyplot as pl
+from io import BytesIO
 
 from collections import defaultdict
 from docx import Document
@@ -58,6 +61,12 @@ def create_report(unit_id, path, config):
                 elif scope == 'table':
                     r.text = ''
                     create_table(doc, item, p)
+
+                elif scope == 'chart':
+                    r.text = ''
+                    if key == 'priorities':
+                        get_pie_chart()
+                    # do a thing
 
         if '{{INDICATORS}}' in p.text:
             # Remove '{{INDICATORS}}'placeholder and add the report content above empty p.text
@@ -137,7 +146,9 @@ def generate_report_context(unit_id, config):
 
     context['value'] = {
         'summary_unit_name': data['name'],
-        'acres': "{:,}".format(data['acres'])
+        'acres': "{:,}".format(data['acres']),
+        'threats_slr': data['slr'],
+        'threats_urban': data['urban']
     }
     context['table'] = {}
 
@@ -502,6 +513,37 @@ def delete_paragraph(paragraph):
     p = paragraph._element
     p.getparent().remove(p)
     p._p = p._element = None
+
+
+def get_pie_chart(series, colors, labels):
+    """
+    Render a pie chart with legend on the right to PNG bytes.
+
+    Parameters
+    ----------
+    series: list-like of values
+    colors: list-like of colors for values
+    labels: list-like of labels for values
+
+    Returns
+    -------
+    BytesIO buffer containing PNG bytes
+    """
+
+    pl.figure(figsize=(5, 5))
+    pl.gca().axis("equal")
+    pie = pl.pie(series, colors=colors)
+    pl.legend(pie[0], labels, loc='center right', bbox_to_anchor=(1, 0.5),
+              bbox_transform=pl.gcf().transFigure)
+    pl.subplots_adjust(left=0.0, bottom=0.1, right=0.6)
+
+    buffer = BytesIO()
+    pl.savefig(buffer, format='png')
+    buffer.seek(0)
+
+    pl.close()
+
+    return buffer
 
 
 def _resolve(scope, key, context):
