@@ -624,7 +624,7 @@ footer {
 }
 .chart-line-y-axis-label {
     position: absolute;
-    left: -5em;
+    left: -4em;
     top: 6em;
     transform: rotate(-90deg);
 }
