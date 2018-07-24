@@ -156,7 +156,7 @@ def generate_report_context(unit_id, config):
 
         priorities['rows'] = [
             (config['priorities'][str(i)]['label'], percent_to_acres(percentage, total_acres),
-             '{0}%'.format(str(percentage))) for i, percentage in enumerate(data.get('blueprint'))
+             '{0}%'.format(percentage)) for i, percentage in enumerate(data.get('blueprint'))
         ]
         priorities['rows'].reverse()
         context['table']['priorities'] = priorities
@@ -174,7 +174,7 @@ def generate_report_context(unit_id, config):
                                   reverse=True)  # sort by percent, from largest percent to smallest
 
     ecosystems_table['rows'] = [
-        (config['ecosystems'][e]['label'], percent_to_acres(percent, total_acres), '{0}%'.format(str(percent)))
+        (config['ecosystems'][e]['label'], percent_to_acres(percent, total_acres), '{0}%'.format(percent))
         for e, percent in ecosystems_with_area
     ]
 
@@ -231,6 +231,7 @@ def generate_report_context(unit_id, config):
             indicator_keys = [int(v) for v in indicator_config['valueLabels'].keys()]
             indicator_keys.sort()  # make sure keys are sorted in ascending order
             indicator_values = list(zip(indicator_keys, indicator_data['percent']))
+            indicator_values.reverse()  # Reverse order so highest priorities at top of table
 
             if good_threshold is not None:
                 # Find threshold position in indicator values so total will be added after
@@ -244,16 +245,16 @@ def generate_report_context(unit_id, config):
                     if label_key >= good_threshold:
                         total_good_percent += percent
                         rows.append([indicator_config['valueLabels'][str(label_key)], percent_to_acres(percent, total_acres),
-                                     '{0}%'.format(str(percent))])
+                                     '{0}%'.format(percent)])
                     else:
                         total_not_good_percent += percent
                         rows.append([indicator_config['valueLabels'][str(label_key)], percent_to_acres(percent, total_acres),
-                                     '{0}%'.format(str(percent))])
+                                     '{0}%'.format(percent)])
 
                 good_total_row = ['Total in good condition', percent_to_acres(total_good_percent, total_acres),
-                                  '{0}%'.format(str(round(total_good_percent, 1)))]
+                                  '{0}%'.format(round(total_good_percent, 1))]
                 not_good_total_row = ['Total not in good condition', percent_to_acres(total_not_good_percent,
-                                      total_acres), '{0}%'.format(str(round(total_not_good_percent, 1)))]
+                                      total_acres), '{0}%'.format(round(total_not_good_percent, 1))]
 
                 # Insert total_good row at threshold and total_not_good at table end
                 rows.insert(int(threshold_position)+1, good_total_row)
@@ -264,7 +265,7 @@ def generate_report_context(unit_id, config):
             else:
                 indicator_context['table']['indicator_table']['rows'] = [
                     [indicator_config['valueLabels'][str(label_key)], percent_to_acres(percent, total_acres),
-                     '{0}%'.format(str(percent))] for label_key, percent in indicator_values
+                     '{0}%'.format(percent)] for label_key, percent in indicator_values
                 ]
 
             ecosystem_indicators['indicators'].append(indicator_context)
@@ -299,7 +300,7 @@ def generate_report_context(unit_id, config):
         owners = dict(col_names=['Ownership', 'Acres', 'Percent of Area'])
 
         owners['rows'] = [
-            [config['owners'][key]['label'], percent_to_acres(percent, total_acres), '{0}%'.format(str(percent))]
+            [config['owners'][key]['label'], percent_to_acres(percent, total_acres), '{0}%'.format(percent)]
             for key, percent in data['owner'].items()
         ]
 
@@ -308,7 +309,7 @@ def generate_report_context(unit_id, config):
         if own_perc_sum < 100:
             perc_remainder = round(100 - own_perc_sum, 1)
             owners['rows'].append(['Not conserved', percent_to_acres(perc_remainder, total_acres),
-                                   '{0}%'.format(str(perc_remainder))])
+                                   '{0}%'.format(perc_remainder)])
 
         context['table']['ownership'] = owners
     else:
@@ -320,7 +321,7 @@ def generate_report_context(unit_id, config):
 
     if 'gap' in data:
         protection['rows'] = [
-            [config['protection'][key]['label'], percent_to_acres(percent, total_acres), '{0}%'.format(str(percent))]
+            [config['protection'][key]['label'], percent_to_acres(percent, total_acres), '{0}%'.format(percent)]
             for key, percent in data['gap'].items()
         ]
 
@@ -329,7 +330,7 @@ def generate_report_context(unit_id, config):
         if pro_perc_sum < 100:
             perc_remainder = round(100 - pro_perc_sum, 1)
             protection['rows'].append(['Not conserved', percent_to_acres(perc_remainder, total_acres),
-                                       '{0}%'.format(str(perc_remainder))])
+                                       '{0}%'.format(perc_remainder)])
 
         context['table']['protection'] = protection
     else:
@@ -376,12 +377,11 @@ def create_table(doc, data, para):
 
     for datarow in data['rows']:
         row = table.add_row()
-        condition_style = False
+        condition_style = str(datarow[0]) == 'Total in good condition' or str(
+            datarow[0]) == 'Total not in good condition'
 
         for index, datacell in enumerate(datarow):
             row.cells[index].text = str(datacell)
-            if str(datacell) == 'Total in good condition' or str(datacell) == 'Total not in good condition':
-                condition_style = True
             if condition_style is True:
                 # A new shade must be generated for each cell
                 new_shade = shade_generator(TOTAL_ROW_COLOR)
