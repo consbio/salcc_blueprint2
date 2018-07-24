@@ -11,6 +11,7 @@ fiona = "*"
 python-docx = "*"
 pytest = "*"
 flask = "*"
+matplotlib = "*"
 
 [dev-packages]
 pytest = "*"

@@ -15,7 +15,7 @@ const ThreatsTab = ({ isMarine, urban, slr }) => {
                 <h3>Sea level rise</h3>
                 {slr !== null && slr.length > 0 ? (
                     <div className="chart-line">
-                        <label className="text-quiet text-smaller chart-line-y-axis-label">Percent of watershed</label>
+                        <label className="text-quiet text-smaller chart-line-y-axis-label">Percent of area</label>
                         <LineChart
                             className="chart-line"
                             areaColor="#004da8"
@@ -44,7 +44,7 @@ const ThreatsTab = ({ isMarine, urban, slr }) => {
                 <h3>Urban growth</h3>
                 {urban !== null && urban.length > 0 ? (
                     <div className="chart-line">
-                        <label className="text-quiet text-smaller chart-line-y-axis-label">Percent of watershed</label>
+                        <label className="text-quiet text-smaller chart-line-y-axis-label">Percent of area</label>
                         <LineChart
                             className="chart-line"
                             areaColor="#D90000"
