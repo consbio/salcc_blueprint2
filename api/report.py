@@ -136,7 +136,10 @@ def generate_report_context(unit_id, config):
 
     context = dict()
 
-    context['value'] = {'summary_unit_name': data['name']}
+    context['value'] = {
+        'summary_unit_name': data['name'],
+        'acres': total_acres
+    }
     context['table'] = {}
 
     # Priorities table
@@ -145,7 +148,7 @@ def generate_report_context(unit_id, config):
         priorities = dict(col_names=['Priority Category', 'Acres', 'Percent of Area'])
 
         priorities['rows'] = [
-            (config['priorities'][str(i)]['label'], percent_to_acres(percentage, total_acres), str(percentage) + '%')
+            (config['priorities'][str(i)]['label'], "{:,}".format(percent_to_acres(percentage, total_acres)), str(percentage) + '%')
             for i, percentage in enumerate(data.get('blueprint'))
         ]
         priorities['rows'].reverse()
@@ -164,7 +167,7 @@ def generate_report_context(unit_id, config):
                                   reverse=True)  # sort by percent, from largest percent to smallest
 
     ecosystems_table['rows'] = [
-        (config['ecosystems'][e]['label'], percent_to_acres(percent, total_acres), str(percent) + '%')
+        (config['ecosystems'][e]['label'], "{:,}".format(percent_to_acres(percent, total_acres)), str(percent) + '%')
         for e, percent in ecosystems_with_area
     ]
 
@@ -208,7 +211,7 @@ def generate_report_context(unit_id, config):
                 },
                 'table': {
                     'indicator_table': {
-                        'col_names': ['Indicator Values', 'Area', 'Percent of Area'],
+                        'col_names': ['Indicator Values', 'Acres', 'Percent of Area'],
                         'rows': []
                     }
                 }
@@ -217,7 +220,7 @@ def generate_report_context(unit_id, config):
             indicator_values = list(zip(indicator_config['valueLabels'], indicator_data['percent']))
             indicator_values.reverse()  # Reverse order so highest priorities at top of table
             indicator_context['table']['indicator_table']['rows'] = [
-                (indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres), str(percent) + '%')
+                (indicator_config['valueLabels'][label], "{:,}".format(percent_to_acres(percent, total_acres)), str(percent) + '%')
                 for label, percent in indicator_values
             ]
 
@@ -253,7 +256,7 @@ def generate_report_context(unit_id, config):
         owners = dict(col_names=['Ownership', 'Acres', 'Percent of Area'])
 
         owners['rows'] = [
-            [config['owners'][key]['label'], percent_to_acres(percent, total_acres), str(percent) + '%']
+            [config['owners'][key]['label'], "{:,}".format(percent_to_acres(percent, total_acres)), str(percent) + '%']
             for key, percent in data['owner'].items()
         ]
 
@@ -261,7 +264,7 @@ def generate_report_context(unit_id, config):
 
         if own_perc_sum < 100:
             perc_remainder = 100 - own_perc_sum
-            owners['rows'].append(['Not conserved', percent_to_acres(perc_remainder, total_acres),
+            owners['rows'].append(['Not conserved', "{:,}".format(percent_to_acres(perc_remainder, total_acres)),
                                    str(perc_remainder) + '%'])
 
         context['table']['ownership'] = owners
@@ -274,7 +277,7 @@ def generate_report_context(unit_id, config):
 
     if 'gap' in data:
         protection['rows'] = [
-            [config['protection'][key]['label'], percent_to_acres(percent, total_acres), str(percent) + '%']
+            [config['protection'][key]['label'], "{:,}".format(percent_to_acres(percent, total_acres)), str(percent) + '%']
             for key, percent in data['gap'].items()
         ]
 
@@ -282,7 +285,7 @@ def generate_report_context(unit_id, config):
 
         if pro_perc_sum < 100:
             perc_remainder = 100 - pro_perc_sum
-            protection['rows'].append(['Not conserved', percent_to_acres(perc_remainder, total_acres),
+            protection['rows'].append(['Not conserved', "{:,}".format(percent_to_acres(perc_remainder, total_acres)),
                                        str(perc_remainder) + '%'])
 
         context['table']['protection'] = protection
