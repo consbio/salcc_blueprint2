@@ -138,7 +138,7 @@ def generate_report_context(unit_id, config):
 
     context['value'] = {
         'summary_unit_name': data['name'],
-        'acres': total_acres
+        'acres': "{:,}".format(data['acres'])
     }
     context['table'] = {}
 
