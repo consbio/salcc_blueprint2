@@ -16,6 +16,8 @@ DATA_DIR = '../public/data'
 # Example placeholder: {{label:title}}
 PLACEHOLDER_REGEX = re.compile(r'{{(?P<scope>\w+):(?P<key>\w+)}}')
 
+TOTAL_ROW_COLOR = 'cacdd1'
+
 
 def create_report(unit_id, path, config):
     """
@@ -153,8 +155,8 @@ def generate_report_context(unit_id, config):
         priorities = dict(col_names=['Priority Category', 'Acres', 'Percent of Area'])
 
         priorities['rows'] = [
-            (config['priorities'][str(i)]['label'], percent_to_acres(percentage, total_acres), str(percentage) + '%')
-            for i, percentage in enumerate(data.get('blueprint'))
+            (config['priorities'][str(i)]['label'], percent_to_acres(percentage, total_acres),
+             '{0}%'.format(str(percentage))) for i, percentage in enumerate(data.get('blueprint'))
         ]
         priorities['rows'].reverse()
         context['table']['priorities'] = priorities
@@ -172,7 +174,7 @@ def generate_report_context(unit_id, config):
                                   reverse=True)  # sort by percent, from largest percent to smallest
 
     ecosystems_table['rows'] = [
-        (config['ecosystems'][e]['label'], percent_to_acres(percent, total_acres), str(percent) + '%')
+        (config['ecosystems'][e]['label'], percent_to_acres(percent, total_acres), '{0}%'.format(str(percent)))
         for e, percent in ecosystems_with_area
     ]
 
@@ -221,36 +223,37 @@ def generate_report_context(unit_id, config):
                 }
             }
 
-            has_threshold = indicator_config.get('goodThreshold', None)
+            good_threshold = indicator_config.get('goodThreshold', None)
 
-            indicator_values = list(zip(indicator_config['valueLabels'], indicator_data['percent']))
-            indicator_values.reverse()  # Reverse order so highest priorities at top of table
+            # indicator_values = list(zip(sorted(indicator_config['valueLabels'].keys()), indicator_data['percent']))
+            # indicator_values.reverse()  # Reverse order so highest priorities at top of table
 
-            if has_threshold:
+            indicator_keys = [int(v) for v in indicator_config['valueLabels'].keys()]
+            indicator_keys.sort()  # make sure keys are sorted in ascending order
+            indicator_values = list(zip(indicator_keys, indicator_data['percent']))
+
+            if good_threshold is not None:
                 # Find threshold position in indicator values so total will be added after
-                threshold_position = 0
-                for tup in indicator_values:
-                    if str(has_threshold) in tup:
-                        threshold_position = indicator_values.index(tup)
+                threshold_position = indicator_keys[::-1].index(good_threshold)
 
                 total_good_percent = 0
                 total_not_good_percent = 0
                 rows = []
 
-                for label, percent in indicator_values:
-                    if int(label) >= has_threshold:
+                for label_key, percent in indicator_values:
+                    if label_key >= good_threshold:
                         total_good_percent += percent
-                        rows.append([indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres),
-                                     str(percent) + '%'])
-                    if int(label) < has_threshold:
+                        rows.append([indicator_config['valueLabels'][str(label_key)], percent_to_acres(percent, total_acres),
+                                     '{0}%'.format(str(percent))])
+                    else:
                         total_not_good_percent += percent
-                        rows.append([indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres),
-                                     str(percent) + '%'])
+                        rows.append([indicator_config['valueLabels'][str(label_key)], percent_to_acres(percent, total_acres),
+                                     '{0}%'.format(str(percent))])
 
                 good_total_row = ['Total in good condition', percent_to_acres(total_good_percent, total_acres),
-                                  str(round(total_good_percent, 1)) + '%']
+                                  '{0}%'.format(str(round(total_good_percent, 1)))]
                 not_good_total_row = ['Total not in good condition', percent_to_acres(total_not_good_percent,
-                                      total_acres), str(round(total_not_good_percent, 1)) + '%']
+                                      total_acres), '{0}%'.format(str(round(total_not_good_percent, 1)))]
 
                 # Insert total_good row at threshold and total_not_good at table end
                 rows.insert(int(threshold_position)+1, good_total_row)
@@ -260,8 +263,8 @@ def generate_report_context(unit_id, config):
 
             else:
                 indicator_context['table']['indicator_table']['rows'] = [
-                    [indicator_config['valueLabels'][label], percent_to_acres(percent, total_acres), str(percent) + '%']
-                    for label, percent in indicator_values
+                    [indicator_config['valueLabels'][str(label_key)], percent_to_acres(percent, total_acres),
+                     '{0}%'.format(str(percent))] for label_key, percent in indicator_values
                 ]
 
             ecosystem_indicators['indicators'].append(indicator_context)
@@ -296,7 +299,7 @@ def generate_report_context(unit_id, config):
         owners = dict(col_names=['Ownership', 'Acres', 'Percent of Area'])
 
         owners['rows'] = [
-            [config['owners'][key]['label'], percent_to_acres(percent, total_acres), str(percent) + '%']
+            [config['owners'][key]['label'], percent_to_acres(percent, total_acres), '{0}%'.format(str(percent))]
             for key, percent in data['owner'].items()
         ]
 
@@ -305,7 +308,7 @@ def generate_report_context(unit_id, config):
         if own_perc_sum < 100:
             perc_remainder = round(100 - own_perc_sum, 1)
             owners['rows'].append(['Not conserved', percent_to_acres(perc_remainder, total_acres),
-                                   str(perc_remainder) + '%'])
+                                   '{0}%'.format(str(perc_remainder))])
 
         context['table']['ownership'] = owners
     else:
@@ -317,7 +320,7 @@ def generate_report_context(unit_id, config):
 
     if 'gap' in data:
         protection['rows'] = [
-            [config['protection'][key]['label'], percent_to_acres(percent, total_acres), str(percent) + '%']
+            [config['protection'][key]['label'], percent_to_acres(percent, total_acres), '{0}%'.format(str(percent))]
             for key, percent in data['gap'].items()
         ]
 
@@ -326,7 +329,7 @@ def generate_report_context(unit_id, config):
         if pro_perc_sum < 100:
             perc_remainder = round(100 - pro_perc_sum, 1)
             protection['rows'].append(['Not conserved', percent_to_acres(perc_remainder, total_acres),
-                                       str(perc_remainder) + '%'])
+                                       '{0}%'.format(str(perc_remainder))])
 
         context['table']['protection'] = protection
     else:
@@ -381,8 +384,7 @@ def create_table(doc, data, para):
                 condition_style = True
             if condition_style is True:
                 # A new shade must be generated for each cell
-                color = "cacdd1"
-                new_shade = shade_generator(color)
+                new_shade = shade_generator(TOTAL_ROW_COLOR)
                 row.cells[index]._tc.get_or_add_tcPr().append(new_shade)
 
     set_col_widths(table)
