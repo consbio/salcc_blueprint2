@@ -7,7 +7,6 @@ import Map from './Map'
 
 import Header from './Header'
 import Sidebar from './Sidebar'
-import Footer from './Footer'
 import ContentOverlay from './ContentOverlay'
 import * as actions from '../Actions/actions'
 
@@ -43,8 +42,6 @@ class App extends Component {
                 {isMobile ? <ContentOverlay /> : <Sidebar />}
 
                 <Map />
-
-                {!isMobile && <Footer />}
 
                 {this.renderError()}
             </div>
