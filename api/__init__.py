@@ -2,11 +2,8 @@ import os
 import json
 import tempfile
 from flask import Flask, send_file
-from dotenv import load_dotenv
 
 from .report import create_report
-
-load_dotenv(dotenv_path='../.env')
 
 app = Flask(__name__)
 
