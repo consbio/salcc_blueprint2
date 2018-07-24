@@ -2,14 +2,17 @@ import os
 import json
 import tempfile
 from flask import Flask, send_file
+from dotenv import load_dotenv
 
-from report import create_report
+from .report import create_report
+
+load_dotenv(dotenv_path='../.env')
 
 app = Flask(__name__)
 
 BP_VERSION = '2.2'
 
-CONFIG_DIR = '../src/config'
+CONFIG_DIR = './src/config'
 CONFIG = {}
 for entry in ('ecosystems', 'owners', 'plans', 'priorities', 'protection'):
     with open('{0}/{1}.json'.format(CONFIG_DIR, entry)) as infile:
@@ -19,7 +22,8 @@ for entry in ('ecosystems', 'owners', 'plans', 'priorities', 'protection'):
 @app.route('/report/<unit_id>', methods=['GET'])
 def get_report(unit_id):
     unit_id = unit_id
-    doc_name = 'south_atlantic_blueprint_{version}_{id}.docx'.format(version=BP_VERSION, id=unit_id)
+    doc_name = 'south_atlantic_blueprint_{version}_{id}.docx'.format(
+        version=BP_VERSION, id=unit_id)
 
     with tempfile.TemporaryDirectory() as tmpdir:
         path = os.path.join(tmpdir, doc_name)

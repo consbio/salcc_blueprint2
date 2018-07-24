@@ -12,6 +12,8 @@ python-docx = "*"
 pytest = "*"
 flask = "*"
 matplotlib = "*"
+python-dotenv = "*"
+gunicorn = "*"
 
 [dev-packages]
 pytest = "*"

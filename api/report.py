@@ -7,11 +7,12 @@ from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
 
+DATA_DIR = os.getenv('DATA_DIR', './public/data')
+
+TEMPLATE = 'api/template.docx'
 
 # TODO: Improve custom table style in template.docx
 DOC_STYLE = 'SALCC_style'
-
-DATA_DIR = '../public/data'
 
 # Example placeholder: {{label:title}}
 PLACEHOLDER_REGEX = re.compile(r'{{(?P<scope>\w+):(?P<key>\w+)}}')
@@ -34,7 +35,7 @@ def create_report(unit_id, path, config):
     report: docx file
 
     """
-    doc = Document('template.docx')
+    doc = Document(TEMPLATE)
 
     context = generate_report_context(unit_id, config)
 
@@ -77,12 +78,16 @@ def create_report(unit_id, path, config):
                         p.insert_paragraph_before(heading, style='Heading13')
 
                     for indicator in ecosystem['indicators']:
-                        p.insert_paragraph_before(indicator['value']['indicator_name'], style='Heading11')
-                        p.insert_paragraph_before(indicator['value']['indicator_description'])
+                        p.insert_paragraph_before(
+                            indicator['value']['indicator_name'], style='Heading11')
+                        p.insert_paragraph_before(
+                            indicator['value']['indicator_description'])
 
-                        caption = p.insert_paragraph_before(indicator['value']['indicator_caption'])
-                        
-                        create_table(doc, ecosystem['indicators'][0]['table']['indicator_table'], caption)
+                        caption = p.insert_paragraph_before(
+                            indicator['value']['indicator_caption'])
+
+                        create_table(
+                            doc, ecosystem['indicators'][0]['table']['indicator_table'], caption)
 
             # Delete the placeholder para
             delete_paragraph(p)
@@ -92,7 +97,8 @@ def create_report(unit_id, path, config):
             p.text = ''
 
             for category in context['partners']:
-                p.insert_paragraph_before(context['partner_headers'][category], style='Heading14')
+                p.insert_paragraph_before(
+                    context['partner_headers'][category], style='Heading14')
 
                 for partner in context['partners'][category]:
                     part = p.insert_paragraph_before(style='HyperlinkList')
@@ -100,9 +106,11 @@ def create_report(unit_id, path, config):
 
             # Counties
             if 'counties' in context:
-                p.insert_paragraph_before('Land Trusts (by county)', style='Heading14')
+                p.insert_paragraph_before(
+                    'Land Trusts (by county)', style='Heading14')
                 for county in context['counties']:
-                    county_name = p.insert_paragraph_before(style='HyperlinkList')
+                    county_name = p.insert_paragraph_before(
+                        style='HyperlinkList')
                     add_hyperlink(county_name, county['url'], county['name'])
 
             # Delete the placeholder para
@@ -144,10 +152,12 @@ def generate_report_context(unit_id, config):
     # Priorities table
 
     if data['blueprint']:
-        priorities = dict(col_names=['Priority Category', 'Acres', 'Percent of Area'])
+        priorities = dict(
+            col_names=['Priority Category', 'Acres', 'Percent of Area'])
 
         priorities['rows'] = [
-            (config['priorities'][str(i)]['label'], "{:,}".format(percent_to_acres(percentage, total_acres)), '{0}%'.format(percentage))
+            (config['priorities'][str(i)]['label'], "{:,}".format(
+                percent_to_acres(percentage, total_acres)), '{0}%'.format(percentage))
             for i, percentage in enumerate(data.get('blueprint'))
         ]
         priorities['rows'].reverse()
@@ -157,16 +167,19 @@ def generate_report_context(unit_id, config):
 
     # Ecosystem table
 
-    ecosystems_table = dict(col_names=['Ecosystems', 'Acres', 'Percent of Area'])
+    ecosystems_table = dict(
+        col_names=['Ecosystems', 'Acres', 'Percent of Area'])
     ecosystems = data.get('ecosystems', [])  # make sure we always have a list
 
-    ecosystems_with_area = [(e, ecosystems[e]['percent']) for e in ecosystems if 'percent' in ecosystems[e]]
+    ecosystems_with_area = [(e, ecosystems[e]['percent'])
+                            for e in ecosystems if 'percent' in ecosystems[e]]
     # filter the list to those with percents, and make a new list of tuples of ecosystem ID and percent
     ecosystems_with_area = sorted(ecosystems_with_area, key=lambda x: x[1],
                                   reverse=True)  # sort by percent, from largest percent to smallest
 
     ecosystems_table['rows'] = [
-        (config['ecosystems'][e]['label'], "{:,}".format(percent_to_acres(percent, total_acres)), '{0}%'.format(percent))
+        (config['ecosystems'][e]['label'], "{:,}".format(
+            percent_to_acres(percent, total_acres)), '{0}%'.format(percent))
         for e, percent in ecosystems_with_area
     ]
 
@@ -176,13 +189,16 @@ def generate_report_context(unit_id, config):
 
     context['ecosystem_indicators'] = []
 
-    ind_ecosystems = [(key, data['ecosystems'][key].get('percent', None)) for key in data['ecosystems']]
+    ind_ecosystems = [(key, data['ecosystems'][key].get(
+        'percent', None)) for key in data['ecosystems']]
 
     ecosystems_with_percent = [e for e in ind_ecosystems if e[1] is not None]
-    ecosystems_with_percent = sorted(ecosystems_with_percent, key=lambda x: x[1], reverse=True)  # sort descending percent
+    ecosystems_with_percent = sorted(
+        ecosystems_with_percent, key=lambda x: x[1], reverse=True)  # sort descending percent
 
     ecosystems_without_percent = [e for e in ind_ecosystems if e[1] is None]
-    ecosystems_without_percent = sorted(ecosystems_without_percent, key=lambda x: x[0])  # sort ascending label
+    ecosystems_without_percent = sorted(
+        ecosystems_without_percent, key=lambda x: x[0])  # sort ascending label
 
     ecosystems = ecosystems_with_percent + ecosystems_without_percent
 
@@ -221,9 +237,11 @@ def generate_report_context(unit_id, config):
             # indicator_values = list(zip(sorted(indicator_config['valueLabels'].keys()), indicator_data['percent']))
             # indicator_values.reverse()  # Reverse order so highest priorities at top of table
 
-            indicator_keys = [int(v) for v in indicator_config['valueLabels'].keys()]
+            indicator_keys = [int(v)
+                              for v in indicator_config['valueLabels'].keys()]
             indicator_keys.sort()  # make sure keys are sorted in ascending order
-            indicator_values = list(zip(indicator_keys, indicator_data['percent']))
+            indicator_values = list(
+                zip(indicator_keys, indicator_data['percent']))
             indicator_values.reverse()  # Reverse order so highest priorities at top of table
 
             if good_threshold is not None:
@@ -247,7 +265,7 @@ def generate_report_context(unit_id, config):
                 good_total_row = ['Total in good condition', percent_to_acres(total_good_percent, total_acres),
                                   '{0}%'.format(round(total_good_percent, 1))]
                 not_good_total_row = ['Total not in good condition', percent_to_acres(total_not_good_percent,
-                                      total_acres), '{0}%'.format(round(total_not_good_percent, 1))]
+                                                                                      total_acres), '{0}%'.format(round(total_not_good_percent, 1))]
 
                 # Insert total_good row at threshold and total_not_good at table end
                 rows.insert(int(threshold_position)+1, good_total_row)
@@ -283,7 +301,8 @@ def generate_report_context(unit_id, config):
     # Counties list - name and url
 
     context['counties'] = [
-        {'name': value, 'url': 'http://findalandtrust.org/counties/{0}'.format(key)}
+        {'name': value,
+            'url': 'http://findalandtrust.org/counties/{0}'.format(key)}
         for key, value in data['counties'].items()
     ]  # key is FIPS and value is county with state
 
@@ -294,7 +313,8 @@ def generate_report_context(unit_id, config):
 
         owners['rows'] = [
 
-            [config['owners'][key]['label'], "{:,}".format(percent_to_acres(percent, total_acres)), '{0}%'.format(percent)]
+            [config['owners'][key]['label'], "{:,}".format(
+                percent_to_acres(percent, total_acres)), '{0}%'.format(percent)]
             for key, percent in data['owner'].items()
         ]
 
@@ -311,11 +331,13 @@ def generate_report_context(unit_id, config):
 
     # Protections table
 
-    protection = dict(col_names=['Land Protection Status', 'Acres', 'Percent of Area'])
+    protection = dict(
+        col_names=['Land Protection Status', 'Acres', 'Percent of Area'])
 
     if 'gap' in data:
         protection['rows'] = [
-            [config['protection'][key]['label'], "{:,}".format(percent_to_acres(percent, total_acres)), '{0}%'.format(percent)]
+            [config['protection'][key]['label'], "{:,}".format(
+                percent_to_acres(percent, total_acres)), '{0}%'.format(percent)]
             for key, percent in data['gap'].items()
         ]
 
@@ -476,7 +498,8 @@ def add_hyperlink(paragraph, url, text):
 
     # This gets access to the document.xml.rels file and gets a new relation id value
     part = paragraph.part
-    r_id = part.relate_to(url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
+    r_id = part.relate_to(
+        url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
 
     # Create the w:hyperlink tag and add needed values
     hyperlink = docx.oxml.shared.OxmlElement('w:hyperlink')
