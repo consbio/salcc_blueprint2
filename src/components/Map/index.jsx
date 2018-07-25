@@ -22,7 +22,7 @@ import * as actions from '../../Actions/actions'
 import LocateControl from './LocateControl'
 import { PlacePropType } from '../../CustomPropTypes'
 
-const MAPBOX_TOKEN = 'pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ'
+const MAPBOX_TOKEN = process.env.MAPBOX_ACCESS_TOKEN || ''  // REQUIRED: this must be present in .env file
 
 // Make leaflet icons work properly from webpack / react context
 

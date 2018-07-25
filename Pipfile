@@ -13,6 +13,7 @@ pytest = "*"
 flask = "*"
 matplotlib = "*"
 gunicorn = "*"
+requests = "*"
 
 [dev-packages]
 pytest = "*"
