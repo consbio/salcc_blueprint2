@@ -71,7 +71,7 @@ def create_report(unit_id, path, config):
                     name = ecosystem['ecosystem_name']
                     percent = ecosystem['ecosystem_percentage']
                     if percent is not '':
-                        heading = name + ': ' + str(percent) + '% of area'
+                        heading = '{0}: {1}% of area'.format(name, percent)
                         p.insert_paragraph_before(heading, style='Heading13')
                     else:
                         heading = name
@@ -145,7 +145,7 @@ def generate_report_context(unit_id, config):
 
     context['value'] = {
         'summary_unit_name': data['name'],
-        'acres': "{:,}".format(data['acres'])
+        'acres': '{:,}'.format(data['acres'])
     }
     context['table'] = {}
 
@@ -156,7 +156,7 @@ def generate_report_context(unit_id, config):
             col_names=['Priority Category', 'Acres', 'Percent of Area'])
 
         priorities['rows'] = [
-            (config['priorities'][str(i)]['label'], "{:,}".format(
+            (config['priorities'][str(i)]['label'], '{:,}'.format(
                 percent_to_acres(percentage, total_acres)), '{0}%'.format(percentage))
             for i, percentage in enumerate(data.get('blueprint'))
         ]
@@ -178,7 +178,7 @@ def generate_report_context(unit_id, config):
                                   reverse=True)  # sort by percent, from largest percent to smallest
 
     ecosystems_table['rows'] = [
-        (config['ecosystems'][e]['label'], "{:,}".format(
+        (config['ecosystems'][e]['label'], '{:,}'.format(
             percent_to_acres(percent, total_acres)), '{0}%'.format(percent))
         for e, percent in ecosystems_with_area
     ]
@@ -255,17 +255,19 @@ def generate_report_context(unit_id, config):
                 for label_key, percent in indicator_values:
                     if label_key >= good_threshold:
                         total_good_percent += percent
-                        rows.append([indicator_config['valueLabels'][str(label_key)], percent_to_acres(percent, total_acres),
-                                     '{0}%'.format(percent)])
+                        rows.append([indicator_config['valueLabels'][str(label_key)],
+                                     '{:,}'.format(percent_to_acres(percent, total_acres)), '{0}%'.format(percent)])
                     else:
                         total_not_good_percent += percent
-                        rows.append([indicator_config['valueLabels'][str(label_key)], percent_to_acres(percent, total_acres),
-                                     '{0}%'.format(percent)])
+                        rows.append([indicator_config['valueLabels'][str(label_key)],
+                                     '{:,}'.format(percent_to_acres(percent, total_acres)), '{0}%'.format(percent)])
 
-                good_total_row = ['Total in good condition', percent_to_acres(total_good_percent, total_acres),
+                good_total_row = ['Total in good condition',
+                                  '{:,}'.format(percent_to_acres(total_good_percent, total_acres)),
                                   '{0}%'.format(round(total_good_percent, 1))]
-                not_good_total_row = ['Total not in good condition', percent_to_acres(total_not_good_percent,
-                                                                                      total_acres), '{0}%'.format(round(total_not_good_percent, 1))]
+                not_good_total_row = ['Total not in good condition',
+                                      '{:,}'.format(percent_to_acres(total_not_good_percent, total_acres)),
+                                      '{0}%'.format(round(total_not_good_percent, 1))]
 
                 # Insert total_good row at threshold and total_not_good at table end
                 rows.insert(int(threshold_position)+1, good_total_row)
@@ -275,7 +277,7 @@ def generate_report_context(unit_id, config):
 
             else:
                 indicator_context['table']['indicator_table']['rows'] = [
-                    [indicator_config['valueLabels'][str(label_key)], percent_to_acres(percent, total_acres),
+                    [indicator_config['valueLabels'][str(label_key)], '{:,}'.format(percent_to_acres(percent, total_acres)),
                      '{0}%'.format(percent)] for label_key, percent in indicator_values
                 ]
 
@@ -313,7 +315,7 @@ def generate_report_context(unit_id, config):
 
         owners['rows'] = [
 
-            [config['owners'][key]['label'], "{:,}".format(
+            [config['owners'][key]['label'], '{:,}'.format(
                 percent_to_acres(percent, total_acres)), '{0}%'.format(percent)]
             for key, percent in data['owner'].items()
         ]
@@ -322,7 +324,7 @@ def generate_report_context(unit_id, config):
 
         if own_perc_sum < 100:
             perc_remainder = round(100 - own_perc_sum, 1)
-            owners['rows'].append(['Not conserved', "{:,}".format(percent_to_acres(perc_remainder, total_acres)),
+            owners['rows'].append(['Not conserved', '{:,}'.format(percent_to_acres(perc_remainder, total_acres)),
                                    '{0}%'.format(perc_remainder)])
 
         context['table']['ownership'] = owners
@@ -336,7 +338,7 @@ def generate_report_context(unit_id, config):
 
     if 'gap' in data:
         protection['rows'] = [
-            [config['protection'][key]['label'], "{:,}".format(
+            [config['protection'][key]['label'], '{:,}'.format(
                 percent_to_acres(percent, total_acres)), '{0}%'.format(percent)]
             for key, percent in data['gap'].items()
         ]
@@ -345,7 +347,7 @@ def generate_report_context(unit_id, config):
 
         if pro_perc_sum < 100:
             perc_remainder = round(100 - pro_perc_sum, 1)
-            protection['rows'].append(['Not conserved', "{:,}".format(percent_to_acres(perc_remainder, total_acres)),
+            protection['rows'].append(['Not conserved', '{:,}'.format(percent_to_acres(perc_remainder, total_acres)),
                                        '{0}%'.format(perc_remainder)])
 
         context['table']['protection'] = protection
