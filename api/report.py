@@ -10,6 +10,8 @@ from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
 
+matplotlib.use('Agg')
+
 DATA_DIR = os.getenv('DATA_DIR', './public/data')
 
 TEMPLATE = 'api/template.docx'
@@ -66,8 +68,7 @@ def create_report(unit_id, path, config):
                 elif scope == 'chart':
                     r.text = ''
                     if key == 'priorities':
-                        get_pie_chart()
-                    # do a thing
+                        doc.add_picture(context['chart']['priorities'])
 
         if '{{INDICATORS}}' in p.text:
             # Remove '{{INDICATORS}}'placeholder and add the report content above empty p.text
@@ -159,6 +160,7 @@ def generate_report_context(unit_id, config):
         'threats_urban': data['urban']
     }
     context['table'] = {}
+    context['chart'] = {}
 
     # Priorities table
 
@@ -172,9 +174,25 @@ def generate_report_context(unit_id, config):
             for i, percentage in enumerate(data.get('blueprint'))
         ]
         priorities['rows'].reverse()
+
         context['table']['priorities'] = priorities
+
+        # context['chart']['priorities'] = {}
+        indices = [i for i, v in enumerate(data['blueprint']) if v > 0]
+        values = [data['blueprint'][i] for i in indices]
+        colors = [config['priorities'][str(i)]['color'] for i in indices]
+        labels = ['{0} ({1}%)'.format(config['priorities'][str(i)]['label'],
+                                      data['blueprint'][i]) for i in indices]
+        chart = get_pie_chart(values, colors=colors, labels=labels)
+
+        # TODO: how to save to a tmpdir
+        with open('api/tests/blueprint_chart.png', 'wb') as out:
+            out.write(chart.read())
+        context['chart']['priorities'] = 'api/tests/blueprint_chart.png'
+
     else:
         context['table']['priorities'] = 'No priority information available'
+        context['chart']['priorities'] = ''
 
     # Ecosystem table
 
