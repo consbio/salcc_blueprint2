@@ -13,7 +13,7 @@ from docx.shared import Cm
 
 
 DATA_DIR = os.getenv('DATA_DIR', './public/data')
-IMAGE_DIR = 'tests'
+IMAGE_DIR = './api/tests'
 
 TEMPLATE = 'api/template.docx'
 
@@ -57,7 +57,9 @@ def create_report(unit_id, path, config):
                 if scope == 'chart':
                     r.text = ''
                     if key == 'priorities':
-                        r.add_picture('./api/tests/blueprint_chart.png', width=Cm(10.0))
+                        chart_para = p.insert_paragraph_before()
+                        run = chart_para.add_run()
+                        run.add_picture(context['chart']['priorities'], width=Cm(11.0))
 
                 elif isinstance(item, str):
                     # match.group() has the original text to replace
@@ -70,7 +72,6 @@ def create_report(unit_id, path, config):
                 elif scope == 'table':
                     r.text = ''
                     create_table(doc, item, p)
-
 
         if '{{INDICATORS}}' in p.text:
             # Remove '{{INDICATORS}}'placeholder and add the report content above empty p.text
@@ -571,12 +572,12 @@ def get_pie_chart(series, colors, labels):
     BytesIO buffer containing PNG bytes
     """
 
-    pl.figure(figsize=(5, 5))
+    pl.figure(figsize=(5, 3))
     pl.gca().axis("equal")
-    pie = pl.pie(series, colors=colors)
-    pl.legend(pie[0], labels, loc='center right', bbox_to_anchor=(1, 0.5),
+    pie = pl.pie(series, colors=colors, radius=1.2)
+    pl.legend(pie[0], labels, loc='center right', bbox_to_anchor=(0.95, 0.5),
               bbox_transform=pl.gcf().transFigure)
-    pl.subplots_adjust(left=0.0, bottom=0.1, right=0.6)
+    pl.subplots_adjust(left=-0.1, bottom=0.1, right=0.6)
 
     buffer = BytesIO()
     pl.savefig(buffer, format='png')
