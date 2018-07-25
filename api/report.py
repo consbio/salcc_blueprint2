@@ -60,13 +60,11 @@ def create_report(unit_id, path, config):
                         chart_para = p.insert_paragraph_before()
                         run = chart_para.add_run()
                         run.add_picture(context['chart']['priorities'], width=Cm(11.0))
-                    if key == 'slr':
-                        print('elif slr')
+                    if key == 'slr' and not isinstance(context['chart']['slr'], str):
                         chart_para = p.insert_paragraph_before()
                         run = chart_para.add_run()
                         run.add_picture(context['chart']['slr'], width=Cm(11.0))
-                    if key == 'urban':
-                        print('elif urban')
+                    if key == 'urban' and not isinstance(context['chart']['urban'], str):
                         chart_para = p.insert_paragraph_before()
                         run = chart_para.add_run()
                         run.add_picture(context['chart']['urban'], width=Cm(11.0))
@@ -394,20 +392,16 @@ def generate_report_context(unit_id, config):
     # Threats
 
     if data['slr']:
-        print('MAKE IT SO')
         chart = get_line_chart(config['slr'], data['slr'], x_label='Amount of sea level rise (feet)',
-                                                 y_label='Percent of area', color='#004da8', alpha=0.3)
+                               y_label='Percent of area', color='#004da8', alpha=0.3)
         context['chart']['slr'] = chart
-        print('slr chart', context['chart']['slr'])
     else:
         context['chart']['slr'] = 'No sea level rise data available'
 
     if data['urban']:
-        print('ENGAGE')
         chart = get_line_chart(config['urbanization'], data['urban'], x_label='Decade',
-                                                   y_label='Percent of area', color='#D90000', alpha=0.3)
+                               y_label='Percent of area', color='#D90000', alpha=0.3)
         context['chart']['urban'] = chart
-        print('urb chart', context['chart']['urban'])
     else:
         context['chart']['urban'] = 'No urban growth data available'
 
