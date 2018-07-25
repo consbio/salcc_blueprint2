@@ -54,7 +54,14 @@ def create_report(unit_id, path, config):
 
                 item = _resolve(scope, key, context)
 
-                if scope == 'chart':
+                if isinstance(item, str):
+                    # match.group() has the original text to replace
+                    r.text = r.text.replace(match.group(), item)
+                    if scope == 'table' or scope == 'chart':
+                        # TODO: make "No info available" text more eye-catching
+                        r.font.italic = True
+
+                elif scope == 'chart':
                     r.text = ''
                     if key == 'priorities':
                         chart_para = p.insert_paragraph_before()
@@ -63,19 +70,11 @@ def create_report(unit_id, path, config):
                     if key == 'slr' and not isinstance(context['chart']['slr'], str):
                         chart_para = p.insert_paragraph_before()
                         run = chart_para.add_run()
-                        run.add_picture(context['chart']['slr'], width=Cm(11.0))
+                        run.add_picture(context['chart']['slr'], width=Cm(13.0))
                     if key == 'urban' and not isinstance(context['chart']['urban'], str):
                         chart_para = p.insert_paragraph_before()
                         run = chart_para.add_run()
-                        run.add_picture(context['chart']['urban'], width=Cm(11.0))
-
-                elif isinstance(item, str):
-                    # match.group() has the original text to replace
-                    r.text = r.text.replace(match.group(), item)
-
-                    if scope == 'table' or scope == 'chart':
-                        # TODO: make "No info available" text more eye-catching
-                        r.font.italic = True
+                        run.add_picture(context['chart']['urban'], width=Cm(13.0))
 
                 elif scope == 'table':
                     r.text = ''
