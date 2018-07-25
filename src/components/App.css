@@ -208,7 +208,7 @@ footer {
     margin: 0;
 }
 #SidebarHeaderInner {
-    margin: 4px 10px 14px;
+    margin: 4px 10px 10px;
 }
 
 #Sidebar .tabs {
@@ -254,6 +254,15 @@ footer {
     padding: 20px 20px 0;
     overflow-y: auto;
     overflow-x: hidden;
+}
+
+#ReportDownload {
+    margin-top: 8px;
+}
+#ReportDownload svg {
+    vertical-align: middle;
+    margin-right: 2px;
+    fill: rgba(0, 116, 217, 0.75) !important;
 }
 
 #ContentOverlay {

@@ -16,7 +16,6 @@ class Header extends Component {
     }
 
     handleContactClick = (e) => {
-        console.log('On contact click')
         e.preventDefault()
         this.setState({ contactOpen: true })
     }
