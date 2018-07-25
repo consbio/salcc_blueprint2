@@ -3,6 +3,7 @@ import os
 import json
 import docx
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as pl
 from io import BytesIO
 
@@ -10,9 +11,9 @@ from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
 
-matplotlib.use('Agg')
 
 DATA_DIR = os.getenv('DATA_DIR', './public/data')
+IMAGE_DIR = 'tests'
 
 TEMPLATE = 'api/template.docx'
 
@@ -66,9 +67,10 @@ def create_report(unit_id, path, config):
                     create_table(doc, item, p)
 
                 elif scope == 'chart':
-                    r.text = ''
-                    if key == 'priorities':
-                        doc.add_picture(context['chart']['priorities'])
+                    r.text = 'THIS IS ONLY A TEST'
+                    # if key == 'priorities':
+                        # doc.add_picture('Databasin_logo.png', width=Cm(5.0))
+                        # do nothing
 
         if '{{INDICATORS}}' in p.text:
             # Remove '{{INDICATORS}}'placeholder and add the report content above empty p.text
@@ -184,11 +186,10 @@ def generate_report_context(unit_id, config):
         labels = ['{0} ({1}%)'.format(config['priorities'][str(i)]['label'],
                                       data['blueprint'][i]) for i in indices]
         chart = get_pie_chart(values, colors=colors, labels=labels)
-
         # TODO: how to save to a tmpdir
         with open('api/tests/blueprint_chart.png', 'wb') as out:
             out.write(chart.read())
-        context['chart']['priorities'] = 'api/tests/blueprint_chart.png'
+        context['chart']['priorities'] = os.path.join(IMAGE_DIR, 'blueprint_chart.png')
 
     else:
         context['table']['priorities'] = 'No priority information available'
@@ -266,8 +267,7 @@ def generate_report_context(unit_id, config):
             # indicator_values = list(zip(sorted(indicator_config['valueLabels'].keys()), indicator_data['percent']))
             # indicator_values.reverse()  # Reverse order so highest priorities at top of table
 
-            indicator_keys = [int(v)
-                              for v in indicator_config['valueLabels'].keys()]
+            indicator_keys = [int(v) for v in indicator_config['valueLabels'].keys()]
             indicator_keys.sort()  # make sure keys are sorted in ascending order
             indicator_values = list(
                 zip(indicator_keys, indicator_data['percent']))
