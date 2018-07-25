@@ -54,7 +54,12 @@ def create_report(unit_id, path, config):
 
                 item = _resolve(scope, key, context)
 
-                if isinstance(item, str):
+                if scope == 'chart':
+                    r.text = ''
+                    if key == 'priorities':
+                        r.add_picture('./api/tests/blueprint_chart.png', width=Cm(10.0))
+
+                elif isinstance(item, str):
                     # match.group() has the original text to replace
                     r.text = r.text.replace(match.group(), item)
 
@@ -66,11 +71,6 @@ def create_report(unit_id, path, config):
                     r.text = ''
                     create_table(doc, item, p)
 
-                elif scope == 'chart':
-                    r.text = 'THIS IS ONLY A TEST'
-                    # if key == 'priorities':
-                        # doc.add_picture('Databasin_logo.png', width=Cm(5.0))
-                        # do nothing
 
         if '{{INDICATORS}}' in p.text:
             # Remove '{{INDICATORS}}'placeholder and add the report content above empty p.text
