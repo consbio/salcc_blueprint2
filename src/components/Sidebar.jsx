@@ -5,10 +5,21 @@ import { connect } from 'react-redux'
 import InfoTab from './InfoTab'
 import Tabs, { getUnitTab } from './Tabs'
 import ResetIcon from './icons/outline-cancel-24px.svg'
+import DownloadIcon from './icons/outline-cloud_download-24px.svg'
 import * as actions from '../Actions/actions'
 
+const REPORT_SERVER = process.env.REPORT_SERVER || '/report'
+
 const Sidebar = ({
-    activeTab, unitName, hasSelectedUnit, isDataLoaded, isMarine, acres, deselectUnit, setTab
+    selectedUnit,
+    activeTab,
+    unitName,
+    hasSelectedUnit,
+    isDataLoaded,
+    isMarine,
+    acres,
+    deselectUnit,
+    setTab
 }) => {
     let tab = null
     if (hasSelectedUnit) {
@@ -27,7 +38,12 @@ const Sidebar = ({
                                 <h3>{unitName}</h3>
                                 <div className="text-quiet text-smaller">
                                     {acres && <div>{acres.toLocaleString()} acres</div>}
-                                    <a href="">download report</a>
+                                    <div id="ReportDownload">
+                                        <a href={`${REPORT_SERVER}/${selectedUnit}`}>
+                                            <DownloadIcon height={20} />
+                                            download report
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                             <ResetIcon id="CloseButton" onClick={deselectUnit} />
@@ -65,11 +81,13 @@ Sidebar.propTypes = {
     deselectUnit: PropTypes.func.isRequired,
     setTab: PropTypes.func.isRequired,
 
+    selectedUnit: PropTypes.string,
     activeTab: PropTypes.string,
     acres: PropTypes.number
 }
 
 Sidebar.defaultProps = {
+    selectedUnit: null,
     activeTab: null,
     acres: null
 }
@@ -79,6 +97,7 @@ const mapStateToProps = ({
         activeTab, selectedUnit, isDataLoaded, data
     }
 }) => ({
+    selectedUnit,
     activeTab,
     isDataLoaded,
     hasSelectedUnit: selectedUnit !== null,
