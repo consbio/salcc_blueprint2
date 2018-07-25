@@ -2,6 +2,7 @@
     "name": "salcc_blueprint2",
     "version": "2.2.0",
     "private": true,
+    "homepage": "https://m.salcc.databasin.org",
     "dependencies": {
         "autoprefixer": "7.1.1",
         "babel-core": "6.26.0",
