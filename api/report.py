@@ -60,12 +60,22 @@ def create_report(unit_id, path, config):
                         chart_para = p.insert_paragraph_before()
                         run = chart_para.add_run()
                         run.add_picture(context['chart']['priorities'], width=Cm(11.0))
+                    if key == 'slr':
+                        print('elif slr')
+                        chart_para = p.insert_paragraph_before()
+                        run = chart_para.add_run()
+                        run.add_picture(context['chart']['slr'], width=Cm(11.0))
+                    if key == 'urban':
+                        print('elif urban')
+                        chart_para = p.insert_paragraph_before()
+                        run = chart_para.add_run()
+                        run.add_picture(context['chart']['urban'], width=Cm(11.0))
 
                 elif isinstance(item, str):
                     # match.group() has the original text to replace
                     r.text = r.text.replace(match.group(), item)
 
-                    if scope == 'table':
+                    if scope == 'table' or scope == 'chart':
                         # TODO: make "No info available" text more eye-catching
                         r.font.italic = True
 
@@ -381,6 +391,26 @@ def generate_report_context(unit_id, config):
     else:
         context['table']['protection'] = 'No information available'
 
+    # Threats
+
+    if data['slr']:
+        print('MAKE IT SO')
+        chart = get_line_chart(config['slr'], data['slr'], x_label='Amount of sea level rise (feet)',
+                                                 y_label='Percent of area', color='#004da8', alpha=0.3)
+        context['chart']['slr'] = chart
+        print('slr chart', context['chart']['slr'])
+    else:
+        context['chart']['slr'] = 'No sea level rise data available'
+
+    if data['urban']:
+        print('ENGAGE')
+        chart = get_line_chart(config['urbanization'], data['urban'], x_label='Decade',
+                                                   y_label='Percent of area', color='#D90000', alpha=0.3)
+        context['chart']['urban'] = chart
+        print('urb chart', context['chart']['urban'])
+    else:
+        context['chart']['urban'] = 'No urban growth data available'
+
     return context
 
 
@@ -577,6 +607,45 @@ def get_pie_chart(series, colors, labels):
     pl.legend(pie[0], labels, loc='center right', bbox_to_anchor=(0.95, 0.5),
               bbox_transform=pl.gcf().transFigure)
     pl.subplots_adjust(left=-0.1, bottom=0.1, right=0.6)
+
+    buffer = BytesIO()
+    pl.savefig(buffer, format='png')
+    buffer.seek(0)
+
+    pl.close()
+
+    return buffer
+
+
+def get_line_chart(x_series, y_series, x_label=None, y_label=None, color='blue', alpha=1):
+    """
+    Render a line chart to PNG bytes.
+
+    Parameters
+    ----------
+    x_series: list-like of x values
+    y_series: list-like of y values
+    x_label: label for x axis (optional, default None)
+    y_label: label for y axis (optional, default None)
+    color
+    alpha
+
+    Returns
+    -------
+    BytesIO buffer containing PNG bytes
+    """
+
+    pl.stackplot(x_series, y_series, color=color, alpha=alpha)
+    lines = pl.plot(x_series, y_series, linewidth=2,
+                    color=color, marker='.', markersize=10)
+    pl.xlim(min(x_series), max(x_series))
+    pl.ylim(min(y_series), max(y_series))
+
+    if x_label:
+        pl.xlabel(x_label)
+
+    if y_label:
+        pl.ylabel(y_label)
 
     buffer = BytesIO()
     pl.savefig(buffer, format='png')

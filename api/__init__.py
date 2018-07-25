@@ -11,7 +11,7 @@ BP_VERSION = '2.2'
 
 CONFIG_DIR = './src/config'
 CONFIG = {}
-for entry in ('ecosystems', 'owners', 'plans', 'priorities', 'protection'):
+for entry in ('ecosystems', 'owners', 'plans', 'priorities', 'protection', 'slr', 'urbanization'):
     with open('{0}/{1}.json'.format(CONFIG_DIR, entry)) as infile:
         CONFIG[entry] = json.loads(infile.read())
 
