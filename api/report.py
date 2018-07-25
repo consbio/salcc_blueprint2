@@ -165,9 +165,7 @@ def generate_report_context(unit_id, config):
 
     context['value'] = {
         'summary_unit_name': data['name'],
-        'acres': '{:,}'.format(data['acres']),
-        'threats_slr': data['slr'],
-        'threats_urban': data['urban']
+        'acres': '{:,}'.format(data['acres'])
     }
     context['table'] = {}
     context['chart'] = {}
@@ -336,11 +334,12 @@ def generate_report_context(unit_id, config):
 
     # Counties list - name and url
 
-    context['counties'] = [
-        {'name': value,
-            'url': 'http://findalandtrust.org/counties/{0}'.format(key)}
-        for key, value in data['counties'].items()
-    ]  # key is FIPS and value is county with state
+    if 'counties' in data:
+        context['counties'] = [
+            {'name': value,
+                'url': 'http://findalandtrust.org/counties/{0}'.format(key)}
+            for key, value in data['counties'].items()
+        ]  # key is FIPS and value is county with state
 
     # Ownership table
 
@@ -390,14 +389,14 @@ def generate_report_context(unit_id, config):
 
     # Threats
 
-    if data['slr']:
+    if 'slr' in data and data['slr']:
         chart = get_line_chart(config['slr'], data['slr'], x_label='Amount of sea level rise (feet)',
                                y_label='Percent of area', color='#004da8', alpha=0.3)
         context['chart']['slr'] = chart
     else:
         context['chart']['slr'] = 'No sea level rise data available'
 
-    if data['urban']:
+    if 'urban' in data and data['urban']:
         chart = get_line_chart(config['urbanization'], data['urban'], x_label='Decade',
                                y_label='Percent of area', color='#D90000', alpha=0.3)
         context['chart']['urban'] = chart
