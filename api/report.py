@@ -187,10 +187,7 @@ def generate_report_context(unit_id, config):
         labels = ['{0} ({1}%)'.format(config['priorities'][str(i)]['label'],
                                       data['blueprint'][i]) for i in indices]
         chart = get_pie_chart(values, colors=colors, labels=labels)
-        # TODO: how to save to a tmpdir
-        with open('api/tests/blueprint_chart.png', 'wb') as out:
-            out.write(chart.read())
-        context['chart']['priorities'] = os.path.join(IMAGE_DIR, 'blueprint_chart.png')
+        context['chart']['priorities'] = chart
 
     else:
         context['table']['priorities'] = 'No priority information available'
