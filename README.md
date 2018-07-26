@@ -14,8 +14,36 @@ We also obtain the US Census TIGER States shapefile to extract state and county 
 
 ## Development
 
-To startup the frontend application:
+You will likely need several environment variables set.  Create a file `.env` in the root of this project, based on the `.env.example` file.
+Note: Flask does not use these variables, they need to be provided manually on the command line.
+
+To start the frontend application (on port 3000, by default:
 `yarn start`
+Then open `http://localhost:3000` in your browser.
+
+To start the report server (on port 5000, by default):
+```
+export FLASK_APP=api
+pipenv run flask run
+```
+Alternatively, you can run flask from within your virtual environment:
+```
+pipenv shell
+flask run
+```
+
+To confirm it is running, go to `http://localhost:5000/report/I1` in your browser, which should trigger a download of a word doc.
+
+
+To start the map generation server (on port 8000, by default, using tiles hosted in /tiles):
+```
+mbgl-server -t ./tiles
+```
+
+To confirm that it is running, open `http://localhost:8000/render` in your browser.  It should give you a 400 error message about required parameters.
+
+If you get a command not found error, you might need to execute the local binary file:
+`./node_modules/.bin/mbgl-server -t ./tiles`
 
 
 ## Deployment
