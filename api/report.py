@@ -6,6 +6,7 @@ import docx
 from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
+from docx.oxml.shared import OxmlElement
 
 DATA_DIR = os.getenv('DATA_DIR', './public/data')
 
@@ -380,13 +381,17 @@ def create_table(doc, data, para):
         location that the last item was added to the document
 
     """
-    # TODO: ensure tables don't run over a page break
-
     styles = doc.styles
     ncols = len(data['col_names'])
 
+    # Create big table to hold real table
+    big_table = doc.add_table(1, 1)
+    big_table.autofit = True
+
+    cells = big_table.add_row().cells
+
     # Create table with one row for column headings
-    table = doc.add_table(rows=1, cols=ncols)
+    table = cells[0].add_table(rows=1, cols=ncols)
     table.style = styles[DOC_STYLE]
 
     for index, heading in enumerate(data['col_names']):
@@ -405,6 +410,8 @@ def create_table(doc, data, para):
                 new_shade = shade_generator(TOTAL_ROW_COLOR)
                 row.cells[index]._tc.get_or_add_tcPr().append(new_shade)
 
+    prevent_document_break(doc)
+
     set_col_widths(table)
 
     _move_table_after(table, para)
@@ -413,6 +420,18 @@ def create_table(doc, data, para):
     _move_p_after_t(table, end_buffer)
 
     return end_buffer
+
+
+def prevent_document_break(document):
+    """https://github.com/python-openxml/python-docx/issues/245#event-621236139
+       Globally prevent table cells from splitting across pages.
+    """
+    tags = document.element.xpath('//w:tr')
+    rows = len(tags)
+    for row in range(0, rows):
+        tag = tags[row]  # Specify which <w:r> tag you want
+        child = OxmlElement('w:cantSplit')  # Create arbitrary tag
+        tag.append(child)  # Append in the new tag
 
 
 def shade_generator(color):
