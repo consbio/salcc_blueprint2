@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import PRIORITIES from '../../config/priorities.json'
 
 const InfoTab = ({ isMobile }) => {
-    const sortedPriorities = [4, 3, 2, 1] // 0 deliberately omitted
+    const sortedPriorities = [5, 4, 3, 2, 1] // 0 deliberately omitted
 
     const renderPriority = (priority) => {
         const {
