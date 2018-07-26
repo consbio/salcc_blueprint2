@@ -62,16 +62,17 @@ def create_report(unit_id, path, config):
                         r.font.italic = True
 
                 elif scope == 'chart':
+                    # Pictures are added at the run level
                     r.text = ''
                     if key == 'priorities':
                         chart_para = p.insert_paragraph_before()
                         run = chart_para.add_run()
                         run.add_picture(context['chart']['priorities'], width=Cm(11.0))
-                    if key == 'slr' and not isinstance(context['chart']['slr'], str):
+                    elif key == 'slr' and not isinstance(context['chart']['slr'], str):
                         chart_para = p.insert_paragraph_before()
                         run = chart_para.add_run()
                         run.add_picture(context['chart']['slr'], width=Cm(13.0))
-                    if key == 'urban' and not isinstance(context['chart']['urban'], str):
+                    elif key == 'urban' and not isinstance(context['chart']['urban'], str):
                         chart_para = p.insert_paragraph_before()
                         run = chart_para.add_run()
                         run.add_picture(context['chart']['urban'], width=Cm(13.0))
@@ -185,7 +186,6 @@ def generate_report_context(unit_id, config):
 
         context['table']['priorities'] = priorities
 
-        # context['chart']['priorities'] = {}
         indices = [i for i, v in enumerate(data['blueprint']) if v > 0]
         values = [data['blueprint'][i] for i in indices]
         colors = [config['priorities'][str(i)]['color'] for i in indices]
@@ -267,13 +267,9 @@ def generate_report_context(unit_id, config):
 
             good_threshold = indicator_config.get('goodThreshold', None)
 
-            # indicator_values = list(zip(sorted(indicator_config['valueLabels'].keys()), indicator_data['percent']))
-            # indicator_values.reverse()  # Reverse order so highest priorities at top of table
-
             indicator_keys = [int(v) for v in indicator_config['valueLabels'].keys()]
             indicator_keys.sort()  # make sure keys are sorted in ascending order
-            indicator_values = list(
-                zip(indicator_keys, indicator_data['percent']))
+            indicator_values = list(zip(indicator_keys, indicator_data['percent']))
             indicator_values.reverse()  # Reverse order so highest priorities at top of table
 
             if good_threshold is not None:
@@ -397,8 +393,8 @@ def generate_report_context(unit_id, config):
         context['chart']['slr'] = 'No sea level rise data available'
 
     if 'urban' in data and data['urban']:
-        chart = get_line_chart(config['urbanization'], data['urban'], x_label='Decade',
-                               y_label='Percent of area', color='#D90000', alpha=0.3)
+        chart = get_line_chart(config['urbanization'], data['urban'], x_label='Decade',  y_label='Percent of area',
+                               color='#D90000', alpha=0.3)
         context['chart']['urban'] = chart
     else:
         context['chart']['urban'] = 'No urban growth data available'
