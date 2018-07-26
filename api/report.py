@@ -2,10 +2,14 @@ import re
 import os
 import json
 import docx
+import matplotlib
+matplotlib.use('Agg')
 
 from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
+
+from api.charts import get_pie_chart, get_line_chart
 
 DATA_DIR = os.getenv('DATA_DIR', './public/data')
 
@@ -51,10 +55,18 @@ def create_report(unit_id, path, config):
                 if isinstance(item, str):
                     # match.group() has the original text to replace
                     r.text = r.text.replace(match.group(), item)
-
-                    if scope == 'table':
+                    if scope in {'table', 'chart'}:
                         # TODO: make "No info available" text more eye-catching
                         r.font.italic = True
+
+                elif scope == 'chart':
+                    # Pictures are added at the run level
+                    r.text = ''
+
+                    if not isinstance(context['chart'][key], str):
+                        chart_para = p.insert_paragraph_before()
+                        run = chart_para.add_run()
+                        run.add_picture(context['chart'][key], width=Cm(11.0))
 
                 elif scope == 'table':
                     r.text = ''
@@ -148,6 +160,7 @@ def generate_report_context(unit_id, config):
         'acres': '{:,}'.format(data['acres'])
     }
     context['table'] = {}
+    context['chart'] = {}
 
     # Priorities table
 
@@ -161,9 +174,21 @@ def generate_report_context(unit_id, config):
             for i, percentage in enumerate(data.get('blueprint'))
         ]
         priorities['rows'].reverse()
+
         context['table']['priorities'] = priorities
+
+        indices = [i for i, v in enumerate(data['blueprint']) if v > 0]
+        indices.reverse()
+        values = [data['blueprint'][i] for i in indices]
+        colors = [config['priorities'][str(i)]['color'] for i in indices]
+        labels = ['{0} ({1}%)'.format(config['priorities'][str(i)]['label'],
+                                      data['blueprint'][i]) for i in indices]
+        chart = get_pie_chart(values, colors=colors, labels=labels)
+        context['chart']['priorities'] = chart
+
     else:
         context['table']['priorities'] = 'No priority information available'
+        context['chart']['priorities'] = ''
 
     # Ecosystem table
 
@@ -234,14 +259,9 @@ def generate_report_context(unit_id, config):
 
             good_threshold = indicator_config.get('goodThreshold', None)
 
-            # indicator_values = list(zip(sorted(indicator_config['valueLabels'].keys()), indicator_data['percent']))
-            # indicator_values.reverse()  # Reverse order so highest priorities at top of table
-
-            indicator_keys = [int(v)
-                              for v in indicator_config['valueLabels'].keys()]
+            indicator_keys = [int(v) for v in indicator_config['valueLabels'].keys()]
             indicator_keys.sort()  # make sure keys are sorted in ascending order
-            indicator_values = list(
-                zip(indicator_keys, indicator_data['percent']))
+            indicator_values = list(zip(indicator_keys, indicator_data['percent']))
             indicator_values.reverse()  # Reverse order so highest priorities at top of table
 
             if good_threshold is not None:
@@ -302,11 +322,12 @@ def generate_report_context(unit_id, config):
 
     # Counties list - name and url
 
-    context['counties'] = [
-        {'name': value,
-            'url': 'http://findalandtrust.org/counties/{0}'.format(key)}
-        for key, value in data['counties'].items()
-    ]  # key is FIPS and value is county with state
+    if 'counties' in data:
+        context['counties'] = [
+            {'name': value,
+                'url': 'http://findalandtrust.org/counties/{0}'.format(key)}
+            for key, value in data['counties'].items()
+        ]  # key is FIPS and value is county with state
 
     # Ownership table
 
@@ -353,6 +374,22 @@ def generate_report_context(unit_id, config):
         context['table']['protection'] = protection
     else:
         context['table']['protection'] = 'No information available'
+
+    # Threats
+
+    if 'slr' in data and data['slr']:
+        chart = get_line_chart(config['slr'], data['slr'], x_label='Amount of sea level rise (feet)',
+                               y_label='Percent of area', color='#004da8', alpha=0.3)
+        context['chart']['slr'] = chart
+    else:
+        context['chart']['slr'] = 'No sea level rise data available'
+
+    if 'urban' in data and data['urban']:
+        chart = get_line_chart(config['urbanization'], data['urban'], x_label='Decade',  y_label='Percent of area',
+                               color='#D90000', alpha=0.3)
+        context['chart']['urban'] = chart
+    else:
+        context['chart']['urban'] = 'No urban growth data available'
 
     return context
 
