@@ -64,18 +64,11 @@ def create_report(unit_id, path, config):
                 elif scope == 'chart':
                     # Pictures are added at the run level
                     r.text = ''
-                    if key == 'priorities':
+
+                    if not isinstance(context['chart'][key], str):
                         chart_para = p.insert_paragraph_before()
                         run = chart_para.add_run()
-                        run.add_picture(context['chart']['priorities'], width=Cm(11.0))
-                    elif key == 'slr' and not isinstance(context['chart']['slr'], str):
-                        chart_para = p.insert_paragraph_before()
-                        run = chart_para.add_run()
-                        run.add_picture(context['chart']['slr'], width=Cm(13.0))
-                    elif key == 'urban' and not isinstance(context['chart']['urban'], str):
-                        chart_para = p.insert_paragraph_before()
-                        run = chart_para.add_run()
-                        run.add_picture(context['chart']['urban'], width=Cm(13.0))
+                        run.add_picture(context['chart'][key], width=Cm(11.0))
 
                 elif scope == 'table':
                     r.text = ''
