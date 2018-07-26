@@ -4,16 +4,14 @@ import json
 import docx
 import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as pl
-from io import BytesIO
 
 from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
 
+from api.charts import get_pie_chart, get_line_chart
 
 DATA_DIR = os.getenv('DATA_DIR', './public/data')
-IMAGE_DIR = './api/tests'
 
 TEMPLATE = 'api/template.docx'
 
@@ -57,7 +55,7 @@ def create_report(unit_id, path, config):
                 if isinstance(item, str):
                     # match.group() has the original text to replace
                     r.text = r.text.replace(match.group(), item)
-                    if scope == 'table' or scope == 'chart':
+                    if scope in {'table', 'chart'}:
                         # TODO: make "No info available" text more eye-catching
                         r.font.italic = True
 
@@ -180,6 +178,7 @@ def generate_report_context(unit_id, config):
         context['table']['priorities'] = priorities
 
         indices = [i for i, v in enumerate(data['blueprint']) if v > 0]
+        indices.reverse()
         values = [data['blueprint'][i] for i in indices]
         colors = [config['priorities'][str(i)]['color'] for i in indices]
         labels = ['{0} ({1}%)'.format(config['priorities'][str(i)]['label'],
@@ -565,76 +564,6 @@ def delete_paragraph(paragraph):
     p = paragraph._element
     p.getparent().remove(p)
     p._p = p._element = None
-
-
-def get_pie_chart(series, colors, labels):
-    """
-    Render a pie chart with legend on the right to PNG bytes.
-
-    Parameters
-    ----------
-    series: list-like of values
-    colors: list-like of colors for values
-    labels: list-like of labels for values
-
-    Returns
-    -------
-    BytesIO buffer containing PNG bytes
-    """
-
-    pl.figure(figsize=(5, 3))
-    pl.gca().axis("equal")
-    pie = pl.pie(series, colors=colors, radius=1.2)
-    pl.legend(pie[0], labels, loc='center right', bbox_to_anchor=(0.95, 0.5),
-              bbox_transform=pl.gcf().transFigure)
-    pl.subplots_adjust(left=-0.1, bottom=0.1, right=0.6)
-
-    buffer = BytesIO()
-    pl.savefig(buffer, format='png')
-    buffer.seek(0)
-
-    pl.close()
-
-    return buffer
-
-
-def get_line_chart(x_series, y_series, x_label=None, y_label=None, color='blue', alpha=1):
-    """
-    Render a line chart to PNG bytes.
-
-    Parameters
-    ----------
-    x_series: list-like of x values
-    y_series: list-like of y values
-    x_label: label for x axis (optional, default None)
-    y_label: label for y axis (optional, default None)
-    color
-    alpha
-
-    Returns
-    -------
-    BytesIO buffer containing PNG bytes
-    """
-
-    pl.stackplot(x_series, y_series, color=color, alpha=alpha)
-    lines = pl.plot(x_series, y_series, linewidth=2,
-                    color=color, marker='.', markersize=10)
-    pl.xlim(min(x_series), max(x_series))
-    pl.ylim(min(y_series), max(y_series))
-
-    if x_label:
-        pl.xlabel(x_label)
-
-    if y_label:
-        pl.ylabel(y_label)
-
-    buffer = BytesIO()
-    pl.savefig(buffer, format='png')
-    buffer.seek(0)
-
-    pl.close()
-
-    return buffer
 
 
 def _resolve(scope, key, context):
