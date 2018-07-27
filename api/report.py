@@ -57,16 +57,14 @@ def create_report(unit_id, path, config):
                     # match.group() has the original text to replace
                     r.text = r.text.replace(match.group(), item)
                     if scope in {'table', 'chart'}:
-                        # TODO: make "No info available" text more eye-catching
                         r.font.italic = True
 
                 elif scope in {'map', 'chart'}:
                     # Pictures are added at the run level
                     r.text = ''
+                    size = 11.0
                     if scope == 'map':
                         size = 15.0
-                    else:
-                        size = 11.0
                     if not isinstance(context[scope][key], str):
                         run = p.add_run()
                         run.add_picture(context[scope][key], width=Cm(size))
@@ -168,8 +166,8 @@ def generate_report_context(unit_id, config):
 
     # Priorities map
 
-    priorities_json = config['priorities']
-    priorities_map = get_map(unit_id, priorities_json)
+    priorities_config = config['priorities']
+    priorities_map = get_map(unit_id, priorities_config)
 
     context['map']['priorities'] = priorities_map
 
@@ -180,7 +178,7 @@ def generate_report_context(unit_id, config):
             col_names=['Priority Category', 'Acres', 'Percent of Area'])
 
         priorities['rows'] = [
-            (priorities_json[str(i)]['label'], '{:,}'.format(
+            (priorities_config[str(i)]['label'], '{:,}'.format(
                 percent_to_acres(percentage, total_acres)), '{0}%'.format(percentage))
             for i, percentage in enumerate(data.get('blueprint'))
         ]
@@ -191,8 +189,8 @@ def generate_report_context(unit_id, config):
         indices = [i for i, v in enumerate(data['blueprint']) if v > 0]
         indices.reverse()
         values = [data['blueprint'][i] for i in indices]
-        colors = [priorities_json[str(i)]['color'] for i in indices]
-        labels = ['{0} ({1}%)'.format(priorities_json[str(i)]['label'],
+        colors = [priorities_config[str(i)]['color'] for i in indices]
+        labels = ['{0} ({1}%)'.format(priorities_config[str(i)]['label'],
                                       data['blueprint'][i]) for i in indices]
         chart = get_pie_chart(values, colors=colors, labels=labels)
         context['chart']['priorities'] = chart
@@ -589,8 +587,6 @@ def get_map(unit_id, priorities):
     legend = [entry[1:] for entry in legend]
 
     m = get_map_image(unit_id, bounds, legend)
-    # for testing
-    m.save('api/tests/test_map.png')
 
     buffer = BytesIO()
     m.save(buffer, 'PNG')

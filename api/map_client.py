@@ -142,8 +142,6 @@ def get_unit_map_image(unit_id, bounds, width, height):
     Returns
     -------
     Image object
-
-    In test, width = 804 and height = 800
     """
 
     # Set styling for selected unit to highlight it on the map
