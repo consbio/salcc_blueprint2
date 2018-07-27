@@ -8,6 +8,7 @@ matplotlib.use('Agg')
 from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
+from api.map_client import *
 
 from api.charts import get_pie_chart, get_line_chart
 
@@ -59,14 +60,16 @@ def create_report(unit_id, path, config):
                         # TODO: make "No info available" text more eye-catching
                         r.font.italic = True
 
-                elif scope == 'chart':
+                elif scope in {'map', 'chart'}:
                     # Pictures are added at the run level
                     r.text = ''
-
-                    if not isinstance(context['chart'][key], str):
-                        chart_para = p.insert_paragraph_before()
-                        run = chart_para.add_run()
-                        run.add_picture(context['chart'][key], width=Cm(11.0))
+                    if scope == 'map':
+                        size = 15.0
+                    else:
+                        size = 11.0
+                    if not isinstance(context[scope][key], str):
+                        run = p.add_run()
+                        run.add_picture(context[scope][key], width=Cm(size))
 
                 elif scope == 'table':
                     r.text = ''
@@ -161,6 +164,14 @@ def generate_report_context(unit_id, config):
     }
     context['table'] = {}
     context['chart'] = {}
+    context['map'] = {}
+
+    # Priorities map
+
+    priorities_json = config['priorities']
+    priorities_map = get_map(unit_id, priorities_json)
+
+    context['map']['priorities'] = priorities_map
 
     # Priorities table
 
@@ -169,7 +180,7 @@ def generate_report_context(unit_id, config):
             col_names=['Priority Category', 'Acres', 'Percent of Area'])
 
         priorities['rows'] = [
-            (config['priorities'][str(i)]['label'], '{:,}'.format(
+            (priorities_json[str(i)]['label'], '{:,}'.format(
                 percent_to_acres(percentage, total_acres)), '{0}%'.format(percentage))
             for i, percentage in enumerate(data.get('blueprint'))
         ]
@@ -180,8 +191,8 @@ def generate_report_context(unit_id, config):
         indices = [i for i, v in enumerate(data['blueprint']) if v > 0]
         indices.reverse()
         values = [data['blueprint'][i] for i in indices]
-        colors = [config['priorities'][str(i)]['color'] for i in indices]
-        labels = ['{0} ({1}%)'.format(config['priorities'][str(i)]['label'],
+        colors = [priorities_json[str(i)]['color'] for i in indices]
+        labels = ['{0} ({1}%)'.format(priorities_json[str(i)]['label'],
                                       data['blueprint'][i]) for i in indices]
         chart = get_pie_chart(values, colors=colors, labels=labels)
         context['chart']['priorities'] = chart
@@ -564,6 +575,26 @@ def delete_paragraph(paragraph):
     p = paragraph._element
     p.getparent().remove(p)
     p._p = p._element = None
+
+
+def get_map(unit_id, priorities):
+    data = json.loads(open('public/data/{0}.json'.format(unit_id)).read())
+    bounds = data['bounds']
+
+    # convert priorities to legend, in descending priority (dropping Not a Priority class)
+    legend = [(int(k), v['color'], v['label'])
+              for k, v in priorities.items() if k != '0']
+    legend = sorted(legend, key=lambda x: x[0], reverse=True)
+    # strip off the value used for sorting
+    legend = [entry[1:] for entry in legend]
+
+    m = get_map_image(unit_id, bounds, legend)
+    # for testing
+    m.save('api/tests/test_map.png')
+
+    buffer = BytesIO()
+    m.save(buffer, 'PNG')
+    return buffer
 
 
 def _resolve(scope, key, context):
