@@ -95,8 +95,8 @@ def create_report(unit_id, path, config):
                         p.insert_paragraph_before(
                             indicator['value']['indicator_description'])
 
-                        caption = p.insert_paragraph_before(
-                            indicator['value']['indicator_caption'])
+                        caption_text = "{0}: {1}".format('Table caption', indicator['value']['indicator_caption'])
+                        caption = p.insert_paragraph_before(caption_text, style='TableCaption')
 
                         create_table(
                             doc, ecosystem['indicators'][0]['table']['indicator_table'], caption)
