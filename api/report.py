@@ -42,6 +42,7 @@ def create_report(unit_id, path, config):
     doc = Document(TEMPLATE)
 
     context = generate_report_context(unit_id, config)
+    table_counter = 0
 
     for p in doc.paragraphs:
         # Assumption: placeholders are always completely contained within a run
@@ -70,6 +71,7 @@ def create_report(unit_id, path, config):
 
                 elif scope == 'table':
                     r.text = ''
+                    table_counter += 1
                     create_table(doc, item, p)
 
         if '{{INDICATORS}}' in p.text:
@@ -90,13 +92,15 @@ def create_report(unit_id, path, config):
                         p.insert_paragraph_before(heading, style='Heading13')
 
                     for indicator in ecosystem['indicators']:
+                        table_counter += 1
+
                         p.insert_paragraph_before(
                             indicator['value']['indicator_name'], style='Heading11')
                         p.insert_paragraph_before(
                             indicator['value']['indicator_description'])
 
-                        caption = p.insert_paragraph_before(
-                            indicator['value']['indicator_caption'])
+                        caption_text = "Table {0}: {1}".format(table_counter, indicator['value']['indicator_caption'])
+                        caption = p.insert_paragraph_before(caption_text, style='TableCaption')
 
                         create_table(
                             doc, ecosystem['indicators'][0]['table']['indicator_table'], caption)
