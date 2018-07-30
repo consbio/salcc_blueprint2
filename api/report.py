@@ -65,7 +65,7 @@ def create_report(unit_id, path, config):
                     r.text = ''
                     size = 11.0
                     if scope == 'map':
-                        size = 15.0
+                        size = 16.0
                     if not isinstance(context[scope][key], str):
                         run = p.add_run()
                         run.add_picture(context[scope][key], width=Cm(size))
@@ -171,7 +171,8 @@ def generate_report_context(unit_id, config):
     # Priorities map
 
     priorities_config = config['priorities']
-    priorities_map = get_map(unit_id, priorities_config)
+    print('data type:', type(data))
+    priorities_map = get_map(unit_id, data, priorities_config)
 
     context['map']['priorities'] = priorities_map
 
@@ -579,8 +580,9 @@ def delete_paragraph(paragraph):
     p._p = p._element = None
 
 
-def get_map(unit_id, priorities):
-    data = json.loads(open('public/data/{0}.json'.format(unit_id)).read())
+def get_map(unit_id, data, priorities):
+    # data = json.loads(open('public/data/{0}.json'.format(unit_id)).read())
+    print('data type:', type(data))
     bounds = data['bounds']
 
     # convert priorities to legend, in descending priority (dropping Not a Priority class)
