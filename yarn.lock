@@ -4592,9 +4592,9 @@ math-expression-evaluator@^1.2.14:
   version "1.2.17"
   resolved "https://registry.yarnpkg.com/math-expression-evaluator/-/math-expression-evaluator-1.2.17.tgz#de819fdbcd84dccd8fae59c6aeb79615b9d266ac"
 
-mbgl-renderer@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/mbgl-renderer/-/mbgl-renderer-0.1.1.tgz#579ba6584e2922e03958dd5a8f403c90ea4bf329"
+mbgl-renderer@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/mbgl-renderer/-/mbgl-renderer-0.2.0.tgz#86f04f235dc88674ecd91cc0765f6c23756b56f4"
   dependencies:
     "@mapbox/geo-viewport" "^0.3.0"
     "@mapbox/mapbox-gl-native" "^4.0.0-pre.8"

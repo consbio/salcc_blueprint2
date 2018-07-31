@@ -8,7 +8,9 @@ matplotlib.use('Agg')
 from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 
+from api.map_client import *
 from api.charts import get_pie_chart, get_line_chart
 
 DATA_DIR = os.getenv('DATA_DIR', './public/data')
@@ -57,17 +59,17 @@ def create_report(unit_id, path, config):
                     # match.group() has the original text to replace
                     r.text = r.text.replace(match.group(), item)
                     if scope in {'table', 'chart'}:
-                        # TODO: make "No info available" text more eye-catching
                         r.font.italic = True
 
-                elif scope == 'chart':
+                elif scope in {'map', 'chart'}:
                     # Pictures are added at the run level
                     r.text = ''
-
-                    if not isinstance(context['chart'][key], str):
-                        chart_para = p.insert_paragraph_before()
-                        run = chart_para.add_run()
-                        run.add_picture(context['chart'][key], width=Cm(11.0))
+                    size = 11.0
+                    if scope == 'map':
+                        size = 16.0
+                    if not isinstance(context[scope][key], str):
+                        run = p.add_run()
+                        run.add_picture(context[scope][key], width=Cm(size))
 
                 elif scope == 'table':
                     r.text = ''
@@ -165,6 +167,14 @@ def generate_report_context(unit_id, config):
     }
     context['table'] = {}
     context['chart'] = {}
+    context['map'] = {}
+
+    # Priorities map
+
+    priorities_config = config['priorities']
+    priorities_map = get_map(unit_id, data, priorities_config)
+
+    context['map']['priorities'] = priorities_map
 
     # Priorities table
 
@@ -173,7 +183,7 @@ def generate_report_context(unit_id, config):
             col_names=['Priority Category', 'Acres', 'Percent of Area'])
 
         priorities['rows'] = [
-            (config['priorities'][str(i)]['label'], '{:,}'.format(
+            (priorities_config[str(i)]['label'], '{:,}'.format(
                 percent_to_acres(percentage, total_acres)), '{0}%'.format(percentage))
             for i, percentage in enumerate(data.get('blueprint'))
         ]
@@ -184,8 +194,8 @@ def generate_report_context(unit_id, config):
         indices = [i for i, v in enumerate(data['blueprint']) if v > 0]
         indices.reverse()
         values = [data['blueprint'][i] for i in indices]
-        colors = [config['priorities'][str(i)]['color'] for i in indices]
-        labels = ['{0} ({1}%)'.format(config['priorities'][str(i)]['label'],
+        colors = [priorities_config[str(i)]['color'] for i in indices]
+        labels = ['{0} ({1}%)'.format(priorities_config[str(i)]['label'],
                                       data['blueprint'][i]) for i in indices]
         chart = get_pie_chart(values, colors=colors, labels=labels)
         context['chart']['priorities'] = chart
@@ -255,7 +265,7 @@ def generate_report_context(unit_id, config):
                 },
                 'table': {
                     'indicator_table': {
-                        'col_names': ['Indicator Values', 'Acres', 'Percent of Area'],
+                        'col_names': ['', 'Indicator Values', 'Acres', 'Percent of Area'],
                         'rows': []
                     }
                 }
@@ -279,17 +289,23 @@ def generate_report_context(unit_id, config):
                 for label_key, percent in indicator_values:
                     if label_key >= good_threshold:
                         total_good_percent += percent
-                        rows.append([indicator_config['valueLabels'][str(label_key)],
+                        rows.append(['', indicator_config['valueLabels'][str(label_key)],
                                      '{:,}'.format(percent_to_acres(percent, total_acres)), '{0}%'.format(percent)])
                     else:
                         total_not_good_percent += percent
-                        rows.append([indicator_config['valueLabels'][str(label_key)],
+                        rows.append(['', indicator_config['valueLabels'][str(label_key)],
                                      '{:,}'.format(percent_to_acres(percent, total_acres)), '{0}%'.format(percent)])
 
-                good_total_row = ['Total in good condition',
+                # Add lows & highs
+                rows[0][0] = 'High'
+                rows[-1][0] = 'Low'
+
+                # Add condition rows
+
+                good_total_row = ['', 'Total in good condition',
                                   '{:,}'.format(percent_to_acres(total_good_percent, total_acres)),
                                   '{0}%'.format(round(total_good_percent, 1))]
-                not_good_total_row = ['Total not in good condition',
+                not_good_total_row = ['', 'Total not in good condition',
                                       '{:,}'.format(percent_to_acres(total_not_good_percent, total_acres)),
                                       '{0}%'.format(round(total_not_good_percent, 1))]
 
@@ -300,10 +316,15 @@ def generate_report_context(unit_id, config):
                 indicator_context['table']['indicator_table']['rows'] = rows
 
             else:
-                indicator_context['table']['indicator_table']['rows'] = [
-                    [indicator_config['valueLabels'][str(label_key)], '{:,}'.format(percent_to_acres(percent, total_acres)),
-                     '{0}%'.format(percent)] for label_key, percent in indicator_values
-                ]
+                rows = [['', indicator_config['valueLabels'][str(label_key)],
+                         '{:,}'.format(percent_to_acres(percent, total_acres)),
+                         '{0}%'.format(percent)] for label_key, percent in indicator_values]
+
+                # Add lows & highs
+                rows[0][0] = 'High'
+                rows[-1][0] = 'Low'
+
+                indicator_context['table']['indicator_table']['rows'] = rows
 
             ecosystem_indicators['indicators'].append(indicator_context)
 
@@ -433,20 +454,31 @@ def create_table(doc, data, para):
     for index, heading in enumerate(data['col_names']):
         cell = table.cell(0, index)
         cell.text = heading
+        # Change justification of first heading
+        if ncols is 3 and index is 0:
+            cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
+        elif ncols is 4 and index is 1:
+            cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
 
     for datarow in data['rows']:
         row = table.add_row()
-        condition_style = str(datarow[0]) == 'Total in good condition' or str(
-            datarow[0]) == 'Total not in good condition'
-
+        condition_style = str(datarow[1]) == 'Total in good condition' or str(
+            datarow[1]) == 'Total not in good condition'
         for index, datacell in enumerate(datarow):
             row.cells[index].text = str(datacell)
+            if ncols is 4 and index is 1:
+                row.cells[index].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
             if condition_style is True:
                 # A new shade must be generated for each cell
                 new_shade = shade_generator(TOTAL_ROW_COLOR)
                 row.cells[index]._tc.get_or_add_tcPr().append(new_shade)
 
-    set_col_widths(table)
+    if 'Indicator Values' in data['col_names']:
+        table_type = 'indicator'
+    else:
+        table_type = 'other'
+
+    set_col_widths(table, table_type)
 
     _move_table_after(table, para)
 
@@ -460,7 +492,7 @@ def shade_generator(color):
     return docx.oxml.parse_xml(r'<w:shd {0} w:fill="{1}"/>'.format(docx.oxml.ns.nsdecls('w'), color))
 
 
-def set_col_widths(table):
+def set_col_widths(table, table_type):
     """
     Set widths for standard table columns
 
@@ -469,11 +501,14 @@ def set_col_widths(table):
     table: table object
 
     """
-    widths = (Cm(9), Cm(4), Cm(4))
+    if table_type is 'indicator':
+        widths = (Cm(1), Cm(9), Cm(3.5), Cm(3.5))
+    else:
+        widths = (Cm(9), Cm(4), Cm(4))
+
     for row in table.rows:
         for idx, width in enumerate(widths):
             row.cells[idx].width = width
-
 
 def _move_p_after(p_move, p_destination):
     """
@@ -568,6 +603,23 @@ def delete_paragraph(paragraph):
     p = paragraph._element
     p.getparent().remove(p)
     p._p = p._element = None
+
+
+def get_map(unit_id, data, priorities):
+    bounds = data['bounds']
+
+    # convert priorities to legend, in descending priority (dropping Not a Priority class)
+    legend = [(int(k), v['color'], v['label'])
+              for k, v in priorities.items() if k != '0']
+    legend = sorted(legend, key=lambda x: x[0], reverse=True)
+    # strip off the value used for sorting
+    legend = [entry[1:] for entry in legend]
+
+    m = get_map_image(unit_id, bounds, legend)
+
+    buffer = BytesIO()
+    m.save(buffer, 'PNG')
+    return buffer
 
 
 def _resolve(scope, key, context):
