@@ -46,6 +46,17 @@ def create_report(unit_id, path, config):
     context = generate_report_context(unit_id, config)
     table_counter = 0
 
+    # count up the number of indicator tables so that we have table numbers for the
+    # that come after.  There are 2 known tables at the beginning of the report too
+    indicator_table_count = 0
+    for ecosystem in context['ecosystem_indicators']:
+        for indicator in ecosystem.get('indicators', []):
+            indicator_table_count += 1
+    # context values must be strings
+    context['value']['ownership_table_number'] = str(indicator_table_count + 3)
+    context['value']['protection_table_number'] = str(
+        indicator_table_count + 4)
+
     for p in doc.paragraphs:
         # Assumption: placeholders are always completely contained within a run
         for r in p.runs:
@@ -70,6 +81,12 @@ def create_report(unit_id, path, config):
                     if not isinstance(context[scope][key], str):
                         run = p.add_run()
                         run.add_picture(context[scope][key], width=Cm(size))
+
+                        # add a caption if we have one in context
+                        if key in context['caption']:
+                            caption = doc.add_paragraph(
+                                context['caption'][key], style='TableCaption')
+                            _move_p_after(caption, p)
 
                 elif scope == 'table':
                     r.text = ''
@@ -101,8 +118,10 @@ def create_report(unit_id, path, config):
                         p.insert_paragraph_before(
                             indicator['value']['indicator_description'])
 
-                        caption_text = "Table {0}: {1}".format(table_counter, indicator['value']['indicator_caption'])
-                        caption = p.insert_paragraph_before(caption_text, style='TableCaption')
+                        caption_text = "Table {0}: {1}".format(
+                            table_counter, indicator['value']['indicator_caption'])
+                        caption = p.insert_paragraph_before(
+                            caption_text, style='TableCaption')
 
                         create_table(
                             doc, ecosystem['indicators'][0]['table']['indicator_table'], caption)
@@ -158,23 +177,31 @@ def generate_report_context(unit_id, config):
         data = json.loads(json_file.read())
 
     total_acres = data['acres']
+    summary_unit_type = 'marine lease block' if 'M' in unit_id else 'subwatershed'
 
     context = dict()
 
     context['value'] = {
         'summary_unit_name': data['name'],
+        'summary_unit_type': summary_unit_type,
         'acres': '{:,}'.format(data['acres'])
     }
     context['table'] = {}
     context['chart'] = {}
     context['map'] = {}
+    context['caption'] = {
+        'priorities_map': 'Figure 1: Map of Blueprint priorities in the {0} {1}.'.format(data['name'], summary_unit_type),
+        'priorities': 'Figure 2: Proportion of each Blueprint category within the {0} {1}.'.format(data['name'], summary_unit_type),
+        'slr': 'Figure 3: Extent of inundation by projected sea level rise within the {0} {1}.'.format(data['name'], summary_unit_type),
+        'urban': 'Figure 4: Extent of projected urbanization within the {0} {1}.'.format(data['name'], summary_unit_type)
+    }
 
     # Priorities map
 
     priorities_config = config['priorities']
     priorities_map = get_map(unit_id, data, priorities_config)
 
-    context['map']['priorities'] = priorities_map
+    context['map']['priorities_map'] = priorities_map
 
     # Priorities table
 
@@ -273,9 +300,11 @@ def generate_report_context(unit_id, config):
 
             good_threshold = indicator_config.get('goodThreshold', None)
 
-            indicator_keys = [int(v) for v in indicator_config['valueLabels'].keys()]
+            indicator_keys = [int(v)
+                              for v in indicator_config['valueLabels'].keys()]
             indicator_keys.sort()  # make sure keys are sorted in ascending order
-            indicator_values = list(zip(indicator_keys, indicator_data['percent']))
+            indicator_values = list(
+                zip(indicator_keys, indicator_data['percent']))
             indicator_values.reverse()  # Reverse order so highest priorities at top of table
 
             if good_threshold is not None:
@@ -303,10 +332,12 @@ def generate_report_context(unit_id, config):
                 # Add condition rows
 
                 good_total_row = ['', 'Total in good condition',
-                                  '{:,}'.format(percent_to_acres(total_good_percent, total_acres)),
+                                  '{:,}'.format(percent_to_acres(
+                                      total_good_percent, total_acres)),
                                   '{0}%'.format(round(total_good_percent, 1))]
                 not_good_total_row = ['', 'Total not in good condition',
-                                      '{:,}'.format(percent_to_acres(total_not_good_percent, total_acres)),
+                                      '{:,}'.format(percent_to_acres(
+                                          total_not_good_percent, total_acres)),
                                       '{0}%'.format(round(total_not_good_percent, 1))]
 
                 # Insert total_good row at threshold and total_not_good at table end
@@ -509,6 +540,7 @@ def set_col_widths(table, table_type):
     for row in table.rows:
         for idx, width in enumerate(widths):
             row.cells[idx].width = width
+
 
 def _move_p_after(p_move, p_destination):
     """
