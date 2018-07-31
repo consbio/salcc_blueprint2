@@ -1,5 +1,6 @@
 import os
 import json
+from copy import deepcopy
 from io import BytesIO
 
 from PIL import Image, ImageDraw, ImageFont
@@ -89,16 +90,6 @@ STYLE = {
             "paint": {
                 "raster-opacity": 0.3
             }
-        },
-        {
-            "id": "boundaries",
-            "source": "boundaries",
-            "source-layer": "inland_marine_id",
-            "type": "line",
-            "paint": {
-                "line-color": "#0892D0",
-                "line-width": 1
-            }
         }
     ]
 }
@@ -145,8 +136,18 @@ def get_unit_map_image(unit_id, bounds, width, height):
     """
 
     # Set styling for selected unit to highlight it on the map
-    style = STYLE.copy()
+    style = deepcopy(STYLE)
     style['layers'].extend([
+        {
+            "id": "boundaries",
+            "source": "boundaries",
+            "source-layer": "inland_marine_id",
+            "type": "line",
+            "paint": {
+                "line-color": "#0892D0",
+                "line-width": 1
+            }
+        },
         {
             "id": "selected_boundary-fill",
             "source": "boundaries",
@@ -165,7 +166,7 @@ def get_unit_map_image(unit_id, bounds, width, height):
             "type": "line",
             "paint": {
                 "line-color": "#0892D0",
-                "line-width": 3
+                "line-width": 4
             },
             "filter": ["==", ["get", "ID"], unit_id]
         }
@@ -177,6 +178,7 @@ def get_unit_map_image(unit_id, bounds, width, height):
         'width': width,
         'height': height
     }
+
     r = requests.post(MBGL_SERVER_URL, json=params)
     r.raise_for_status()
 
@@ -203,8 +205,21 @@ def get_overview_image(unit_id, bounds, width, height):
     Image object
     """
 
+    center = get_center_from_bounds(bounds)
+
     # Set styling for selected unit to highlight it on the map
-    style = OVERVIEW_STYLE.copy()
+    style = deepcopy(STYLE)
+
+    # Add a circle highlight for selected feature
+    style['sources']["selected_boundary-circle"] = {
+        "id": "selected_boundary-circle",
+        "type": "geojson",
+        "data": {
+            "type": "Point",
+            "coordinates": center
+        }
+    }
+
     style['layers'].extend([
         {
             "id": "selected_boundary-fill",
@@ -212,10 +227,22 @@ def get_overview_image(unit_id, bounds, width, height):
             "source-layer": "inland_marine_id",
             "type": "fill",
             "paint": {
-                "fill-color": "#0892D0",
-                # "fill-opacity": 0.3
+                "fill-color": "#0892D0"
             },
             "filter": ["==", ["get", "ID"], unit_id]
+        },
+        {
+            "id": "selected_boundary-circle",
+            "source": "selected_boundary-circle",
+            "type": "circle",
+            "paint": {
+                "circle-radius": 10,
+                "circle-color": "#FF0000",
+                "circle-opacity": 0,
+                "circle-stroke-color": "#FF0000",
+                "circle-stroke-width": 2
+
+            }
         },
         {
             "id": "selected_boundary-outline",
@@ -232,7 +259,7 @@ def get_overview_image(unit_id, bounds, width, height):
 
     params = {
         'style': style,
-        'center': get_center_from_bounds(bounds),
+        'center': center,
         'zoom': 3,  # determined to be the best zoom given size of overview
         'width': width,
         'height': height
