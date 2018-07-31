@@ -77,7 +77,7 @@ def create_report(unit_id, path, config):
                     r.text = ''
                     size = 11.0
                     if scope == 'map':
-                        size = 16.0
+                        size = 16.5
                     if not isinstance(context[scope][key], str):
                         run = p.add_run()
                         run.add_picture(context[scope][key], width=Cm(size))
@@ -138,8 +138,13 @@ def create_report(unit_id, path, config):
                     context['partner_headers'][category], style='Heading14')
 
                 for partner in context['partners'][category]:
-                    part = p.insert_paragraph_before(style='HyperlinkList')
-                    add_hyperlink(part, partner[1], partner[0])
+                    text, url = partner
+                    
+                    if url:
+                        part = p.insert_paragraph_before(style='HyperlinkList')
+                        add_hyperlink(part, url, text)
+                    else:
+                        p.insert_paragraph_before(style='List Bullet 2').text = text
 
             # Counties
             if 'counties' in context:

@@ -12,11 +12,23 @@ ACCESS_TOKEN = os.getenv(
 
 MBGL_SERVER_URL = os.getenv('MAP_SERVER', 'http://localhost:8000/render')
 
-MAP_WIDTH = 1024
-MAP_HEIGHT = 800
+MAP_WIDTH = 800
+MAP_HEIGHT = 600
 OVERVIEW_WIDTH = 200
 OVERVIEW_HEIGHT = 200
 LEGEND_WIDTH = 200
+MAP_ATTRIBUTION = '© Mapbox, © OpenStreetMap'
+
+# Load fonts for legend and map text
+try:
+    HEADER_FONT = ImageFont.truetype("Calibri.ttf", 20)
+except:
+    HEADER_FONT = ImageFont.load_default()
+
+try:
+    LABEL_FONT = ImageFont.truetype("Calibri.ttf", 14)
+except:
+    LABEL_FONT = ImageFont.load_default()
 
 OVERVIEW_STYLE = {
     "version": 8,
@@ -182,7 +194,14 @@ def get_unit_map_image(unit_id, bounds, width, height):
     r = requests.post(MBGL_SERVER_URL, json=params)
     r.raise_for_status()
 
-    return Image.open(BytesIO(r.content))
+    img = Image.open(BytesIO(r.content))
+
+    if MAP_ATTRIBUTION:
+        canvas = ImageDraw.Draw(img)
+        canvas.text((10, height - 24), MAP_ATTRIBUTION,
+                    font=LABEL_FONT, fill=(0, 0, 0, 255))
+
+    return img
 
 
 def get_overview_image(unit_id, bounds, width, height):
@@ -288,16 +307,6 @@ def get_legend_image(legend, width):
     Image object    
     """
 
-    try:
-        header_font = ImageFont.truetype("Calibri.ttf", 24)
-    except:
-        header_font = ImageFont.load_default()
-
-    try:
-        label_font = ImageFont.truetype("Calibri.ttf", 18)
-    except:
-        label_font = ImageFont.load_default()
-
     header = "Legend"
     patch_width = 20
     patch_height = 20
@@ -309,7 +318,7 @@ def get_legend_image(legend, width):
     label_height = 16
 
     # figure out the dimensions required for the text
-    text_width = max([label_font.getsize(label)[0]
+    text_width = max([LABEL_FONT.getsize(label)[0]
                       for _, label in legend])
 
     if text_width > (width - patch_width - padding):
@@ -321,7 +330,7 @@ def get_legend_image(legend, width):
         255, 255, 255, 255))
     canvas = ImageDraw.Draw(img)
 
-    canvas.text((0, 0), header, font=header_font,
+    canvas.text((0, 0), header, font=HEADER_FONT,
                 fill=(0, 0, 0, 255))  # black text
 
     label_y_offset = header_height
@@ -332,7 +341,7 @@ def get_legend_image(legend, width):
             (0, label_y, patch_width, label_y+patch_height), fill=color)
 
         # move labels up 2 px to center against patches
-        canvas.text((label_x, label_y - 2), label, font=label_font,
+        canvas.text((label_x, label_y), label, font=LABEL_FONT,
                     fill=(0, 0, 0, 255))  # black text
 
     return img
