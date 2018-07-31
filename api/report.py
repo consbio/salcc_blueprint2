@@ -171,7 +171,6 @@ def generate_report_context(unit_id, config):
     # Priorities map
 
     priorities_config = config['priorities']
-    print('data type:', type(data))
     priorities_map = get_map(unit_id, data, priorities_config)
 
     context['map']['priorities'] = priorities_map
@@ -265,7 +264,7 @@ def generate_report_context(unit_id, config):
                 },
                 'table': {
                     'indicator_table': {
-                        'col_names': ['Indicator Values', 'Acres', 'Percent of Area'],
+                        'col_names': ['', 'Indicator Values', 'Acres', 'Percent of Area'],
                         'rows': []
                     }
                 }
@@ -289,17 +288,23 @@ def generate_report_context(unit_id, config):
                 for label_key, percent in indicator_values:
                     if label_key >= good_threshold:
                         total_good_percent += percent
-                        rows.append([indicator_config['valueLabels'][str(label_key)],
+                        rows.append(['', indicator_config['valueLabels'][str(label_key)],
                                      '{:,}'.format(percent_to_acres(percent, total_acres)), '{0}%'.format(percent)])
                     else:
                         total_not_good_percent += percent
-                        rows.append([indicator_config['valueLabels'][str(label_key)],
+                        rows.append(['', indicator_config['valueLabels'][str(label_key)],
                                      '{:,}'.format(percent_to_acres(percent, total_acres)), '{0}%'.format(percent)])
 
-                good_total_row = ['Total in good condition',
+                # Add lows & highs
+                rows[0][0] = '(high)'
+                rows[-1][0] = '(low)'
+
+                # Add condition rows
+
+                good_total_row = ['', 'Total in good condition',
                                   '{:,}'.format(percent_to_acres(total_good_percent, total_acres)),
                                   '{0}%'.format(round(total_good_percent, 1))]
-                not_good_total_row = ['Total not in good condition',
+                not_good_total_row = ['', 'Total not in good condition',
                                       '{:,}'.format(percent_to_acres(total_not_good_percent, total_acres)),
                                       '{0}%'.format(round(total_not_good_percent, 1))]
 
@@ -310,10 +315,16 @@ def generate_report_context(unit_id, config):
                 indicator_context['table']['indicator_table']['rows'] = rows
 
             else:
-                indicator_context['table']['indicator_table']['rows'] = [
-                    [indicator_config['valueLabels'][str(label_key)], '{:,}'.format(percent_to_acres(percent, total_acres)),
+                rows = [
+                    ['', indicator_config['valueLabels'][str(label_key)], '{:,}'.format(percent_to_acres(percent, total_acres)),
                      '{0}%'.format(percent)] for label_key, percent in indicator_values
                 ]
+
+                # Add lows & highs
+                rows[0][0] = '(high)'
+                rows[-1][0] = '(low)'
+
+                indicator_context['table']['indicator_table']['rows'] = rows
 
             ecosystem_indicators['indicators'].append(indicator_context)
 
@@ -446,9 +457,8 @@ def create_table(doc, data, para):
 
     for datarow in data['rows']:
         row = table.add_row()
-        condition_style = str(datarow[0]) == 'Total in good condition' or str(
-            datarow[0]) == 'Total not in good condition'
-
+        condition_style = str(datarow[1]) == 'Total in good condition' or str(
+            datarow[1]) == 'Total not in good condition'
         for index, datacell in enumerate(datarow):
             row.cells[index].text = str(datacell)
             if condition_style is True:
@@ -456,7 +466,12 @@ def create_table(doc, data, para):
                 new_shade = shade_generator(TOTAL_ROW_COLOR)
                 row.cells[index]._tc.get_or_add_tcPr().append(new_shade)
 
-    set_col_widths(table)
+    if 'Indicator Values' in data['col_names']:
+        table_type = 'indicator'
+    else:
+        table_type = 'other'
+
+    set_col_widths(table, table_type)
 
     _move_table_after(table, para)
 
@@ -470,7 +485,7 @@ def shade_generator(color):
     return docx.oxml.parse_xml(r'<w:shd {0} w:fill="{1}"/>'.format(docx.oxml.ns.nsdecls('w'), color))
 
 
-def set_col_widths(table):
+def set_col_widths(table, table_type):
     """
     Set widths for standard table columns
 
@@ -479,11 +494,14 @@ def set_col_widths(table):
     table: table object
 
     """
-    widths = (Cm(9), Cm(4), Cm(4))
+    if table_type is 'indicator':
+        widths = (Cm(1), Cm(9), Cm(3.5), Cm(3.5))
+    else:
+        widths = (Cm(9), Cm(4), Cm(4))
+
     for row in table.rows:
         for idx, width in enumerate(widths):
             row.cells[idx].width = width
-
 
 def _move_p_after(p_move, p_destination):
     """
@@ -581,8 +599,6 @@ def delete_paragraph(paragraph):
 
 
 def get_map(unit_id, data, priorities):
-    # data = json.loads(open('public/data/{0}.json'.format(unit_id)).read())
-    print('data type:', type(data))
     bounds = data['bounds']
 
     # convert priorities to legend, in descending priority (dropping Not a Priority class)
