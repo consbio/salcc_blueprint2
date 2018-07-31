@@ -8,8 +8,9 @@ matplotlib.use('Agg')
 from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
-from api.map_client import *
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 
+from api.map_client import *
 from api.charts import get_pie_chart, get_line_chart
 
 DATA_DIR = os.getenv('DATA_DIR', './public/data')
@@ -315,10 +316,9 @@ def generate_report_context(unit_id, config):
                 indicator_context['table']['indicator_table']['rows'] = rows
 
             else:
-                rows = [
-                    ['', indicator_config['valueLabels'][str(label_key)], '{:,}'.format(percent_to_acres(percent, total_acres)),
-                     '{0}%'.format(percent)] for label_key, percent in indicator_values
-                ]
+                rows = [['', indicator_config['valueLabels'][str(label_key)],
+                         '{:,}'.format(percent_to_acres(percent, total_acres)),
+                         '{0}%'.format(percent)] for label_key, percent in indicator_values]
 
                 # Add lows & highs
                 rows[0][0] = '(high)'
@@ -454,6 +454,11 @@ def create_table(doc, data, para):
     for index, heading in enumerate(data['col_names']):
         cell = table.cell(0, index)
         cell.text = heading
+        # Change justification of first heading
+        if ncols is 3 and index is 0:
+            cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
+        elif ncols is 4 and index is 1:
+            cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
 
     for datarow in data['rows']:
         row = table.add_row()
@@ -461,6 +466,8 @@ def create_table(doc, data, para):
             datarow[1]) == 'Total not in good condition'
         for index, datacell in enumerate(datarow):
             row.cells[index].text = str(datacell)
+            if ncols is 4 and index is 1:
+                row.cells[index].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
             if condition_style is True:
                 # A new shade must be generated for each cell
                 new_shade = shade_generator(TOTAL_ROW_COLOR)
