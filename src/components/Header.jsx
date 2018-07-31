@@ -109,7 +109,7 @@ class Header extends Component {
                             <p>
                                 Do you have a question about the Blueprint? Would you like help using the Blueprint to
                                 support a proposal or inform a decision? South Atlantic staff are here to support you!
-                                We really mean it. It is what we do!
+                                We really mean it. It&apos;s what we do!
                                 <br />
                                 <br />
                                 <b>email</b>{' '}
