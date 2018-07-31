@@ -297,8 +297,8 @@ def generate_report_context(unit_id, config):
                                      '{:,}'.format(percent_to_acres(percent, total_acres)), '{0}%'.format(percent)])
 
                 # Add lows & highs
-                rows[0][0] = '(high)'
-                rows[-1][0] = '(low)'
+                rows[0][0] = 'High'
+                rows[-1][0] = 'Low'
 
                 # Add condition rows
 
@@ -321,8 +321,8 @@ def generate_report_context(unit_id, config):
                          '{0}%'.format(percent)] for label_key, percent in indicator_values]
 
                 # Add lows & highs
-                rows[0][0] = '(high)'
-                rows[-1][0] = '(low)'
+                rows[0][0] = 'High'
+                rows[-1][0] = 'Low'
 
                 indicator_context['table']['indicator_table']['rows'] = rows
 
