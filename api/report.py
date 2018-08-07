@@ -195,7 +195,7 @@ def generate_report_context(unit_id, config):
     context['chart'] = {}
     context['map'] = {}
     context['caption'] = {
-        'priorities_map': 'Figure 1: Map of Blueprint priorities in the {0} {1}.'.format(data['name'], summary_unit_type),
+        'priorities_map': 'Figure 1: Map of Blueprint priority categories within the {0} {1}.'.format(data['name'], summary_unit_type),
         'priorities': 'Figure 2: Proportion of each Blueprint category within the {0} {1}.'.format(data['name'], summary_unit_type),
         'slr': 'Figure 3: Extent of inundation by projected sea level rise within the {0} {1}.'.format(data['name'], summary_unit_type),
         'urban': 'Figure 4: Extent of projected urbanization within the {0} {1}.'.format(data['name'], summary_unit_type)
