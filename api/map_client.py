@@ -10,7 +10,7 @@ import requests
 ACCESS_TOKEN = os.getenv(
     'MAPBOX_ACCESS_TOKEN', 'pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ')
 
-MBGL_SERVER_URL = os.getenv('MAP_SERVER', 'http://localhost:8000/render')
+MBGL_SERVER_URL = os.getenv('MBGL_SERVER_URL', 'http://localhost:8000/render')
 
 MAP_WIDTH = 800
 MAP_HEIGHT = 600
