@@ -12,6 +12,7 @@ import 'leaflet-basemaps'
 import 'leaflet-zoombox'
 import 'leaflet-geonames'
 import 'leaflet-html-legend'
+import 'leaflet-datatilelayer'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-basemaps/L.Control.Basemaps.css'
 import 'leaflet-zoombox/L.Control.ZoomBox.css'
@@ -20,9 +21,12 @@ import 'leaflet-html-legend/dist/L.Control.HtmlLegend.css'
 
 import * as actions from '../../Actions/actions'
 import LocateControl from './LocateControl'
+import PixelModeControl from './PixelModeControl'
 import { PlacePropType } from '../../CustomPropTypes'
 
-const MAPBOX_TOKEN = process.env.MAPBOX_ACCESS_TOKEN || ''  // REQUIRED: this must be present in .env file
+import marineEncoding from '../../config/marineEncoding.json'
+
+const MAPBOX_TOKEN = process.env.MAPBOX_ACCESS_TOKEN || '' // REQUIRED: this must be present in .env file
 
 // Make leaflet icons work properly from webpack / react context
 
@@ -88,7 +92,15 @@ const config = {
         fillOpacity: 0.7,
         fill: true,
         weight: 2
-    }
+    },
+    dataLayers: [
+        L.dataTileLayer('http://localhost:8001/services/test/tiles/{z}/{x}/{y}.png', {
+            encoding: marineEncoding,
+            opacity: 0.5,
+            minZoom: 10,
+            maxZoom: 12 // TODO
+        })
+    ]
 }
 
 const opacityScale = (zoom) => {
@@ -107,10 +119,11 @@ class Map extends Component {
     constructor(props) {
         super(props)
 
-        const { place, selectedUnit } = props
+        const { place, selectedUnit, isPixelMode } = props
         this.state = {
             place,
             selectedUnit,
+            isPixelMode,
             zoom: config.mapParams.zoom
         }
 
@@ -122,7 +135,7 @@ class Map extends Component {
 
     componentDidMount() {
         const { place, selectedUnit } = this.state
-        const { isMobile, setPlace } = this.props
+        const { isMobile, setPlace, setPixelMode } = this.props
         config.mapParams.attributionControl = !isMobile
         const map = L.map(this._mapNode, config.mapParams)
         this.map = map
@@ -198,26 +211,6 @@ class Map extends Component {
             this.setState({ zoom })
         })
 
-        config.unitLayer.on('click', (f) => {
-            this._handleSelect(f.layer.properties.ID)
-        })
-
-        if (!isMobile) {
-            config.unitLayer.on('mouseover', (f) => {
-                const id = f.layer.properties.ID
-                if (id === null || id === this.state.selectedUnit) return
-                config.unitLayer.setFeatureStyle(id, config.hoverStyle)
-            })
-                .on('mouseout', (f) => {
-                    const id = f.layer.properties.ID
-                    if (id === null || id === this.state.selectedUnit) return
-                    // config.unitLayer.setFeatureStyle(id, config.visibleStyle)
-                    this._unhighlightUnit(id)
-                })
-        }
-
-        map.addLayer(config.unitLayer)
-
         const basemapsControl = L.control.basemaps({
             basemaps: config.basemaps,
             tileX: 4,
@@ -237,6 +230,18 @@ class Map extends Component {
         }
         this.locateControl.addTo(map)
 
+        // we are not in pixel mode by default, so go ahead and add unit layer
+        this._addUnitLayer()
+
+        if (!isMobile) {
+            const pixelModeControl = new PixelModeControl()
+            pixelModeControl.on('change', ({ isEnabled }) => {
+                console.log('enabled', isEnabled)
+                setPixelMode(isEnabled)
+            })
+            pixelModeControl.addTo(map)
+        }
+
         if (place && this.place.location !== null) {
             this._zoomToPlace(place)
         }
@@ -247,7 +252,7 @@ class Map extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { place, selectedUnit } = nextProps
+        const { place, selectedUnit, isPixelMode } = nextProps
 
         if (place !== this.state.place) {
             if (place && place.location) {
@@ -265,6 +270,62 @@ class Map extends Component {
             this._highlightUnit(selectedUnit)
             this.setState({ selectedUnit })
         }
+
+        // update per pixel mode
+        console.log('pixel mode is', isPixelMode)
+        if (isPixelMode !== this.state.isPixelMode) {
+            this.setState({ isPixelMode })
+            if (isPixelMode) {
+                this._addDataTileLayers()
+            } else {
+                this._addUnitLayer()
+            }
+        }
+    }
+
+    _addUnitLayer = () => {
+        const { isMobile } = this.props
+        config.unitLayer.on('click', (f) => {
+            this._handleSelect(f.layer.properties.ID)
+        })
+
+        if (!isMobile) {
+            config.unitLayer
+                .on('mouseover', (f) => {
+                    const id = f.layer.properties.ID
+                    if (id === null || id === this.state.selectedUnit) return
+                    config.unitLayer.setFeatureStyle(id, config.hoverStyle)
+                })
+                .on('mouseout', (f) => {
+                    const id = f.layer.properties.ID
+                    if (id === null || id === this.state.selectedUnit) return
+                    this._unhighlightUnit(id)
+                })
+        }
+
+        this.map.addLayer(config.unitLayer)
+    }
+
+    _addDataTileLayers = () => {
+        const { map } = this
+        const { setPixelValues } = this.props
+        const { dataLayers } = config
+        // map.removeLayer(config.unitLayer)
+
+        const getValues = () => {
+            // splice all objects into a single one
+            const values = Object.assign({}, ...dataLayers.map(l => l.decodePoint(map.getCenter())))
+            console.log('marine', dataLayers[0].decodePoint(map.getCenter()))
+            console.log('values', values)
+            setPixelValues(values)
+        }
+
+        dataLayers.forEach((layer) => {
+            layer.on('load', getValues)
+            layer.addTo(map)
+        })
+
+        map.on('move', getValues) // TODO: on zoom too?
     }
 
     _zoomToPlace(place) {
@@ -359,10 +420,13 @@ class Map extends Component {
 
 Map.propTypes = {
     isMobile: PropTypes.bool.isRequired,
+    isPixelMode: PropTypes.bool.isRequired,
     setPlace: PropTypes.func.isRequired,
     selectUnit: PropTypes.func.isRequired,
     deselectUnit: PropTypes.func.isRequired,
     setTab: PropTypes.func.isRequired,
+    setPixelMode: PropTypes.func.isRequired,
+    setPixelValues: PropTypes.func.isRequired,
 
     activeTab: PropTypes.string,
     place: PlacePropType,
@@ -377,7 +441,16 @@ Map.defaultProps = {
 
 const mapStateToProps = ({
     app: {
-        activeTab, place, selectedUnit, selectUnit, deselectUnit, setPlace, setTab
+        activeTab,
+        place,
+        selectedUnit,
+        isPixelMode,
+        selectUnit,
+        deselectUnit,
+        setPlace,
+        setPixelMode,
+        setPixelValues,
+        setTab
     },
     browser: { isMobile }
 }) => ({
@@ -385,9 +458,12 @@ const mapStateToProps = ({
     isMobile,
     place,
     selectedUnit,
+    isPixelMode,
     selectUnit,
     deselectUnit,
     setPlace,
+    setPixelMode,
+    setPixelValues,
     setTab
 })
 

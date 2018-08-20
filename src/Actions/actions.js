@@ -67,3 +67,16 @@ export const setPlaces = places => ({
     type: SET_PLACES,
     places
 })
+
+export const SET_PIXEL_MODE = 'SET_PIXEL_MODE'
+export const setPixelMode = isPixelMode => ({
+    type: SET_PIXEL_MODE,
+    isPixelMode
+})
+
+export const SET_PIXEL_VALUES = 'SET_PIXEL_VALUES'
+
+export const setPixelValues = pixelValues => ({
+    type: SET_PIXEL_VALUES,
+    pixelValues
+})

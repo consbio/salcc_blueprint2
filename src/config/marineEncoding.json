@@ -1,0 +1,43 @@
+{
+    "type": "exponential",
+    "base": 7,
+    "dtype": "uint16",
+    "nodata": 65535,
+    "layers": [
+        {
+            "id": "Marine_Birds",
+            "nodata": 6,
+            "type": "indexed",
+            "values": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        },
+        {
+            "id": "Marine_Mammals",
+            "nodata": 6,
+            "type": "indexed",
+            "values": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        },
+        {
+            "id": "Marine_PotentialHardbottomCondition",
+            "nodata": 6,
+            "type": "indexed",
+            "values": [
+                0,
+                1,
+                2,
+                3
+            ]
+        }
+    ]
+}
