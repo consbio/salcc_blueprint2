@@ -30,7 +30,8 @@ const initialState = {
     isDataLoaded: false,
 
     // State of the current pixel
-    pixelValues: null
+    pixelValues: null,
+    pixelLocation: null // {latitude: <lat>, longitude: <long>}
 }
 
 const mainReducer = (state = initialState, action) => {
@@ -83,7 +84,10 @@ const mainReducer = (state = initialState, action) => {
             })
 
         case SET_PIXEL_VALUES:
-            return updateObject(state, { pixelValues: action.pixelValues })
+            return updateObject(state, {
+                pixelLocation: action.pixelLocation,
+                pixelValues: action.pixelValues
+            })
 
         case SET_TAB:
             return updateObject(state, { activeTab: action.tab })

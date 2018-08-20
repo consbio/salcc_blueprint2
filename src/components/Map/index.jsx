@@ -97,8 +97,8 @@ const config = {
         L.dataTileLayer('http://localhost:8001/services/test/tiles/{z}/{x}/{y}.png', {
             encoding: marineEncoding,
             opacity: 0.5,
-            minZoom: 10,
-            maxZoom: 12 // TODO
+            minZoom: 0,
+            maxZoom: 8 // TODO
         })
     ]
 }
@@ -236,7 +236,6 @@ class Map extends Component {
         if (!isMobile) {
             const pixelModeControl = new PixelModeControl()
             pixelModeControl.on('change', ({ isEnabled }) => {
-                console.log('enabled', isEnabled)
                 setPixelMode(isEnabled)
             })
             pixelModeControl.addTo(map)
@@ -271,8 +270,7 @@ class Map extends Component {
             this.setState({ selectedUnit })
         }
 
-        // update per pixel mode
-        console.log('pixel mode is', isPixelMode)
+        // update based on pixel mode
         if (isPixelMode !== this.state.isPixelMode) {
             this.setState({ isPixelMode })
             if (isPixelMode) {
@@ -314,14 +312,15 @@ class Map extends Component {
 
         const getValues = () => {
             // splice all objects into a single one
-            const values = Object.assign({}, ...dataLayers.map(l => l.decodePoint(map.getCenter())))
+            const location = map.getCenter()
+            const values = Object.assign({}, ...dataLayers.map(l => l.decodePoint(location)))
             console.log('marine', dataLayers[0].decodePoint(map.getCenter()))
             console.log('values', values)
-            setPixelValues(values)
+            setPixelValues({ latitude: location.lat, longitude: location.lng }, values)
         }
 
         dataLayers.forEach((layer) => {
-            layer.on('load', getValues)
+            layer.on('load', getValues) // TODO: this won't work if there are multiple layers and they haven't all loaded; increment a counter!
             layer.addTo(map)
         })
 
@@ -394,9 +393,10 @@ class Map extends Component {
     }
 
     render() {
+        const { zoom, isPixelMode } = this.state
         return (
             <div id="MapContainer">
-                {this.state.zoom < 10 && (
+                {zoom < 10 && (
                     <div
                         ref={(node) => {
                             this._zoomNote = node
@@ -413,6 +413,7 @@ class Map extends Component {
                     }}
                     id="Map"
                 />
+                {isPixelMode && <div id="MapCenterIcon" />}
             </div>
         )
     }

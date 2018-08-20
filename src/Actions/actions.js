@@ -76,7 +76,8 @@ export const setPixelMode = isPixelMode => ({
 
 export const SET_PIXEL_VALUES = 'SET_PIXEL_VALUES'
 
-export const setPixelValues = pixelValues => ({
+export const setPixelValues = (pixelLocation, pixelValues) => ({
     type: SET_PIXEL_VALUES,
+    pixelLocation,
     pixelValues
 })
