@@ -24,7 +24,7 @@ import LocateControl from './LocateControl'
 import PixelModeControl from './PixelModeControl'
 import { PlacePropType } from '../../CustomPropTypes'
 
-import marineEncoding from '../../config/marineEncoding.json'
+import encoding from '../../config/encoding.json'
 
 const MAPBOX_TOKEN = process.env.MAPBOX_ACCESS_TOKEN || '' // REQUIRED: this must be present in .env file
 
@@ -94,8 +94,26 @@ const config = {
         weight: 2
     },
     dataLayers: [
-        L.dataTileLayer('http://localhost:8001/services/test/tiles/{z}/{x}/{y}.png', {
-            encoding: marineEncoding,
+        L.dataTileLayer('http://localhost:8001/services/encoding2/tiles/{z}/{x}/{y}.png', {
+            encoding: encoding['2'],
+            opacity: 0.5,
+            minZoom: 0,
+            maxZoom: 8 // TODO
+        }),
+        L.dataTileLayer('http://localhost:8001/services/encoding3/tiles/{z}/{x}/{y}.png', {
+            encoding: encoding['3'],
+            opacity: 0.5,
+            minZoom: 0,
+            maxZoom: 8 // TODO
+        }),
+        L.dataTileLayer('http://localhost:8001/services/encoding5/tiles/{z}/{x}/{y}.png', {
+            encoding: encoding['5'],
+            opacity: 0.5,
+            minZoom: 0,
+            maxZoom: 8 // TODO
+        }),
+        L.dataTileLayer('http://localhost:8001/services/encoding7/tiles/{z}/{x}/{y}.png', {
+            encoding: encoding['7'],
             opacity: 0.5,
             minZoom: 0,
             maxZoom: 8 // TODO
@@ -276,6 +294,7 @@ class Map extends Component {
             if (isPixelMode) {
                 this._addDataTileLayers()
             } else {
+                this._removeDataTileLayers()
                 this._addUnitLayer()
             }
         }
@@ -307,24 +326,35 @@ class Map extends Component {
     _addDataTileLayers = () => {
         const { map } = this
         const { setPixelValues } = this.props
-        const { dataLayers } = config
-        // map.removeLayer(config.unitLayer)
+        const { dataLayers, unitLayer } = config
+        map.removeLayer(unitLayer)
 
         const getValues = () => {
             // splice all objects into a single one
             const location = map.getCenter()
             const values = Object.assign({}, ...dataLayers.map(l => l.decodePoint(location)))
-            console.log('marine', dataLayers[0].decodePoint(map.getCenter()))
             console.log('values', values)
             setPixelValues({ latitude: location.lat, longitude: location.lng }, values)
         }
 
         dataLayers.forEach((layer) => {
-            layer.on('load', getValues) // TODO: this won't work if there are multiple layers and they haven't all loaded; increment a counter!
+            // layer.on('load', getValues) // TODO: this won't work if there are multiple layers and they haven't all loaded; increment a counter!
             layer.addTo(map)
         })
 
         map.on('move', getValues) // TODO: on zoom too?
+        // TODO: need to unhook this when not in pixel mode
+        // TODO: be careful, not all tiles may be fully loaded after move, need to collect them all
+    }
+
+    _removeDataTileLayers = () => {
+        // map silently ignores layers it doesn't already have
+        const { map } = this
+        const { dataLayers } = config
+        dataLayers.forEach((layer) => {
+            map.removeLayer(layer)
+        })
+        map.off('move')  // TODO: tune this, it disconnects ALL move handlers
     }
 
     _zoomToPlace(place) {

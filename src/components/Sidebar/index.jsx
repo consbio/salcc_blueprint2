@@ -13,7 +13,11 @@ const Sidebar = ({ selectedUnit, isPixelMode }) => {
     } else if (isPixelMode) {
         content = <PixelDetails />
     } else {
-        content = <InfoTab />
+        content = (
+            <div id="SidebarContent">
+                <InfoTab />
+            </div>
+        )
     }
 
     return (
