@@ -20,14 +20,12 @@ LEGEND_WIDTH = 200
 MAP_ATTRIBUTION = '© Mapbox, © OpenStreetMap'
 
 # Load fonts for legend and map text
+calibri_font = os.path.join(os.path.dirname(__file__), "Calibri.ttf")
 try:
-    HEADER_FONT = ImageFont.truetype("Calibri.ttf", 20)
+    HEADER_FONT = ImageFont.truetype(calibri_font, 20)
+    LABEL_FONT = ImageFont.truetype(calibri_font, 14)
 except:
     HEADER_FONT = ImageFont.load_default()
-
-try:
-    LABEL_FONT = ImageFont.truetype("Calibri.ttf", 14)
-except:
     LABEL_FONT = ImageFont.load_default()
 
 OVERVIEW_STYLE = {
