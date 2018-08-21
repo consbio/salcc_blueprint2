@@ -338,8 +338,8 @@ def get_legend_image(legend, width):
         canvas.rectangle(
             (0, label_y, patch_width, label_y+patch_height), fill=color)
 
-        # move labels up 2 px to center against patches
-        canvas.text((label_x, label_y), label, font=LABEL_FONT,
+        # move labels down 4 px to center against patches
+        canvas.text((label_x, label_y + 4), label, font=LABEL_FONT,
                     fill=(0, 0, 0, 255))  # black text
 
     return img
