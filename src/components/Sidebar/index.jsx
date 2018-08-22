@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import InfoTab from '../InfoTab'
 import SelectedUnit from './SelectedUnit'
-import PixelDetails from './PixelDetails'
+import PixelDetails from '../PixelDetails'
 
 const Sidebar = ({ selectedUnit, isPixelMode }) => {
     let content = null

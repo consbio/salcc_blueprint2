@@ -333,7 +333,6 @@ class Map extends Component {
             // splice all objects into a single one
             const location = map.getCenter()
             const values = Object.assign({}, ...dataLayers.map(l => l.decodePoint(location)))
-            console.log('values', values)
             setPixelValues({ latitude: location.lat, longitude: location.lng }, values)
         }
 

@@ -118,13 +118,13 @@
                 "values": [1, 2, 3, 4, 5]
             },
             {
-                "id": "EstuarineMarsh_Water_VegetationEdge",
+                "id": "Estuarine_WaterVegetationEdge",
                 "nodata": 6,
                 "type": "indexed",
                 "values": [0, 1, 2, 3, 4]
             },
             {
-                "id": "EstuarineMarsh_WetlandPatchSize",
+                "id": "Estuarine_WetlandPatchSize",
                 "nodata": 6,
                 "type": "indexed",
                 "values": [0, 1, 2, 3, 4]
