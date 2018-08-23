@@ -59,9 +59,8 @@ marine_indicator_tables = [
 
 urbanization_years = [2020, 2030, 2040, 2050, 2060, 2070, 2080, 2090, 2100]
 urbanization_filename = 'TabArea_0_serap_urb{year}_IsNull0.csv'
-slr_filename = 'TabArea_slra_alb30m_IsNull0.csv'
-slr_levels = ['0_5', '1', '1_5', '2', '2_5', '3', '3_5', '4', '4_5', '5',
-              '5_5', '6', '6_5', '7', '7_5', '8', '8_5', '9', '9_5', '10']
+slr_filename = 'SLR_Inundation_allft_b_5m.csv'
+slr_levels = ['0', '1', '2', '3','4','5', '6']
 
 indicator_avg = defaultdict(list)
 indicator_area = defaultdict(list)
@@ -250,13 +249,10 @@ for year in urbanization_years:
 print('reading SLR')
 inland_slr = defaultdict(list)
 df = pd.read_csv(os.path.join(src_dir, slr_filename), dtype={'HUC12': str})
-# level is each 1/2 foot increase in SLR
+# level is each 1 foot increase in SLR up to 1 foot
 for index, row in df.iterrows():
     huc = row['HUC12']
-    total_area = row['PixelArea30m']
-    inland_slr[huc] = [int(round(100.0 * row['MigrationSpace_{}'.format(level)] / total_area))
-                       for level in slr_levels]  # values are in percents
-
+    inland_slr[huc] = [row['InundationTotal_{}'.format(level)]for level in slr_levels]  # values are in sq m
 
 # Write each feature as JSON
 # inland_v2.csv is outdated, but since the watershed geometries were based on it, use it to join ID to HUC
@@ -294,6 +290,8 @@ for index, row in df.iterrows():
     slr = inland_slr.get(huc, None)
     if slr is None or max(slr) == 0:
         slr = None
+    else:
+        slr = [int(100 * amount / row['Shape_Area']) for amount in slr]  # convert to percent
 
     urbanization = inland_urbanization.get(huc, None)
     if urbanization is None or max(urbanization) == 0:

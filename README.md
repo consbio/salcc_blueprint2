@@ -3,7 +3,11 @@
 
 ## Data processing
 
-Data are provided as a file geodatabase (GDB) by SALCC staff (Amy Kiester).
+Data are provided as a file geodatabase (GDB) by SALCC staff (Amy Kiester):
+* Indicators: Blueprint_V_2_2_SimpleViewerInterfaceData_20180720.7z (7/20/2018)
+* Threats (IGNORE SLR, replaced by below): SimpleViewerInterfaceDataThreats.7z  (4/3/2018)
+* Updated SLR: NOAA_SLR_Inundation.7z (8/22/2018)
+
 
 We also obtain the US Census TIGER States shapefile to extract state and county FIPS codes for each watershed.
 
@@ -61,6 +65,8 @@ Server configuration steps are available in the [wiki](https://github.com/consbi
 3. make sure dependencies are up to date using `yarn`.
 4. Change to `app` user: `> sudo su app`.
 5. Deploy using yarn: `yarn deploy`
+6. `pipenv install` to install any new Python dependencies
+7. make sure to restart services if code has changed (e.g., Flask)
 
 
 

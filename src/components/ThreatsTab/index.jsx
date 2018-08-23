@@ -27,7 +27,7 @@ const ThreatsTab = ({ isMarine, urban, slr }) => {
                             pointsStrokeWidth={0}
                             labelsStepX={1}
                             viewBoxWidth={500}
-                            labelsFormatX={x => x || ''}
+                            labelsFormatX={x => x}
                             data={slr.map((y, i) => ({ x: SLR_LEVELS[i], y }))}
                         />
                         <div className="text-center text-quiet text-smaller chart-line-x-axis-label">
@@ -35,9 +35,9 @@ const ThreatsTab = ({ isMarine, urban, slr }) => {
                         </div>
                     </div>
                 ) : (
-                    <parseInt className="text-small text-quieter">
-                        This watershed is not impacted by up to 10 feet of projected sea level rise.
-                    </parseInt>
+                    <div className="text-small text-quieter">
+                        This watershed is not impacted by up to 6 feet of projected sea level rise.
+                    </div>
                 )}
             </section>
             <section>
