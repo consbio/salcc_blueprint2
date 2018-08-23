@@ -5,7 +5,8 @@ const Indicator = ({
     label, mean, domain, onClick
 }) => {
     /* eslint-disable-next-line no-mixed-operators */
-    const percent = (100 * (mean - domain[0])) / (domain[1] - domain[0])
+    const [minValue, maxValue] = domain
+    const percent = (100 * (mean - minValue)) / (maxValue - minValue)
 
     return (
         <div className="indicator" onClick={onClick}>
@@ -28,7 +29,7 @@ const Indicator = ({
 Indicator.propTypes = {
     label: PropTypes.string.isRequired,
     mean: PropTypes.number.isRequired,
-    domain: PropTypes.arrayOf(PropTypes.number).isRequired,
+    domain: PropTypes.arrayOf(PropTypes.number).isRequired, // [minValue, maxCalue]
     onClick: PropTypes.func.isRequired
 }
 

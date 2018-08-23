@@ -317,7 +317,7 @@
                     "4": "60th-80th percentile of importance",
                     "5": "Above the 80th percentile of importance for seasonal density of marine bird index species"
                 },
-                "categoricalValues": [0, 6],
+                "categoricalValues": [1, 6],
                 "categories": {
                     "1": "<20",
                     "2": "20-40",

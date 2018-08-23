@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 
 import EcosystemHeader from '../IndicatorsTab/EcosystemHeader'
 
-import IndicatorChart from '../IndicatorsTab/IndicatorChart'
+// import IndicatorChart from '../IndicatorsTab/IndicatorChart'
+import CategoricalIndicatorChart from './CategoricalIndicatorChart'
 import IndicatorDetails from '../IndicatorsTab/IndicatorDetails'
 import { IndicatorPropType } from '../../CustomPropTypes'
 import ECOSYSTEMS from '../../config/ecosystems.json'
@@ -11,12 +12,7 @@ import ECOSYSTEMS from '../../config/ecosystems.json'
 const getIcon = ecosystemID => `/icons/${ecosystemID}.svg`
 
 const Ecosystem = ({
-    ecosystemID,
-    selectedIndicator,
-    percent,
-    indicators,
-    onSelectIndicator,
-    onDeselectIndicator
+    ecosystemID, selectedIndicator, percent, indicators, onSelectIndicator, onDeselectIndicator
 }) => {
     const ecosystemConfig = ECOSYSTEMS[ecosystemID]
     const { label } = ecosystemConfig
@@ -41,11 +37,17 @@ const Ecosystem = ({
         .sort()
         .map((indicator) => {
             console.log('merging', indicator, indicators[indicator])
-            return Object.assign({ id: indicator }, indicatorsConfig[indicator], indicators[indicator])
+            return Object.assign(
+                {
+                    id: indicator,
+                    valueLabel: indicatorsConfig[indicator].valueLabels[indicators[indicator].value]
+                },
+                indicatorsConfig[indicator],
+                indicators[indicator]
+            )
         })
 
     console.log('merged', mergedIndicators)
-
 
     return (
         <div className="ecosystem">
@@ -54,7 +56,12 @@ const Ecosystem = ({
             <div className="indicators-container">
                 {mergedIndicators.length > 0 ? (
                     mergedIndicators.map(indicator => (
-                        <IndicatorChart
+                        // <IndicatorChart
+                        //     key={indicator.id}
+                        //     {...indicator}
+                        //     onClick={() => onSelectIndicator(indicator)}
+                        // />
+                        <CategoricalIndicatorChart
                             key={indicator.id}
                             {...indicator}
                             onClick={() => onSelectIndicator(indicator)}

@@ -96,25 +96,25 @@ const config = {
     dataLayers: [
         L.dataTileLayer('http://localhost:8001/services/encoding2/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['2'],
-            opacity: 0.5,
+            opacity: 0,
             minZoom: 0,
             maxZoom: 8 // TODO
         }),
         L.dataTileLayer('http://localhost:8001/services/encoding3/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['3'],
-            opacity: 0.5,
+            opacity: 0,
             minZoom: 0,
             maxZoom: 8 // TODO
         }),
         L.dataTileLayer('http://localhost:8001/services/encoding5/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['5'],
-            opacity: 0.5,
+            opacity: 0,
             minZoom: 0,
             maxZoom: 8 // TODO
         }),
         L.dataTileLayer('http://localhost:8001/services/encoding7/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['7'],
-            opacity: 0.5,
+            opacity: 0,
             minZoom: 0,
             maxZoom: 8 // TODO
         })

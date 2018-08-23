@@ -256,6 +256,15 @@ footer {
     overflow-x: hidden;
 }
 
+#PixelDetails #SidebarHeaderInner {
+    margin-top: 1.5em;
+    /* margin-bottom: 2em; */
+}
+#PixelDetails h2 {
+    margin-bottom: 0.25em;
+    margin-top: 0;
+}
+
 #ReportDownload {
     margin-top: 8px;
 }
@@ -418,6 +427,13 @@ footer {
     border-top: 1px solid #bae0f2;
 }
 
+#PixelDetails .ecosystem-header {
+    height: 54px;
+}
+#PixelDetails .ecosystem:first-child .ecosystem-header {
+    margin-top: 0 !important;
+}
+
 .ecosystem-header img {
     margin-right: 8px;
     height: 40px;
@@ -451,6 +467,10 @@ footer {
     font-size: smaller;
     color: #aaa;
 }
+.indicator label.value {
+    margin-top: 0.5em;
+    display: block;
+}
 .indicator .domain {
     position: relative;
     /* margin: 16px 14px 0; */
@@ -477,6 +497,33 @@ footer {
     height: 24px;
     width: 1px;
     border-left: 1px dashed #666;
+}
+
+.indicator .domain-categories {
+    border: 1px solid #aaa;
+}
+.indicator .category {
+    height: 12px;
+    flex: 1;
+    background: #f6f6f6;
+}
+.indicator .category + .category {
+    border-left: 1px solid #aaa;
+}
+.indicator .category.condition-good {
+    background: #0f05;
+}
+.indicator .category.condition-not-good {
+    background: #f005;
+}
+.indicator .category.current {
+    background: #aaa;
+}
+.indicator .category.current.condition-good {
+    background: #0f0;
+}
+.indicator .category.current.condition-not-good {
+    background: #f00;
 }
 
 .no-indicators {

@@ -8,7 +8,7 @@ import Ecosystem from './Ecosystem'
 import { formatNumber } from '../../utils'
 
 import PRIORITIES from '../../config/priorities.json'
-import ECOSYSTEMS from '../../config/ecosystems.json'
+// import ECOSYSTEMS from '../../config/ecosystems.json'
 
 const PixelDetails = ({ location, values }) => {
     if (location === null) {
@@ -30,20 +30,17 @@ const PixelDetails = ({ location, values }) => {
             console.log('indicator', ecosystem, indicator)
 
             // Create a percent array similar to that for watersheds, and fill the current value as 100% of area
-            const indicatorConfig = ECOSYSTEMS[ecosystem].indicators[indicator]
-            const { categoricalValues } = indicatorConfig
-            const indicatorValues = Array.from({ length: categoricalValues[1] - 1 }, (_, i) => i + categoricalValues[0])
-            const indicatorValueIndex = indicatorValues.indexOf(value)
-            const percent = new Array(categoricalValues[1] - 1).fill(0)
-            percent[indicatorValues.indexOf(value)] = 100
-            console.log('value', value, 'categories', categoricalValues, indicatorValues, indicatorValueIndex)
+            // const indicatorConfig = ECOSYSTEMS[ecosystem].indicators[indicator]
+            // const { categoricalValues } = indicatorConfig
+            // const indicatorValues = Array.from({ length: categoricalValues[1] - 1 }, (_, i) => i + categoricalValues[0])
+            // const indicatorValueIndex = indicatorValues.indexOf(value)
+            // const percent = new Array(categoricalValues[1] - 1).fill(0)
+            // percent[indicatorValues.indexOf(value)] = 100
+            // console.log('value', value, 'categories', categoricalValues, indicatorValues, indicatorValueIndex)
             if (!indicatorData[ecosystem]) {
                 indicatorData[ecosystem] = {}
             }
-            indicatorData[ecosystem][indicator] = {
-                mean: value,
-                percent
-            }
+            indicatorData[ecosystem][indicator] = { value }
         })
 
     console.log('indicator data', indicatorData)
@@ -56,34 +53,38 @@ const PixelDetails = ({ location, values }) => {
     const { label: blueprintLabel, color, textColor } = PRIORITIES[blueprint]
 
     return (
-        <div>
+        <div id="PixelDetails">
             <div id="SidebarHeader">
                 <div className="text-quiet text-smaller text-center">
                     Details for latitude: {formatNumber(latitude, 5)}&deg;, longitude: {formatNumber(longitude, 5)}&deg;
                 </div>
-                <div id="SidebarHeaderInner" className="flex-container flex-justify-center flex-align-start">
-                    <div className="flex-grow">
-                        <div className="priorityColorPatch" style={{ backgroundColor: color, color: textColor }}>
-                            <b>{blueprintLabel}</b>
-                        </div>
+                <div id="SidebarHeaderInner">
+                    <h2>Blueprint priority:</h2>
+                    <div className="priorityColorPatch" style={{ backgroundColor: color, color: textColor }}>
+                        <b>{blueprintLabel}</b>
                     </div>
                 </div>
             </div>
 
             <div id="SidebarContent">
-                <div id="Ecosystems">
-                    {ecosystemIDs.map(id => (
-                        <Ecosystem
-                            key={id}
-                            ecosystemID={id}
-                            indicators={indicatorData[id]}
-                            onSelectIndicator={() => {}}
-                            onDeselectIndicator={() => {}}
-                            // onSelectIndicator={selectedIndicator => this.handleSelectIndicator(id, selectedIndicator)}
-                            // onDeselectIndicator={this.handleDeselectIndicator}
-                        />
-                    ))}
-                </div>
+                <h2>Indicators</h2>
+                {ecosystemIDs.length > 0 ? (
+                    <div id="Ecosystems">
+                        {ecosystemIDs.map(id => (
+                            <Ecosystem
+                                key={id}
+                                ecosystemID={id}
+                                indicators={indicatorData[id]}
+                                onSelectIndicator={() => {}}
+                                onDeselectIndicator={() => {}}
+                                // onSelectIndicator={selectedIndicator => this.handleSelectIndicator(id, selectedIndicator)}
+                                // onDeselectIndicator={this.handleDeselectIndicator}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="no-indicators">No indicators at this location</div>
+                )}
             </div>
         </div>
     )
