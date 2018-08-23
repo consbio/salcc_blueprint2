@@ -5,6 +5,9 @@ from io import BytesIO
 
 from PIL import Image, ImageDraw, ImageFont
 import requests
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Mapbox token is REQUIRED, using default public token from Mapbox as fallback (beware, it could be rotated by them in future)
 ACCESS_TOKEN = os.getenv(
@@ -189,15 +192,22 @@ def get_unit_map_image(unit_id, bounds, width, height):
         'height': height
     }
 
-    r = requests.post(MBGL_SERVER_URL, json=params)
-    r.raise_for_status()
+    try:
+        r = requests.post(MBGL_SERVER_URL, json=params)
+        r.raise_for_status()
 
-    img = Image.open(BytesIO(r.content))
+        img = Image.open(BytesIO(r.content))
 
-    if MAP_ATTRIBUTION:
-        canvas = ImageDraw.Draw(img)
-        canvas.text((10, height - 24), MAP_ATTRIBUTION,
-                    font=LABEL_FONT, fill=(0, 0, 0, 255))
+        if MAP_ATTRIBUTION:
+            canvas = ImageDraw.Draw(img)
+            canvas.text((10, height - 24), MAP_ATTRIBUTION,
+                        font=LABEL_FONT, fill=(0, 0, 0, 255))
+
+    except Exception as err:
+        logger.error("Error retrieving map image: {0}".format(err))
+        img = Image.new('RGBA', (width, height), color='#EEE')
+        ImageDraw.Draw(img).text(
+            (width/2 - 40, height/2), 'Error creating map', font=LABEL_FONT, fill=(80, 80, 80, 255))
 
     return img
 
@@ -282,10 +292,15 @@ def get_overview_image(unit_id, bounds, width, height):
         'height': height
     }
 
-    r = requests.post(MBGL_SERVER_URL, json=params)
-    r.raise_for_status()
+    try:
+        r = requests.post(MBGL_SERVER_URL, json=params)
+        r.raise_for_status()
+        img = Image.open(BytesIO(r.content))
 
-    return Image.open(BytesIO(r.content))
+    except Exception as err:
+        img = Image.new('RGBA', (width, height), color='#EEE')
+
+    return img
 
 
 def get_legend_image(legend, width):
