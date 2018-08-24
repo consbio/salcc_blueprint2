@@ -98,25 +98,25 @@ const config = {
             encoding: encoding['2'],
             opacity: 0,
             minZoom: 0,
-            maxZoom: 8 // TODO
+            maxZoom: 9 // TODO
         }),
         L.dataTileLayer('http://localhost:8001/services/encoding3/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['3'],
             opacity: 0,
             minZoom: 0,
-            maxZoom: 8 // TODO
+            maxZoom: 9 // TODO
         }),
         L.dataTileLayer('http://localhost:8001/services/encoding5/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['5'],
             opacity: 0,
             minZoom: 0,
-            maxZoom: 8 // TODO
+            maxZoom: 9 // TODO
         }),
         L.dataTileLayer('http://localhost:8001/services/encoding7/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['7'],
             opacity: 0,
             minZoom: 0,
-            maxZoom: 8 // TODO
+            maxZoom: 9 // TODO
         })
     ]
 }
@@ -425,16 +425,30 @@ class Map extends Component {
         const { zoom, isPixelMode } = this.state
         return (
             <div id="MapContainer">
-                {zoom < 10 && (
-                    <div
-                        ref={(node) => {
-                            this._zoomNote = node
-                        }}
-                        id="ZoomInNote"
-                        className="text-center text-small text-quieter"
-                    >
-                        Zoom in to select an area
-                    </div>
+                {isPixelMode ? (
+                    zoom < 8 && (
+                        <div
+                            ref={(node) => {
+                                this._zoomNote = node
+                            }}
+                            id="ZoomInNote"
+                            className="text-center text-small text-quieter"
+                        >
+                            Zoom in to view pixel details
+                        </div>
+                    )
+                ) : (
+                    zoom < 10 && (
+                        <div
+                            ref={(node) => {
+                                this._zoomNote = node
+                            }}
+                            id="ZoomInNote"
+                            className="text-center text-small text-quieter"
+                        >
+                            Zoom in to select an area
+                        </div>
+                    )
                 )}
                 <div
                     ref={(node) => {

@@ -56,11 +56,6 @@ const Ecosystem = ({
             <div className="indicators-container">
                 {mergedIndicators.length > 0 ? (
                     mergedIndicators.map(indicator => (
-                        // <IndicatorChart
-                        //     key={indicator.id}
-                        //     {...indicator}
-                        //     onClick={() => onSelectIndicator(indicator)}
-                        // />
                         <CategoricalIndicatorChart
                             key={indicator.id}
                             {...indicator}
@@ -80,7 +75,7 @@ Ecosystem.propTypes = {
     onSelectIndicator: PropTypes.func.isRequired,
     onDeselectIndicator: PropTypes.func.isRequired,
 
-    indicators: PropTypes.objectOf(IndicatorPropType),
+    indicators: PropTypes.objectOf(PropTypes.objectOf(PropTypes.number)),
     percent: PropTypes.number,
     selectedIndicator: IndicatorPropType
 }

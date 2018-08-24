@@ -468,7 +468,7 @@ footer {
     color: #aaa;
 }
 .indicator label.value {
-    margin-top: 0.5em;
+    margin-top: 1em;
     display: block;
 }
 .indicator .domain {
@@ -506,24 +506,44 @@ footer {
     height: 12px;
     flex: 1;
     background: #f6f6f6;
+    position: relative;
 }
 .indicator .category + .category {
     border-left: 1px solid #aaa;
 }
 .indicator .category.condition-good {
-    background: #0f05;
+    background: #0c5da533;
 }
 .indicator .category.condition-not-good {
-    background: #f005;
+    background: #ff950033;
 }
 .indicator .category.current {
     background: #aaa;
 }
 .indicator .category.current.condition-good {
-    background: #0f0;
+    background: #0c5da5;
 }
 .indicator .category.current.condition-not-good {
-    background: #f00;
+    background: #ff9500;
+}
+.indicator .category .marker {
+    position: absolute;
+    width: 0;
+    top: 13px;
+    left: 50%;
+    margin-left: -8px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid #333;
+}
+
+.indicator .category .condition-good-label {
+    position: absolute;
+    top: -16px;
+    left: -1px;
+    width: 120px;
+    font-size: 10px;
+    border-left: 1px dashed #999;
 }
 
 .no-indicators {

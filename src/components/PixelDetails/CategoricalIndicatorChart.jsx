@@ -29,7 +29,15 @@ const CategoricalIndicatorChart = ({
                 <label>Low</label>
                 <div className="domain">
                     <div className="domain-categories flex-container">
-                        {bins.map(b => <div className={`category ${getBinClass(b)}`} />)}
+                        {bins.map(b => (
+                            <div key={`${label}-${b}`} className={`category ${getBinClass(b)}`}>
+                                {b === value && <div className="marker" />}
+                                {hasGoodThreshold &&
+                                    b === goodThreshold && (
+                                    <div className="condition-good-label text-quieter">&rarr; good condition</div>
+                                )}
+                            </div>
+                        ))}
                     </div>
                     {/* <div className="marker-line" style={{ left: `${percent}%` }} />
                       <div className="marker-label text-quiet" style={{ left: `${percent}%` }}>

@@ -6,16 +6,20 @@ import * as actions from '../../Actions/actions'
 
 import Ecosystem from './Ecosystem'
 import { formatNumber } from '../../utils'
-
 import PRIORITIES from '../../config/priorities.json'
-// import ECOSYSTEMS from '../../config/ecosystems.json'
+
+const CROSS_SYSTEM_ECOSYSTEMS = {
+    FreshwaterAquatic: true,
+    Landscapes: true,
+    Waterscapes: true
+}
 
 const PixelDetails = ({ location, values }) => {
     if (location === null) {
-        return <div>Loading...</div>
+        return <div className="no-indicators">Loading...</div>
     }
     if (values === null || Object.keys(values).length === 0) {
-        return <div>No data available</div>
+        return <div className="no-indicators">No data at this location</div>
     }
 
     const { latitude, longitude } = location
@@ -29,14 +33,6 @@ const PixelDetails = ({ location, values }) => {
             const [ecosystem, indicator] = key.split('_')
             console.log('indicator', ecosystem, indicator)
 
-            // Create a percent array similar to that for watersheds, and fill the current value as 100% of area
-            // const indicatorConfig = ECOSYSTEMS[ecosystem].indicators[indicator]
-            // const { categoricalValues } = indicatorConfig
-            // const indicatorValues = Array.from({ length: categoricalValues[1] - 1 }, (_, i) => i + categoricalValues[0])
-            // const indicatorValueIndex = indicatorValues.indexOf(value)
-            // const percent = new Array(categoricalValues[1] - 1).fill(0)
-            // percent[indicatorValues.indexOf(value)] = 100
-            // console.log('value', value, 'categories', categoricalValues, indicatorValues, indicatorValueIndex)
             if (!indicatorData[ecosystem]) {
                 indicatorData[ecosystem] = {}
             }
@@ -45,8 +41,14 @@ const PixelDetails = ({ location, values }) => {
 
     console.log('indicator data', indicatorData)
 
-    const ecosystemIDs = Object.keys(indicatorData)
-    ecosystemIDs.sort() // Sort alphabetically, no need to split cross system indicators into a separate group below
+    let ecosystemIDs = Object.keys(indicatorData)
+    ecosystemIDs.sort() // Sort alphabetically
+
+    // move cross-system indicators to the end
+    ecosystemIDs = ecosystemIDs
+        .filter(e => !CROSS_SYSTEM_ECOSYSTEMS[e])
+        .concat(ecosystemIDs.filter(e => CROSS_SYSTEM_ECOSYSTEMS[e]))
+
     console.log('ecosystems', ecosystemIDs)
 
     const blueprint = values.Blueprint || 0 // default to not a priority
