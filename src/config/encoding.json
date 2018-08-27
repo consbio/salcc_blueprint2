@@ -157,45 +157,39 @@
     },
     "7": {
         "type": "exponential",
-        "base": 12,
+        "base": 10,
         "dtype": "uint32",
         "nodata": 16777215,
         "layers": [
             {
                 "id": "UplandHardwood_Birds",
-                "nodata": 11,
+                "nodata": 9,
                 "type": "indexed",
                 "values": [0, 1, 2, 3, 4]
             },
             {
                 "id": "Blueprint",
-                "nodata": 11,
+                "nodata": 9,
                 "type": "indexed",
                 "values": [0, 1, 2, 3, 4, 5]
             },
             {
                 "id": "UplandHardwood_UrbanOpenSpace",
-                "nodata": 11,
+                "nodata": 9,
                 "type": "indexed",
                 "values": [0, 1, 2, 3, 4, 5]
             },
             {
                 "id": "Waterscapes_NetworkComplexity",
-                "nodata": 11,
+                "nodata": 9,
                 "type": "indexed",
                 "values": [1, 2, 3, 4, 5, 6, 7]
             },
             {
                 "id": "Landscapes_ResilientBiodiversityHotspots",
-                "nodata": 11,
+                "nodata": 9,
                 "type": "indexed",
                 "values": [0, 1, 2, 3, 4, 5, 6, 7]
-            },
-            {
-                "id": "Ecosystem",
-                "nodata": 11,
-                "type": "indexed",
-                "values": [6, 8, 10, 12, 14, 16, 17, 18, 20, 22]
             }
         ]
     }

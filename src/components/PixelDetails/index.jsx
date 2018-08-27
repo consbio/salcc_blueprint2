@@ -31,7 +31,6 @@ const PixelDetails = ({ location, values }) => {
         .filter(([key, value]) => key.indexOf('_') !== -1 && value !== null)
         .forEach(([key, value]) => {
             const [ecosystem, indicator] = key.split('_')
-            console.log('indicator', ecosystem, indicator)
 
             if (!indicatorData[ecosystem]) {
                 indicatorData[ecosystem] = {}
@@ -39,7 +38,6 @@ const PixelDetails = ({ location, values }) => {
             indicatorData[ecosystem][indicator] = { value }
         })
 
-    console.log('indicator data', indicatorData)
 
     let ecosystemIDs = Object.keys(indicatorData)
     ecosystemIDs.sort() // Sort alphabetically
@@ -48,8 +46,6 @@ const PixelDetails = ({ location, values }) => {
     ecosystemIDs = ecosystemIDs
         .filter(e => !CROSS_SYSTEM_ECOSYSTEMS[e])
         .concat(ecosystemIDs.filter(e => CROSS_SYSTEM_ECOSYSTEMS[e]))
-
-    console.log('ecosystems', ecosystemIDs)
 
     const blueprint = values.Blueprint || 0 // default to not a priority
     const { label: blueprintLabel, color, textColor } = PRIORITIES[blueprint]

@@ -23,6 +23,7 @@ import * as actions from '../../Actions/actions'
 import LocateControl from './LocateControl'
 import PixelModeControl from './PixelModeControl'
 import { PlacePropType } from '../../CustomPropTypes'
+import { all } from '../../utils'
 
 import encoding from '../../config/encoding.json'
 
@@ -37,7 +38,8 @@ L.Icon.Default.mergeOptions({ iconRetinaUrl, iconUrl, shadowUrl })
 const config = {
     mapParams: {
         center: [33.358, -78.593], // for testing: [33.358, -80]
-        zoom: 5, // for testing: 10
+        // zoom: 5, // for testing: 10
+        zoom: 8, // FIXME!
         minZoom: 3,
         maxZoom: 15,
         zoomControl: false,
@@ -292,6 +294,7 @@ class Map extends Component {
         if (isPixelMode !== this.state.isPixelMode) {
             this.setState({ isPixelMode })
             if (isPixelMode) {
+                this._removeUnitLayer()
                 this._addDataTileLayers()
             } else {
                 this._removeDataTileLayers()
@@ -323,37 +326,48 @@ class Map extends Component {
         this.map.addLayer(config.unitLayer)
     }
 
-    _addDataTileLayers = () => {
-        const { map } = this
-        const { setPixelValues } = this.props
-        const { dataLayers, unitLayer } = config
-        map.removeLayer(unitLayer)
+    _removeUnitLayer = () => {
+        this.map.removeLayer(config.unitLayer)
+    }
 
-        const getValues = () => {
-            // splice all objects into a single one
-            const location = map.getCenter()
-            const values = Object.assign({}, ...dataLayers.map(l => l.decodePoint(location)))
-            setPixelValues({ latitude: location.lat, longitude: location.lng }, values)
-        }
+    _addDataTileLayers = () => {
+        const { map, _decodePixelValues } = this
+        const { dataLayers } = config
 
         dataLayers.forEach((layer) => {
-            // layer.on('load', getValues) // TODO: this won't work if there are multiple layers and they haven't all loaded; increment a counter!
             layer.addTo(map)
+            layer.on('load', () => {
+                _decodePixelValues()
+            })
         })
 
-        map.on('move', getValues) // TODO: on zoom too?
-        // TODO: need to unhook this when not in pixel mode
-        // TODO: be careful, not all tiles may be fully loaded after move, need to collect them all
+        map.on('move', _decodePixelValues)
+        map.on('zoomend', _decodePixelValues)
     }
 
     _removeDataTileLayers = () => {
-        // map silently ignores layers it doesn't already have
-        const { map } = this
+        // map silently ignores removeLayers on layers it doesn't already have
+        const { map, _decodePixelValues } = this
         const { dataLayers } = config
         dataLayers.forEach((layer) => {
             map.removeLayer(layer)
         })
-        map.off('move')  // TODO: tune this, it disconnects ALL move handlers
+        map.off('move', _decodePixelValues)
+        map.off('zoomend', _decodePixelValues)
+    }
+
+    _decodePixelValues = () => {
+        const { map } = this
+        const { setPixelValues } = this.props
+        const { dataLayers } = config
+
+        // only proceed if all layers have been loaded
+        if (!all(dataLayers.map(l => !l.isLoading()))) return
+
+        // splice all objects into a single one
+        const location = map.getCenter()
+        const values = Object.assign({}, ...dataLayers.map(l => l.decodePoint(location)))
+        setPixelValues({ latitude: location.lat, longitude: location.lng }, values)
     }
 
     _zoomToPlace(place) {
@@ -425,8 +439,8 @@ class Map extends Component {
         const { zoom, isPixelMode } = this.state
         return (
             <div id="MapContainer">
-                {isPixelMode ? (
-                    zoom < 8 && (
+                {isPixelMode
+                    ? zoom < 8 && (
                         <div
                             ref={(node) => {
                                 this._zoomNote = node
@@ -434,11 +448,10 @@ class Map extends Component {
                             id="ZoomInNote"
                             className="text-center text-small text-quieter"
                         >
-                            Zoom in to view pixel details
+                              Zoom in to view pixel details
                         </div>
                     )
-                ) : (
-                    zoom < 10 && (
+                    : zoom < 10 && (
                         <div
                             ref={(node) => {
                                 this._zoomNote = node
@@ -446,10 +459,9 @@ class Map extends Component {
                             id="ZoomInNote"
                             className="text-center text-small text-quieter"
                         >
-                            Zoom in to select an area
+                              Zoom in to select an area
                         </div>
-                    )
-                )}
+                    )}
                 <div
                     ref={(node) => {
                         this._mapNode = node

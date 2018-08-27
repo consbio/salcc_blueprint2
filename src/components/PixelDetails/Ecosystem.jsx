@@ -30,24 +30,19 @@ const Ecosystem = ({
     }
 
     const indicatorsConfig = ecosystemConfig.indicators
-    console.log('indicatorConfig', indicatorsConfig)
 
     // Merge constants with dynamic data
     const mergedIndicators = Object.keys(indicators || {})
         .sort()
-        .map((indicator) => {
-            console.log('merging', indicator, indicators[indicator])
-            return Object.assign(
+        .map(indicator =>
+            Object.assign(
                 {
                     id: indicator,
                     valueLabel: indicatorsConfig[indicator].valueLabels[indicators[indicator].value]
                 },
                 indicatorsConfig[indicator],
                 indicators[indicator]
-            )
-        })
-
-    console.log('merged', mergedIndicators)
+            ))
 
     return (
         <div className="ecosystem">

@@ -42,4 +42,11 @@ export const formatNumber = (number, decimals = null) => {
     })
 }
 
+/**
+ * Return true if all values are truthy, otherwise false
+ *
+ * @param {Array} values - array of values
+ */
+export const all = values => values.filter(v => !!v).length === values.length
+
 export default { formatPercent, formatNumber }

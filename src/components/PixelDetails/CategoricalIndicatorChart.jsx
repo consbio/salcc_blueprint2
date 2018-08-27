@@ -7,7 +7,6 @@ const CategoricalIndicatorChart = ({
     // construct an array of bins from minCategory to maxCategory
     const [minCategory, maxCategory] = categoricalValues
     const bins = Array.from({ length: maxCategory - minCategory }, (_, i) => i + minCategory)
-    console.log(label, value, 'bins', bins)
 
     // if there is a good condition, colorize bins below it one color, bins above it another color
     // and current value is an intense variant of that
