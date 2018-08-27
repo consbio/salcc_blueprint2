@@ -38,8 +38,7 @@ L.Icon.Default.mergeOptions({ iconRetinaUrl, iconUrl, shadowUrl })
 const config = {
     mapParams: {
         center: [33.358, -78.593], // for testing: [33.358, -80]
-        // zoom: 5, // for testing: 10
-        zoom: 8, // FIXME!
+        zoom: 5, // for testing: 10
         minZoom: 3,
         maxZoom: 15,
         zoomControl: false,
@@ -99,25 +98,25 @@ const config = {
         L.dataTileLayer('http://localhost:8001/services/encoding2/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['2'],
             opacity: 0,
-            minZoom: 0,
+            minZoom: 8,
             maxZoom: 9 // TODO
         }),
         L.dataTileLayer('http://localhost:8001/services/encoding3/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['3'],
             opacity: 0,
-            minZoom: 0,
+            minZoom: 8,
             maxZoom: 9 // TODO
         }),
         L.dataTileLayer('http://localhost:8001/services/encoding5/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['5'],
             opacity: 0,
-            minZoom: 0,
+            minZoom: 8,
             maxZoom: 9 // TODO
         }),
         L.dataTileLayer('http://localhost:8001/services/encoding7/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['7'],
             opacity: 0,
-            minZoom: 0,
+            minZoom: 8,
             maxZoom: 9 // TODO
         })
     ]
@@ -360,14 +359,24 @@ class Map extends Component {
         const { map } = this
         const { setPixelValues } = this.props
         const { dataLayers } = config
+        const location = map.getCenter()
+        const zoom = map.getZoom()
+
+        // if data are not avaiable at this zoom level, return
+        if (zoom < dataLayers[0].options.minZoom || zoom > dataLayers[0].options.maxZoom) {
+            setPixelValues(null, null, false)
+            return
+        }
 
         // only proceed if all layers have been loaded
-        if (!all(dataLayers.map(l => !l.isLoading()))) return
+        if (!all(dataLayers.map(l => !l.isLoading()))) {
+            setPixelValues({ latitude: location.lat, longitude: location.lng }, null, true)
+            return
+        }
 
         // splice all objects into a single one
-        const location = map.getCenter()
         const values = Object.assign({}, ...dataLayers.map(l => l.decodePoint(location)))
-        setPixelValues({ latitude: location.lat, longitude: location.lng }, values)
+        setPixelValues({ latitude: location.lat, longitude: location.lng }, values, false)
     }
 
     _zoomToPlace(place) {

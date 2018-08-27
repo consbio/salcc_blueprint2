@@ -86,7 +86,8 @@ const mainReducer = (state = initialState, action) => {
         case SET_PIXEL_VALUES:
             return updateObject(state, {
                 pixelLocation: action.pixelLocation,
-                pixelValues: action.pixelValues
+                pixelValues: action.pixelValues,
+                isPending: action.isPending
             })
 
         case SET_TAB:

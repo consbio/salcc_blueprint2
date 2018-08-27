@@ -506,25 +506,25 @@ footer {
     height: 12px;
     flex: 1;
     background: #f6f6f6;
+    /* border: 1px solid #666; */
     position: relative;
+    box-sizing: border-box;
 }
 .indicator .category + .category {
     border-left: 1px solid #aaa;
 }
-.indicator .category.condition-good {
-    background: #0c5da533;
-}
-.indicator .category.condition-not-good {
-    background: #ff950033;
+.indicator .category.condition-good + .category,
+.indicator .category.condition-not-good + .category {
+    border-left-color: #fff;
 }
 .indicator .category.current {
     background: #aaa;
 }
-.indicator .category.current.condition-good {
-    background: #0c5da5;
+.indicator .category.condition-good {
+    background: #5fb785;
 }
-.indicator .category.current.condition-not-good {
-    background: #ff9500;
+.indicator .category.condition-not-good {
+    background: #e77778;
 }
 .indicator .category .marker {
     position: absolute;

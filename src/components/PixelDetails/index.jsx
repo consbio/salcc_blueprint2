@@ -14,9 +14,12 @@ const CROSS_SYSTEM_ECOSYSTEMS = {
     Waterscapes: true
 }
 
-const PixelDetails = ({ location, values }) => {
-    if (location === null) {
+const PixelDetails = ({ location, values, isPending }) => {
+    if (isPending) {
         return <div className="no-indicators">Loading...</div>
+    }
+    if (location === null) {
+        return <div className="no-indicators">Pixel details are not available for this zoom level</div>
     }
     if (values === null || Object.keys(values).length === 0) {
         return <div className="no-indicators">No data at this location</div>
@@ -37,7 +40,6 @@ const PixelDetails = ({ location, values }) => {
             }
             indicatorData[ecosystem][indicator] = { value }
         })
-
 
     let ecosystemIDs = Object.keys(indicatorData)
     ecosystemIDs.sort() // Sort alphabetically
@@ -93,17 +95,20 @@ PixelDetails.propTypes = {
         latitude: PropTypes.number.isRequired,
         longitude: PropTypes.number.isRequired
     }),
-    values: PropTypes.object
+    values: PropTypes.object,
+    isPending: PropTypes.bool
 }
 
 PixelDetails.defaultProps = {
-    location: null,
-    values: null // for nodata pixels
+    location: null, // if not available for this zoom level
+    values: null, // for nodata pixels
+    isPending: false
 }
 
-const mapStateToProps = ({ app: { pixelLocation, pixelValues } }) => ({
+const mapStateToProps = ({ app: { pixelLocation, pixelValues, isPending } }) => ({
     location: pixelLocation,
-    values: pixelValues
+    values: pixelValues,
+    isPending
 })
 
 export default connect(
