@@ -23,14 +23,16 @@ import * as actions from '../../Actions/actions'
 import LocateControl from './LocateControl'
 import PixelModeControl from './PixelModeControl'
 import { PlacePropType } from '../../CustomPropTypes'
-// import { all } from '../../utils'
+import { all } from '../../utils'
 
 import encoding from '../../config/encoding.json'
 
 const MAPBOX_TOKEN = process.env.MAPBOX_ACCESS_TOKEN || '' // REQUIRED: this must be present in .env file
+const TILE_HOST = process.env.TILE_HOST || ''  // If absent from .env file, assume that tiles are served on same host
+const ENCODING_LEVELS = [2, 3, 5, 7]
+
 
 // Make leaflet icons work properly from webpack / react context
-
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({ iconRetinaUrl, iconUrl, shadowUrl })
 
@@ -58,12 +60,12 @@ const config = {
             }
         )
     ],
-    blueprintLayer: L.tileLayer('https://m.salcc.databasin.org/services/blueprint2_2/tiles/{z}/{x}/{y}.png', {
+    blueprintLayer: L.tileLayer(`${TILE_HOST}/services/blueprint2_2/tiles/{z}/{x}/{y}.png`, {
         maxNativeZoom: 15,
         bounds: [[29.257276664000074, -85.89853697199993], [37.45876403900007, -71.28723321899992]],
         zIndex: 2
     }),
-    unitLayer: L.vectorGrid.protobuf('https://m.salcc.databasin.org/services/salcc_id/tiles/{z}/{x}/{y}.pbf', {
+    unitLayer: L.vectorGrid.protobuf(`${TILE_HOST}/services/salcc_id/tiles/{z}/{x}/{y}.pbf`, {
         minZoom: 10,
         maxZoom: 15,
         zIndex: 3,
@@ -94,36 +96,13 @@ const config = {
         fill: true,
         weight: 2
     },
-    dataLayers: [
-        L.dataTileLayer('http://localhost:8001/services/encoding2/tiles/{z}/{x}/{y}.png', {
-            encoding: encoding['2'],
-            opacity: 0,
-            minZoom: 8,
-            maxZoom: 15,
-            imageSize: 128
-        }),
-        L.dataTileLayer('http://localhost:8001/services/encoding3/tiles/{z}/{x}/{y}.png', {
-            encoding: encoding['3'],
-            opacity: 0,
-            minZoom: 8,
-            maxZoom: 15,
-            imageSize: 128
-        }),
-        L.dataTileLayer('http://localhost:8001/services/encoding5/tiles/{z}/{x}/{y}.png', {
-            encoding: encoding['5'],
-            opacity: 0,
-            minZoom: 8,
-            maxZoom: 15,
-            imageSize: 128
-        }),
-        L.dataTileLayer('http://localhost:8001/services/encoding7/tiles/{z}/{x}/{y}.png', {
-            encoding: encoding['7'],
-            opacity: 0,
-            minZoom: 8,
-            maxZoom: 15,
-            imageSize: 128
-        })
-    ]
+    dataLayers: ENCODING_LEVELS.map(encodingLevel => L.dataTileLayer(`${TILE_HOST}/services/encoding${encodingLevel}/tiles/{z}/{x}/{y}.png`, {
+        encoding: encoding[encodingLevel],
+        opacity: 0,
+        minZoom: 8,
+        maxZoom: 15,
+        imageSize: 128
+    }))
 }
 
 const opacityScale = (zoom) => {
@@ -366,17 +345,17 @@ class Map extends Component {
         const location = map.getCenter()
         const zoom = map.getZoom()
 
+        // only proceed if all layers have been loaded
+        if (!all(dataLayers.map(l => !l.isLoading()))) {
+            setPixelValues({ latitude: location.lat, longitude: location.lng }, null, true)
+            return
+        }
+
         // if data are not avaiable at this zoom level, return
         if (zoom < dataLayers[0].options.minZoom || zoom > dataLayers[0].options.maxZoom) {
             setPixelValues(null, null, false)
             return
         }
-
-        // only proceed if all layers have been loaded
-        // if (!all(dataLayers.map(l => !l.isLoading()))) {
-        //     setPixelValues({ latitude: location.lat, longitude: location.lng }, null, true)
-        //     return
-        // }
 
         // splice all objects into a single one
         const values = Object.assign({}, ...dataLayers.map(l => l.decodePoint(location)))

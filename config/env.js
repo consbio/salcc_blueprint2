@@ -1,5 +1,3 @@
-
-
 const fs = require('fs')
 const path = require('path')
 const paths = require('./paths')
@@ -74,7 +72,8 @@ function getClientEnvironment(publicUrl) {
                 PUBLIC_URL: publicUrl,
                 REPORT_SERVER: process.env.REPORT_SERVER || '/report',
                 MAPBOX_ACCESS_TOKEN: process.env.MAPBOX_ACCESS_TOKEN || '',
-                SENTRY_DSN: process.env.SENTRY_DSN || ''
+                SENTRY_DSN: process.env.SENTRY_DSN || '',
+                TILE_HOST: process.env.TILE_HOST || ''
             }
         )
     // Stringify all values so we can feed into Webpack DefinePlugin

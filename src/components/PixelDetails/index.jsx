@@ -36,14 +36,26 @@ class PixelDetails extends Component {
     render() {
         const { location, values, isPending } = this.props
 
-        if (isPending) {
-            return <div className="no-indicators">Loading...</div>
-        }
         if (location === null) {
-            return <div className="no-indicators">Pixel details are not available for this zoom level</div>
+            return <div className="no-indicators">Please zoom in for pixel details.</div>
         }
-        if (values === null || Object.keys(values).length === 0) {
-            return <div className="no-indicators">No data at this location</div>
+
+        const { latitude, longitude } = location
+
+        if (isPending || values === null || Object.keys(values).length === 0) {
+            return (
+                <div id="PixelDetails">
+                    <div id="SidebarHeader">
+                        <div className="location-info text-quiet text-smaller text-center">
+                            Details for latitude: {formatNumber(latitude, 5)}&deg;,&nbsp; longitude:{' '}
+                            {formatNumber(longitude, 5)}&deg;
+                        </div>
+                    </div>
+                    <div id="SidebarContent">
+                        <div className="no-indicators">{isPending ? 'Loading...' : 'No data at this location.'}</div>
+                    </div>
+                </div>
+            )
         }
 
         const { selectedEcosystemID, selectedIndicatorID } = this.state
@@ -55,18 +67,24 @@ class PixelDetails extends Component {
                 ECOSYSTEMS[selectedEcosystemID].indicators[selectedIndicatorID]
             )
             return (
-                <div id="SidebarContent">
-                    <Ecosystem
-                        ecosystemID={selectedEcosystemID}
-                        selectedIndicator={selectedIndicator}
-                        isMobile={false}
-                        onDeselectIndicator={this.handleDeselectIndicator}
-                    />
+                <div id="PixelDetails">
+                    <div id="SidebarHeader">
+                        <div className="location-info text-quiet text-smaller text-center">
+                            Details for latitude: {formatNumber(latitude, 5)}&deg;,&nbsp; longitude:{' '}
+                            {formatNumber(longitude, 5)}&deg;
+                        </div>
+                    </div>
+                    <div id="SidebarContent">
+                        <Ecosystem
+                            ecosystemID={selectedEcosystemID}
+                            selectedIndicator={selectedIndicator}
+                            isMobile={false}
+                            onDeselectIndicator={this.handleDeselectIndicator}
+                        />
+                    </div>
                 </div>
             )
         }
-
-        const { latitude, longitude } = location
 
         // extract out indicators and split out keys
         // only keep the non-null indicators
@@ -96,7 +114,7 @@ class PixelDetails extends Component {
         return (
             <div id="PixelDetails">
                 <div id="SidebarHeader">
-                    <div className="text-quiet text-smaller text-center">
+                    <div className="location-info text-quiet text-smaller text-center">
                         Details for latitude: {formatNumber(latitude, 5)}&deg;, longitude: {formatNumber(longitude, 5)}&deg;
                     </div>
                     <div id="SidebarHeaderInner">

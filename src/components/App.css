@@ -264,6 +264,9 @@ footer {
     margin-bottom: 0.25em;
     margin-top: 0;
 }
+#PixelDetails .location-info {
+    margin-bottom: 0.5em;
+}
 
 #ReportDownload {
     margin-top: 8px;
