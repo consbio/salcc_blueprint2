@@ -99,25 +99,29 @@ const config = {
             encoding: encoding['2'],
             opacity: 0,
             minZoom: 8,
-            maxZoom: 9 // TODO
+            maxZoom: 15,
+            imageSize: 128
         }),
         L.dataTileLayer('http://localhost:8001/services/encoding3/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['3'],
             opacity: 0,
             minZoom: 8,
-            maxZoom: 9 // TODO
+            maxZoom: 15,
+            imageSize: 128
         }),
         L.dataTileLayer('http://localhost:8001/services/encoding5/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['5'],
             opacity: 0,
             minZoom: 8,
-            maxZoom: 9 // TODO
+            maxZoom: 15,
+            imageSize: 128
         }),
         L.dataTileLayer('http://localhost:8001/services/encoding7/tiles/{z}/{x}/{y}.png', {
             encoding: encoding['7'],
             opacity: 0,
             minZoom: 8,
-            maxZoom: 9 // TODO
+            maxZoom: 15,
+            imageSize: 128
         })
     ]
 }
