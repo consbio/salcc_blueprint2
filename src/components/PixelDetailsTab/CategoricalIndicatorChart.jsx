@@ -38,10 +38,6 @@ const CategoricalIndicatorChart = ({
                             </div>
                         ))}
                     </div>
-                    {/* <div className="marker-line" style={{ left: `${percent}%` }} />
-                      <div className="marker-label text-quiet" style={{ left: `${percent}%` }}>
-                          avg
-                      </div> */}
                 </div>
                 <label>High</label>
             </div>

@@ -49,9 +49,7 @@ const IndicatorDetails = (props) => {
 
     // if pixel level, need to update the caption to indicate it
     if (caption && value !== null) {
-        caption = caption
-            .replace(/in this lease block/g, 'in this pixel')
-            .replace(/in this subwatershed/g, 'in this pixel')
+        caption = caption.replace(caption.split('. ')[0], 'Indicator value of this pixel')
     }
 
     // create an object containing the percent values, the indicator value, and its label

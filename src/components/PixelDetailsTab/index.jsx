@@ -115,7 +115,8 @@ class PixelDetails extends Component {
             <div id="PixelDetails">
                 <div id="SidebarHeader">
                     <div className="location-info text-quiet text-smaller text-center">
-                        Details for latitude: {formatNumber(latitude, 5)}&deg;, longitude: {formatNumber(longitude, 5)}&deg;
+                        Details for latitude: {formatNumber(latitude, 5)}&deg;,&nbsp;
+                        longitude: {formatNumber(longitude, 5)}&deg;
                     </div>
                     <div id="SidebarHeaderInner">
                         <h2>Blueprint priority:</h2>

@@ -20,7 +20,6 @@ const SelectedUnit = ({
     deselectUnit,
     setTab
 }) => {
-    console.log('selected unit props', arguments)
     let tab = null
     if (hasSelectedUnit) {
         if (isDataLoaded) {
