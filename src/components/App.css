@@ -698,6 +698,7 @@ footer {
 .chart-labeledpercentbar label {
     min-width: 36px;
     margin-left: 12px !important;
+    text-align: right;
 }
 #Content h4 + .chart-labeledpercentbar {
     margin-top: 14px;

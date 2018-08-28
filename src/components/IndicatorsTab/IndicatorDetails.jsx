@@ -4,28 +4,74 @@ import PropTypes from 'prop-types'
 import LabeledPercentBar from '../Charts/LabeledPercentBar'
 import { formatPercent } from '../../utils'
 
-const IndicatorDetails = ({
-    label,
-    description,
-    caption,
-    valueLabels,
-    percent,
-    ecosystemIcon,
-    isMobile,
-    datasetID,
-    goodThreshold,
-    onBackClick
-}) => {
+const IndicatorDetails = (props) => {
+    const {
+        label,
+        description,
+        valueLabels,
+        percent,
+        value,
+        ecosystemIcon,
+        isMobile,
+        datasetID,
+        goodThreshold,
+        onBackClick
+    } = props
+
+    let { caption } = props
+
     const handleBackClick = (event) => {
         event.preventDefault()
         onBackClick()
     }
 
-    const percents = Object.keys(valueLabels).map((value, i) => ({
-        value,
-        label: valueLabels[value],
-        percent: percent[i]
-    }))
+    const header = (
+        <div
+            id="IndicatorDetailsHeader"
+            className="ecosystem-header flex-container flex-justify-start flex-align-center"
+            onClick={handleBackClick}
+        >
+            <a href="">&lt;&lt;</a>
+            <img src={ecosystemIcon} alt="" />
+            <h3>{label}</h3>
+        </div>
+    )
+
+    // no data for the current location, just return a message indicating such
+    if (percent === null && value === null) {
+        return (
+            <React.Fragment>
+                {header}
+                <div className="no-indicators">This indicator is not present at this location</div>
+            </React.Fragment>
+        )
+    }
+
+    // if pixel level, need to update the caption to indicate it
+    if (caption && value !== null) {
+        caption = caption
+            .replace(/in this lease block/g, 'in this pixel')
+            .replace(/in this subwatershed/g, 'in this pixel')
+    }
+
+    // create an object containing the percent values, the indicator value, and its label
+    // if this is for a pixel value instead of a summary for a unit, then the category with
+    // that pixel value gets 100% of the area, the rest are 0%
+    const percents = Object.keys(valueLabels).map((v, i) => {
+        let p = 0
+        if (percent !== null) {
+            p = percent[i]
+        } else {
+            // value must not be null
+            p = v === `${value}` ? 100 : 0 // value labels are strings, so we need to cast to string to compare
+        }
+
+        return {
+            value: v,
+            label: valueLabels[v],
+            percent: p
+        }
+    })
     percents.reverse()
 
     const hasGoodThreshold = goodThreshold !== null
@@ -42,15 +88,7 @@ const IndicatorDetails = ({
 
     return (
         <React.Fragment>
-            <div
-                id="IndicatorDetailsHeader"
-                className="ecosystem-header flex-container flex-justify-start flex-align-center"
-                onClick={handleBackClick}
-            >
-                <a href="">&lt;&lt;</a>
-                <img src={ecosystemIcon} alt="" />
-                <h3>{label}</h3>
-            </div>
+            {header}
             <div id="IndicatorDetails" className="flex-container-column">
                 <p>{description}</p>
                 <div>
@@ -60,11 +98,7 @@ const IndicatorDetails = ({
                                 {goodPercents.map((entry, i) => (
                                     <div className="flex-container" key={entry.value}>
                                         <div className="indicator-chart-heading">{i === 0 ? 'High:' : ''}</div>
-                                        <LabeledPercentBar
-                                            className="text-quiet"
-                                            {...entry}
-                                            height={6}
-                                        />
+                                        <LabeledPercentBar className="text-quiet" {...entry} height={6} />
                                     </div>
                                 ))}
 
@@ -83,11 +117,7 @@ const IndicatorDetails = ({
                                         <div className="indicator-chart-heading">
                                             {i === notGoodPercents.length - 1 ? 'Low:' : ''}
                                         </div>
-                                        <LabeledPercentBar
-                                            className="text-quiet"
-                                            {...entry}
-                                            height={6}
-                                        />
+                                        <LabeledPercentBar className="text-quiet" {...entry} height={6} />
                                     </div>
                                 ))}
                             </div>
@@ -105,11 +135,7 @@ const IndicatorDetails = ({
                                 return (
                                     <div className="flex-container" key={entry.value}>
                                         <div className="indicator-chart-heading">{heading}</div>
-                                        <LabeledPercentBar
-                                            className="text-quiet"
-                                            {...entry}
-                                            height={6}
-                                        />
+                                        <LabeledPercentBar className="text-quiet" {...entry} height={6} />
                                     </div>
                                 )
                             })}
@@ -117,11 +143,7 @@ const IndicatorDetails = ({
                     )}
                 </div>
 
-                {caption && (
-                    <p className="text-small text-quiet indicator-details-caption">
-                        {caption}
-                    </p>
-                )}
+                {caption && <p className="text-small text-quiet indicator-details-caption">{caption}</p>}
 
                 {!isMobile &&
                     datasetID && (
@@ -146,10 +168,11 @@ IndicatorDetails.propTypes = {
     label: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     valueLabels: PropTypes.objectOf(PropTypes.string).isRequired,
-    percent: PropTypes.arrayOf(PropTypes.number).isRequired,
     ecosystemIcon: PropTypes.string.isRequired,
     onBackClick: PropTypes.func.isRequired,
 
+    percent: PropTypes.arrayOf(PropTypes.number),
+    value: PropTypes.number,
     datasetID: PropTypes.string,
     caption: PropTypes.string,
     goodThreshold: PropTypes.number // values >= goodThreshold are considered in "good" condition
@@ -158,7 +181,9 @@ IndicatorDetails.propTypes = {
 IndicatorDetails.defaultProps = {
     datasetID: null,
     caption: null,
-    goodThreshold: null
+    goodThreshold: null,
+    percent: null, // if a unit summary
+    value: null // if a pixel value
 }
 
 export default IndicatorDetails

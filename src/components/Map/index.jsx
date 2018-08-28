@@ -23,7 +23,7 @@ import * as actions from '../../Actions/actions'
 import LocateControl from './LocateControl'
 import PixelModeControl from './PixelModeControl'
 import { PlacePropType } from '../../CustomPropTypes'
-import { all } from '../../utils'
+// import { all } from '../../utils'
 
 import encoding from '../../config/encoding.json'
 
@@ -369,10 +369,10 @@ class Map extends Component {
         }
 
         // only proceed if all layers have been loaded
-        if (!all(dataLayers.map(l => !l.isLoading()))) {
-            setPixelValues({ latitude: location.lat, longitude: location.lng }, null, true)
-            return
-        }
+        // if (!all(dataLayers.map(l => !l.isLoading()))) {
+        //     setPixelValues({ latitude: location.lat, longitude: location.lng }, null, true)
+        //     return
+        // }
 
         // splice all objects into a single one
         const values = Object.assign({}, ...dataLayers.map(l => l.decodePoint(location)))

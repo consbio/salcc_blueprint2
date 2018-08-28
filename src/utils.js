@@ -1,4 +1,7 @@
 export const formatPercent = (percent) => {
+    if (percent === 0) {
+        return '0'
+    }
     if (percent < 1) {
         return '< 1'
     }
