@@ -140,13 +140,14 @@ Tabs.propTypes = {
     hasSelectedUnit: PropTypes.bool.isRequired,
     setTab: PropTypes.func.isRequired,
     isMobile: PropTypes.bool.isRequired,
-    isMarine: PropTypes.bool.isRequired,
+    isMarine: PropTypes.bool,
 
     activeTab: PropTypes.string
 }
 
 Tabs.defaultProps = {
-    activeTab: null
+    activeTab: null,
+    isMarine: false
 }
 
 export default Tabs

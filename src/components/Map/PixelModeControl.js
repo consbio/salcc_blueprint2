@@ -22,7 +22,7 @@ const PixelModeControl = L.Control.extend({
         const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-pixelmode-control')
         this._container = container
         L.DomEvent.disableClickPropagation(container)
-        container.title = 'View pixel-level data'
+        container.title = 'View pixel-level details'
 
         const link = L.DomUtil.create('a', '', container)
         link.href = '#'

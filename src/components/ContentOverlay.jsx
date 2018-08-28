@@ -46,13 +46,14 @@ ContentOverlay.propTypes = {
     setTab: PropTypes.func.isRequired,
     hasSelectedUnit: PropTypes.bool.isRequired,
     isDataLoaded: PropTypes.bool.isRequired,
-    isMarine: PropTypes.bool.isRequired,
+    isMarine: PropTypes.bool,
 
     activeTab: PropTypes.string
 }
 
 ContentOverlay.defaultProps = {
-    activeTab: null
+    activeTab: null,
+    isMarine: false
 }
 
 const mapStateToProps = ({
