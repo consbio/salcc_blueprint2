@@ -4342,6 +4342,10 @@ leaflet-basemaps@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/leaflet-basemaps/-/leaflet-basemaps-0.3.1.tgz#434aaaeba644e92a46b303a94c7e2fd2e65ae74c"
 
+"leaflet-datatilelayer@https://github.com/brendan-ward/Leaflet.DataTileLayer":
+  version "0.1.0"
+  resolved "https://github.com/brendan-ward/Leaflet.DataTileLayer#3c4959be1a5e88548e96f9d78c6b4ab48f01c8c7"
+
 leaflet-geonames@^0.4.5:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/leaflet-geonames/-/leaflet-geonames-0.4.5.tgz#13a8c5d6d16f62772cbfe54670b8b67dfeb29e92"

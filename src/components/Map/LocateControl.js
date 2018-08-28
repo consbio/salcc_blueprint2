@@ -15,6 +15,7 @@ const LocateControl = L.Control.extend({
         this._map = map
         const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-locate-control')
         L.DomEvent.disableClickPropagation(container)
+        container.title = 'Zoom to my location'
 
         const link = L.DomUtil.create('a', '', container)
         link.href = '#'

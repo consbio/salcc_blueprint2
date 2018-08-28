@@ -1,0 +1,196 @@
+{
+    "2": {
+        "type": "exponential",
+        "base": 4,
+        "dtype": "uint32",
+        "nodata": 16777215,
+        "layers": [
+            {
+                "id": "ForestedWetland_Amphibians",
+                "nodata": 3,
+                "type": "indexed",
+                "values": [0, 1]
+            },
+            {
+                "id": "ForestedWetland_Extent",
+                "nodata": 3,
+                "type": "indexed",
+                "values": [0, 1]
+            },
+            {
+                "id": "FreshwaterMarsh_Extent",
+                "nodata": 3,
+                "type": "indexed",
+                "values": [0, 1]
+            },
+            {
+                "id": "Landscapes_LowRoadDensityPatches",
+                "nodata": 3,
+                "type": "indexed",
+                "values": [0, 1]
+            },
+            {
+                "id": "Landscapes_LowUrbanHistoric",
+                "nodata": 3,
+                "type": "indexed",
+                "values": [0, 1]
+            },
+            {
+                "id": "MaritimeForest_Extent",
+                "nodata": 3,
+                "type": "indexed",
+                "values": [0, 1]
+            },
+            {
+                "id": "PineAndPrairie_Amphibians",
+                "nodata": 3,
+                "type": "indexed",
+                "values": [0, 1]
+            },
+            {
+                "id": "PineAndPrairie_RegularlyBurnedHabitat",
+                "nodata": 3,
+                "type": "indexed",
+                "values": [0, 1]
+            }
+        ]
+    },
+    "3": {
+        "type": "exponential",
+        "base": 6,
+        "dtype": "uint16",
+        "nodata": 65535,
+        "layers": [
+            {
+                "id": "BeachAndDune_UnalteredBeach",
+                "nodata": 5,
+                "type": "indexed",
+                "values": [0, 1, 2]
+            },
+            {
+                "id": "FreshwaterMarsh_Birds",
+                "nodata": 5,
+                "type": "indexed",
+                "values": [1, 2, 3]
+            },
+            {
+                "id": "ForestedWetland_Birds",
+                "nodata": 5,
+                "type": "indexed",
+                "values": [0, 1, 2, 3]
+            },
+            {
+                "id": "FreshwaterAquatic_PermeableSurface",
+                "nodata": 5,
+                "type": "indexed",
+                "values": [1, 2, 3, 4]
+            },
+            {
+                "id": "PineAndPrairie_Birds",
+                "nodata": 5,
+                "type": "indexed",
+                "values": [0, 1, 2, 3]
+            },
+            {
+                "id": "Waterscapes_MigratoryFishConnectivity",
+                "nodata": 5,
+                "type": "indexed",
+                "values": [1, 2, 3, 4]
+            }
+        ]
+    },
+    "5": {
+        "type": "exponential",
+        "base": 7,
+        "dtype": "uint32",
+        "nodata": 16777215,
+        "layers": [
+            {
+                "id": "BeachAndDune_BeachBirds",
+                "nodata": 6,
+                "type": "indexed",
+                "values": [1, 2, 3, 4, 5]
+            },
+            {
+                "id": "Estuarine_CoastalCondition",
+                "nodata": 6,
+                "type": "indexed",
+                "values": [1, 2, 3, 4, 5]
+            },
+            {
+                "id": "Estuarine_WaterVegetationEdge",
+                "nodata": 6,
+                "type": "indexed",
+                "values": [0, 1, 2, 3, 4]
+            },
+            {
+                "id": "Estuarine_WetlandPatchSize",
+                "nodata": 6,
+                "type": "indexed",
+                "values": [0, 1, 2, 3, 4]
+            },
+            {
+                "id": "FreshwaterAquatic_ImperiledAquaticSpecies",
+                "nodata": 6,
+                "type": "indexed",
+                "values": [0, 1, 2, 3, 4]
+            },
+            {
+                "id": "FreshwaterAquatic_RiparianBuffers",
+                "nodata": 6,
+                "type": "indexed",
+                "values": [1, 2, 3, 4, 5]
+            },
+            {
+                "id": "Marine_Birds",
+                "nodata": 6,
+                "type": "indexed",
+                "values": [1, 2, 3, 4, 5]
+            },
+            {
+                "id": "Marine_Mammals",
+                "nodata": 6,
+                "type": "indexed",
+                "values": [1, 2, 3, 4, 5]
+            }
+        ]
+    },
+    "7": {
+        "type": "exponential",
+        "base": 10,
+        "dtype": "uint32",
+        "nodata": 16777215,
+        "layers": [
+            {
+                "id": "UplandHardwood_Birds",
+                "nodata": 9,
+                "type": "indexed",
+                "values": [0, 1, 2, 3, 4]
+            },
+            {
+                "id": "Blueprint",
+                "nodata": 9,
+                "type": "indexed",
+                "values": [0, 1, 2, 3, 4, 5]
+            },
+            {
+                "id": "UplandHardwood_UrbanOpenSpace",
+                "nodata": 9,
+                "type": "indexed",
+                "values": [0, 1, 2, 3, 4, 5]
+            },
+            {
+                "id": "Waterscapes_NetworkComplexity",
+                "nodata": 9,
+                "type": "indexed",
+                "values": [1, 2, 3, 4, 5, 6, 7]
+            },
+            {
+                "id": "Landscapes_ResilientBiodiversityHotspots",
+                "nodata": 9,
+                "type": "indexed",
+                "values": [0, 1, 2, 3, 4, 5, 6, 7]
+            }
+        ]
+    }
+}

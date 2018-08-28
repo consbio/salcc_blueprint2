@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types'
 
 export const IndicatorPropType = PropTypes.shape({
-    mean: PropTypes.number.isRequired,
-    percent: PropTypes.arrayOf(PropTypes.number).isRequired
+    mean: PropTypes.number, // if a unit summary
+    percent: PropTypes.arrayOf(PropTypes.number), // if a unit summary
+    value: PropTypes.number // if a pixel value
 })
 
 export const EcosystemPropType = PropTypes.shape({

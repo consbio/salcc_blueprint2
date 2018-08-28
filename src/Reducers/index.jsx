@@ -8,7 +8,9 @@ import {
     REQUEST_ERROR,
     SET_TAB,
     SET_PLACE,
-    SET_PLACES
+    SET_PLACES,
+    SET_PIXEL_MODE,
+    SET_PIXEL_VALUES
 } from '../Actions/actions'
 
 const updateObject = (oldObject, newObject) => Object.assign({}, oldObject, newObject)
@@ -20,11 +22,16 @@ const initialState = {
     activeTab: 'Map',
     place: null, // selected location from search
     places: [], // other places returned from search
+    isPixelMode: false, // if true, map is in pixel mode
 
     // State of the selected unit
     selectedUnit: null,
     data: null,
-    isDataLoaded: false
+    isDataLoaded: false,
+
+    // State of the current pixel
+    pixelValues: null,
+    pixelLocation: null // {latitude: <lat>, longitude: <long>}
 }
 
 const mainReducer = (state = initialState, action) => {
@@ -69,6 +76,19 @@ const mainReducer = (state = initialState, action) => {
 
         case SET_PLACES:
             return updateObject(state, { places: action.places })
+
+        case SET_PIXEL_MODE:
+            return updateObject(state, {
+                isPixelMode: action.isPixelMode,
+                selectedUnit: action.isPixelMode ? null : state.selectedUnit
+            })
+
+        case SET_PIXEL_VALUES:
+            return updateObject(state, {
+                pixelLocation: action.pixelLocation,
+                pixelValues: action.pixelValues,
+                isPending: action.isPending
+            })
 
         case SET_TAB:
             return updateObject(state, { activeTab: action.tab })
