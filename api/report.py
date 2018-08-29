@@ -3,7 +3,8 @@ import os
 import json
 import docx
 import matplotlib
-matplotlib.use('Agg')
+
+matplotlib.use("Agg")
 
 from collections import defaultdict
 from docx import Document
@@ -13,17 +14,17 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from api.map_client import *
 from api.charts import get_pie_chart, get_line_chart
 
-DATA_DIR = os.getenv('DATA_DIR', './public/data')
+DATA_DIR = os.getenv("DATA_DIR", "./public/data")
 
-TEMPLATE = 'api/template.docx'
+TEMPLATE = "api/template.docx"
 
 # TODO: Improve custom table style in template.docx
-DOC_STYLE = 'SALCC_style'
+DOC_STYLE = "SALCC_style"
 
 # Example placeholder: {{label:title}}
-PLACEHOLDER_REGEX = re.compile(r'{{(?P<scope>\w+):(?P<key>\w+)}}')
+PLACEHOLDER_REGEX = re.compile(r"{{(?P<scope>\w+):(?P<key>\w+)}}")
 
-TOTAL_ROW_COLOR = 'cacdd1'
+TOTAL_ROW_COLOR = "cacdd1"
 
 
 def create_report(unit_id, path, config):
@@ -49,13 +50,12 @@ def create_report(unit_id, path, config):
     # count up the number of indicator tables so that we have table numbers for the
     # that come after.  There are 2 known tables at the beginning of the report too
     indicator_table_count = 0
-    for ecosystem in context['ecosystem_indicators']:
-        for indicator in ecosystem.get('indicators', []):
+    for ecosystem in context["ecosystem_indicators"]:
+        for indicator in ecosystem.get("indicators", []):
             indicator_table_count += 1
     # context values must be strings
-    context['value']['ownership_table_number'] = str(indicator_table_count + 3)
-    context['value']['protection_table_number'] = str(
-        indicator_table_count + 4)
+    context["value"]["ownership_table_number"] = str(indicator_table_count + 3)
+    context["value"]["protection_table_number"] = str(indicator_table_count + 4)
 
     for p in doc.paragraphs:
         # Assumption: placeholders are always completely contained within a run
@@ -69,91 +69,98 @@ def create_report(unit_id, path, config):
                 if isinstance(item, str):
                     # match.group() has the original text to replace
                     r.text = r.text.replace(match.group(), item)
-                    if scope in {'table', 'chart'}:
+                    if scope in {"table", "chart"}:
                         r.font.italic = True
 
-                elif scope in {'map', 'chart'}:
+                elif scope in {"map", "chart"}:
                     # Pictures are added at the run level
-                    r.text = ''
+                    r.text = ""
                     size = 11.0
-                    if scope == 'map':
+                    if scope == "map":
                         size = 16.5
                     if not isinstance(context[scope][key], str):
                         run = p.add_run()
                         run.add_picture(context[scope][key], width=Cm(size))
 
                         # add a caption if we have one in context
-                        if key in context['caption']:
+                        if key in context["caption"]:
                             caption = doc.add_paragraph(
-                                context['caption'][key], style='TableCaption')
+                                context["caption"][key], style="TableCaption"
+                            )
                             _move_p_after(caption, p)
 
-                elif scope == 'table':
-                    r.text = ''
+                elif scope == "table":
+                    r.text = ""
                     table_counter += 1
                     create_table(doc, item, p)
 
-        if '{{INDICATORS}}' in p.text:
+        if "{{INDICATORS}}" in p.text:
             # Remove '{{INDICATORS}}'placeholder and add the report content above empty p.text
-            p.text = ''
+            p.text = ""
 
-            for ecosystem in context['ecosystem_indicators']:
+            for ecosystem in context["ecosystem_indicators"]:
 
-                if ecosystem['indicators']:
+                if ecosystem["indicators"]:
 
-                    name = ecosystem['ecosystem_name']
-                    percent = ecosystem['ecosystem_percentage']
-                    if percent is not '':
-                        heading = '{0}: {1}% of area'.format(name, percent)
-                        p.insert_paragraph_before(heading, style='Heading13')
+                    name = ecosystem["ecosystem_name"]
+                    percent = ecosystem["ecosystem_percentage"]
+                    if percent is not "":
+                        heading = "{0}: {1}% of area".format(name, percent)
+                        p.insert_paragraph_before(heading, style="Heading13")
                     else:
                         heading = name
-                        p.insert_paragraph_before(heading, style='Heading13')
+                        p.insert_paragraph_before(heading, style="Heading13")
 
-                    for indicator in ecosystem['indicators']:
+                    for indicator in ecosystem["indicators"]:
                         table_counter += 1
 
                         p.insert_paragraph_before(
-                            indicator['value']['indicator_name'], style='Heading11')
+                            indicator["value"]["indicator_name"], style="Heading11"
+                        )
                         p.insert_paragraph_before(
-                            indicator['value']['indicator_description'])
+                            indicator["value"]["indicator_description"]
+                        )
 
                         caption_text = "Table {0}: {1}".format(
-                            table_counter, indicator['value']['indicator_caption'])
+                            table_counter, indicator["value"]["indicator_caption"]
+                        )
                         caption = p.insert_paragraph_before(
-                            caption_text, style='TableCaption')
+                            caption_text, style="TableCaption"
+                        )
 
                         create_table(
-                            doc, ecosystem['indicators'][0]['table']['indicator_table'], caption)
+                            doc,
+                            ecosystem["indicators"][0]["table"]["indicator_table"],
+                            caption,
+                        )
 
             # Delete the placeholder para
             delete_paragraph(p)
 
-        if '{{PARTNERS}}' in p.text:
+        if "{{PARTNERS}}" in p.text:
             # Remove '{{PARTNERS}}'placeholder and add the report content after empty p.text
-            p.text = ''
+            p.text = ""
 
-            for category in context['partners']:
+            for category in context["partners"]:
                 p.insert_paragraph_before(
-                    context['partner_headers'][category], style='Heading14')
+                    context["partner_headers"][category], style="Heading14"
+                )
 
-                for partner in context['partners'][category]:
+                for partner in context["partners"][category]:
                     text, url = partner
-                    
+
                     if url:
-                        part = p.insert_paragraph_before(style='HyperlinkList')
+                        part = p.insert_paragraph_before(style="HyperlinkList")
                         add_hyperlink(part, url, text)
                     else:
-                        p.insert_paragraph_before(style='List Bullet 2').text = text
+                        p.insert_paragraph_before(style="List Bullet 2").text = text
 
             # Counties
-            if 'counties' in context:
-                p.insert_paragraph_before(
-                    'Land Trusts (by county)', style='Heading14')
-                for county in context['counties']:
-                    county_name = p.insert_paragraph_before(
-                        style='HyperlinkList')
-                    add_hyperlink(county_name, county['url'], county['name'])
+            if "counties" in context:
+                p.insert_paragraph_before("Land Trusts (by county)", style="Heading14")
+                for county in context["counties"]:
+                    county_name = p.insert_paragraph_before(style="HyperlinkList")
+                    add_hyperlink(county_name, county["url"], county["name"])
 
             # Delete the placeholder para
             delete_paragraph(p)
@@ -178,138 +185,163 @@ def generate_report_context(unit_id, config):
 
     """
 
-    with open(os.path.join(DATA_DIR, '{0}.json'.format(unit_id))) as json_file:
+    with open(os.path.join(DATA_DIR, "{0}.json".format(unit_id))) as json_file:
         data = json.loads(json_file.read())
 
-    total_acres = data['acres']
-    summary_unit_type = 'marine lease block' if 'M' in unit_id else 'subwatershed'
+    total_acres = data["acres"]
+    summary_unit_type = "marine lease block" if "M" in unit_id else "subwatershed"
 
     context = dict()
 
-    context['value'] = {
-        'summary_unit_name': data['name'],
-        'summary_unit_type': summary_unit_type,
-        'acres': '{:,}'.format(data['acres'])
+    context["value"] = {
+        "summary_unit_name": data["name"],
+        "summary_unit_type": summary_unit_type,
+        "acres": "{:,}".format(data["acres"]),
     }
-    context['table'] = {}
-    context['chart'] = {}
-    context['map'] = {}
-    context['caption'] = {
-        'priorities_map': 'Figure 1: Map of Blueprint priority categories within the {0} {1}.'.format(data['name'], summary_unit_type),
-        'priorities': 'Figure 2: Proportion of each Blueprint category within the {0} {1}.'.format(data['name'], summary_unit_type),
-        'slr': 'Figure 3: Extent of inundation by projected sea level rise within the {0} {1}.'.format(data['name'], summary_unit_type),
-        'urban': 'Figure 4: Extent of projected urbanization within the {0} {1}.'.format(data['name'], summary_unit_type)
+    context["table"] = {}
+    context["chart"] = {}
+    context["map"] = {}
+    context["caption"] = {
+        "priorities_map": "Figure 1: Map of Blueprint priority categories within the {0} {1}.".format(
+            data["name"], summary_unit_type
+        ),
+        "priorities": "Figure 2: Proportion of each Blueprint category within the {0} {1}.".format(
+            data["name"], summary_unit_type
+        ),
+        "slr": "Figure 3: Extent of inundation by projected sea level rise within the {0} {1}.".format(
+            data["name"], summary_unit_type
+        ),
+        "urban": "Figure 4: Extent of projected urbanization within the {0} {1}.".format(
+            data["name"], summary_unit_type
+        ),
     }
 
     # Priorities map
 
-    priorities_config = config['priorities']
+    priorities_config = config["priorities"]
     priorities_map = get_map(unit_id, data, priorities_config)
 
-    context['map']['priorities_map'] = priorities_map
+    context["map"]["priorities_map"] = priorities_map
 
     # Priorities table
 
-    if data['blueprint']:
-        priorities = dict(
-            col_names=['Priority Category', 'Acres', 'Percent of Area'])
+    if data["blueprint"]:
+        priorities = dict(col_names=["Priority Category", "Acres", "Percent of Area"])
 
-        priorities['rows'] = [
-            (priorities_config[str(i)]['label'], '{:,}'.format(
-                percent_to_acres(percentage, total_acres)), '{0}%'.format(percentage))
-            for i, percentage in enumerate(data.get('blueprint'))
+        priorities["rows"] = [
+            (
+                priorities_config[str(i)]["label"],
+                "{:,}".format(percent_to_acres(percentage, total_acres)),
+                "{0}%".format(percentage),
+            )
+            for i, percentage in enumerate(data.get("blueprint"))
         ]
-        priorities['rows'].reverse()
+        priorities["rows"].reverse()
 
-        context['table']['priorities'] = priorities
+        context["table"]["priorities"] = priorities
 
-        indices = [i for i, v in enumerate(data['blueprint']) if v > 0]
+        indices = [i for i, v in enumerate(data["blueprint"]) if v > 0]
         indices.reverse()
-        values = [data['blueprint'][i] for i in indices]
-        colors = [priorities_config[str(i)]['color'] for i in indices]
-        labels = ['{0} ({1}%)'.format(priorities_config[str(i)]['label'],
-                                      data['blueprint'][i]) for i in indices]
+        values = [data["blueprint"][i] for i in indices]
+        colors = [priorities_config[str(i)]["color"] for i in indices]
+        labels = [
+            "{0} ({1}%)".format(
+                priorities_config[str(i)]["label"], data["blueprint"][i]
+            )
+            for i in indices
+        ]
         chart = get_pie_chart(values, colors=colors, labels=labels)
-        context['chart']['priorities'] = chart
+        context["chart"]["priorities"] = chart
 
     else:
-        context['table']['priorities'] = 'No priority information available'
-        context['chart']['priorities'] = ''
+        context["table"]["priorities"] = "No priority information available"
+        context["chart"]["priorities"] = ""
 
     # Ecosystem table
 
-    ecosystems_table = dict(
-        col_names=['Ecosystems', 'Acres', 'Percent of Area'])
-    ecosystems = data.get('ecosystems', [])  # make sure we always have a list
+    ecosystems_table = dict(col_names=["Ecosystems", "Acres", "Percent of Area"])
+    ecosystems = data.get("ecosystems", [])  # make sure we always have a list
 
-    ecosystems_with_area = [(e, ecosystems[e]['percent'])
-                            for e in ecosystems if 'percent' in ecosystems[e]]
+    ecosystems_with_area = [
+        (e, ecosystems[e]["percent"]) for e in ecosystems if "percent" in ecosystems[e]
+    ]
     # filter the list to those with percents, and make a new list of tuples of ecosystem ID and percent
-    ecosystems_with_area = sorted(ecosystems_with_area, key=lambda x: x[1],
-                                  reverse=True)  # sort by percent, from largest percent to smallest
+    ecosystems_with_area = sorted(
+        ecosystems_with_area, key=lambda x: x[1], reverse=True
+    )  # sort by percent, from largest percent to smallest
 
-    ecosystems_table['rows'] = [
-        (config['ecosystems'][e]['label'], '{:,}'.format(
-            percent_to_acres(percent, total_acres)), '{0}%'.format(percent))
+    ecosystems_table["rows"] = [
+        (
+            config["ecosystems"][e]["label"],
+            "{:,}".format(percent_to_acres(percent, total_acres)),
+            "{0}%".format(percent),
+        )
         for e, percent in ecosystems_with_area
     ]
 
-    context['table']['ecosystems'] = ecosystems_table
+    context["table"]["ecosystems"] = ecosystems_table
 
     # Indicators
 
-    context['ecosystem_indicators'] = []
+    context["ecosystem_indicators"] = []
 
-    ind_ecosystems = [(key, data['ecosystems'][key].get(
-        'percent', None)) for key in data['ecosystems']]
+    ind_ecosystems = [
+        (key, data["ecosystems"][key].get("percent", None))
+        for key in data["ecosystems"]
+    ]
 
     ecosystems_with_percent = [e for e in ind_ecosystems if e[1] is not None]
     ecosystems_with_percent = sorted(
-        ecosystems_with_percent, key=lambda x: x[1], reverse=True)  # sort descending percent
+        ecosystems_with_percent, key=lambda x: x[1], reverse=True
+    )  # sort descending percent
 
     ecosystems_without_percent = [e for e in ind_ecosystems if e[1] is None]
     ecosystems_without_percent = sorted(
-        ecosystems_without_percent, key=lambda x: x[0])  # sort ascending label
+        ecosystems_without_percent, key=lambda x: x[0]
+    )  # sort ascending label
 
     ecosystems = ecosystems_with_percent + ecosystems_without_percent
 
     for ecosystem in ecosystems:
         key = ecosystem[0]
-        ecosystem_data = data['ecosystems'][key]
-        ecosystem_config = config['ecosystems'][key]
+        ecosystem_data = data["ecosystems"][key]
+        ecosystem_config = config["ecosystems"][key]
 
         ecosystem_indicators = {
-            'ecosystem_name': ecosystem_config['label'],
-            'indicators': [],
-            'ecosystem_percentage': ecosystem_data.get('percent', '')
+            "ecosystem_name": ecosystem_config["label"],
+            "indicators": [],
+            "ecosystem_percentage": ecosystem_data.get("percent", ""),
         }
 
         # Indicator tables
 
-        for indicator in ecosystem_data.get('indicators', []):
-            indicator_config = ecosystem_config['indicators'][indicator]
-            indicator_data = ecosystem_data['indicators'][indicator]
+        for indicator in ecosystem_data.get("indicators", []):
+            indicator_config = ecosystem_config["indicators"][indicator]
+            indicator_data = ecosystem_data["indicators"][indicator]
             indicator_context = {
-                'value': {
-                    'indicator_name': indicator_config['label'],
-                    'indicator_description': indicator_config['description'],
-                    'indicator_caption': indicator_config['reportCaption']
+                "value": {
+                    "indicator_name": indicator_config["label"],
+                    "indicator_description": indicator_config["description"],
+                    "indicator_caption": indicator_config["reportCaption"],
                 },
-                'table': {
-                    'indicator_table': {
-                        'col_names': ['', 'Indicator Values', 'Acres', 'Percent of Area'],
-                        'rows': []
+                "table": {
+                    "indicator_table": {
+                        "col_names": [
+                            "",
+                            "Indicator Values",
+                            "Acres",
+                            "Percent of Area",
+                        ],
+                        "rows": [],
                     }
-                }
+                },
             }
 
-            good_threshold = indicator_config.get('goodThreshold', None)
+            good_threshold = indicator_config.get("goodThreshold", None)
 
-            indicator_keys = [int(v)
-                              for v in indicator_config['valueLabels'].keys()]
+            indicator_keys = [int(v) for v in indicator_config["valueLabels"].keys()]
             indicator_keys.sort()  # make sure keys are sorted in ascending order
-            indicator_values = list(
-                zip(indicator_keys, indicator_data['percent']))
+            indicator_values = list(zip(indicator_keys, indicator_data["percent"]))
             indicator_values.reverse()  # Reverse order so highest priorities at top of table
 
             if good_threshold is not None:
@@ -323,134 +355,183 @@ def generate_report_context(unit_id, config):
                 for label_key, percent in indicator_values:
                     if label_key >= good_threshold:
                         total_good_percent += percent
-                        rows.append(['', indicator_config['valueLabels'][str(label_key)],
-                                     '{:,}'.format(percent_to_acres(percent, total_acres)), '{0}%'.format(percent)])
+                        rows.append(
+                            [
+                                "",
+                                indicator_config["valueLabels"][str(label_key)],
+                                "{:,}".format(percent_to_acres(percent, total_acres)),
+                                "{0}%".format(percent),
+                            ]
+                        )
                     else:
                         total_not_good_percent += percent
-                        rows.append(['', indicator_config['valueLabels'][str(label_key)],
-                                     '{:,}'.format(percent_to_acres(percent, total_acres)), '{0}%'.format(percent)])
+                        rows.append(
+                            [
+                                "",
+                                indicator_config["valueLabels"][str(label_key)],
+                                "{:,}".format(percent_to_acres(percent, total_acres)),
+                                "{0}%".format(percent),
+                            ]
+                        )
 
                 # Add lows & highs
-                rows[0][0] = 'High'
-                rows[-1][0] = 'Low'
+                rows[0][0] = "High"
+                rows[-1][0] = "Low"
 
                 # Add condition rows
 
-                good_total_row = ['', 'Total in good condition',
-                                  '{:,}'.format(percent_to_acres(
-                                      total_good_percent, total_acres)),
-                                  '{0}%'.format(round(total_good_percent, 1))]
-                not_good_total_row = ['', 'Total not in good condition',
-                                      '{:,}'.format(percent_to_acres(
-                                          total_not_good_percent, total_acres)),
-                                      '{0}%'.format(round(total_not_good_percent, 1))]
+                good_total_row = [
+                    "",
+                    "Total in good condition",
+                    "{:,}".format(percent_to_acres(total_good_percent, total_acres)),
+                    "{0}%".format(round(total_good_percent, 1)),
+                ]
+                not_good_total_row = [
+                    "",
+                    "Total not in good condition",
+                    "{:,}".format(
+                        percent_to_acres(total_not_good_percent, total_acres)
+                    ),
+                    "{0}%".format(round(total_not_good_percent, 1)),
+                ]
 
                 # Insert total_good row at threshold and total_not_good at table end
-                rows.insert(int(threshold_position)+1, good_total_row)
+                rows.insert(int(threshold_position) + 1, good_total_row)
                 rows.append(not_good_total_row)
 
-                indicator_context['table']['indicator_table']['rows'] = rows
+                indicator_context["table"]["indicator_table"]["rows"] = rows
 
             else:
-                rows = [['', indicator_config['valueLabels'][str(label_key)],
-                         '{:,}'.format(percent_to_acres(percent, total_acres)),
-                         '{0}%'.format(percent)] for label_key, percent in indicator_values]
+                rows = [
+                    [
+                        "",
+                        indicator_config["valueLabels"][str(label_key)],
+                        "{:,}".format(percent_to_acres(percent, total_acres)),
+                        "{0}%".format(percent),
+                    ]
+                    for label_key, percent in indicator_values
+                ]
 
                 # Add lows & highs
-                rows[0][0] = 'High'
-                rows[-1][0] = 'Low'
+                rows[0][0] = "High"
+                rows[-1][0] = "Low"
 
-                indicator_context['table']['indicator_table']['rows'] = rows
+                indicator_context["table"]["indicator_table"]["rows"] = rows
 
-            ecosystem_indicators['indicators'].append(indicator_context)
+            ecosystem_indicators["indicators"].append(indicator_context)
 
-        context['ecosystem_indicators'].append(ecosystem_indicators)
+        context["ecosystem_indicators"].append(ecosystem_indicators)
 
     # Partners list - name and url separated by categories
 
-    context['partner_headers'] = {
-        'regional': 'Regional Conservation Plans',
-        'state': 'Statewide Conservation Plans',
-        'marine': 'Marine Conservation Plans'
+    context["partner_headers"] = {
+        "regional": "Regional Conservation Plans",
+        "state": "Statewide Conservation Plans",
+        "marine": "Marine Conservation Plans",
     }
 
-    context['partners'] = defaultdict(list)
-    for plan_key in data['plans']:
-        plan = config['plans'][plan_key]
-        label = plan['label']
-        url = plan.get('url', '')
-        context['partners'][plan['type']].append((label, url))
+    context["partners"] = defaultdict(list)
+    for plan_key in data["plans"]:
+        plan = config["plans"][plan_key]
+        label = plan["label"]
+        url = plan.get("url", "")
+        context["partners"][plan["type"]].append((label, url))
 
     # Counties list - name and url
 
-    if 'counties' in data:
-        context['counties'] = [
-            {'name': value,
-                'url': 'http://findalandtrust.org/counties/{0}'.format(key)}
-            for key, value in data['counties'].items()
+    if "counties" in data:
+        context["counties"] = [
+            {"name": value, "url": "http://findalandtrust.org/counties/{0}".format(key)}
+            for key, value in data["counties"].items()
         ]  # key is FIPS and value is county with state
 
     # Ownership table
 
-    if 'owner' in data:
-        owners = dict(col_names=['Ownership', 'Acres', 'Percent of Area'])
+    if "owner" in data:
+        owners = dict(col_names=["Ownership", "Acres", "Percent of Area"])
 
-        owners['rows'] = [
-
-            [config['owners'][key]['label'], '{:,}'.format(
-                percent_to_acres(percent, total_acres)), '{0}%'.format(percent)]
-            for key, percent in data['owner'].items()
+        owners["rows"] = [
+            [
+                config["owners"][key]["label"],
+                "{:,}".format(percent_to_acres(percent, total_acres)),
+                "{0}%".format(percent),
+            ]
+            for key, percent in data["owner"].items()
         ]
 
-        own_perc_sum = sum(data['owner'].values())
+        own_perc_sum = sum(data["owner"].values())
 
         if own_perc_sum < 100:
             perc_remainder = round(100 - own_perc_sum, 1)
-            owners['rows'].append(['Not conserved', '{:,}'.format(percent_to_acres(perc_remainder, total_acres)),
-                                   '{0}%'.format(perc_remainder)])
+            owners["rows"].append(
+                [
+                    "Not conserved",
+                    "{:,}".format(percent_to_acres(perc_remainder, total_acres)),
+                    "{0}%".format(perc_remainder),
+                ]
+            )
 
-        context['table']['ownership'] = owners
+        context["table"]["ownership"] = owners
     else:
-        context['table']['ownership'] = 'No information available'
+        context["table"]["ownership"] = "No information available"
 
     # Protections table
 
-    protection = dict(
-        col_names=['Land Protection Status', 'Acres', 'Percent of Area'])
+    protection = dict(col_names=["Land Protection Status", "Acres", "Percent of Area"])
 
-    if 'gap' in data:
-        protection['rows'] = [
-            [config['protection'][key]['label'], '{:,}'.format(
-                percent_to_acres(percent, total_acres)), '{0}%'.format(percent)]
-            for key, percent in data['gap'].items()
+    if "gap" in data:
+        protection["rows"] = [
+            [
+                config["protection"][key]["label"],
+                "{:,}".format(percent_to_acres(percent, total_acres)),
+                "{0}%".format(percent),
+            ]
+            for key, percent in data["gap"].items()
         ]
 
-        pro_perc_sum = sum(data['gap'].values())
+        pro_perc_sum = sum(data["gap"].values())
 
         if pro_perc_sum < 100:
             perc_remainder = round(100 - pro_perc_sum, 1)
-            protection['rows'].append(['Not conserved', '{:,}'.format(percent_to_acres(perc_remainder, total_acres)),
-                                       '{0}%'.format(perc_remainder)])
+            protection["rows"].append(
+                [
+                    "Not conserved",
+                    "{:,}".format(percent_to_acres(perc_remainder, total_acres)),
+                    "{0}%".format(perc_remainder),
+                ]
+            )
 
-        context['table']['protection'] = protection
+        context["table"]["protection"] = protection
     else:
-        context['table']['protection'] = 'No information available'
+        context["table"]["protection"] = "No information available"
 
     # Threats
 
-    if 'slr' in data and data['slr']:
-        chart = get_line_chart(config['slr'], data['slr'], x_label='Amount of sea level rise (feet)',
-                               y_label='Percent of area', color='#004da8', alpha=0.3)
-        context['chart']['slr'] = chart
+    if "slr" in data and data["slr"]:
+        chart = get_line_chart(
+            config["slr"],
+            data["slr"],
+            x_label="Amount of sea level rise (feet)",
+            y_label="Percent of area",
+            color="#004da8",
+            alpha=0.3,
+        )
+        context["chart"]["slr"] = chart
     else:
-        context['chart']['slr'] = 'No sea level rise data available'
+        context["chart"]["slr"] = "No sea level rise data available"
 
-    if 'urban' in data and data['urban']:
-        chart = get_line_chart(config['urbanization'], data['urban'], x_label='Decade',  y_label='Percent of area',
-                               color='#D90000', alpha=0.3)
-        context['chart']['urban'] = chart
+    if "urban" in data and data["urban"]:
+        chart = get_line_chart(
+            config["urbanization"],
+            data["urban"],
+            x_label="Decade",
+            y_label="Percent of area",
+            color="#D90000",
+            alpha=0.3,
+        )
+        context["chart"]["urban"] = chart
     else:
-        context['chart']['urban'] = 'No urban growth data available'
+        context["chart"]["urban"] = "No urban growth data available"
 
     return context
 
@@ -481,13 +562,13 @@ def create_table(doc, data, para):
     # TODO: ensure tables don't run over a page break
 
     styles = doc.styles
-    ncols = len(data['col_names'])
+    ncols = len(data["col_names"])
 
     # Create table with one row for column headings
     table = doc.add_table(rows=1, cols=ncols)
     table.style = styles[DOC_STYLE]
 
-    for index, heading in enumerate(data['col_names']):
+    for index, heading in enumerate(data["col_names"]):
         cell = table.cell(0, index)
         cell.text = heading
         # Change justification of first heading
@@ -496,10 +577,12 @@ def create_table(doc, data, para):
         elif ncols is 4 and index is 1:
             cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
 
-    for datarow in data['rows']:
+    for datarow in data["rows"]:
         row = table.add_row()
-        condition_style = str(datarow[1]) == 'Total in good condition' or str(
-            datarow[1]) == 'Total not in good condition'
+        condition_style = (
+            str(datarow[1]) == "Total in good condition"
+            or str(datarow[1]) == "Total not in good condition"
+        )
         for index, datacell in enumerate(datarow):
             row.cells[index].text = str(datacell)
             if ncols is 4 and index is 1:
@@ -509,23 +592,25 @@ def create_table(doc, data, para):
                 new_shade = shade_generator(TOTAL_ROW_COLOR)
                 row.cells[index]._tc.get_or_add_tcPr().append(new_shade)
 
-    if 'Indicator Values' in data['col_names']:
-        table_type = 'indicator'
+    if "Indicator Values" in data["col_names"]:
+        table_type = "indicator"
     else:
-        table_type = 'other'
+        table_type = "other"
 
     set_col_widths(table, table_type)
 
     _move_table_after(table, para)
 
-    end_buffer = doc.add_paragraph('')
+    end_buffer = doc.add_paragraph("")
     _move_p_after_t(table, end_buffer)
 
     return end_buffer
 
 
 def shade_generator(color):
-    return docx.oxml.parse_xml(r'<w:shd {0} w:fill="{1}"/>'.format(docx.oxml.ns.nsdecls('w'), color))
+    return docx.oxml.parse_xml(
+        r'<w:shd {0} w:fill="{1}"/>'.format(docx.oxml.ns.nsdecls("w"), color)
+    )
 
 
 def set_col_widths(table, table_type):
@@ -537,7 +622,7 @@ def set_col_widths(table, table_type):
     table: table object
 
     """
-    if table_type is 'indicator':
+    if table_type is "indicator":
         widths = (Cm(1), Cm(9), Cm(3.5), Cm(3.5))
     else:
         widths = (Cm(9), Cm(4), Cm(4))
@@ -614,17 +699,18 @@ def add_hyperlink(paragraph, url, text):
     # This gets access to the document.xml.rels file and gets a new relation id value
     part = paragraph.part
     r_id = part.relate_to(
-        url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
+        url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True
+    )
 
     # Create the w:hyperlink tag and add needed values
-    hyperlink = docx.oxml.shared.OxmlElement('w:hyperlink')
-    hyperlink.set(docx.oxml.shared.qn('r:id'), r_id, )
+    hyperlink = docx.oxml.shared.OxmlElement("w:hyperlink")
+    hyperlink.set(docx.oxml.shared.qn("r:id"), r_id)
 
     # Create a w:r element
-    new_run = docx.oxml.shared.OxmlElement('w:r')
+    new_run = docx.oxml.shared.OxmlElement("w:r")
 
     # Create a new w:rPr element
-    rPr = docx.oxml.shared.OxmlElement('w:rPr')
+    rPr = docx.oxml.shared.OxmlElement("w:rPr")
 
     # Join all the xml elements together add add the required text to the w:r element
     new_run.append(rPr)
@@ -643,11 +729,12 @@ def delete_paragraph(paragraph):
 
 
 def get_map(unit_id, data, priorities):
-    bounds = data['bounds']
+    bounds = data["bounds"]
 
     # convert priorities to legend, in descending priority (dropping Not a Priority class)
-    legend = [(int(k), v['color'], v['label'])
-              for k, v in priorities.items() if k != '0']
+    legend = [
+        (int(k), v["color"], v["label"]) for k, v in priorities.items() if k != "0"
+    ]
     legend = sorted(legend, key=lambda x: x[0], reverse=True)
     # strip off the value used for sorting
     legend = [entry[1:] for entry in legend]
@@ -655,7 +742,7 @@ def get_map(unit_id, data, priorities):
     m = get_map_image(unit_id, bounds, legend)
 
     buffer = BytesIO()
-    m.save(buffer, 'PNG')
+    m.save(buffer, "PNG")
     return buffer
 
 
@@ -678,15 +765,15 @@ def _resolve(scope, key, context):
     """
 
     if scope not in context:
-        raise ValueError('Scope {0} is not found in context!'.format(scope))
+        raise ValueError("Scope {0} is not found in context!".format(scope))
 
     if key not in context[scope]:
-        raise ValueError('Key {0} is not found in context!'.format(key))
+        raise ValueError("Key {0} is not found in context!".format(key))
 
     return context[scope][key]
 
 
-if __name__ == '__main__':
-    id = 'I1'
-    outpath = '/tmp/{0}.docx'.format(id)
+if __name__ == "__main__":
+    id = "I1"
+    outpath = "/tmp/{0}.docx".format(id)
     create_report(id, outpath)

@@ -11,16 +11,18 @@ logger = logging.getLogger(__name__)
 
 # Mapbox token is REQUIRED, using default public token from Mapbox as fallback (beware, it could be rotated by them in future)
 ACCESS_TOKEN = os.getenv(
-    'MAPBOX_ACCESS_TOKEN', 'pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ')
+    "MAPBOX_ACCESS_TOKEN",
+    "pk.eyJ1IjoiYmN3YXJkIiwiYSI6InJ5NzUxQzAifQ.CVyzbyOpnStfYUQ_6r8AgQ",
+)
 
-MBGL_SERVER_URL = os.getenv('MBGL_SERVER_URL', 'http://localhost:8000/render')
+MBGL_SERVER_URL = os.getenv("MBGL_SERVER_URL", "http://localhost:8000/render")
 
 MAP_WIDTH = 800
 MAP_HEIGHT = 600
 OVERVIEW_WIDTH = 200
 OVERVIEW_HEIGHT = 200
 LEGEND_WIDTH = 200
-MAP_ATTRIBUTION = '© Mapbox, © OpenStreetMap'
+MAP_ATTRIBUTION = "© Mapbox, © OpenStreetMap"
 
 # Load fonts for legend and map text
 calibri_font = os.path.join(os.path.dirname(__file__), "Calibri.ttf")
@@ -37,36 +39,27 @@ OVERVIEW_STYLE = {
         "basemap": {
             "type": "raster",
             "tiles": [
-                "https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=%s" % ACCESS_TOKEN
+                "https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=%s"
+                % ACCESS_TOKEN
             ],
-            "tileSize": 256
+            "tileSize": 256,
         },
         "blueprint": {
             "type": "raster",
             "url": "mbtiles://blueprint2_2",
-            "tileSize": 256
+            "tileSize": 256,
         },
-        "boundaries": {
-            "type": "vector",
-            "url": "mbtiles://salcc_id",
-            "tileSize": 256
-        }
+        "boundaries": {"type": "vector", "url": "mbtiles://salcc_id", "tileSize": 256},
     },
     "layers": [
-        {
-            "id": "basemap",
-            "type": "raster",
-            "source": "basemap"
-        },
+        {"id": "basemap", "type": "raster", "source": "basemap"},
         {
             "id": "blueprint",
             "type": "raster",
             "source": "blueprint",
-            "paint": {
-                "raster-opacity": 0.3
-            }
-        }
-    ]
+            "paint": {"raster-opacity": 0.3},
+        },
+    ],
 }
 
 STYLE = {
@@ -75,36 +68,27 @@ STYLE = {
         "basemap": {
             "type": "raster",
             "tiles": [
-                "https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=%s" % ACCESS_TOKEN
+                "https://api.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=%s"
+                % ACCESS_TOKEN
             ],
-            "tileSize": 256
+            "tileSize": 256,
         },
         "blueprint": {
             "type": "raster",
             "url": "mbtiles://blueprint2_2",
-            "tileSize": 256
+            "tileSize": 256,
         },
-        "boundaries": {
-            "type": "vector",
-            "url": "mbtiles://salcc_id",
-            "tileSize": 256
-        }
+        "boundaries": {"type": "vector", "url": "mbtiles://salcc_id", "tileSize": 256},
     },
     "layers": [
-        {
-            "id": "basemap",
-            "type": "raster",
-            "source": "basemap"
-        },
+        {"id": "basemap", "type": "raster", "source": "basemap"},
         {
             "id": "blueprint",
             "type": "raster",
             "source": "blueprint",
-            "paint": {
-                "raster-opacity": 0.3
-            }
-        }
-    ]
+            "paint": {"raster-opacity": 0.3},
+        },
+    ],
 }
 
 
@@ -124,7 +108,7 @@ def get_center_from_bounds(bounds):
 
     return [
         ((bounds[2] - bounds[0]) / 2.0) + bounds[0],
-        ((bounds[3] - bounds[1]) / 2.0) + bounds[1]
+        ((bounds[3] - bounds[1]) / 2.0) + bounds[1],
     ]
 
 
@@ -150,47 +134,35 @@ def get_unit_map_image(unit_id, bounds, width, height):
 
     # Set styling for selected unit to highlight it on the map
     style = deepcopy(STYLE)
-    style['layers'].extend([
-        {
-            "id": "boundaries",
-            "source": "boundaries",
-            "source-layer": "inland_marine_id",
-            "type": "line",
-            "paint": {
-                "line-color": "#0892D0",
-                "line-width": 1
-            }
-        },
-        {
-            "id": "selected_boundary-fill",
-            "source": "boundaries",
-            "source-layer": "inland_marine_id",
-            "type": "fill",
-            "paint": {
-                "fill-color": "#0892D0",
-                "fill-opacity": 0.3
+    style["layers"].extend(
+        [
+            {
+                "id": "boundaries",
+                "source": "boundaries",
+                "source-layer": "inland_marine_id",
+                "type": "line",
+                "paint": {"line-color": "#0892D0", "line-width": 1},
             },
-            "filter": ["==", ["get", "ID"], unit_id]
-        },
-        {
-            "id": "selected_boundary-outline",
-            "source": "boundaries",
-            "source-layer": "inland_marine_id",
-            "type": "line",
-            "paint": {
-                "line-color": "#0892D0",
-                "line-width": 4
+            {
+                "id": "selected_boundary-fill",
+                "source": "boundaries",
+                "source-layer": "inland_marine_id",
+                "type": "fill",
+                "paint": {"fill-color": "#0892D0", "fill-opacity": 0.3},
+                "filter": ["==", ["get", "ID"], unit_id],
             },
-            "filter": ["==", ["get", "ID"], unit_id]
-        }
-    ])
+            {
+                "id": "selected_boundary-outline",
+                "source": "boundaries",
+                "source-layer": "inland_marine_id",
+                "type": "line",
+                "paint": {"line-color": "#0892D0", "line-width": 4},
+                "filter": ["==", ["get", "ID"], unit_id],
+            },
+        ]
+    )
 
-    params = {
-        'style': style,
-        'bounds': bounds,
-        'width': width,
-        'height': height
-    }
+    params = {"style": style, "bounds": bounds, "width": width, "height": height}
 
     try:
         r = requests.post(MBGL_SERVER_URL, json=params)
@@ -200,14 +172,19 @@ def get_unit_map_image(unit_id, bounds, width, height):
 
         if MAP_ATTRIBUTION:
             canvas = ImageDraw.Draw(img)
-            canvas.text((10, height - 24), MAP_ATTRIBUTION,
-                        font=LABEL_FONT, fill=(0, 0, 0, 255))
+            canvas.text(
+                (10, height - 24), MAP_ATTRIBUTION, font=LABEL_FONT, fill=(0, 0, 0, 255)
+            )
 
     except Exception as err:
         logger.error("Error retrieving map image: {0}".format(err))
-        img = Image.new('RGBA', (width, height), color='#EEE')
+        img = Image.new("RGBA", (width, height), color="#EEE")
         ImageDraw.Draw(img).text(
-            (width/2 - 40, height/2), 'Error creating map', font=LABEL_FONT, fill=(80, 80, 80, 255))
+            (width / 2 - 40, height / 2),
+            "Error creating map",
+            font=LABEL_FONT,
+            fill=(80, 80, 80, 255),
+        )
 
     return img
 
@@ -238,58 +215,51 @@ def get_overview_image(unit_id, bounds, width, height):
     style = deepcopy(STYLE)
 
     # Add a circle highlight for selected feature
-    style['sources']["selected_boundary-circle"] = {
+    style["sources"]["selected_boundary-circle"] = {
         "id": "selected_boundary-circle",
         "type": "geojson",
-        "data": {
-            "type": "Point",
-            "coordinates": center
-        }
+        "data": {"type": "Point", "coordinates": center},
     }
 
-    style['layers'].extend([
-        {
-            "id": "selected_boundary-fill",
-            "source": "boundaries",
-            "source-layer": "inland_marine_id",
-            "type": "fill",
-            "paint": {
-                "fill-color": "#0892D0"
+    style["layers"].extend(
+        [
+            {
+                "id": "selected_boundary-fill",
+                "source": "boundaries",
+                "source-layer": "inland_marine_id",
+                "type": "fill",
+                "paint": {"fill-color": "#0892D0"},
+                "filter": ["==", ["get", "ID"], unit_id],
             },
-            "filter": ["==", ["get", "ID"], unit_id]
-        },
-        {
-            "id": "selected_boundary-circle",
-            "source": "selected_boundary-circle",
-            "type": "circle",
-            "paint": {
-                "circle-radius": 10,
-                "circle-color": "#FF0000",
-                "circle-opacity": 0,
-                "circle-stroke-color": "#FF0000",
-                "circle-stroke-width": 2
-
-            }
-        },
-        {
-            "id": "selected_boundary-outline",
-            "source": "boundaries",
-            "source-layer": "inland_marine_id",
-            "type": "line",
-            "paint": {
-                "line-color": "#0892D0",
-                "line-width": 3
+            {
+                "id": "selected_boundary-circle",
+                "source": "selected_boundary-circle",
+                "type": "circle",
+                "paint": {
+                    "circle-radius": 10,
+                    "circle-color": "#FF0000",
+                    "circle-opacity": 0,
+                    "circle-stroke-color": "#FF0000",
+                    "circle-stroke-width": 2,
+                },
             },
-            "filter": ["==", ["get", "ID"], unit_id]
-        }
-    ])
+            {
+                "id": "selected_boundary-outline",
+                "source": "boundaries",
+                "source-layer": "inland_marine_id",
+                "type": "line",
+                "paint": {"line-color": "#0892D0", "line-width": 3},
+                "filter": ["==", ["get", "ID"], unit_id],
+            },
+        ]
+    )
 
     params = {
-        'style': style,
-        'center': center,
-        'zoom': 3,  # determined to be the best zoom given size of overview
-        'width': width,
-        'height': height
+        "style": style,
+        "center": center,
+        "zoom": 3,  # determined to be the best zoom given size of overview
+        "width": width,
+        "height": height,
     }
 
     try:
@@ -298,7 +268,7 @@ def get_overview_image(unit_id, bounds, width, height):
         img = Image.open(BytesIO(r.content))
 
     except Exception as err:
-        img = Image.new('RGBA', (width, height), color='#EEE')
+        img = Image.new("RGBA", (width, height), color="#EEE")
 
     return img
 
@@ -331,31 +301,28 @@ def get_legend_image(legend, width):
     label_height = 16
 
     # figure out the dimensions required for the text
-    text_width = max([LABEL_FONT.getsize(label)[0]
-                      for _, label in legend])
+    text_width = max([LABEL_FONT.getsize(label)[0] for _, label in legend])
 
     if text_width > (width - patch_width - padding):
-        print('WARNING: legend text is wider than image width, it will be cropped!')
+        print("WARNING: legend text is wider than image width, it will be cropped!")
 
     # include triple line spacing
     height = header_height + label_height * 3 * len(legend)
-    img = Image.new('RGBA', (width, height), color=(
-        255, 255, 255, 255))
+    img = Image.new("RGBA", (width, height), color=(255, 255, 255, 255))
     canvas = ImageDraw.Draw(img)
 
-    canvas.text((0, 0), header, font=HEADER_FONT,
-                fill=(0, 0, 0, 255))  # black text
+    canvas.text((0, 0), header, font=HEADER_FONT, fill=(0, 0, 0, 255))  # black text
 
     label_y_offset = header_height
 
     for index, (color, label) in enumerate(legend):
         label_y = int(round(index * label_height * 2)) + label_y_offset
-        canvas.rectangle(
-            (0, label_y, patch_width, label_y+patch_height), fill=color)
+        canvas.rectangle((0, label_y, patch_width, label_y + patch_height), fill=color)
 
         # move labels down 4 px to center against patches
-        canvas.text((label_x, label_y + 4), label, font=LABEL_FONT,
-                    fill=(0, 0, 0, 255))  # black text
+        canvas.text(
+            (label_x, label_y + 4), label, font=LABEL_FONT, fill=(0, 0, 0, 255)
+        )  # black text
 
     return img
 
@@ -382,17 +349,14 @@ def get_map_image(unit_id, bounds, legend):
     unit_map_width = MAP_WIDTH - OVERVIEW_WIDTH - gutter
 
     unit_map = get_unit_map_image(unit_id, bounds, unit_map_width, MAP_HEIGHT)
-    overview = get_overview_image(
-        unit_id, bounds, OVERVIEW_WIDTH, OVERVIEW_HEIGHT)
+    overview = get_overview_image(unit_id, bounds, OVERVIEW_WIDTH, OVERVIEW_HEIGHT)
 
     legend = get_legend_image(legend, LEGEND_WIDTH)
 
-    img = Image.new('RGBA', size=(MAP_WIDTH, MAP_HEIGHT),
-                    color=(255, 255, 255, 255))
+    img = Image.new("RGBA", size=(MAP_WIDTH, MAP_HEIGHT), color=(255, 255, 255, 255))
 
     img.paste(unit_map)
-    img.paste(overview, box=(MAP_WIDTH - OVERVIEW_WIDTH,
-                             MAP_HEIGHT - OVERVIEW_HEIGHT))
+    img.paste(overview, box=(MAP_WIDTH - OVERVIEW_WIDTH, MAP_HEIGHT - OVERVIEW_HEIGHT))
 
     img.paste(legend, box=(MAP_WIDTH - LEGEND_WIDTH, 20))
 
