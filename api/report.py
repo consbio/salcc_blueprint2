@@ -47,16 +47,6 @@ def create_report(unit_id, path, config):
     context = generate_report_context(unit_id, config)
     table_counter = 0
 
-    # count up the number of indicator tables so that we have table numbers for the
-    # that come after.  There are 2 known tables at the beginning of the report too
-    indicator_table_count = 0
-    for ecosystem in context["ecosystem_indicators"]:
-        for indicator in ecosystem.get("indicators", []):
-            indicator_table_count += 1
-    # context values must be strings
-    context["value"]["ownership_table_number"] = str(indicator_table_count + 3)
-    context["value"]["protection_table_number"] = str(indicator_table_count + 4)
-
     for p in doc.paragraphs:
         # Assumption: placeholders are always completely contained within a run
         for r in p.runs:
@@ -83,9 +73,11 @@ def create_report(unit_id, path, config):
                         run.add_picture(context[scope][key], width=Cm(size))
 
                         # add a caption if we have one in context
-                        if key in context["caption"]:
+                        caption_name = "{0}_{1}".format(scope, key)
+                        # if key in context["caption"]:
+                        if caption_name in context["caption"]:
                             caption = doc.add_paragraph(
-                                context["caption"][key], style="TableCaption"
+                                context["caption"][caption_name], style="TableCaption"
                             )
                             _move_p_after(caption, p)
 
@@ -202,18 +194,24 @@ def generate_report_context(unit_id, config):
     context["chart"] = {}
     context["map"] = {}
     context["caption"] = {
-        "priorities_map": "Figure 1: Map of Blueprint priority categories within the {0} {1}.".format(
+        "map_priorities": "Figure 1: Map of Blueprint priority categories within the {0} {1}.".format(
             data["name"], summary_unit_type
         ),
-        "priorities": "Figure 2: Proportion of each Blueprint category within the {0} {1}.".format(
+        "chart_priorities": "Figure 2: Proportion of each Blueprint category within the {0} {1}.".format(
             data["name"], summary_unit_type
         ),
-        "slr": "Figure 3: Extent of inundation by projected sea level rise within the {0} {1}.".format(
+        "chart_slr": "Figure 3: Extent of inundation by projected sea level rise within the {0} {1}.".format(
             data["name"], summary_unit_type
         ),
-        "urban": "Figure 4: Extent of projected urbanization within the {0} {1}.".format(
+        "chart_urban": "Figure 4: Extent of projected urbanization within the {0} {1}.".format(
             data["name"], summary_unit_type
         ),
+        "table_priorities": "Table 1: Extent of each Blueprint priority category within the {0} {1}".format(
+            data["name"], summary_unit_type
+        ),
+        "table_ecosystems": "Table 2: Extent of each ecosystem within the {0} {1}".format(
+            data["name"], summary_unit_type
+        )
     }
 
     # Priorities map
@@ -221,7 +219,7 @@ def generate_report_context(unit_id, config):
     priorities_config = config["priorities"]
     priorities_map = get_map(unit_id, data, priorities_config)
 
-    context["map"]["priorities_map"] = priorities_map
+    context["map"]["priorities"] = priorities_map
 
     # Priorities table
 
@@ -532,6 +530,22 @@ def generate_report_context(unit_id, config):
         context["chart"]["urban"] = chart
     else:
         context["chart"]["urban"] = "No urban growth data available"
+
+    # Table captions for last two tables, Ownership and Protection status
+
+    indicator_table_counter = 0
+    for ecosystem in context["ecosystem_indicators"]:
+        for indicator in ecosystem.get("indicators", []):
+            indicator_table_counter += 1
+    ownership_table_number = str(indicator_table_counter + 3)
+    protection_table_number = str(indicator_table_counter + 4)
+
+    context["caption"]["table_ownership"] = "Table {0}: Extent of ownership class within the {1} {2}.".format(
+        ownership_table_number, data["name"], summary_unit_type
+    )
+    context["caption"]["table_protection"] = "Table {0}: Extent of land protection status within the {1} {2}.".format(
+        protection_table_number, data["name"], summary_unit_type
+    )
 
     return context
 
