@@ -1,22 +1,30 @@
 import os
 import json
 import tempfile
+import logging
 from flask import Flask, send_file, abort
+
 from raven.contrib.flask import Sentry
+from raven.handlers.logging import SentryHandler
+from raven.conf import setup_logging
 
 from .report import create_report
 
-SENTRY_DSN = os.getenv("SENTRY_DSN", None)
-DATA_DIR = os.getenv("DATA_DIR", "./public/data")
 
 app = Flask(__name__)
-sentry = Sentry(
-    app, dsn=SENTRY_DSN
-)  # automatically loads SENTRY_DSN from env if available
+
+# Setup sentry for error capture
+SENTRY_DSN = os.getenv("SENTRY_DSN", None)
+sentry = Sentry(app, dsn=SENTRY_DSN)
+if SENTRY_DSN is not None:
+    handler = SentryHandler(SENTRY_DSN)
+    handler.setLevel(logging.ERROR)
+    setup_logging(handler)
 
 
 BP_VERSION = "2.2"
 
+DATA_DIR = os.getenv("DATA_DIR", "./public/data")
 CONFIG_DIR = "./src/config"
 CONFIG = {}
 try:
