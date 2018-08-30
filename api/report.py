@@ -44,7 +44,9 @@ def create_report(unit_id, path, config):
     """
     doc = Document(TEMPLATE)
 
-    context = generate_report_context(unit_id, config)
+    unit_type = unit_id[0].lower()
+    context = generate_report_context(unit_id, config, unit_type)
+
     table_counter = 0
 
     for p in doc.paragraphs:
@@ -134,8 +136,30 @@ def create_report(unit_id, path, config):
             # Delete the placeholder para
             delete_paragraph(p)
 
-        # if "{{THREATS}}" in p.text:
-        #     p.text = ""
+        if "{{THREATS}}" in p.text:
+            p.text = ""
+            size = 11
+            if unit_type == "i":
+                for key in ("slr", "urban"):
+                    p.insert_paragraph_before(context["heading"][key], style="Heading14")
+                    if not isinstance(context["chart"][key], str):
+                        i = p.insert_paragraph_before()
+                        run = i.add_run()
+                        run.add_picture(context["chart"][key], width=Cm(size))
+
+                        # add a caption if we have one in context
+                        chart_key = "chart_{}".format(key)
+                        if chart_key in context["caption"]:
+                            caption = doc.add_paragraph(
+                                context["caption"][chart_key], style="TableCaption"
+                            )
+                            _move_p_after(caption, i)
+                    else:
+                        p.insert_paragraph_before(context["chart"][key])
+                    p.insert_paragraph_before()
+
+            elif unit_type == "m":
+                p.insert_paragraph_before(context["chart"]["slr"])
 
         if "{{PARTNERS}}" in p.text:
             # Remove '{{PARTNERS}}'placeholder and add the report content after empty p.text
@@ -170,7 +194,7 @@ def create_report(unit_id, path, config):
     return report
 
 
-def generate_report_context(unit_id, config):
+def generate_report_context(unit_id, config, unit_type):
     """
         Create json of data points required for report
 
@@ -201,12 +225,15 @@ def generate_report_context(unit_id, config):
     context["table"] = {}
     context["chart"] = {}
     context["map"] = {}
-
-    figure_num = 2
     context["caption"] = {
         "map_priorities": "Figure 1: Map of Blueprint priority categories within the {0} {1}.".format(
             data["name"], summary_unit_type
         )
+    }
+    figure_num = 2
+    context["heading"] = {
+        "slr": "Sea level rise",
+        "urban": "Urban growth"
     }
 
     # Priorities map
@@ -512,40 +539,43 @@ def generate_report_context(unit_id, config):
 
     # Threats
 
-    if "slr" in data and data["slr"]:
-        chart = get_line_chart(
-            config["slr"],
-            data["slr"],
-            x_label="Amount of sea level rise (feet)",
-            y_label="Percent of area",
-            color="#004da8",
-            alpha=0.3,
-        )
-        context["chart"]["slr"] = chart
-        context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}.".format(
-            figure_num, data["name"], summary_unit_type)
-        figure_num += 1
-    else:
-        context["chart"]["slr"] = "No sea level rise data available"
+    if unit_type == 'i':
+        if "slr" in data and data["slr"]:
+            chart = get_line_chart(
+                config["slr"],
+                data["slr"],
+                x_label="Amount of sea level rise (feet)",
+                y_label="Percent of area",
+                color="#004da8",
+                alpha=0.3,
+            )
+            context["chart"]["slr"] = chart
+            context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}.".format(
+                figure_num, data["name"], summary_unit_type)
+            figure_num += 1
+        else:
+            context["chart"]["slr"] = "No sea level rise data available"
 
-    if "urban" in data and data["urban"]:
-        chart = get_line_chart(
-            config["urbanization"],
-            data["urban"],
-            x_label="Decade",
-            y_label="Percent of area",
-            color="#D90000",
-            alpha=0.3,
-        )
-        context["chart"]["urban"] = chart
-        context["caption"]["chart_urban"] = "Figure {0}: Extent of projected urbanization within the {1} {2}.".format(
-            figure_num, data["name"], summary_unit_type
-        )
-        figure_num += 1
-    else:
-        context["chart"]["urban"] = "No urban growth data available"
+        if "urban" in data and data["urban"]:
+            chart = get_line_chart(
+                config["urbanization"],
+                data["urban"],
+                x_label="Decade",
+                y_label="Percent of area",
+                color="#D90000",
+                alpha=0.3,
+            )
+            context["chart"]["urban"] = chart
+            context["caption"]["chart_urban"] = "Figure {0}: Extent of projected urbanization within the {1} {2}.".format(
+                figure_num, data["name"], summary_unit_type
+            )
+            figure_num += 1
+        else:
+            context["chart"]["urban"] = "No urban growth data available"
+    elif unit_type == 'm':
+        context["chart"]["slr"] = "No information on threats is available for marine lease blocks."
 
-    # Table captions for last two tables, Ownership and Protection status
+        # Table captions for last two tables, Ownership and Protection status
 
     indicator_table_counter = 0
     for ecosystem in context["ecosystem_indicators"]:
