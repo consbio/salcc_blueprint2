@@ -212,9 +212,6 @@ def generate_report_context(unit_id, config):
         ),
         "chart_urban": "Figure 4: Extent of projected urbanization within the {0} {1}.".format(
             data["name"], summary_unit_type
-        ),
-        "table_ecosystems": "Table 2: Extent of each ecosystem within the {0} {1}".format(
-            data["name"], summary_unit_type
         )
     }
 
@@ -226,6 +223,7 @@ def generate_report_context(unit_id, config):
     context["map"]["priorities"] = priorities_map
 
     # Priorities table
+    table_num = 1
 
     if data["blueprint"]:
         priorities = dict(col_names=["Priority Category", "Acres", "Percent of Area"])
@@ -254,7 +252,9 @@ def generate_report_context(unit_id, config):
         ]
         chart = get_pie_chart(values, colors=colors, labels=labels)
         context["chart"]["priorities"] = chart
-        context["caption"]["table_priorities"] = "Table 1: Extent of each Blueprint priority category within the {0} {1}".format(data["name"], summary_unit_type)
+        context["caption"]["table_priorities"] = "Table {0}: Extent of each Blueprint priority category within the {1} {2}".format(
+            table_num, data["name"], summary_unit_type)
+        table_num += 1
 
     else:
         context["table"]["priorities"] = "No priority information available for this {}".format(summary_unit_type)
@@ -265,6 +265,10 @@ def generate_report_context(unit_id, config):
 
     ecosystems_table = dict(col_names=["Ecosystems", "Acres", "Percent of Area"])
     ecosystems = data.get("ecosystems", [])  # make sure we always have a list
+    context["caption"]["table_ecosystems"] = "Table {0}: Extent of each ecosystem within the {1} {2}".format(
+        table_num, data["name"], summary_unit_type
+        )
+    table_num += 1
 
     ecosystems_with_area = [
         (e, ecosystems[e]["percent"]) for e in ecosystems if "percent" in ecosystems[e]
@@ -543,8 +547,8 @@ def generate_report_context(unit_id, config):
     for ecosystem in context["ecosystem_indicators"]:
         for indicator in ecosystem.get("indicators", []):
             indicator_table_counter += 1
-    ownership_table_number = str(indicator_table_counter + 3)
-    protection_table_number = str(indicator_table_counter + 4)
+    ownership_table_number = str(indicator_table_counter + table_num)
+    protection_table_number = str(indicator_table_counter + table_num + 1)
 
     if "rows" in context["table"]["ownership"]:
         context["caption"]["table_ownership"] = "Table {0}: Extent of ownership class within the {1} {2}.".format(
