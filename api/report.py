@@ -98,17 +98,25 @@ def create_report(unit_id, path, config):
             p.text = ""
 
             for ecosystem in context["ecosystem_indicators"]:
+                name = ecosystem["ecosystem_name"]
+                percent = ecosystem["ecosystem_percentage"]
+
+                if percent is not "":
+                    heading = "{0}: {1}% of area".format(name, percent)
+                    p.insert_paragraph_before(heading, style="Heading13")
+                else:
+                    heading = name
+                    p.insert_paragraph_before(heading, style="Heading13")
 
                 if ecosystem["indicators"]:
-
-                    name = ecosystem["ecosystem_name"]
-                    percent = ecosystem["ecosystem_percentage"]
-                    if percent is not "":
-                        heading = "{0}: {1}% of area".format(name, percent)
-                        p.insert_paragraph_before(heading, style="Heading13")
-                    else:
-                        heading = name
-                        p.insert_paragraph_before(heading, style="Heading13")
+                    # name = ecosystem["ecosystem_name"]
+                    # percent = ecosystem["ecosystem_percentage"]
+                    # if percent is not "":
+                    #     heading = "{0}: {1}% of area".format(name, percent)
+                    #     p.insert_paragraph_before(heading, style="Heading13")
+                    # else:
+                    #     heading = name
+                    #     p.insert_paragraph_before(heading, style="Heading13")
 
                     for indicator in ecosystem["indicators"]:
                         table_counter += 1
@@ -132,6 +140,8 @@ def create_report(unit_id, path, config):
                             ecosystem["indicators"][0]["table"]["indicator_table"],
                             caption,
                         )
+                else:
+                    p.insert_paragraph_before("No ecosystem indicators available")
 
             # Delete the placeholder para
             delete_paragraph(p)
