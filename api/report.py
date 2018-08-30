@@ -141,7 +141,7 @@ def create_report(unit_id, path, config):
                             caption,
                         )
                 else:
-                    p.insert_paragraph_before("No ecosystem indicators available")
+                    p.insert_paragraph_before("These are lakes, reservoirs, and ponds not included in the Blueprint 2.2 priorities. Ecosystem-specific indicators have not yet been developed for this area", style="NoInfo")
 
             # Delete the placeholder para
             delete_paragraph(p)
