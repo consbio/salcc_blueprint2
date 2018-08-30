@@ -9,7 +9,7 @@ matplotlib.use("Agg")
 from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
 
 from api.map_client import *
 from api.charts import get_pie_chart, get_line_chart
@@ -58,7 +58,12 @@ def create_report(unit_id, path, config):
 
                 if isinstance(item, str):
                     # match.group() has the original text to replace
-                    r.text = r.text.replace(match.group(), item)
+                    if scope == "table":
+                        r.add_break(WD_BREAK.LINE)
+                        r.text = r.text.replace(match.group(), item)
+                    else:
+                        r.text = r.text.replace(match.group(), item)
+
                     if scope in {"table", "chart"}:
                         r.font.italic = True
 
@@ -68,6 +73,8 @@ def create_report(unit_id, path, config):
                     size = 11.0
                     if scope == "map":
                         size = 16.5
+                    if scope == "chart" and key == "priorities":  # If chart is present, put on its own page
+                        r.add_break(WD_BREAK.PAGE)
                     if not isinstance(context[scope][key], str):
                         run = p.add_run()
                         run.add_picture(context[scope][key], width=Cm(size))
@@ -206,9 +213,6 @@ def generate_report_context(unit_id, config):
         "chart_urban": "Figure 4: Extent of projected urbanization within the {0} {1}.".format(
             data["name"], summary_unit_type
         ),
-        "table_priorities": "Table 1: Extent of each Blueprint priority category within the {0} {1}".format(
-            data["name"], summary_unit_type
-        ),
         "table_ecosystems": "Table 2: Extent of each ecosystem within the {0} {1}".format(
             data["name"], summary_unit_type
         )
@@ -250,10 +254,12 @@ def generate_report_context(unit_id, config):
         ]
         chart = get_pie_chart(values, colors=colors, labels=labels)
         context["chart"]["priorities"] = chart
+        context["caption"]["table_priorities"] = "Table 1: Extent of each Blueprint priority category within the {0} {1}".format(data["name"], summary_unit_type)
 
     else:
-        context["table"]["priorities"] = "No priority information available"
+        context["table"]["priorities"] = "No priority information available for this {}".format(summary_unit_type)
         context["chart"]["priorities"] = ""
+        context["caption"]["table_priorities"] = ""
 
     # Ecosystem table
 
@@ -540,13 +546,21 @@ def generate_report_context(unit_id, config):
     ownership_table_number = str(indicator_table_counter + 3)
     protection_table_number = str(indicator_table_counter + 4)
 
-    context["caption"]["table_ownership"] = "Table {0}: Extent of ownership class within the {1} {2}.".format(
-        ownership_table_number, data["name"], summary_unit_type
-    )
-    context["caption"]["table_protection"] = "Table {0}: Extent of land protection status within the {1} {2}.".format(
-        protection_table_number, data["name"], summary_unit_type
-    )
+    if "rows" in context["table"]["ownership"]:
+        context["caption"]["table_ownership"] = "Table {0}: Extent of ownership class within the {1} {2}.".format(
+            ownership_table_number, data["name"], summary_unit_type
+        )
+    else:
+        context["caption"]["table_ownership"] = ""
 
+    if "rows" in context["table"]["protection"]:
+        context["caption"]["table_protection"] = "Table {0}: Extent of land protection status within the {1} {2}.".format(
+            protection_table_number, data["name"], summary_unit_type
+        )
+    else:
+        context["caption"]["table_protection"] = ""
+
+    print('CONTEXT', context)
     return context
 
 
