@@ -165,26 +165,30 @@ def create_report(unit_id, path, config):
             # Remove '{{PARTNERS}}'placeholder and add the report content after empty p.text
             p.text = ""
 
-            for category in context["partners"]:
-                p.insert_paragraph_before(
-                    context["partner_headers"][category], style="Heading14"
-                )
+            if unit_type == "i":
+                for category in context["partners"]:
+                    p.insert_paragraph_before(
+                        context["partner_headers"][category], style="Heading14"
+                    )
 
-                for partner in context["partners"][category]:
-                    text, url = partner
+                    for partner in context["partners"][category]:
+                        text, url = partner
 
-                    if url:
-                        part = p.insert_paragraph_before(style="HyperlinkList")
-                        add_hyperlink(part, url, text)
-                    else:
-                        p.insert_paragraph_before(style="List Bullet 2").text = text
+                        if url:
+                            part = p.insert_paragraph_before(style="HyperlinkList")
+                            add_hyperlink(part, url, text)
+                        else:
+                            p.insert_paragraph_before(style="List Bullet 2").text = text
 
-            # Counties
-            if "counties" in context:
-                p.insert_paragraph_before("Land Trusts (by county)", style="Heading14")
-                for county in context["counties"]:
-                    county_name = p.insert_paragraph_before(style="HyperlinkList")
-                    add_hyperlink(county_name, county["url"], county["name"])
+                # Counties
+                if "counties" in context:
+                    p.insert_paragraph_before("Land Trusts (by county)", style="Heading14")
+                    for county in context["counties"]:
+                        county_name = p.insert_paragraph_before(style="HyperlinkList")
+                        add_hyperlink(county_name, county["url"], county["name"])
+
+            else:
+                p.insert_paragraph_before("No information on partners is available for marine lease blocks.")
 
             # Delete the placeholder para
             delete_paragraph(p)
