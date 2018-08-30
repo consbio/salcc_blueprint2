@@ -60,9 +60,7 @@ def create_report(unit_id, path, config):
                     # match.group() has the original text to replace
                     if scope == "table":
                         r.add_break(WD_BREAK.LINE)
-                        r.text = r.text.replace(match.group(), item)
-                    else:
-                        r.text = r.text.replace(match.group(), item)
+                    r.text = r.text.replace(match.group(), item)
 
                     if scope in {"table", "chart"}:
                         r.font.italic = True
