@@ -560,7 +560,6 @@ def generate_report_context(unit_id, config):
     else:
         context["caption"]["table_protection"] = ""
 
-    print('CONTEXT', context)
     return context
 
 
