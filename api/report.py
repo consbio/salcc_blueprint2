@@ -134,6 +134,9 @@ def create_report(unit_id, path, config):
             # Delete the placeholder para
             delete_paragraph(p)
 
+        # if "{{THREATS}}" in p.text:
+        #     p.text = ""
+
         if "{{PARTNERS}}" in p.text:
             # Remove '{{PARTNERS}}'placeholder and add the report content after empty p.text
             p.text = ""
@@ -198,17 +201,10 @@ def generate_report_context(unit_id, config):
     context["table"] = {}
     context["chart"] = {}
     context["map"] = {}
+
+    figure_num = 2
     context["caption"] = {
         "map_priorities": "Figure 1: Map of Blueprint priority categories within the {0} {1}.".format(
-            data["name"], summary_unit_type
-        ),
-        "chart_priorities": "Figure 2: Proportion of each Blueprint category within the {0} {1}.".format(
-            data["name"], summary_unit_type
-        ),
-        "chart_slr": "Figure 3: Extent of inundation by projected sea level rise within the {0} {1}.".format(
-            data["name"], summary_unit_type
-        ),
-        "chart_urban": "Figure 4: Extent of projected urbanization within the {0} {1}.".format(
             data["name"], summary_unit_type
         )
     }
@@ -250,6 +246,9 @@ def generate_report_context(unit_id, config):
         ]
         chart = get_pie_chart(values, colors=colors, labels=labels)
         context["chart"]["priorities"] = chart
+        context["caption"]["chart_priorities"] = "Figure {0}: Proportion of each Blueprint category within the {1} {2}.".format(
+            figure_num, data["name"], summary_unit_type)
+        figure_num += 1
         context["caption"]["table_priorities"] = "Table {0}: Extent of each Blueprint priority category within the {1} {2}".format(
             table_num, data["name"], summary_unit_type)
         table_num += 1
@@ -523,6 +522,9 @@ def generate_report_context(unit_id, config):
             alpha=0.3,
         )
         context["chart"]["slr"] = chart
+        context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}.".format(
+            figure_num, data["name"], summary_unit_type)
+        figure_num += 1
     else:
         context["chart"]["slr"] = "No sea level rise data available"
 
@@ -536,6 +538,10 @@ def generate_report_context(unit_id, config):
             alpha=0.3,
         )
         context["chart"]["urban"] = chart
+        context["caption"]["chart_urban"] = "Figure {0}: Extent of projected urbanization within the {1} {2}.".format(
+            figure_num, data["name"], summary_unit_type
+        )
+        figure_num += 1
     else:
         context["chart"]["urban"] = "No urban growth data available"
 
