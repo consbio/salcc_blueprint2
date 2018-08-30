@@ -156,11 +156,14 @@ def create_report(unit_id, path, config):
                             )
                             _move_p_after(caption, i)
                     else:
-                        p.insert_paragraph_before(context["chart"][key])
+                        p.insert_paragraph_before(context["chart"][key], style="NoInfo")
                     p.insert_paragraph_before()
 
             elif unit_type == "m":
-                p.insert_paragraph_before(context["chart"]["slr"])
+                p.insert_paragraph_before(context["chart"]["slr"], style="NoInfo")
+
+            # Delete the placeholder para
+            delete_paragraph(p)
 
         if "{{PARTNERS}}" in p.text:
             # Remove '{{PARTNERS}}'placeholder and add the report content
@@ -182,7 +185,7 @@ def create_report(unit_id, path, config):
                             else:
                                 p.insert_paragraph_before(style="List Bullet 2").text = text
                 else:
-                    p.insert_paragraph_before("No information on partners is available.")
+                    p.insert_paragraph_before("No information on partners is available.", style="NoInfo")
 
                 # Counties
                 if "counties" in context:
@@ -192,7 +195,11 @@ def create_report(unit_id, path, config):
                         add_hyperlink(county_name, county["url"], county["name"])
 
             else:
-                p.insert_paragraph_before("No information on partners is available for marine lease blocks.")
+                p.insert_paragraph_before("No information on partners is available for marine lease blocks.",
+                                          style="NoInfo")
+
+            # Delete the placeholder para
+            delete_paragraph(p)
 
         if "{{OWNERSHIP}}" in p.text:
             # Remove '{{OWNERSHIP}}'placeholder and add the report content
@@ -209,16 +216,17 @@ def create_report(unit_id, path, config):
                     para = p.insert_paragraph_before(context["caption"]["table_ownership"], style="TableCaption")
                     create_table(doc, context["table"]["ownership"], para)
                 else:
-                    p.insert_paragraph_before(context["table"]["ownership"])
+                    p.insert_paragraph_before(context["table"]["ownership"], style="NoInfo")
 
                 p.insert_paragraph_before("Land protection status", style="Heading14")
                 if not isinstance(context["table"]["protection"], str):
                     para = p.insert_paragraph_before(context["caption"]["table_protection"], style="TableCaption")
                     create_table(doc, context["table"]["protection"], para)
                 else:
-                    p.insert_paragraph_before(context["table"]["protection"])
+                    p.insert_paragraph_before(context["table"]["protection"], style="NoInfo")
             else:
-                p.insert_paragraph_before("No information on ownership is available for marine lease blocks.")
+                p.insert_paragraph_before("No information on ownership is available for marine lease blocks.",
+                                          style="NoInfo")
 
             # Delete the placeholder para
             delete_paragraph(p)
