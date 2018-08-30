@@ -137,6 +137,7 @@ def create_report(unit_id, path, config):
             delete_paragraph(p)
 
         if "{{THREATS}}" in p.text:
+            # Remove '{{THREATS}}'placeholder and add the report content
             p.text = ""
             size = 11
             if unit_type == "i":
@@ -162,23 +163,26 @@ def create_report(unit_id, path, config):
                 p.insert_paragraph_before(context["chart"]["slr"])
 
         if "{{PARTNERS}}" in p.text:
-            # Remove '{{PARTNERS}}'placeholder and add the report content after empty p.text
+            # Remove '{{PARTNERS}}'placeholder and add the report content
             p.text = ""
 
             if unit_type == "i":
-                for category in context["partners"]:
-                    p.insert_paragraph_before(
-                        context["partner_headers"][category], style="Heading14"
-                    )
+                if context["partners"]:
+                    for category in context["partners"]:
+                        p.insert_paragraph_before(
+                            context["partner_headers"][category], style="Heading14"
+                        )
 
-                    for partner in context["partners"][category]:
-                        text, url = partner
+                        for partner in context["partners"][category]:
+                            text, url = partner
 
-                        if url:
-                            part = p.insert_paragraph_before(style="HyperlinkList")
-                            add_hyperlink(part, url, text)
-                        else:
-                            p.insert_paragraph_before(style="List Bullet 2").text = text
+                            if url:
+                                part = p.insert_paragraph_before(style="HyperlinkList")
+                                add_hyperlink(part, url, text)
+                            else:
+                                p.insert_paragraph_before(style="List Bullet 2").text = text
+                else:
+                    p.insert_paragraph_before("No information on partners is available.")
 
                 # Counties
                 if "counties" in context:
@@ -189,6 +193,32 @@ def create_report(unit_id, path, config):
 
             else:
                 p.insert_paragraph_before("No information on partners is available for marine lease blocks.")
+
+        if "{{OWNERSHIP}}" in p.text:
+            # Remove '{{OWNERSHIP}}'placeholder and add the report content
+            p.text = ""
+
+            if unit_type == "i":
+                p.insert_paragraph_before("Values derived from:", style="No Spacing")
+                sourcelink = p.insert_paragraph_before(style="HyperlinkSource")
+                add_hyperlink(sourcelink, "https://www.conservationgateway.org/ConservationByGeography/NorthAmerica/UnitedStates/edc/reportsdata/terrestrial/secured/Pages/default.aspx", "Secured Lands From TNC Eastern Division - 2015 Edition")
+                p.insert_paragraph_before()
+
+                p.insert_paragraph_before("Conserved lands ownership", style="Heading14")
+                if not isinstance(context["table"]["ownership"], str):
+                    para = p.insert_paragraph_before(context["caption"]["table_ownership"], style="TableCaption")
+                    create_table(doc, context["table"]["ownership"], para)
+                else:
+                    p.insert_paragraph_before(context["table"]["ownership"])
+
+                p.insert_paragraph_before("Land protection status", style="Heading14")
+                if not isinstance(context["table"]["protection"], str):
+                    para = p.insert_paragraph_before(context["caption"]["table_protection"], style="TableCaption")
+                    create_table(doc, context["table"]["protection"], para)
+                else:
+                    p.insert_paragraph_before(context["table"]["protection"])
+            else:
+                p.insert_paragraph_before("No information on ownership is available for marine lease blocks.")
 
             # Delete the placeholder para
             delete_paragraph(p)
