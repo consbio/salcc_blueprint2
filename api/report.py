@@ -44,7 +44,9 @@ def create_report(unit_id, path, config):
     """
     doc = Document(TEMPLATE)
 
-    context = generate_report_context(unit_id, config)
+    is_marine = unit_id[0].lower() == 'm'
+    context = generate_report_context(unit_id, config, is_marine)
+
     table_counter = 0
 
     for p in doc.paragraphs:
@@ -60,9 +62,7 @@ def create_report(unit_id, path, config):
                     # match.group() has the original text to replace
                     if scope == "table":
                         r.add_break(WD_BREAK.LINE)
-                        r.text = r.text.replace(match.group(), item)
-                    else:
-                        r.text = r.text.replace(match.group(), item)
+                    r.text = r.text.replace(match.group(), item)
 
                     if scope in {"table", "chart"}:
                         r.font.italic = True
@@ -146,30 +146,93 @@ def create_report(unit_id, path, config):
             # Delete the placeholder para
             delete_paragraph(p)
 
+        if "{{THREATS}}" in p.text:
+            # Remove '{{THREATS}}'placeholder and add the report content
+            p.text = ""
+            if is_marine:
+                p.insert_paragraph_before(context["chart"]["slr"], style="NoInfo")
+            else:
+                for key in ("slr", "urban"):
+                    p.insert_paragraph_before(context["heading"][key], style="Heading14")
+                    if isinstance(context["chart"][key], str):
+                        p.insert_paragraph_before(context["chart"][key], style="NoInfo")
+                    else:
+                        i = p.insert_paragraph_before()
+                        run = i.add_run()
+                        run.add_picture(context["chart"][key], width=Cm(11))
+
+                        chart_key = "chart_{}".format(key)
+                        caption = doc.add_paragraph(
+                            context["caption"][chart_key], style="TableCaption"
+                        )
+                        _move_p_after(caption, i)
+
+                    p.insert_paragraph_before()
+
+            # Delete the placeholder para
+            delete_paragraph(p)
+
         if "{{PARTNERS}}" in p.text:
-            # Remove '{{PARTNERS}}'placeholder and add the report content after empty p.text
+            # Remove '{{PARTNERS}}'placeholder and add the report content
             p.text = ""
 
-            for category in context["partners"]:
-                p.insert_paragraph_before(
-                    context["partner_headers"][category], style="Heading14"
-                )
+            if is_marine:
+                p.insert_paragraph_before(context["no_info"]["partners_marine_blocks"],
+                                          style="NoInfo")
 
-                for partner in context["partners"][category]:
-                    text, url = partner
+            else:
+                if context["partners"]:
+                    for category in context["partners"]:
+                        p.insert_paragraph_before(
+                            context["partner_headers"][category], style="Heading14"
+                        )
 
-                    if url:
-                        part = p.insert_paragraph_before(style="HyperlinkList")
-                        add_hyperlink(part, url, text)
-                    else:
-                        p.insert_paragraph_before(style="List Bullet 2").text = text
+                        for partner in context["partners"][category]:
+                            text, url = partner
 
-            # Counties
-            if "counties" in context:
-                p.insert_paragraph_before("Land Trusts (by county)", style="Heading14")
-                for county in context["counties"]:
-                    county_name = p.insert_paragraph_before(style="HyperlinkList")
-                    add_hyperlink(county_name, county["url"], county["name"])
+                            if url:
+                                part = p.insert_paragraph_before(style="HyperlinkList")
+                                add_hyperlink(part, url, text)
+                            else:
+                                p.insert_paragraph_before(style="List Bullet 2").text = text
+                else:
+                    p.insert_paragraph_before(context["no_info"]["partners"], style="NoInfo")
+
+                # Counties
+                if "counties" in context:
+                    p.insert_paragraph_before("Land Trusts (by county)", style="Heading14")
+                    for county in context["counties"]:
+                        county_name = p.insert_paragraph_before(style="HyperlinkList")
+                        add_hyperlink(county_name, county["url"], county["name"])
+
+            # Delete the placeholder para
+            delete_paragraph(p)
+
+        if "{{OWNERSHIP}}" in p.text:
+            # Remove '{{OWNERSHIP}}'placeholder and add the report content
+            p.text = ""
+
+            if is_marine:
+                p.insert_paragraph_before(context["no_info"]["ownership_marine_blocks"], style="NoInfo")
+            else:
+                p.insert_paragraph_before("Values derived from:", style="No Spacing")
+                sourcelink = p.insert_paragraph_before(style="HyperlinkSource")
+                add_hyperlink(sourcelink, "https://www.conservationgateway.org/ConservationByGeography/NorthAmerica/UnitedStates/edc/reportsdata/terrestrial/secured/Pages/default.aspx", "Secured Lands From TNC Eastern Division - 2015 Edition")
+                p.insert_paragraph_before()
+
+                p.insert_paragraph_before("Conserved lands ownership", style="Heading14")
+                if not isinstance(context["table"]["ownership"], str):
+                    para = p.insert_paragraph_before(context["caption"]["table_ownership"], style="TableCaption")
+                    create_table(doc, context["table"]["ownership"], para)
+                else:
+                    p.insert_paragraph_before(context["no_info"]["no_info"], style="NoInfo")
+
+                p.insert_paragraph_before("Land protection status", style="Heading14")
+                if not isinstance(context["table"]["protection"], str):
+                    para = p.insert_paragraph_before(context["caption"]["table_protection"], style="TableCaption")
+                    create_table(doc, context["table"]["protection"], para)
+                else:
+                    p.insert_paragraph_before(context["no_info"]["no_info"], style="NoInfo")
 
             # Delete the placeholder para
             delete_paragraph(p)
@@ -179,7 +242,7 @@ def create_report(unit_id, path, config):
     return report
 
 
-def generate_report_context(unit_id, config):
+def generate_report_context(unit_id, config, is_marine):
     """
         Create json of data points required for report
 
@@ -213,19 +276,22 @@ def generate_report_context(unit_id, config):
     context["caption"] = {
         "map_priorities": "Figure 1: Map of Blueprint priority categories within the {0} {1}.".format(
             data["name"], summary_unit_type
-        ),
-        "chart_priorities": "Figure 2: Proportion of each Blueprint category within the {0} {1}.".format(
-            data["name"], summary_unit_type
-        ),
-        "chart_slr": "Figure 3: Extent of inundation by projected sea level rise within the {0} {1}.".format(
-            data["name"], summary_unit_type
-        ),
-        "chart_urban": "Figure 4: Extent of projected urbanization within the {0} {1}.".format(
-            data["name"], summary_unit_type
-        ),
-        "table_ecosystems": "Table 2: Extent of each ecosystem within the {0} {1}".format(
-            data["name"], summary_unit_type
         )
+    }
+    figure_num = 2
+    context["heading"] = {
+        "slr": "Sea level rise",
+        "urban": "Urban growth"
+    }
+    context["no_info"] = {
+        "threats_marine_blocks": "No information on threats is available for marine lease blocks.",
+        "ownership_marine_blocks": "No information on ownership is available for marine lease blocks.",
+        "partners_marine_blocks": "No information on partners is available for marine lease blocks.",
+        "partners": "No information on partners is available.",
+        "slr": "No sea level rise data available",
+        "urban": "No urban growth data available",
+        "priority": "No priority information available for this",  # Followed by summary_unit_type
+        "no_info": "No information available"
     }
 
     # Priorities map
@@ -236,6 +302,7 @@ def generate_report_context(unit_id, config):
     context["map"]["priorities"] = priorities_map
 
     # Priorities table
+    table_num = 1
 
     if data["blueprint"]:
         priorities = dict(col_names=["Priority Category", "Acres", "Percent of Area"])
@@ -264,10 +331,15 @@ def generate_report_context(unit_id, config):
         ]
         chart = get_pie_chart(values, colors=colors, labels=labels)
         context["chart"]["priorities"] = chart
-        context["caption"]["table_priorities"] = "Table 1: Extent of each Blueprint priority category within the {0} {1}".format(data["name"], summary_unit_type)
+        context["caption"]["chart_priorities"] = "Figure {0}: Proportion of each Blueprint category within the {1} {2}.".format(
+            figure_num, data["name"], summary_unit_type)
+        figure_num += 1
+        context["caption"]["table_priorities"] = "Table {0}: Extent of each Blueprint priority category within the {1} {2}".format(
+            table_num, data["name"], summary_unit_type)
+        table_num += 1
 
     else:
-        context["table"]["priorities"] = "No priority information available for this {}".format(summary_unit_type)
+        context["table"]["priorities"] = "{0} {1}".format(context["no_info"]["priority"], summary_unit_type)
         context["chart"]["priorities"] = ""
         context["caption"]["table_priorities"] = ""
 
@@ -275,6 +347,10 @@ def generate_report_context(unit_id, config):
 
     ecosystems_table = dict(col_names=["Ecosystems", "Acres", "Percent of Area"])
     ecosystems = data.get("ecosystems", [])  # make sure we always have a list
+    context["caption"]["table_ecosystems"] = "Table {0}: Extent of each ecosystem within the {1} {2}".format(
+        table_num, data["name"], summary_unit_type
+        )
+    table_num += 1
 
     ecosystems_with_area = [
         (e, ecosystems[e]["percent"]) for e in ecosystems if "percent" in ecosystems[e]
@@ -487,9 +563,9 @@ def generate_report_context(unit_id, config):
 
         context["table"]["ownership"] = owners
     else:
-        context["table"]["ownership"] = "No information available"
+        context["table"]["ownership"] = context["no_info"]["no_info"]
 
-    # Protections table
+        # Protections table
 
     protection = dict(col_names=["Land Protection Status", "Acres", "Percent of Area"])
 
@@ -517,35 +593,46 @@ def generate_report_context(unit_id, config):
 
         context["table"]["protection"] = protection
     else:
-        context["table"]["protection"] = "No information available"
+        context["table"]["protection"] = context["no_info"]["no_info"]
 
-    # Threats
+        # Threats
 
-    if "slr" in data and data["slr"]:
-        chart = get_line_chart(
-            config["slr"],
-            data["slr"],
-            x_label="Amount of sea level rise (feet)",
-            y_label="Percent of area",
-            color="#004da8",
-            alpha=0.3,
-        )
-        context["chart"]["slr"] = chart
+    if is_marine:
+        context["chart"]["slr"] = context["no_info"]["threats_marine_blocks"]
+
     else:
-        context["chart"]["slr"] = "No sea level rise data available"
+        if "slr" in data and data["slr"]:
+            chart = get_line_chart(
+                config["slr"],
+                data["slr"],
+                x_label="Amount of sea level rise (feet)",
+                y_label="Percent of area",
+                color="#004da8",
+                alpha=0.3,
+            )
+            context["chart"]["slr"] = chart
+            context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}.".format(
+                figure_num, data["name"], summary_unit_type)
+            figure_num += 1
+        else:
+            context["chart"]["slr"] = context["no_info"]["slr"]
 
-    if "urban" in data and data["urban"]:
-        chart = get_line_chart(
-            config["urbanization"],
-            data["urban"],
-            x_label="Decade",
-            y_label="Percent of area",
-            color="#D90000",
-            alpha=0.3,
-        )
-        context["chart"]["urban"] = chart
-    else:
-        context["chart"]["urban"] = "No urban growth data available"
+        if "urban" in data and data["urban"]:
+            chart = get_line_chart(
+                config["urbanization"],
+                data["urban"],
+                x_label="Decade",
+                y_label="Percent of area",
+                color="#D90000",
+                alpha=0.3,
+            )
+            context["chart"]["urban"] = chart
+            context["caption"]["chart_urban"] = "Figure {0}: Extent of projected urbanization within the {1} {2}.".format(
+                figure_num, data["name"], summary_unit_type
+            )
+            figure_num += 1
+        else:
+            context["chart"]["urban"] = context["no_info"]["urban"]
 
     # Table captions for last two tables, Ownership and Protection status
 
@@ -553,8 +640,8 @@ def generate_report_context(unit_id, config):
     for ecosystem in context["ecosystem_indicators"]:
         for indicator in ecosystem.get("indicators", []):
             indicator_table_counter += 1
-    ownership_table_number = str(indicator_table_counter + 3)
-    protection_table_number = str(indicator_table_counter + 4)
+    ownership_table_number = str(indicator_table_counter + table_num)
+    protection_table_number = str(indicator_table_counter + table_num + 1)
 
     if "rows" in context["table"]["ownership"]:
         context["caption"]["table_ownership"] = "Table {0}: Extent of ownership class within the {1} {2}.".format(

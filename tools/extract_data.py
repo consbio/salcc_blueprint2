@@ -292,6 +292,8 @@ for index, row in df.iterrows():
         slr = None
     else:
         slr = [int(100 * amount / row['Shape_Area']) for amount in slr]  # convert to percent
+        if max(slr) == 0:
+            slr = None
 
     urbanization = inland_urbanization.get(huc, None)
     if urbanization is None or max(urbanization) == 0:
