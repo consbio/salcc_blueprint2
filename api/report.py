@@ -10,6 +10,7 @@ from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
+from docx.oxml.shared import OxmlElement, qn
 
 from api.map_client import *
 from api.charts import get_pie_chart, get_line_chart
@@ -835,21 +836,21 @@ def add_hyperlink(paragraph, url, text):
     )
 
     # Create the w:hyperlink tag and add needed values
-    hyperlink = docx.oxml.shared.OxmlElement("w:hyperlink")
-    hyperlink.set(docx.oxml.shared.qn("r:id"), r_id)
+    hyperlink = OxmlElement("w:hyperlink")
+    hyperlink.set(qn("r:id"), r_id)
 
     # Create a w:r element
-    new_run = docx.oxml.shared.OxmlElement("w:r")
+    new_run = OxmlElement("w:r")
 
     # Create a new w:rPr element
-    rPr = docx.oxml.shared.OxmlElement("w:rPr")
+    rPr = OxmlElement("w:rPr")
 
     # Style it
-    c = docx.oxml.shared.OxmlElement("w:color")
-    c.set(docx.oxml.shared.qn("w:val"), "4F81BD")
+    c = OxmlElement("w:color")
+    c.set(qn("w:val"), "4F81BD")
     rPr.append(c)
-    u = docx.oxml.shared.OxmlElement("w:u")
-    u.set(docx.oxml.shared.qn("w:val"), "none")
+    u = OxmlElement("w:u")
+    u.set(qn("w:val"), "none")
     rPr.append(u)
 
     # Join all the xml elements together add add the required text to the w:r element
