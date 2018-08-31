@@ -611,8 +611,11 @@ def generate_report_context(unit_id, config, is_marine):
                 alpha=0.3,
             )
             context["chart"]["slr"] = chart
-            context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}.".format(
-                figure_num, data["name"], summary_unit_type)
+            # context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}.".format(
+            #     figure_num, data["name"], summary_unit_type)
+            context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {0} subwatershed. Values from the NOAA sea-level rise inundation data (https://coast.noaa.gov/digitalcoast/data/slr.html).".format(
+                figure_num, data["name"]
+            )
             figure_num += 1
         else:
             context["chart"]["slr"] = context["no_info"]["slr"]
