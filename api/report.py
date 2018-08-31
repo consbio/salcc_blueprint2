@@ -191,7 +191,7 @@ def create_report(unit_id, path, config):
                             text, url = partner
 
                             if url:
-                                part = p.insert_paragraph_before(style="HyperlinkList")
+                                part = p.insert_paragraph_before(style="List Bullet 2")
                                 add_hyperlink(part, url, text)
                             else:
                                 p.insert_paragraph_before(style="List Bullet 2").text = text
@@ -202,7 +202,7 @@ def create_report(unit_id, path, config):
                 if "counties" in context:
                     p.insert_paragraph_before("Land Trusts (by county)", style="Heading14")
                     for county in context["counties"]:
-                        county_name = p.insert_paragraph_before(style="HyperlinkList")
+                        county_name = p.insert_paragraph_before(style="List Bullet 2")
                         add_hyperlink(county_name, county["url"], county["name"])
 
             # Delete the placeholder para
@@ -215,9 +215,10 @@ def create_report(unit_id, path, config):
             if is_marine:
                 p.insert_paragraph_before(context["no_info"]["ownership_marine_blocks"], style="NoInfo")
             else:
-                p.insert_paragraph_before("Values derived from:", style="No Spacing")
-                sourcelink = p.insert_paragraph_before(style="HyperlinkSource")
-                add_hyperlink(sourcelink, "https://www.conservationgateway.org/ConservationByGeography/NorthAmerica/UnitedStates/edc/reportsdata/terrestrial/secured/Pages/default.aspx", "Secured Lands From TNC Eastern Division - 2015 Edition")
+                para = p.insert_paragraph_before("Values derived from: ")
+                add_hyperlink(para,
+                              "https://www.conservationgateway.org/ConservationByGeography/NorthAmerica/UnitedStates/edc/reportsdata/terrestrial/secured/Pages/default.aspx",
+                              "Secured Lands From TNC Eastern Division - 2015 Edition")
                 p.insert_paragraph_before()
 
                 p.insert_paragraph_before("Conserved lands ownership", style="Heading14")
@@ -837,6 +838,14 @@ def add_hyperlink(paragraph, url, text):
 
     # Create a new w:rPr element
     rPr = docx.oxml.shared.OxmlElement("w:rPr")
+
+    # Style it
+    c = docx.oxml.shared.OxmlElement("w:color")
+    c.set(docx.oxml.shared.qn("w:val"), "4F81BD")
+    rPr.append(c)
+    u = docx.oxml.shared.OxmlElement("w:u")
+    u.set(docx.oxml.shared.qn("w:val"), "none")
+    rPr.append(u)
 
     # Join all the xml elements together add add the required text to the w:r element
     new_run.append(rPr)
