@@ -541,12 +541,11 @@ def generate_report_context(unit_id, config):
 
     # Table captions for last two tables, Ownership and Protection status
 
-    indicator_table_counter = 0
     for ecosystem in context["ecosystem_indicators"]:
         for indicator in ecosystem.get("indicators", []):
-            indicator_table_counter += 1
-    ownership_table_number = str(indicator_table_counter + table_num)
-    protection_table_number = str(indicator_table_counter + table_num + 1)
+            table_num += 1
+    ownership_table_number = str(table_num)
+    protection_table_number = str(table_num + 1)
 
     if "rows" in context["table"]["ownership"]:
         context["caption"]["table_ownership"] = "Table {0}: Extent of ownership class within the {1} {2}.".format(
