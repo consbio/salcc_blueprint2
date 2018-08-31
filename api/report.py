@@ -165,6 +165,11 @@ def create_report(unit_id, path, config):
                         caption = doc.add_paragraph(
                             context["caption"][chart_key], style="TableCaption"
                         )
+                        if key == "slr":
+                            add_hyperlink(caption, "https://coast.noaa.gov/digitalcoast/data/slr.html", "Values from the NOAA sea-level rise inundation data.")
+                        else:
+                            add_hyperlink(caption, "http://www.basic.ncsu.edu/dsl/urb.html", "Values from the SLEUTH urban growth model.")
+
                         _move_p_after(caption, i)
 
                     p.insert_paragraph_before()
@@ -612,7 +617,7 @@ def generate_report_context(unit_id, config, is_marine):
                 alpha=0.3,
             )
             context["chart"]["slr"] = chart
-            context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}. Values from the NOAA sea-level rise inundation data (https://coast.noaa.gov/digitalcoast/data/slr.html).".format(
+            context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}. ".format(
                 figure_num, data["name"], summary_unit_type
             )
             figure_num += 1
@@ -630,7 +635,7 @@ def generate_report_context(unit_id, config, is_marine):
             )
             context["chart"]["urban"] = chart
             context["caption"][
-                "chart_urban"] = "Figure {0}: Extent of projected urbanization within the {1} {2}. Values from the SLEUTH urban growth model (http://www.basic.ncsu.edu/dsl/urb.html).".format(
+                "chart_urban"] = "Figure {0}: Extent of projected urbanization within the {1} {2}. ".format(
                 figure_num, data["name"], summary_unit_type
             )
             figure_num += 1
