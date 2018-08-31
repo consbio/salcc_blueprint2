@@ -159,7 +159,7 @@ def create_report(unit_id, path, config):
                     else:
                         i = p.insert_paragraph_before()
                         run = i.add_run()
-                        run.add_picture(context["chart"][key], width=Cm(11))
+                        run.add_picture(context["chart"][key], width=Cm(10))
 
                         chart_key = "chart_{}".format(key)
                         caption = doc.add_paragraph(
@@ -611,10 +611,8 @@ def generate_report_context(unit_id, config, is_marine):
                 alpha=0.3,
             )
             context["chart"]["slr"] = chart
-            # context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}.".format(
-            #     figure_num, data["name"], summary_unit_type)
-            context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {0} subwatershed. Values from the NOAA sea-level rise inundation data (https://coast.noaa.gov/digitalcoast/data/slr.html).".format(
-                figure_num, data["name"]
+            context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}. Values from the NOAA sea-level rise inundation data (https://coast.noaa.gov/digitalcoast/data/slr.html).".format(
+                figure_num, data["name"], summary_unit_type
             )
             figure_num += 1
         else:
@@ -630,7 +628,8 @@ def generate_report_context(unit_id, config, is_marine):
                 alpha=0.3,
             )
             context["chart"]["urban"] = chart
-            context["caption"]["chart_urban"] = "Figure {0}: Extent of projected urbanization within the {1} {2}.".format(
+            context["caption"][
+                "chart_urban"] = "Figure {0}: Extent of projected urbanization within the {1} {2}. Values from the SLEUTH urban growth model (http://www.basic.ncsu.edu/dsl/urb.html).".format(
                 figure_num, data["name"], summary_unit_type
             )
             figure_num += 1
