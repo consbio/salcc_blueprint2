@@ -127,7 +127,7 @@ def create_report(unit_id, path, config):
 
                         create_table(
                             doc,
-                            ecosystem["indicators"][0]["table"]["indicator_table"],
+                            indicator["table"]["indicator_table"],
                             caption,
                         )
 
