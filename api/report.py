@@ -44,8 +44,8 @@ def create_report(unit_id, path, config):
     """
     doc = Document(TEMPLATE)
 
-    unit_type = unit_id[0].lower()
-    context = generate_report_context(unit_id, config, unit_type)
+    is_marine = unit_id[0].lower() == 'm'
+    context = generate_report_context(unit_id, config, is_marine)
 
     table_counter = 0
 
@@ -140,7 +140,9 @@ def create_report(unit_id, path, config):
             # Remove '{{THREATS}}'placeholder and add the report content
             p.text = ""
             size = 11
-            if unit_type == "i":
+            if is_marine:
+                p.insert_paragraph_before(context["chart"]["slr"], style="NoInfo")
+            else:
                 for key in ("slr", "urban"):
                     p.insert_paragraph_before(context["heading"][key], style="Heading14")
                     if not isinstance(context["chart"][key], str):
@@ -159,9 +161,6 @@ def create_report(unit_id, path, config):
                         p.insert_paragraph_before(context["chart"][key], style="NoInfo")
                     p.insert_paragraph_before()
 
-            elif unit_type == "m":
-                p.insert_paragraph_before(context["chart"]["slr"], style="NoInfo")
-
             # Delete the placeholder para
             delete_paragraph(p)
 
@@ -169,7 +168,10 @@ def create_report(unit_id, path, config):
             # Remove '{{PARTNERS}}'placeholder and add the report content
             p.text = ""
 
-            if unit_type == "i":
+            if is_marine:
+                p.insert_paragraph_before("No information on partners is available for marine lease blocks.",
+                                          style="NoInfo")
+            else:
                 if context["partners"]:
                     for category in context["partners"]:
                         p.insert_paragraph_before(
@@ -194,10 +196,6 @@ def create_report(unit_id, path, config):
                         county_name = p.insert_paragraph_before(style="HyperlinkList")
                         add_hyperlink(county_name, county["url"], county["name"])
 
-            else:
-                p.insert_paragraph_before("No information on partners is available for marine lease blocks.",
-                                          style="NoInfo")
-
             # Delete the placeholder para
             delete_paragraph(p)
 
@@ -205,7 +203,10 @@ def create_report(unit_id, path, config):
             # Remove '{{OWNERSHIP}}'placeholder and add the report content
             p.text = ""
 
-            if unit_type == "i":
+            if is_marine:
+                p.insert_paragraph_before("No information on ownership is available for marine lease blocks.",
+                                          style="NoInfo")
+            else:
                 p.insert_paragraph_before("Values derived from:", style="No Spacing")
                 sourcelink = p.insert_paragraph_before(style="HyperlinkSource")
                 add_hyperlink(sourcelink, "https://www.conservationgateway.org/ConservationByGeography/NorthAmerica/UnitedStates/edc/reportsdata/terrestrial/secured/Pages/default.aspx", "Secured Lands From TNC Eastern Division - 2015 Edition")
@@ -224,9 +225,6 @@ def create_report(unit_id, path, config):
                     create_table(doc, context["table"]["protection"], para)
                 else:
                     p.insert_paragraph_before(context["table"]["protection"], style="NoInfo")
-            else:
-                p.insert_paragraph_before("No information on ownership is available for marine lease blocks.",
-                                          style="NoInfo")
 
             # Delete the placeholder para
             delete_paragraph(p)
@@ -236,7 +234,7 @@ def create_report(unit_id, path, config):
     return report
 
 
-def generate_report_context(unit_id, config, unit_type):
+def generate_report_context(unit_id, config, is_marine):
     """
         Create json of data points required for report
 
@@ -581,7 +579,9 @@ def generate_report_context(unit_id, config, unit_type):
 
     # Threats
 
-    if unit_type == 'i':
+    if is_marine:
+        context["chart"]["slr"] = "No information on threats is available for marine lease blocks."
+    else:
         if "slr" in data and data["slr"]:
             chart = get_line_chart(
                 config["slr"],
@@ -614,10 +614,8 @@ def generate_report_context(unit_id, config, unit_type):
             figure_num += 1
         else:
             context["chart"]["urban"] = "No urban growth data available"
-    elif unit_type == 'm':
-        context["chart"]["slr"] = "No information on threats is available for marine lease blocks."
 
-        # Table captions for last two tables, Ownership and Protection status
+    # Table captions for last two tables, Ownership and Protection status
 
     indicator_table_counter = 0
     for ecosystem in context["ecosystem_indicators"]:
