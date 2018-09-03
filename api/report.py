@@ -10,6 +10,7 @@ from collections import defaultdict
 from docx import Document
 from docx.shared import Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
+from docx.oxml.shared import OxmlElement, qn
 
 from api.map_client import *
 from api.charts import get_pie_chart, get_line_chart
@@ -99,17 +100,25 @@ def create_report(unit_id, path, config):
             p.text = ""
 
             for ecosystem in context["ecosystem_indicators"]:
+                name = ecosystem["ecosystem_name"]
+                percent = ecosystem["ecosystem_percentage"]
+
+                if percent is not "":
+                    heading = "{0}: {1}% of area".format(name, percent)
+                    p.insert_paragraph_before(heading, style="Heading13")
+                else:
+                    heading = name
+                    p.insert_paragraph_before(heading, style="Heading13")
 
                 if ecosystem["indicators"]:
-
-                    name = ecosystem["ecosystem_name"]
-                    percent = ecosystem["ecosystem_percentage"]
-                    if percent is not "":
-                        heading = "{0}: {1}% of area".format(name, percent)
-                        p.insert_paragraph_before(heading, style="Heading13")
-                    else:
-                        heading = name
-                        p.insert_paragraph_before(heading, style="Heading13")
+                    # name = ecosystem["ecosystem_name"]
+                    # percent = ecosystem["ecosystem_percentage"]
+                    # if percent is not "":
+                    #     heading = "{0}: {1}% of area".format(name, percent)
+                    #     p.insert_paragraph_before(heading, style="Heading13")
+                    # else:
+                    #     heading = name
+                    #     p.insert_paragraph_before(heading, style="Heading13")
 
                     for indicator in ecosystem["indicators"]:
                         table_counter += 1
@@ -133,6 +142,8 @@ def create_report(unit_id, path, config):
                             indicator["table"]["indicator_table"],
                             caption,
                         )
+                else:
+                    p.insert_paragraph_before("These are lakes, reservoirs, and ponds not included in the Blueprint 2.2 priorities. Ecosystem-specific indicators have not yet been developed for this area", style="NoInfo")
 
             # Delete the placeholder para
             delete_paragraph(p)
@@ -147,26 +158,30 @@ def create_report(unit_id, path, config):
             else:
                 for key in ("slr", "urban"):
                     p.insert_paragraph_before(context["heading"][key], style="Heading14")
-
                     if isinstance(context["chart"][key], str):
                         # unit does not have information for this threat
                         p.insert_paragraph_before(context["chart"][key], style="NoInfo")
 
                     else:
-                        chart_run = p.insert_paragraph_before()
-                        run = chart_run.add_run()
-                        run.add_picture(context["chart"][key], width=Cm(11))
+                        i = p.insert_paragraph_before()
+                        run = i.add_run()
+                        run.add_picture(context["chart"][key], width=Cm(10))
 
                         chart_key = "chart_{}".format(key)
                         caption = doc.add_paragraph(
                             context["caption"][chart_key], style="TableCaption"
                         )
-                        _move_p_after(caption, chart_run)
-                    
+                        if key == "slr":
+                            add_hyperlink(caption, "https://coast.noaa.gov/digitalcoast/data/slr.html", "NOAA sea-level rise inundation data.")
+                        else:
+                            add_hyperlink(caption, "http://www.basic.ncsu.edu/dsl/urb.html", "SLEUTH urban growth model.")
+
+                        _move_p_after(caption, i)
+
                     # insert blank line
                     p.insert_paragraph_before()
 
-            # Delete the placeholder paragraph
+            # Delete the placeholder para
             delete_paragraph(p)
 
         if "{{PARTNERS}}" in p.text:
@@ -193,6 +208,7 @@ def create_report(unit_id, path, config):
                                 add_hyperlink(part, url, text)
                             else:
                                 p.insert_paragraph_before(style="List Bullet 2").text = text
+
                 else:
                     # no partner info available
                     p.insert_paragraph_before(context["no_info"]["partners"], style="NoInfo")
@@ -200,12 +216,11 @@ def create_report(unit_id, path, config):
                 # Counties
                 if "counties" in context:
                     p.insert_paragraph_before("Land Trusts (by county)", style="Heading14")
-
                     for county in context["counties"]:
-                        county_name = p.insert_paragraph_before(style="HyperlinkList")
+                        county_name = p.insert_paragraph_before(style="List Bullet 2")
                         add_hyperlink(county_name, county["url"], county["name"])
 
-            # Delete the placeholder paragraph
+            # Delete the placeholder para
             delete_paragraph(p)
 
         if "{{OWNERSHIP}}" in p.text:
@@ -213,30 +228,28 @@ def create_report(unit_id, path, config):
             p.text = ""
 
             if is_marine:
-                # Marine units do not have ownership info available
+                # Marine units do not have ownership info
                 p.insert_paragraph_before(context["no_info"]["ownership_marine_blocks"], style="NoInfo")
 
             else:
-                # Add source information for ownership information
-                p.insert_paragraph_before("Values derived from:", style="No Spacing")
-                sourcelink = p.insert_paragraph_before(style="HyperlinkSource")
-                add_hyperlink(sourcelink, "https://www.conservationgateway.org/ConservationByGeography/NorthAmerica/UnitedStates/edc/reportsdata/terrestrial/secured/Pages/default.aspx", "Secured Lands From TNC Eastern Division - 2015 Edition")
+                # Add source info
+                para = p.insert_paragraph_before("Values derived from: ")
+                add_hyperlink(para,
+                              "https://www.conservationgateway.org/ConservationByGeography/NorthAmerica/UnitedStates/edc/reportsdata/terrestrial/secured/Pages/default.aspx",
+                              "Secured Lands From TNC Eastern Division - 2015 Edition")
                 p.insert_paragraph_before()
 
                 p.insert_paragraph_before("Conserved lands ownership", style="Heading14")
                 if not isinstance(context["table"]["ownership"], str):
                     para = p.insert_paragraph_before(context["caption"]["table_ownership"], style="TableCaption")
                     create_table(doc, context["table"]["ownership"], para)
-
                 else:
                     p.insert_paragraph_before(context["no_info"]["no_info"], style="NoInfo")
 
                 p.insert_paragraph_before("Land protection status", style="Heading14")
-
                 if not isinstance(context["table"]["protection"], str):
                     para = p.insert_paragraph_before(context["caption"]["table_protection"], style="TableCaption")
                     create_table(doc, context["table"]["protection"], para)
-
                 else:
                     p.insert_paragraph_before(context["no_info"]["no_info"], style="NoInfo")
 
@@ -340,7 +353,6 @@ def generate_report_context(unit_id, config, is_marine):
         context["caption"]["chart_priorities"] = "Figure {0}: Proportion of each Blueprint category within the {1} {2}.".format(
             figure_num, data["name"], summary_unit_type)
         figure_num += 1
-
         context["caption"]["table_priorities"] = "Table {0}: Extent of each Blueprint priority category within the {1} {2}".format(
             table_num, data["name"], summary_unit_type)
         table_num += 1
@@ -618,7 +630,7 @@ def generate_report_context(unit_id, config, is_marine):
                 alpha=0.3,
             )
             context["chart"]["slr"] = chart
-            context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}.".format(
+            context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}.  Values from the ".format(
                 figure_num, data["name"], summary_unit_type)
             figure_num += 1
         else:
@@ -634,7 +646,7 @@ def generate_report_context(unit_id, config, is_marine):
                 alpha=0.3,
             )
             context["chart"]["urban"] = chart
-            context["caption"]["chart_urban"] = "Figure {0}: Extent of projected urbanization within the {1} {2}.".format(
+            context["caption"]["chart_urban"] = "Figure {0}: Extent of projected urbanization within the {1} {2}.  Values from the ".format(
                 figure_num, data["name"], summary_unit_type
             )
             figure_num += 1
@@ -833,14 +845,22 @@ def add_hyperlink(paragraph, url, text):
     )
 
     # Create the w:hyperlink tag and add needed values
-    hyperlink = docx.oxml.shared.OxmlElement("w:hyperlink")
-    hyperlink.set(docx.oxml.shared.qn("r:id"), r_id)
+    hyperlink = OxmlElement("w:hyperlink")
+    hyperlink.set(qn("r:id"), r_id)
 
     # Create a w:r element
-    new_run = docx.oxml.shared.OxmlElement("w:r")
+    new_run = OxmlElement("w:r")
 
     # Create a new w:rPr element
-    rPr = docx.oxml.shared.OxmlElement("w:rPr")
+    rPr = OxmlElement("w:rPr")
+
+    # Style it
+    c = OxmlElement("w:color")
+    c.set(qn("w:val"), "4F81BD")
+    rPr.append(c)
+    u = OxmlElement("w:u")
+    u.set(qn("w:val"), "none")
+    rPr.append(u)
 
     # Join all the xml elements together add add the required text to the w:r element
     new_run.append(rPr)
