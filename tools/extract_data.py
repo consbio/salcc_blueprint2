@@ -159,7 +159,7 @@ for index, row in df.iterrows():
         field for field in inland_plan_fields if field in df.columns and row[field].strip()]
     value = str(row['Justification'])
     if value != 'nan':
-        justification[huc] = value
+        justification[huc] = value.replace('[', '').replace(']', '').replace(' ... ', '. ')
 
 
 # Extract inland indicators by HUC

@@ -63,13 +63,6 @@ const PrioritiesTab = ({
                 </div>
             </section>
 
-            {justification && (
-                <section>
-                    <h3>Blueprint 1.0 Workshop Feedback</h3>
-                    <p>{justification}</p>
-                </section>
-            )}
-
             {regionalPlans.length > 0 && (
                 <section>
                     <h3>Regional Conservation Plans</h3>
@@ -88,6 +81,13 @@ const PrioritiesTab = ({
                 <section>
                     <h3>Marine Conservation Plans</h3>
                     {marinePlans.map(renderPlan)}
+                </section>
+            )}
+
+            {justification && (
+                <section>
+                    <h3>Blueprint 1.0 Workshop Feedback</h3>
+                    <p>{justification}</p>
                 </section>
             )}
         </div>
