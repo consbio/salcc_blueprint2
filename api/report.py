@@ -204,7 +204,7 @@ def create_report(unit_id, path, config):
                             text, url = partner
 
                             if url:
-                                part = p.insert_paragraph_before(style="HyperlinkList")
+                                part = p.insert_paragraph_before(style="List Bullet 2")
                                 add_hyperlink(part, url, text)
                             else:
                                 p.insert_paragraph_before(style="List Bullet 2").text = text

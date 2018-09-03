@@ -54,19 +54,21 @@ class Header extends Component {
                         <React.Fragment>
                             <img src="/logo_96x96.png" alt="South Atlantic Logo" />
                             <div className="flex-grow">
-                                {isMobile && <h4>South Atlantic</h4>}
-                                <h1>{`${!isMobile ? 'South Atlantic ' : ''}Conservation Blueprint 2.2`}</h1>
+                                <a href="http://www.southatlanticlcc.org/blueprint/" rel="noopener noreferrer">
+                                    {isMobile && <h4>South Atlantic</h4>}
+                                    <h1>{`${!isMobile ? 'South Atlantic ' : ''}Conservation Blueprint 2.2`}</h1>
+                                </a>
                             </div>
                             {!isMobile && (
                                 <div id="ContactButtons">
-                                    <button onClick={this.handleFeedbackClick}>
+                                    <div className="button" onClick={this.handleFeedbackClick}>
                                         <OutlineFeedbackIcon height={20} fill="#AAA" />
                                         Feedback
-                                    </button>
-                                    <button onClick={this.handleContactClick}>
+                                    </div>
+                                    <div className="button" onClick={this.handleContactClick}>
                                         <OutlineContactIcon height={20} fill="#AAA" />
                                         Contact Staff
-                                    </button>
+                                    </div>
                                 </div>
                             )}
                         </React.Fragment>
@@ -76,7 +78,7 @@ class Header extends Component {
                 {!isMobile && (
                     <React.Fragment>
                         <Modal
-                            title="South Atlantic Conservation Blueprint - Feedback"
+                            title="Give your feedback to Blueprint staff"
                             width={600}
                             open={feedbackOpen}
                             onClose={this.handleModalClose}
@@ -102,7 +104,7 @@ class Header extends Component {
                         </Modal>
 
                         <Modal
-                            title="South Atlantic Conservation Blueprint - Contact Staff"
+                            title="Contact Blueprint staff for help using the Blueprint"
                             width={600}
                             open={contactOpen}
                             onClose={this.handleModalClose}
