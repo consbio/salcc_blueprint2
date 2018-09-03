@@ -45,7 +45,8 @@ def create_report(unit_id, path, config):
     """
     doc = Document(TEMPLATE)
 
-    is_marine = unit_id[0].lower() == 'm'
+    # per convention, all marine units begin with M, e.g., M100
+    is_marine = unit_id[0].lower() == 'm'  
     context = generate_report_context(unit_id, config, is_marine)
 
     table_counter = 0
@@ -138,7 +139,7 @@ def create_report(unit_id, path, config):
 
                         create_table(
                             doc,
-                            ecosystem["indicators"][0]["table"]["indicator_table"],
+                            indicator["table"]["indicator_table"],
                             caption,
                         )
                 else:
@@ -151,12 +152,16 @@ def create_report(unit_id, path, config):
             # Remove '{{THREATS}}'placeholder and add the report content
             p.text = ""
             if is_marine:
-                p.insert_paragraph_before(context["chart"]["slr"], style="NoInfo")
+                # Marine units do not have any threats data
+                p.insert_paragraph_before(context["no_info"]["threats_marine_blocks"], style="NoInfo")
+
             else:
                 for key in ("slr", "urban"):
                     p.insert_paragraph_before(context["heading"][key], style="Heading14")
                     if isinstance(context["chart"][key], str):
+                        # unit does not have information for this threat
                         p.insert_paragraph_before(context["chart"][key], style="NoInfo")
+
                     else:
                         i = p.insert_paragraph_before()
                         run = i.add_run()
@@ -167,12 +172,13 @@ def create_report(unit_id, path, config):
                             context["caption"][chart_key], style="TableCaption"
                         )
                         if key == "slr":
-                            add_hyperlink(caption, "https://coast.noaa.gov/digitalcoast/data/slr.html", "Values from the NOAA sea-level rise inundation data.")
+                            add_hyperlink(caption, "https://coast.noaa.gov/digitalcoast/data/slr.html", "NOAA sea-level rise inundation data.")
                         else:
-                            add_hyperlink(caption, "http://www.basic.ncsu.edu/dsl/urb.html", "Values from the SLEUTH urban growth model.")
+                            add_hyperlink(caption, "http://www.basic.ncsu.edu/dsl/urb.html", "SLEUTH urban growth model.")
 
                         _move_p_after(caption, i)
 
+                    # insert blank line
                     p.insert_paragraph_before()
 
             # Delete the placeholder para
@@ -183,6 +189,7 @@ def create_report(unit_id, path, config):
             p.text = ""
 
             if is_marine:
+                # Marine units do not have partner info available
                 p.insert_paragraph_before(context["no_info"]["partners_marine_blocks"],
                                           style="NoInfo")
 
@@ -197,11 +204,13 @@ def create_report(unit_id, path, config):
                             text, url = partner
 
                             if url:
-                                part = p.insert_paragraph_before(style="List Bullet 2")
+                                part = p.insert_paragraph_before(style="HyperlinkList")
                                 add_hyperlink(part, url, text)
                             else:
                                 p.insert_paragraph_before(style="List Bullet 2").text = text
+
                 else:
+                    # no partner info available
                     p.insert_paragraph_before(context["no_info"]["partners"], style="NoInfo")
 
                 # Counties
@@ -219,8 +228,11 @@ def create_report(unit_id, path, config):
             p.text = ""
 
             if is_marine:
+                # Marine units do not have ownership info
                 p.insert_paragraph_before(context["no_info"]["ownership_marine_blocks"], style="NoInfo")
+
             else:
+                # Add source info
                 para = p.insert_paragraph_before("Values derived from: ")
                 add_hyperlink(para,
                               "https://www.conservationgateway.org/ConservationByGeography/NorthAmerica/UnitedStates/edc/reportsdata/terrestrial/secured/Pages/default.aspx",
@@ -294,10 +306,10 @@ def generate_report_context(unit_id, config, is_marine):
         "threats_marine_blocks": "No information on threats is available for marine lease blocks.",
         "ownership_marine_blocks": "No information on ownership is available for marine lease blocks.",
         "partners_marine_blocks": "No information on partners is available for marine lease blocks.",
-        "partners": "No information on partners is available.",
-        "slr": "No sea level rise data available",
-        "urban": "No urban growth data available",
-        "priority": "No priority information available for this",  # Followed by summary_unit_type
+        "partners": "No information on partners is available for this {0}.".format(summary_unit_type),
+        "slr": "No sea level rise data are available for this {0}.".format(summary_unit_type),
+        "urban": "No urban growth data are available for this {0}".format(summary_unit_type),
+        "priority": "No priority information is available for this {0}".format(summary_unit_type),
         "no_info": "No information available"
     }
 
@@ -346,7 +358,7 @@ def generate_report_context(unit_id, config, is_marine):
         table_num += 1
 
     else:
-        context["table"]["priorities"] = "{0} {1}".format(context["no_info"]["priority"], summary_unit_type)
+        context["table"]["priorities"] = context["no_info"]["priority"]
         context["chart"]["priorities"] = ""
         context["caption"]["table_priorities"] = ""
 
@@ -618,9 +630,8 @@ def generate_report_context(unit_id, config, is_marine):
                 alpha=0.3,
             )
             context["chart"]["slr"] = chart
-            context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}. ".format(
-                figure_num, data["name"], summary_unit_type
-            )
+            context["caption"]["chart_slr"] = "Figure {0}: Extent of inundation by projected sea level rise within the {1} {2}.  Values from the ".format(
+                figure_num, data["name"], summary_unit_type)
             figure_num += 1
         else:
             context["chart"]["slr"] = context["no_info"]["slr"]
@@ -635,8 +646,7 @@ def generate_report_context(unit_id, config, is_marine):
                 alpha=0.3,
             )
             context["chart"]["urban"] = chart
-            context["caption"][
-                "chart_urban"] = "Figure {0}: Extent of projected urbanization within the {1} {2}. ".format(
+            context["caption"]["chart_urban"] = "Figure {0}: Extent of projected urbanization within the {1} {2}.  Values from the ".format(
                 figure_num, data["name"], summary_unit_type
             )
             figure_num += 1
@@ -645,24 +655,23 @@ def generate_report_context(unit_id, config, is_marine):
 
     # Table captions for last two tables, Ownership and Protection status
 
-    indicator_table_counter = 0
     for ecosystem in context["ecosystem_indicators"]:
         for indicator in ecosystem.get("indicators", []):
-            indicator_table_counter += 1
-    ownership_table_number = str(indicator_table_counter + table_num)
-    protection_table_number = str(indicator_table_counter + table_num + 1)
+            table_num += 1
 
     if "rows" in context["table"]["ownership"]:
         context["caption"]["table_ownership"] = "Table {0}: Extent of ownership class within the {1} {2}.".format(
-            ownership_table_number, data["name"], summary_unit_type
+            table_num, data["name"], summary_unit_type
         )
+        table_num += 1
     else:
         context["caption"]["table_ownership"] = ""
 
     if "rows" in context["table"]["protection"]:
         context["caption"]["table_protection"] = "Table {0}: Extent of land protection status within the {1} {2}.".format(
-            protection_table_number, data["name"], summary_unit_type
+            table_num, data["name"], summary_unit_type
         )
+        table_num += 1
     else:
         context["caption"]["table_protection"] = ""
 
