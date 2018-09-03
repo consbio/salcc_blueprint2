@@ -247,7 +247,7 @@
             },
             "RegularlyBurnedHabitat": {
                 "label": "Regularly burned habitat",
-                "description": "Regularly burned habitat is an an indicator of acres of fire-maintained, open canopy habitat. It attempts to capture recent fire in the pine ecosystem by using LANDFIRE data (1999-2010) as a proxy for regularly burned habitat.",
+                "description": "Regularly burned habitat is an indicator of acres of fire-maintained, open canopy habitat. It attempts to capture recent fire in the pine ecosystem by using LANDFIRE data (1999-2010) as a proxy for regularly burned habitat.",
                 "caption": "Indicator values within the pine and prairie ecosystem in this subwatershed. Good condition thresholds reflect the range of indicator values that occur in healthy, functioning ecosystems.",
                 "reportCaption": "The area of regularly burned habitat indicator values as they occur within the pine and prairie ecosystem in this subwatershed. Good condition thresholds reflect the range of indicator values that occur in healthy, functioning ecosystems.",
                 "valueLabels": {

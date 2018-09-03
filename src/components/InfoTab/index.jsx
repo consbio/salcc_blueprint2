@@ -3,6 +3,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import ResetIcon from '../icons/outline-cancel-24px.svg'
+
 import PRIORITIES from '../../config/priorities.json'
 
 const InfoTab = ({ isMobile }) => {
@@ -30,21 +32,22 @@ const InfoTab = ({ isMobile }) => {
             <section>
                 <h3>Welcome to the South Atlantic Conservation Blueprint Simple Viewer</h3>
                 <p>
-                    The Conservation Blueprint is a living spatial plan to conserve natural and cultural resources for
-                    future generations. It identifies priority areas for shared conservation action. Blueprint 2.2 is
-                    completely data-driven, prioritizing the lands and waters of the South Atlantic region based on
-                    ecosystem indicator models and a connectivity analysis. Better indicator condition suggests higher
-                    ecosystem integrity and higher importance for natural and cultural resources across all ecosystems
-                    collectively. So far, more than 500 people from 150 organizations actively participated in the
-                    collaborative development of the Blueprint.
+                    The{' '}
+                    <a href="http://www.southatlanticlcc.org/blueprint/" rel="noopener noreferrer">
+                        Conservation Blueprint
+                    </a>{' '}
+                    is a living spatial plan to conserve natural and cultural resources for future generations. It
+                    identifies priority areas for shared conservation action. Blueprint 2.2 is completely data-driven,
+                    prioritizing the lands and waters of the South Atlantic region based on ecosystem indicator models
+                    and a connectivity analysis. Better indicator condition suggests higher ecosystem integrity and
+                    higher importance for natural and cultural resources across all ecosystems collectively. So far,
+                    more than 500 people from 150 organizations actively participated in the collaborative development
+                    of the Blueprint.
                 </p>
                 <p>
                     This <b>Simple Viewer</b> summarizes the Blueprint priorities and supporting information within
-                    subwatersheds and marine lease blocks.
-                    <br />
-                    <a href="http://www.southatlanticlcc.org/blueprint/" target="_blank" rel="noopener noreferrer">
-                        More information about the Blueprint.
-                    </a>
+                    subwatersheds and marine lease blocks. In a new pixel mode, you can also explore pixel-level details
+                    of what indicators are driving the Blueprint priorities.
                 </p>
             </section>
 
@@ -73,8 +76,9 @@ const InfoTab = ({ isMobile }) => {
                             see more details.
                             <br />
                             <br />
-                            To unselect the area, click on the (x) in the upper right or click on the unit again in the
-                            map.
+                            To unselect the area, click on the{' '}
+                            <ResetIcon style={{ marginBottom: '-0.5em', fill: '#666' }} /> button in the upper right or
+                            click on the unit again in the map.
                         </p>
 
                         <h4 style={{ marginBottom: '0.5em' }}>To find a specific area:</h4>
@@ -100,7 +104,9 @@ const InfoTab = ({ isMobile }) => {
                             area. Click on an indicator for more information about it.
                             <br />
                             <br />
-                            To unselect the area, click on the (x) in the upper right of the sidebar.
+                            To unselect the area, click on the{' '}
+                            <ResetIcon style={{ marginBottom: '-0.5em', fill: '#666' }} /> button in the upper right of
+                            the sidebar.
                         </p>
                         <h4>Map tools:</h4>
                         <p>Hover over one of the tool buttons on the right side of the map for more information.</p>
@@ -129,21 +135,11 @@ const InfoTab = ({ isMobile }) => {
             </section>
 
             <section>
-                <h3>You can help improve the Blueprint</h3>
-                <p>
-                    Give us your feedback:
-                    <br />
-                    email <a href="mailto:southatlanticlcc@gmail.com">southatlanticlcc@gmail.com</a>
-                    <br />
-                    <br />
-                    or call Hilary Morris (Blueprint User Support):
-                    <br />
-                    <a href="tel:19197070252">(919) 707-0252</a>
-                </p>
-            </section>
-
-            <section>
                 <h3>Credits</h3>
+
+                <h4>Citation:</h4>
+                <p>The South Atlantic Conservation Blueprint Version 2.2.</p>
+
                 <h4>Application developed by:</h4>
 
                 <div style={{ fontSize: 14, marginBottom: 20 }}>
@@ -173,9 +169,6 @@ const InfoTab = ({ isMobile }) => {
                         </div>
                     </div>
                 </div>
-
-                <h4>Citation:</h4>
-                <p>The South Atlantic Conservation Blueprint Version 2.2.</p>
 
                 <p>
                     Land ownership and conservation status is derived from the Secured Lands Database from TNC Eastern
