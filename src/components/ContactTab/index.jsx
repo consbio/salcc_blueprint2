@@ -3,7 +3,7 @@ import React from 'react'
 const ContactTab = () => (
     <div id="Content">
         <section>
-            <h3>Feedback</h3>
+            <h3>Give your feedback to Blueprint staff</h3>
             <p>
                 The Blueprint and indicators are regularly revised based on input from people like you. Have a
                 suggestion on how to improve the priorities? Let us know! We also welcome feedback on how to improve the
@@ -23,7 +23,7 @@ const ContactTab = () => (
             </p>
         </section>
         <section>
-            <h3>Contact Staff</h3>
+            <h3>Contact Blueprint staff for help using the Blueprint</h3>
             <p>
                 Do you have a question about the Blueprint? Would you like help using the Blueprint to support a
                 proposal or inform a decision? South Atlantic staff are here to support you! We really mean it. It is
