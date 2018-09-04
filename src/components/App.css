@@ -705,7 +705,7 @@ footer {
     margin: 0 0 20px 0;
 }
 .chart-labeledpercentbar label {
-    min-width: 36px;
+    min-width: 50px;
     margin-left: 12px !important;
     text-align: right;
 }

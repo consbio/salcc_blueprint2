@@ -96,7 +96,7 @@ const IndicatorDetails = (props) => {
                                 {goodPercents.map((entry, i) => (
                                     <div className="flex-container" key={entry.value}>
                                         <div className="indicator-chart-heading">{i === 0 ? 'High:' : ''}</div>
-                                        <LabeledPercentBar className="text-quiet" {...entry} height={6} />
+                                        <LabeledPercentBar className="text-quiet" {...entry} color="#5fb785" height={6} />
                                     </div>
                                 ))}
 
@@ -115,7 +115,7 @@ const IndicatorDetails = (props) => {
                                         <div className="indicator-chart-heading">
                                             {i === notGoodPercents.length - 1 ? 'Low:' : ''}
                                         </div>
-                                        <LabeledPercentBar className="text-quiet" {...entry} height={6} />
+                                        <LabeledPercentBar className="text-quiet" {...entry} color="#e77778" height={6} />
                                     </div>
                                 ))}
                             </div>
@@ -133,7 +133,7 @@ const IndicatorDetails = (props) => {
                                 return (
                                     <div className="flex-container" key={entry.value}>
                                         <div className="indicator-chart-heading">{heading}</div>
-                                        <LabeledPercentBar className="text-quiet" {...entry} height={6} />
+                                        <LabeledPercentBar className="text-quiet" {...entry} color="#AAA" height={6} />
                                     </div>
                                 )
                             })}
