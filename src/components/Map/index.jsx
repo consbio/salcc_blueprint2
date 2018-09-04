@@ -432,7 +432,7 @@ class Map extends Component {
         return (
             <div id="MapContainer">
                 {isPixelMode
-                    ? zoom < 8 && (
+                    ? (
                         <div
                             ref={(node) => {
                                 this._zoomNote = node
@@ -440,7 +440,9 @@ class Map extends Component {
                             id="ZoomInNote"
                             className="text-center text-small text-quieter"
                         >
-                              Zoom in to view pixel details
+                            {
+                                zoom < 8 ? 'Zoom in to view pixel details' : 'Use your cursor (the hand) to click and drag the map behind the target'
+                            }
                         </div>
                     )
                     : zoom < 10 && (
