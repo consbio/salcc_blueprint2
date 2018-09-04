@@ -498,7 +498,7 @@ footer {
     padding: 2px;
 }
 
-.indicator .marker {
+.indicator .domain-continuous .marker {
     position: absolute;
     top: -12px;
     width: 24px;

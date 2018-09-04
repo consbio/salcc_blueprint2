@@ -13,7 +13,7 @@ const Indicator = ({
             <h4>{label}</h4>
             <div className="flex-container flex-align-center">
                 <label>Low</label>
-                <div className="domain">
+                <div className="domain domain-continuous">
                     <div className="domain-line" />
                     {/* <div className="marker-line" style={{ left: `${percent}%` }} /> */}
                     <div className="marker" style={{ left: `${percent}%` }} />
