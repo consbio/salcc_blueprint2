@@ -119,7 +119,7 @@ const PartnersTab = ({
     if (isMarine) {
         return (
             <div id="Content" className="flex-container-column">
-                <h4 className="text-center">No partner information available.</h4>
+                <h4 className="text-quieter">No information on partners is available for marine lease blocks.</h4>
             </div>
         )
     }
