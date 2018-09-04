@@ -45,17 +45,19 @@ const config = {
         maxZoom: 15,
         zoomControl: false,
         scrollwheel: false,
-        attributionControl: false,
         zIndex: 1
     },
     basemaps: [
         L.tileLayer(
             `https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`,
-            {}
+            {
+                attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a> <a href="https://openstreetmap.org/about/" target="_blank">© OpenStreetMap</a> <a class="mapbox-improve-map" href="https://www.mapbox.com/map-feedback" target="_blank">Improve this map</a>'
+            }
         ),
         L.tileLayer(
             `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token=${MAPBOX_TOKEN}`,
             {
+                attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a> <a href="https://openstreetmap.org/about/" target="_blank">© OpenStreetMap</a> <a class="mapbox-improve-map" href="https://www.mapbox.com/map-feedback" target="_blank">Improve this map</a>',
                 opacity: 0.6
             }
         )

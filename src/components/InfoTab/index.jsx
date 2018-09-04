@@ -175,22 +175,26 @@ const InfoTab = ({ isMobile }) => {
                     Division - 2015 Edition.
                 </p>
 
-                <h4>Basemaps:</h4>
-                <p>
-                    <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener noreferrer">
-                        © Mapbox
-                    </a>
-                    <br />
-                    <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">
-                        © OpenStreetMap
-                    </a>
-                    <br />
-                    <a href="https://www.mapbox.com/map-feedback/" target="_blank" rel="noopener noreferrer">
-                        Improve this map
-                    </a>
-                    <br />
-                    <span className="text-small text-quiet">(note: applies to the basemap, not the Blueprint)</span>
-                </p>
+                {isMobile && (
+                    <React.Fragment>
+                        <h4>Basemaps:</h4>
+                        <p>
+                            <a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener noreferrer">
+                                © Mapbox
+                            </a>
+                            <br />
+                            <a href="http://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">
+                                © OpenStreetMap
+                            </a>
+                            <br />
+                            <a href="https://www.mapbox.com/map-feedback/" target="_blank" rel="noopener noreferrer">
+                                Improve this map
+                            </a>
+                            <br />
+                            <span className="text-small text-quiet">(note: applies to the basemap, not the Blueprint)</span>
+                        </p>
+                    </React.Fragment>
+                )}
             </section>
         </div>
     )
