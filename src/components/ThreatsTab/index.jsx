@@ -14,24 +14,32 @@ const ThreatsTab = ({ isMarine, urban, slr }) => {
             <section>
                 <h3>Sea level rise</h3>
                 {slr !== null && slr.length > 0 ? (
-                    <div className="chart-line">
-                        <label className="text-quiet text-smaller chart-line-y-axis-label">Percent of area</label>
-                        <LineChart
-                            className="chart-line"
-                            areaColor="#004da8"
-                            areaVisible
-                            gridVisible={false}
-                            pathWidth={2}
-                            pathColor="#004da8"
-                            pointsColor="#004da8"
-                            pointsStrokeWidth={0}
-                            labelsStepX={1}
-                            viewBoxWidth={500}
-                            labelsFormatX={x => x}
-                            data={slr.map((y, i) => ({ x: SLR_LEVELS[i], y }))}
-                        />
-                        <div className="text-center text-quiet text-smaller chart-line-x-axis-label">
-                            Amount of sea level rise (feet)
+                    <div>
+                        <div className="chart-line">
+                            <label className="text-quiet text-smaller chart-line-y-axis-label">Percent of area</label>
+                            <LineChart
+                                className="chart-line"
+                                areaColor="#004da8"
+                                areaVisible
+                                gridVisible={false}
+                                pathWidth={2}
+                                pathColor="#004da8"
+                                pointsColor="#004da8"
+                                pointsStrokeWidth={0}
+                                labelsStepX={1}
+                                viewBoxWidth={500}
+                                labelsFormatX={x => x}
+                                data={slr.map((y, i) => ({ x: SLR_LEVELS[i], y }))}
+                            />
+                            <div className="text-center text-quiet text-smaller chart-line-x-axis-label">
+                                Amount of sea level rise (feet)
+                            </div>
+                        </div>
+                        <div className="text-small text-quieter" style={{ marginTop: '1em' }}>
+                            Extent of inundation by projected sea level rise within this subwatershed. Values from the{' '}
+                            <a href="https://coast.noaa.gov/digitalcoast/data/slr.html" rel="noopener noreferrer">
+                                NOAA sea-level rise inundation data
+                            </a>.
                         </div>
                     </div>
                 ) : (
@@ -43,23 +51,31 @@ const ThreatsTab = ({ isMarine, urban, slr }) => {
             <section>
                 <h3>Urban growth</h3>
                 {urban !== null && urban.length > 0 ? (
-                    <div className="chart-line">
-                        <label className="text-quiet text-smaller chart-line-y-axis-label">Percent of area</label>
-                        <LineChart
-                            className="chart-line"
-                            areaColor="#D90000"
-                            areaVisible
-                            gridVisible={false}
-                            pathWidth={2}
-                            pathColor="#D90000"
-                            pointsColor="#D90000"
-                            pointsStrokeWidth={0}
-                            labelsStepX={20}
-                            viewBoxWidth={500}
-                            labelsFormatX={x => x || ''}
-                            data={urban.map((y, i) => ({ x: URBANIZATION_LEVELS[i], y }))}
-                        />
-                        <div className="text-center text-quiet text-smaller chart-line-x-axis-label">Decade</div>
+                    <div>
+                        <div className="chart-line">
+                            <label className="text-quiet text-smaller chart-line-y-axis-label">Percent of area</label>
+                            <LineChart
+                                className="chart-line"
+                                areaColor="#D90000"
+                                areaVisible
+                                gridVisible={false}
+                                pathWidth={2}
+                                pathColor="#D90000"
+                                pointsColor="#D90000"
+                                pointsStrokeWidth={0}
+                                labelsStepX={20}
+                                viewBoxWidth={500}
+                                labelsFormatX={x => x || ''}
+                                data={urban.map((y, i) => ({ x: URBANIZATION_LEVELS[i], y }))}
+                            />
+                            <div className="text-center text-quiet text-smaller chart-line-x-axis-label">Decade</div>
+                        </div>
+                        <div className="text-small text-quieter" style={{ marginTop: '1em' }}>
+                            Extent of projected urbanization within this subwatershed. Values from the{' '}
+                            <a href="http://www.basic.ncsu.edu/dsl/urb.html" rel="noopener noreferrer">
+                                SLEUTH urban growth model
+                            </a>.
+                        </div>
                     </div>
                 ) : (
                     <p className="text-small text-quieter">
