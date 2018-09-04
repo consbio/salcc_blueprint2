@@ -417,7 +417,8 @@
                     "5": "Greater than 95%"
                 },
                 "domain": [0, 100],
-                "datasetID": "c822c798ba724e06b5fb25d2c18ff0cb"
+                "datasetID": "c822c798ba724e06b5fb25d2c18ff0cb",
+                "goodThreshold": 5
             },
             "ImperiledAquaticSpecies": {
                 "label": "Imperiled aquatic species",
@@ -459,8 +460,8 @@
             "LowUrbanHistoric": {
                 "label": "Low-urban historic landscapes",
                 "description": "Low-urban historic landscapes is an index of sites on the National Register of Historic Places surrounded by limited urban development. This cultural resource indicator identifies significant historic places that remain connected to their context in the natural world.",
-                "caption": "Indicator values within the historic landscapes in this subwatershed. Good condition thresholds reflect the range of indicator values that occur in healthy, functioning ecosystems.",
-                "reportCaption": "The area of low-urban historic landscapes indicator values as they occur within the historic landscapes in this subwatershed. Good condition thresholds reflect the range of indicator values that occur in healthy, functioning ecosystems.",
+                "caption": "Indicator values within the historic landscapes in this subwatershed. Good condition thresholds reflect the range of indicator values that occur in healthy, functioning ecosystems.  Note: Historic landscapes are rare across the South Atlantic. The presence of any historic landscape, even in high-urban condition, will increase the priority in the Blueprint.",
+                "reportCaption": "The area of low-urban historic landscapes indicator values as they occur within the historic landscapes in this subwatershed. Good condition thresholds reflect the range of indicator values that occur in healthy, functioning ecosystems.  Note: Historic landscapes are rare across the South Atlantic. The presence of any historic landscape, even in high-urban condition, will increase the priority in the Blueprint.",
                 "valueLabels": {
                     "0": "Historic place with nearby high-urban buffer",
                     "1": "Historic place with nearby low-urban buffer"
