@@ -110,15 +110,10 @@ def create_report(unit_id, path, config):
                     heading = name
                     p.insert_paragraph_before(heading, style="Heading13")
 
-                if ecosystem["indicators"]:
-                    # name = ecosystem["ecosystem_name"]
-                    # percent = ecosystem["ecosystem_percentage"]
-                    # if percent is not "":
-                    #     heading = "{0}: {1}% of area".format(name, percent)
-                    #     p.insert_paragraph_before(heading, style="Heading13")
-                    # else:
-                    #     heading = name
-                    #     p.insert_paragraph_before(heading, style="Heading13")
+                if name == 'Inland waterbodies':
+                    p.insert_paragraph_before("These are lakes, reservoirs, and ponds not included in the Blueprint 2.2 priorities. Ecosystem-specific indicators have not yet been developed for this area", style="NoInfo")
+
+                elif ecosystem["indicators"]:
 
                     for indicator in ecosystem["indicators"]:
                         table_counter += 1
@@ -142,8 +137,9 @@ def create_report(unit_id, path, config):
                             indicator["table"]["indicator_table"],
                             caption,
                         )
+
                 else:
-                    p.insert_paragraph_before("These are lakes, reservoirs, and ponds not included in the Blueprint 2.2 priorities. Ecosystem-specific indicators have not yet been developed for this area", style="NoInfo")
+                    p.insert_paragraph_before("No indicators are present in this area", style="NoInfo")
 
             # Delete the placeholder para
             delete_paragraph(p)
