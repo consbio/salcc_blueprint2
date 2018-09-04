@@ -10,4 +10,12 @@ m.blueprint.salcc.databasin.org {
     proxy /report localhost:8001 {
         transparent
     }
+
+    redir {
+        /v2.2/index.html /
+        /v2.1/index.html /
+        /v2/index.html /
+        /v1/index.html /
+        /v1.1/index.html /
+    }
 }
