@@ -1,0 +1,13 @@
+m.blueprint.salcc.databasin.org {
+    root /var/www
+    gzip
+    tls bcward@consbio.org
+
+    proxy /services localhost:8000 {
+        transparent
+    }
+
+    proxy /report localhost:8001 {
+        transparent
+    }
+}

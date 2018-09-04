@@ -1,0 +1,20 @@
+[Unit]
+Description=MBTileserver
+Documentation=https://github.com/consbio/mbtileserver
+After=network-online.target
+Wants=network-online.target systemd-networkd-wait-online.service
+
+[Service]
+Restart=on-abnormal
+RestartSec=60
+
+; User and group the process will run as.
+User=app
+Group=www-data
+
+WorkingDirectory=/opt/go/src/github.com/consbio/mbtileserver
+ExecStart=/opt/go/src/github.com/consbio/mbtileserver/mbtileserver -p 8000 -d /salcc/tilesets
+ExecReload=/bin/kill -USR1 $MAINPID
+
+[Install]
+WantedBy=multi-user.target

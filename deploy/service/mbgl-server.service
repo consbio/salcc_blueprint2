@@ -1,0 +1,23 @@
+;NoNewPrivileges=true
+
+[Unit]
+Description=Mapbox GL server
+Documentation=https://github.com/consbio/mbgl-renderer
+After=network-online.target
+Wants=network-online.target systemd-networkd-wait-online.service
+
+[Service]
+Restart=on-failure
+RestartSec=60
+
+; User and group the process will run as.
+User=app
+Group=www-data
+
+WorkingDirectory=/home/app/salcc_blueprint2
+EnvironmentFile=/home/app/salcc_blueprint2/.env.production
+ExecStart=/home/app/salcc_blueprint2/node_modules/.bin/mbgl-server -t /salcc/tilesets -p 8002
+ExecReload=/bin/kill -USR1 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
