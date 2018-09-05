@@ -162,6 +162,12 @@
         "nodata": 16777215,
         "layers": [
             {
+                "id": "Marine_PotentialHardbottomCondition",
+                "nodata": 9,
+                "type": "indexed",
+                "values": [0, 1, 2, 3]
+            },
+            {
                 "id": "UplandHardwood_Birds",
                 "nodata": 9,
                 "type": "indexed",
