@@ -16,6 +16,7 @@ gunicorn = "*"
 requests = "*"
 pillow = "*"
 raven = {version = "*", extras = ["flask"]}
+datatiles = {git = "https://github.com/brendan-ward/datatiles.git"}
 
 [dev-packages]
 pytest = "*"
