@@ -13,14 +13,16 @@ import store from './store'
 // unregister previously installed service workers, which are messing with the routes on the server
 unregister()
 
-if (process.env.NODE_ENV !== 'development') {
-    ReactGA.initialize('UA-38720072-1')
+if (process.env.NODE_ENV === 'production') {
+    ReactGA.initialize('UA-82274034-10')
 
     // Initialize raven for our DSN
     if (process.env.SENTRY_DSN) {
         Raven.config(process.env.SENTRY_DSN).install()
     }
 }
+
+ReactGA.pageview(window.location.pathname)
 
 ReactDOM.render(
     <Provider store={store}>

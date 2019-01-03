@@ -5,17 +5,23 @@ import { compose, createStore, applyMiddleware } from 'redux'
 import { responsiveStoreEnhancer } from 'redux-responsive'
 
 import rootReducer from './Reducers'
+import { trackingMiddleware } from './analytics'
 
-const loggerMiddleware = createLogger()
+const middleware = [thunkMiddleware]
+
+const { NODE_ENV } = process.env
+
+if (NODE_ENV === 'production') {
+    middleware.push(trackingMiddleware)
+} else {
+    middleware.push(createLogger())
+}
 
 const store = createStore(
     rootReducer,
     compose(
         responsiveStoreEnhancer,
-        applyMiddleware(
-            thunkMiddleware,
-            loggerMiddleware
-        )
+        applyMiddleware(...middleware)
     )
 )
 
