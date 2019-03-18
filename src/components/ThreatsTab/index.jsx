@@ -36,8 +36,13 @@ const ThreatsTab = ({ isMarine, urban, slr }) => {
                             </div>
                         </div>
                         <div className="text-small text-quieter" style={{ marginTop: '1em' }}>
-                            Extent of inundation by projected sea level rise within this subwatershed. Values from the{' '}
-                            <a href="https://coast.noaa.gov/digitalcoast/data/slr.html" rel="noopener noreferrer">
+                            Extent of inundation by projected average highest daily tide due to sea level rise within
+                            this subwatershed. Values from the{' '}
+                            <a
+                                href="https://coast.noaa.gov/digitalcoast/data/slr.html"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
                                 NOAA sea-level rise inundation data
                             </a>.
                         </div>
@@ -72,7 +77,7 @@ const ThreatsTab = ({ isMarine, urban, slr }) => {
                         </div>
                         <div className="text-small text-quieter" style={{ marginTop: '1em' }}>
                             Extent of projected urbanization within this subwatershed. Values from the{' '}
-                            <a href="http://www.basic.ncsu.edu/dsl/urb.html" rel="noopener noreferrer">
+                            <a href="http://www.basic.ncsu.edu/dsl/urb.html" rel="noopener noreferrer" target="_blank">
                                 SLEUTH urban growth model
                             </a>.
                         </div>

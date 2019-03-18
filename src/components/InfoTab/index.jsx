@@ -33,7 +33,7 @@ const InfoTab = ({ isMobile }) => {
                 <h3>Welcome to the South Atlantic Conservation Blueprint Simple Viewer</h3>
                 <p>
                     The{' '}
-                    <a href="http://www.southatlanticlcc.org/blueprint/" rel="noopener noreferrer">
+                    <a href="http://www.southatlanticlcc.org/blueprint/" target="_blank" rel="noopener noreferrer">
                         Conservation Blueprint
                     </a>{' '}
                     is a living spatial plan to conserve natural and cultural resources for future generations. It

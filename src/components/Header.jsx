@@ -54,7 +54,7 @@ class Header extends Component {
                         <React.Fragment>
                             <img src="/logo_96x96.png" alt="South Atlantic Logo" />
                             <div className="flex-grow">
-                                <a href="http://www.southatlanticlcc.org/blueprint/" rel="noopener noreferrer">
+                                <a href="http://www.southatlanticlcc.org/blueprint/" target="_blank" rel="noopener noreferrer">
                                     {isMobile && <h4>South Atlantic</h4>}
                                     <h1>{`${!isMobile ? 'South Atlantic ' : ''}Conservation Blueprint 2.2`}</h1>
                                 </a>
