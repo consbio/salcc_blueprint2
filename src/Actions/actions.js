@@ -82,3 +82,9 @@ export const setPixelValues = (pixelLocation, pixelValues, isPending) => ({
     pixelValues,
     isPending
 })
+
+export const SET_VIDEO_OPEN = 'SET_VIDEO_OPEN'
+export const setVideoOpen = isVideoOpen => ({
+    type: SET_VIDEO_OPEN,
+    isVideoOpen
+})

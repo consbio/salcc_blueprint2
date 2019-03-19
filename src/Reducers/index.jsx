@@ -10,7 +10,8 @@ import {
     SET_PLACE,
     SET_PLACES,
     SET_PIXEL_MODE,
-    SET_PIXEL_VALUES
+    SET_PIXEL_VALUES,
+    SET_VIDEO_OPEN
 } from '../Actions/actions'
 
 const updateObject = (oldObject, newObject) => Object.assign({}, oldObject, newObject)
@@ -31,7 +32,9 @@ const initialState = {
 
     // State of the current pixel
     pixelValues: null,
-    pixelLocation: null // {latitude: <lat>, longitude: <long>}
+    pixelLocation: null, // {latitude: <lat>, longitude: <long>}
+
+    isVideoOpen: false
 }
 
 const mainReducer = (state = initialState, action) => {
@@ -92,6 +95,9 @@ const mainReducer = (state = initialState, action) => {
 
         case SET_TAB:
             return updateObject(state, { activeTab: action.tab })
+
+        case SET_VIDEO_OPEN:
+            return updateObject(state, { isVideoOpen: action.isVideoOpen })
 
         default:
             return state

@@ -440,6 +440,15 @@ footer {
     margin-top: 0 !important;
 }
 
+#VideoButton {
+    font-size: 1.25em;
+    padding: 0.25em;
+    cursor: pointer;
+    color: #fff;
+    background: #0892d0;
+    border-radius: 6px;
+}
+
 .ecosystem-header img {
     margin-right: 8px;
     height: 40px;

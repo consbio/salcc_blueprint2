@@ -4,10 +4,13 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import ResetIcon from '../icons/outline-cancel-24px.svg'
+import PlayIcon from '../icons/baseline-play_arrow-24px.svg'
 
 import PRIORITIES from '../../config/priorities.json'
 
-const InfoTab = ({ isMobile }) => {
+import * as actions from '../../Actions/actions'
+
+const InfoTab = ({ isMobile, setVideoOpen }) => {
     const sortedPriorities = [5, 4, 3, 2, 1] // 0 deliberately omitted
 
     const renderPriority = (priority) => {
@@ -44,6 +47,20 @@ const InfoTab = ({ isMobile }) => {
                     more than 500 people from 150 organizations actively participated in the collaborative development
                     of the Blueprint.
                 </p>
+                <div className="text-center">
+                    <button id="VideoButton" onClick={() => setVideoOpen(true)} type="button">
+                        <PlayIcon
+                            style={{
+                                fill: '#FFF',
+                                verticalAlign: 'middle',
+                                display: 'inline-block',
+                                marginRight: '0.5em'
+                            }}
+                        />
+                        <span style={{ verticalAlign: 'middle', display: 'inline-block' }}>Overview Video</span>
+                    </button>
+                </div>
+                <br />
                 <p>
                     This <b>Simple Viewer</b> summarizes the Blueprint priorities and supporting information within
                     subwatersheds and marine lease blocks. In a new pixel mode, you can also explore pixel-level details
@@ -191,7 +208,9 @@ const InfoTab = ({ isMobile }) => {
                                 Improve this map
                             </a>
                             <br />
-                            <span className="text-small text-quiet">(note: applies to the basemap, not the Blueprint)</span>
+                            <span className="text-small text-quiet">
+                                (note: applies to the basemap, not the Blueprint)
+                            </span>
                         </p>
                     </React.Fragment>
                 )}
@@ -201,8 +220,12 @@ const InfoTab = ({ isMobile }) => {
 }
 
 InfoTab.propTypes = {
-    isMobile: PropTypes.bool.isRequired
+    isMobile: PropTypes.bool.isRequired,
+    setVideoOpen: PropTypes.func.isRequired
 }
 const mapStateToProps = ({ browser: { isMobile } }) => ({ isMobile })
 
-export default connect(mapStateToProps)(InfoTab)
+export default connect(
+    mapStateToProps,
+    actions
+)(InfoTab)
