@@ -52,7 +52,6 @@ class App extends Component {
                     open={isVideoOpen}
                     onClose={() => setVideoOpen(false)}
                 >
-                    {/* <iframe title="Blueprint Simple Viewer - Overview Video" width="560" height="315" src="https://www.youtube.com/embed/wSPbCiCTQOM" allowfullscreen /> */}
                     <YouTube videoId="wSPbCiCTQOM" opts={{ height: '464', width: '800' }} />
                 </Modal>
 
