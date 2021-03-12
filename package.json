@@ -52,7 +52,7 @@
         "raven-for-redux": "^1.0.0",
         "raven-js": "^3.17.0",
         "react": "^16.4.1",
-        "react-dev-utils": "^3.0.2",
+        "react-dev-utils": "^11.0.4",
         "react-dom": "^16.4.1",
         "react-error-overlay": "^1.0.9",
         "react-ga": "^2.5.3",
